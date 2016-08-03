@@ -1,0 +1,138 @@
+// Coloring links
+@mixin gradientlinks($link, $hover, $hover2) {
+    @media (-webkit-min-device-pixel-ratio:0) {
+        a {
+            background-color: $link;
+            @include gradient(top, $hover 0%, $hover2 50%, transparent 50%);
+            background-position: 0 100%;
+            background-size: 200% 200%;
+            color: transparent;
+            @include transition(.3s ease);
+            -webkit-background-clip: text;
+        }
+        a:hover {
+            background-position: 0 0;
+            color: transparent;
+            @include transition(.3s ease);
+        }
+    }
+}
+
+// Cross-browser transitions
+@mixin transition($args...) {
+    -webkit-transition: $args;
+    -moz-transition: $args;
+    -ms-transition: $args;
+    -o-transition: $args;
+    transition: $args;
+}
+
+@mixin transform($args...){
+    -webkit-transform: $args;
+    -moz-transform: $args;
+    -ms-transform: $args;
+    transform: $args;
+}
+
+// Cross-browser opacity
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+// Cross-browser gradients
+@mixin gradient($args...){
+    background-color: $white; /* fallback color if gradients are not supported */
+    background-image: -webkit-linear-gradient($args); /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
+    background-image:    -moz-linear-gradient($args); /* For Firefox (3.6 to 15) */
+    background-image:      -o-linear-gradient($args); /* For old Opera (11.1 to 12.0) */
+    background-image:         linear-gradient($args); /* Standard syntax; must be last */
+}
+
+@mixin gradientBG($args...){
+    background: $white; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient($args); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient($args); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient($args); /* For Firefox 3.6 to 15 */
+    background: linear-gradient($args); /* Standard syntax */
+}
+
+@mixin radialgradientBG($args...){
+    background: $white; /* For browsers that do not support gradients */
+    background: -webkit-radial-gradient($args); /* For Safari 5.1 to 6.0 */
+    background: -o-radial-gradient($args); /* For Opera 11.1 to 12.0 */
+    background: -moz-radial-gradient($args); /* For Firefox 3.6 to 15 */
+    background: radial-gradient($args); /* Standard syntax */
+}
+
+@mixin boxshadow($args...){
+    -webkit-box-shadow: $args;
+    -moz-box-shadow: $args;
+    box-shadow: $args;
+}
+
+// Thanks to Josh Broton for these:
+// http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
+
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin placeholder($className){
+    .#{$className}::-webkit-input-placeholder {
+    	@content;
+    }
+    .#{$className}:-moz-placeholder {
+    	@content;
+    }
+    .#{$className}::-moz-placeholder {
+    	@content;
+    }
+    .#{$className}::-ms-input-placeholder {
+    	@content;
+    }
+}
+
+@mixin placeholderHover($className){
+    .#{$className}:hover::-webkit-input-placeholder {
+    	@content;
+    }
+    .#{$className}:hover:-moz-placeholder {
+    	@content;
+    }
+    .#{$className}:hover::-moz-placeholder {
+    	@content;
+    }
+    .#{$className}:hover::-ms-input-placeholder {
+    	@content;
+    }
+}

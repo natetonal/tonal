@@ -1,0 +1,58 @@
+// Tonal - Main Color Palette
+$white: #f5f5f5;
+$black: #050505;
+$lightgray1: #bdbdbd;
+$darkgray1: #313131;
+$orange: #f49800;
+$red: #e30713;
+$darkblue: #009688;
+$lightblue: #9ef6ec;
+
+// General
+$highlight1: $darkblue;
+$highlight2: $lightblue;
+$modal-bg: rgba(0,0,0,0.3);
+$shadow-dark: rgba(0,0,0,0.7);
+$shadow-light: rgba(225,225,225,0.3);
+$inactive-light: #e1e1e1;
+
+// Header
+$header-font: "Lato script=all rev=1", sans-serif;
+$header-height: 50px;
+$header-background: $black;
+$header-text: $white;
+$header-link: $lightgray1;
+$header-link-hover1: $darkblue;
+$header-link-hover2: $lightblue;
+$header-logo-height: 35px;
+$header-logo-width: 118px;
+$header-link-fontsize: 14px;
+
+// Search Bar
+$search-bg: $darkgray1;
+$search-height: 40px;
+$search-width: 200px;
+$search-media-bg1: rgba($lightgray1, 0.05);
+$search-media-bg2: rgba($lightgray1, 0.1);
+$search-media-border:rgba($lightblue, 0.8);
+
+// Settings
+$settings-background: $darkgray1;
+$settings-width: 250px;
+$settings-font-size: 12px;
+$settings-padding: 14px;
+$settings-link-text: $inactive-light;
+
+// Content Area
+$content-height: 50vh;
+$content-top-padding: $header-height + 10px;
+$content-bg1: #424242;
+$content-bg2: #686868;
+
+// Tabs
+$number-of-tabs: 4;
+$tabs-bg1: $darkgray1;
+$tabs-bg2: $black;
+$tabs-bg-hover: $darkgray1;
+$tabs-color-hover1: $orange;
+$tabs-color-hover2: $orange;

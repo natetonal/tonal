@@ -1,0 +1,21 @@
+// This will be a series of imports usually.
+
+@import "base/variables";
+
+// Foundation
+@import "base/foundation-settings";
+@import "foundation";
+@include foundation-everything;
+
+// Mixins
+@import "base/mixins";
+
+// Fonts
+@import "base/fonts";
+
+// Components
+@import "components/header";
+@import "components/settings";
+@import "components/content";
+@import "components/tabs";
+@import "components/search";

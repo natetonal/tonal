@@ -1,0 +1,174 @@
+.tonal-pusher {
+	position: relative;
+	left: 0;
+	z-index: 99;
+	height: 100%;
+	perspective: 1000px;
+	overflow: hidden;
+	@include boxshadow(-4px 0px 6px 0px $modal-bg);
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
+}
+
+.tonal-pusher::after {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 0;
+	background: $modal-bg;
+	content: '';
+	opacity: 0;
+	cursor: pointer;
+	@include transition(opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s);
+}
+
+.tonal-menu-open .tonal-pusher::after {
+	width: 100%;
+	height: 100%;
+	opacity: 1;
+	@include transition(opacity 0.5s);
+}
+
+.tonal-menu {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	visibility: hidden;
+	width: $settings-width;
+	height: 100%;
+	background: $settings-background;
+	@include transition(all 0.5s);
+
+	.special{
+		@include gradientBG(left, $red, $orange);
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	ul li:first-child a {
+    	box-shadow: inset 0 -1px $shadow-dark, inset 0 1px $shadow-dark;
+	}
+
+    ul li a {
+	    display: block;
+		text-indent: none;
+	    padding: $settings-padding 0 $settings-padding 30px;
+		margin: 0;
+	    outline: none;
+	    box-shadow: inset 0 -1px $shadow-dark;
+	    color: $settings-link-text;
+	    text-transform: uppercase;
+	    text-shadow: 0 0 1px rgba(255,255,255,0.1);
+	    letter-spacing: 1px;
+	    font-weight: 700;
+		font-size: $settings-font-size;
+		vertical-align: middle;
+	    @include transition(all 0.3s);
+
+		.fa{
+			font-size: $settings-font-size * 1.2;
+			padding-right: 10px;
+		}
+
+		&::after{
+			font-family: FontAwesome;
+			content: "\f105";
+			color: $white;
+			float: right;
+			padding-right: 20px;
+			@include transition(all 0.3s);
+		}
+
+		&:hover{
+			background: $white;
+			color: $orange;
+			padding-left: 40px;
+			@include transition(all 0.3s);
+
+			&::after{
+				padding-right: 10px;
+				@include keyframes(blinking-arrow) {
+				  0%   { color: $highlight2; }
+				  50%  { color: $lightgray1; }
+				  100% { color: $highlight2; }
+				}
+				@include animation('blinking-arrow .5s infinite');
+				@include transition(all 0.3s);
+			}
+		}
+	}
+
+	li.logout {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		text-align: center;
+		a{
+			padding-left: 0;
+			color: darken($settings-link-text, 20%);
+			&:hover{
+				color: $settings-link-text;
+				background: darken(desaturate($red, 20%), 10%);
+				padding-left: 0;
+				@include transition(all 0.3s);
+			}
+			&::after{
+				content: '';
+			}
+		}
+
+	}
+
+	.avatar{
+		position: relative;
+		height: 250px;
+		width: 250px;
+		@include gradientBG(top, $white, #d3d3d3);
+
+	}
+}
+
+.tonal-menu::after {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background: $modal-bg;
+	content: '';
+	opacity: 1;
+	@include transition(opacity 0.5s);
+}
+
+.tonal-menu-open .tonal-menu::after {
+	width: 0;
+	height: 0;
+	opacity: 0;
+	@include transition(opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s);
+}
+
+.menu-effect.tonal-menu-open .tonal-pusher {
+	-webkit-transform: translate3d($settings-width, 0, 0);
+	transform: translate3d($settings-width, 0, 0);
+}
+
+.menu-effect.tonal-menu {
+	z-index: 1;
+}
+
+.menu-effect.tonal-menu-open .menu-effect.tonal-menu {
+	visibility: visible;
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
+}
+
+.menu-effect.tonal-menu::after {
+	display: none;
+}

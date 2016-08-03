@@ -1,0 +1,37 @@
+
+*,
+*:after,
+*::before {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body,
+.tonal-container,
+.tonal-pusher,
+.tonal-main{
+	margin: 0;
+	padding: 0;
+    height: 100vh;
+	width: 100vw;
+}
+
+.tonal-main {
+	overflow-y: scroll;
+	@include gradient(top, $content-bg1, $content-bg2);
+}
+
+.tonal-main,
+.tonal-main-inner {
+	position: relative;
+}
+
+.tonal-container {
+	position: relative;
+	overflow: hidden;
+}
+
+.tonal-content{
+
+}

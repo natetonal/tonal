@@ -1,0 +1,28 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /Users/natekimball/.nvm/versions/node/v6.2.2/bin/node /Users/natekimball/.nvm/versions/node/v6.2.2/bin/firebase serve
+[debug] CLI Version:  3.0.4
+[debug] Platform:     darwin
+[debug] Node Version: v6.2.2
+[debug] Time:         Sat Jul 16 2016 11:49:34 GMT-0700 (PDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /Users/natekimball/Tonal
+[info] Public Directory: public
+[info] 
+[info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /Users/natekimball/.nvm/versions/node/v6.2.2/bin/node /Users/natekimball/.nvm/versions/node/v6.2.2/bin/firebase serve
+[debug] CLI Version:  3.0.4
+[debug] Platform:     darwin
+[debug] Node Version: v6.2.2
+[debug] Time:         Sat Jul 16 2016 11:56:36 GMT-0700 (PDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /Users/natekimball/Tonal
+[info] Public Directory: public
+[info] 
+[info] Server listening at: http://localhost:5000
