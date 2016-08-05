@@ -104,8 +104,8 @@
     .hi-icon {
     	display: inline-block;
     	cursor: pointer;
-    	width: $header-height - 10px;
-    	height: $header-height - 10px;
+    	width: $header-icon-div-size;
+    	height: $header-icon-div-size;
     	border-radius: 50%;
     	text-align: center;
     	position: relative;
@@ -139,7 +139,7 @@
     }
 
     .hi-icon-effect-1 .hi-icon:after {
-        top: 0;
+        top: ($header-height - $header-icon-div-size) / 4;
         left: 0;
         padding: 0;
         box-shadow: inset 0 0 0 2px #9ef6ec;
