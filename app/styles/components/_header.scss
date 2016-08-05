@@ -6,7 +6,7 @@
     padding: 0;
     line-height: 1;
     z-index: 10;
-    background-color: $header-background;
+    @include gradientBG(top, $header-background 0, darken($header-background, 5%) 60%, $header-background 100%);
     color: $header-text;
     font-family: $header-font;
     height: $header-height;
@@ -96,9 +96,9 @@
     }
 
     .fa {
-        font-size: 18px;
-        padding-top: 12px;
-        text-shadow: 1px 1px 1px rgba(200,200,200,1);
+        font-size: 20px;
+        padding-top: $header-height / 4;
+        text-shadow: 1px 1px 1px rgba(161,161,161,1);
     }
 
     .hi-icon {
@@ -148,15 +148,26 @@
     	opacity: 0;
     }
 
+    .hi-icon-effect-1.notification .hi-icon:after{
+        box-shadow: inset 0 0 0 2px lighten(saturate($orange, 10%), 10%);
+    }
+
     /* Effect 1b */
     .hi-icon-effect-1.hi-icon-effect-1b {
         display: inline-block;
         padding: 0 10px 0 0;
+        @include breakpoint(portrait only){
+            padding: 0;
+        }
     }
 
     .hi-icon-effect-1b .hi-icon:hover {
     	background: transparent;
     	color: $highlight2;
+    }
+
+    .hi-icon-effect-1b.notification .hi-icon:hover{
+        color: lighten(saturate($orange, 10%), 10%);
     }
 
     .hi-icon-effect-1b .hi-icon:after {

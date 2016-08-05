@@ -44,7 +44,7 @@ export const Header = React.createClass({
                             </nav>
                         </div>
                         <div className="small-6 text-right columns">
-                                <div className="hi-icon-effect-1 hi-icon-effect-1b">
+                                <div className="hi-icon-effect-1 hi-icon-effect-1b notification">
                                     <a href="#" className="hi-icon hi-icon-mobile">
                                         <i className="fa fa-bell" aria-hidden="true"></i>
                                     </a>
