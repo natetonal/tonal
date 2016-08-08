@@ -3,6 +3,7 @@ import firebase, { databaseRef, storageRef, facebookAuthProvider } from 'app/fir
 import moment from 'moment';
 
 export var login = (uid) => {
+    console.log("UID from actions: ", uid);
     return{
         type: 'LOGIN',
         uid
@@ -12,6 +13,12 @@ export var login = (uid) => {
 export var logout = () => {
     return{
         type: 'LOGOUT'
+    };
+};
+
+export var toggleLoginModal = () => {
+    return{
+        type: 'TOGGLE_LOGIN_MODAL'
     };
 };
 

@@ -8,7 +8,7 @@ import Menu from './Menu';
 
 export const MenuWrapper = React.createClass({
 
-    onClick(event){
+    handleClick(event){
         event.preventDefault();
         console.log(event);
         var { dispatch } = this.props;
@@ -20,12 +20,12 @@ export const MenuWrapper = React.createClass({
         var { isOpen } = this.props;
 
         return(
-            <Hammer onSwipe={ !isOpen ? this.onClick : false} direction="DIRECTION_RIGHT">
+            <Hammer onSwipe={ !isOpen ? this.handleClick : false} direction="DIRECTION_RIGHT">
                 <div id="tonal-container" className={`tonal-container menu-effect ${isOpen ? "tonal-menu-open" : ""}`}>
                     <Menu />
-                    <Hammer onSwipe={ isOpen ? this.onClick : false }
+                    <Hammer onSwipe={ isOpen ? this.handleClick : false }
                             direction="DIRECTION_LEFT">
-                        <div className="tonal-pusher" onMouseDown={ isOpen ? this.onClick : false }>
+                        <div className="tonal-pusher" onMouseDown={ isOpen ? this.handleClick : false }>
                             <div className="tonal-main">
                                 <div className="tonal-main-inner">
                                         {this.props.children}

@@ -2,6 +2,8 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
+import LoginModal from './LoginModal';
+
 export const Login = React.createClass({
 
     onEmailLogin(){
@@ -14,7 +16,10 @@ export const Login = React.createClass({
 
     render(){
         return(
-            <div className="tonal__content">Login</div>
+            <div>
+                <LoginModal />
+                LOGIN
+            </div>
         );
     }
 });

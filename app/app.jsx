@@ -17,7 +17,8 @@ firebase.auth().onAuthStateChanged((user) => {
         browserHistory.push('connect');
     } else {
         store.dispatch(actions.logout());
-        // Dispatch an action to clear any lingering data
+        // Dispatch an action to clear any lingering data.
+        // Might want to push to a "Goodbye" marketing page.
         browserHistory.push('/');
     }
 });

@@ -8,8 +8,6 @@ try {
         storageBucket: process.env.STORAGE_BUCKET
     };
 
-    console.log(process.env.API_KEY, process.env.AUTH_DOMAIN, process.env.DATABASE_URL, process.env.STORAGE_BUCKET);
-
     firebase.initializeApp(config);
 } catch (e) {
     console.log('Error with Firebase: ', e);

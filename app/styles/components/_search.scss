@@ -8,10 +8,9 @@
 	min-height: $search-height;
     display: inline-block;
 	@include gradientBG(top, darken(rgba($search-bg, .9), 10%), darken(rgba($search-bg, .9), 30%));
-	position: relative;
 	z-index: 1000;
     width: auto;
-	top: -1px;
+	margin-top: ($header-height - $search-height) / 2;
     border-radius: 12px;
 	-webkit-transform-origin: 100% 0;
 	transform-origin: 100% 0;
@@ -34,6 +33,7 @@
 	top: 0px;
 	right: 0px;
     border-radius: 0;
+    margin: 0;
 }
 
 .morphsearch-form {
@@ -74,7 +74,7 @@
 }
 
 .morphsearch.open .morphsearch-input {
-    font-family: $header-font;
+    font-family: $main-font;
     background: $search-bg;
     font-size: 7em;
     text-indent: 20px;
@@ -107,7 +107,7 @@ input[type="search"] { /* reset normalize */
 .morphsearch-input:focus,
 .morphsearch-submit:focus {
 	outline: none;
-    font-family: $header-font;
+    font-family: $main-font;
     content: '';
     @include boxshadow(0 0 2px 2px $lightblue);
 }
@@ -244,35 +244,11 @@ input[type="search"] { /* reset normalize */
 	// transition: transform 0.5s, opacity 0.5s;
 }
 
-// .morphsearch.open .dummy-column:first-child {
-// 	-webkit-transition-delay: 0.4s;
-// 	transition-delay: 0.4s;
-// }
-//
-// .morphsearch.open .dummy-column:nth-child(2) {
-// 	-webkit-transition-delay: 0.45s;
-// 	transition-delay: 0.45s;
-// }
-//
-// .morphsearch.open .dummy-column:nth-child(3) {
-// 	-webkit-transition-delay: 0.5s;
-// 	transition-delay: 0.5s;
-// }
-//
-// .morphsearch.open .dummy-column:nth-child(4) {
-// 	-webkit-transition-delay: 0.5s;
-// 	transition-delay: 0.5s;
-// }
-//
-// .morphsearch.open .dummy-column {
-// 	opacity: 1;
-// 	-webkit-transform: translate3d(0,0,0);
-// 	transform: translate3d(0,0,0);
-// }
-
 .dummy-column h2 {
 	font-size: 1em;
 	letter-spacing: 1px;
+    text-align: left;
+    text-indent: 10px;
 	text-transform: uppercase;
 	font-weight: 800;
 	color: $white;

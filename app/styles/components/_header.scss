@@ -8,7 +8,6 @@
     z-index: 10;
     @include gradientBG(top, $header-background 0, darken($header-background, 5%) 60%, $header-background 100%);
     color: $header-text;
-    font-family: $header-font;
     height: $header-height;
     width: 100%;
     @include boxshadow(0 4px 6px 0 $modal-bg);
@@ -22,6 +21,9 @@
         color: $white;
     }
 
+    .header-login{
+
+    }
     .tonal-links{
 
         nav{
@@ -37,9 +39,8 @@
                 	outline: none;
                 	text-decoration: none;
                     // text-transform: uppercase;
-                	letter-spacing: 1px;
-                	font-weight: 200;
-                	text-shadow: 0 0 1px $shadow-light;
+                	font-weight: 400;
+                	// text-shadow: 0 0 1px $shadow-light;
                 	font-size: $header-link-fontsize;
                     cursor: pointer;
                     height: $header-height;
@@ -86,13 +87,19 @@
 
     .logo {
         position: absolute;
-        margin-left: auto;
-        margin-right: auto;
+        margin: (($header-height - $header-logo-height) / 2) auto;
         left: 0;
         right: 0;
         padding:(($header-height - $header-logo-height) / 2) 0;
         height: $header-logo-height;
         width: $header-logo-width;
+        background: url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-logo.png?alt=media&token=8c709f68-11b8-41ef-969d-f17c5286c4a1') no-repeat center;
+        @include breakpoint(small only){
+            background: url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-symbol.png?alt=media&token=8a6c0e15-c74e-4549-967d-400cb9f2fff2') no-repeat center;
+            background-size: contain;
+            height: $header-logo-height-mobile;
+            width: $header-logo-width-mobile;
+        }
     }
 
     .fa {
@@ -148,17 +155,31 @@
     	opacity: 0;
     }
 
-    .hi-icon-effect-1.notification .hi-icon:after{
-        box-shadow: inset 0 0 0 2px lighten(saturate($orange, 10%), 10%);
+    .hi-icon-notify .badge{
+        position: relative;
+        top: -12px;
+        margin-right: -15px;
+        left: -15px;
+        z-index: 100;
+        padding: .6em;
+        display: inline-block;
+        min-width: 2.1em;
+        font-size: .3rem;
+        text-align: center;
+        border-radius: 50%;
+    }
+
+    .nt-right{
+        @include hide-for-only(small);
+    }
+    .nt-left{
+        @include show-for-only(small);
     }
 
     /* Effect 1b */
     .hi-icon-effect-1.hi-icon-effect-1b {
         display: inline-block;
         padding: 0 10px 0 0;
-        @include breakpoint(portrait only){
-            padding: 0;
-        }
     }
 
     .hi-icon-effect-1b .hi-icon:hover {
@@ -166,8 +187,20 @@
     	color: $highlight2;
     }
 
-    .hi-icon-effect-1b.notification .hi-icon:hover{
+    .hi-icon-effect-1b.hi-icon-notify .hi-icon:hover{
         color: lighten(saturate($orange, 10%), 10%);
+    }
+
+    .hi-icon-effect-1.hi-icon-notify .hi-icon:after{
+        box-shadow: inset 0 0 0 2px lighten(saturate($orange, 10%), 10%);
+    }
+
+    .hi-icon-effect-1b.hi-icon-post .hi-icon:hover{
+        color: lighten(saturate($lightgreen, 10%), 10%);
+    }
+
+    .hi-icon-effect-1.hi-icon-post .hi-icon:after{
+        box-shadow: inset 0 0 0 2px lighten(saturate($lightgreen, 10%), 10%);
     }
 
     .hi-icon-effect-1b .hi-icon:after {

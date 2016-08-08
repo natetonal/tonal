@@ -1,10 +1,12 @@
 export var authReducer = (state = {}, action) => {
+    console.log("action.type from authReducer: ", action.type);
     switch(action.type){
         case 'LOGIN':
             return action.uid;
         case 'LOGOUT':
             return {};
         default:
+            console.log("authReducer returning default");
             return state;
     }
 };
@@ -12,7 +14,6 @@ export var authReducer = (state = {}, action) => {
 export var imgUrlReducer = (state = "", action) => {
     switch(action.type){
         case 'GET_IMG_URL':
-            console.log('Adding to state: ', action.imgUrl);
             return action.imgUrl;
         default:
             return state;
@@ -20,7 +21,6 @@ export var imgUrlReducer = (state = "", action) => {
 };
 
 export var uiStateReducer = (state = {}, action) => {
-    console.log(`state of ${action.type} coming into reducer: ${JSON.stringify(state)}`);
     switch(action.type){
         case 'TOGGLE_MENU':
             return {
@@ -31,6 +31,11 @@ export var uiStateReducer = (state = {}, action) => {
             return{
                 ...state,
                 searchIsOpen: !state.searchIsOpen
+            };
+        case 'TOGGLE_LOGIN_MODAL':
+            return{
+                ...state,
+                loginModalIsOpen: !state.loginModalIsOpen
             };
         default:
             return state;

@@ -12,6 +12,35 @@
         color: $black;
         @include gradient(top, $tabs-bg1, $tabs-bg2);
 
+        .tab-icon{
+            display: block;
+            margin: 0 auto;
+            background-size: contain;
+            height: $tabs-icon-size;
+            width: $tabs-icon-size;
+        }
+
+        .tab-connect{
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-comment%20clicked.png?alt=media&token=11852c7c-8fd9-4362-97bb-d47966841bb3')  no-repeat center / contain;
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-comment.png?alt=media&token=e45b96c7-39e5-4f84-951b-891be15f6780')  no-repeat center / contain;
+        }
+
+        .tab-discover{
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-headphones%20clicked.png?alt=media&token=72c8153d-c7e1-482a-b433-49a0efbff29f')  no-repeat center / contain;
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-headphones.png?alt=media&token=a4d39e76-7790-4324-a363-bc60ad9b071e')  no-repeat center / contain;
+        }
+
+        .tab-store{
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-shopping-cart%20clicked.png?alt=media&token=96b95a01-3c41-46be-bf46-7ad26a543149')  no-repeat center / contain;
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-shopping-cart.png?alt=media&token=884943bd-f79c-49ba-a51a-0533944dee72')  no-repeat center / contain;
+        }
+
+        .tab-mymusic{
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-music%20clicked.png?alt=media&token=de7840a9-f306-4d51-ad0e-0862b1d84849')  no-repeat center / contain;
+            background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-music.png?alt=media&token=24a44ca4-1e34-48f8-b36c-b6af3ded9d3e')  no-repeat center / contain;
+        }
+
+
         ul{
             margin: 0;
         }
@@ -36,22 +65,42 @@
             }
 
             a{
-                font-family: $header-font;
-                font-size: 12px;
-                font-weight: 300;
-                letter-spacing: 1px;
+                font-family: $main-font;
+                font-size: 14px;
+                font-weight: 100;
                 text-decoration: none;
                 color: $inactive-light;
                 outline: none;
             }
 
             &:hover{
-                .fa, .link-name{
-                    color: $highlight2;
-                    @include transition(all .3s);
-                }
+                // .fa, .link-name{
+                //     color: $highlight2;
+                //     @include transition(all .3s);
+                // }
 
                 // box-shadow: 0px -5px 0px 0px $highlight2;
+
+                .tab-connect{
+                    background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-comment%20clicked.png?alt=media&token=11852c7c-8fd9-4362-97bb-d47966841bb3')  no-repeat center / contain;
+                    @include transition(all 0.3s);
+                }
+
+                .tab-discover{
+                    background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-headphones%20clicked.png?alt=media&token=72c8153d-c7e1-482a-b433-49a0efbff29f')  no-repeat center / contain;
+                    @include transition(all 0.3s);
+                }
+
+                .tab-store{
+                    background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-shopping-cart%20clicked.png?alt=media&token=96b95a01-3c41-46be-bf46-7ad26a543149')  no-repeat center / contain;
+                    @include transition(all 0.3s);
+                }
+
+                .tab-mymusic{
+                    background: transparent url('https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ffa-music%20clicked.png?alt=media&token=de7840a9-f306-4d51-ad0e-0862b1d84849')  no-repeat center / contain;
+                    @include transition(all 0.3s);
+                }
+
                 background: $tabs-bg-hover;
                 cursor: pointer;
                 @include transition(all .3s);
