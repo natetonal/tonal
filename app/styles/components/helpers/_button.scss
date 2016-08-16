@@ -10,7 +10,6 @@
 
     &::before{
         position: absolute;
-        height: 100%;
         color: $white;
         font-family: FontAwesome;
         content: "\f105";
@@ -33,15 +32,15 @@
 
     &:active{
         outline: none;
-    	border-color: $darkblue;
-    	color: $darkblue;
+    	border-color: $orange;
+    	color: $orange;
 
         &::before{
             font-family: FontAwesome;
             content: "\f105";
             left: 90%;
             opacity: 0;
-            color: $darkblue;
+            color: $orange;
             @include transition(all 0.3s);
         }
     }
