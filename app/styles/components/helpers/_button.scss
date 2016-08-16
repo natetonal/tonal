@@ -1,0 +1,66 @@
+.tonal-btn{
+    border-radius: 2px;
+    color: $white;
+    overflow: hidden;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.3);
+    transition: all 0.3s;
+    text-transform: uppercase;
+
+    &::before{
+        position: absolute;
+        height: 100%;
+        color: $white;
+        font-family: FontAwesome;
+        content: "\f105";
+        left: 90%;
+        opacity: 0;
+        @include transition(all 0.3s);
+    }
+
+    &::after{
+        content: '';
+        position: absolute;
+        z-index: -1;
+        @include transition(all 0.3s);
+    }
+
+    &:focus{
+        outline: none;
+        box-shadow: 0px 0px 5px 0px rgba($orange, 0.7);
+    }
+
+    &:active{
+        outline: none;
+    	border-color: $darkblue;
+    	color: $darkblue;
+
+        &::before{
+            font-family: FontAwesome;
+            content: "\f105";
+            left: 90%;
+            opacity: 0;
+            color: $darkblue;
+            @include transition(all 0.3s);
+        }
+    }
+
+    &:hover{
+        background: rgba(0,0,0,0.1);
+
+        &::before{
+            font-family: FontAwesome;
+            content: "\f105";
+            left: 80%;
+            opacity: 1;
+            @include keyframes(blinking-arrow) {
+              0%   { color: $orange; }
+              50%  { color: $white; }
+              100% { color: $orange; }
+            }
+            @include animation('blinking-arrow .5s infinite');
+            @include transition(all 0.3s);
+        }
+    }
+}

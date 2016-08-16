@@ -22,7 +22,7 @@ export const HeaderLoggedOut = React.createClass({
                 <div className="row">
                     <div className="small-12 columns">
                         <div className="small-6 columns">
-                            <button className="button header-login" onClick={ isModalOpen ? false : this.toggleLoginModal } href="#">Log In</button>
+                            <button className="button header-login" onClick={ isModalOpen ? false : this.toggleLoginModal } href="#">GoodLoginButton.jpg</button>
                         </div>
                         <div className="small-6 text-right columns">
                             <Search />

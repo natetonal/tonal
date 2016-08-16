@@ -1,5 +1,9 @@
 // This will be a series of imports usually.
 
+// Fonts
+@import "base/fonts";
+
+// Variables
 @import "base/variables";
 
 // Foundation
@@ -10,9 +14,6 @@
 // Mixins
 @import "base/mixins";
 
-// Fonts
-@import "base/fonts";
-
 // Components
 @import "components/header";
 @import "components/settings";
@@ -20,3 +21,7 @@
 @import "components/tabs";
 @import "components/search";
 @import "components/auth/loginmodal";
+
+// Helper Components
+@import "components/helpers/input";
+@import "components/helpers/button";

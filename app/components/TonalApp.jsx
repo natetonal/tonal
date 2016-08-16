@@ -18,7 +18,7 @@ export const TonalApp = React.createClass({
         const { uid }  = this.props.auth;
 
         // Flip this to switch between headers:
-        if(!uid){
+        if(uid){
             return(
                 <MenuWrapper>
                     <Header />

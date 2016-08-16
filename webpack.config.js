@@ -67,14 +67,22 @@ module.exports = {
   },
   module: {
     loaders: [
-      {
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015', 'stage-0']
+        {
+            test: /\.jsx?$/,
+            loader: 'babel-loader',
+            query: {
+                presets: ['react', 'es2015', 'stage-0']
+            },
+            exclude: /(node_modules|bower_components)/
         },
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/
-      }
+        {
+            test: /\.woff$|\.woff2$|\.ttf$|\.eot$|\.svg$/,
+            loader: 'url',
+            query:
+            {
+                name: 'app/styles/fonts/[name].[ext]'
+            },
+        }
     ]
   },
   sassLoader: {
