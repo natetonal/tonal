@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
@@ -29,6 +30,9 @@ export const LoginModal = React.createClass({
                         <Button btnIcon="" btnText="Sign In" hoverArrow="true" />
                         <p className="text-center">-OR-</p>
                         <Button btnIcon="fa-facebook-official" btnText="Sign In With Facebook" hoverArrow="false" />
+                        <p className="text-center">
+                            <Link to="#" className="forgot-password">I forgot my password</Link>
+                        </p>
             		</div>
             	</div>
             </div>
