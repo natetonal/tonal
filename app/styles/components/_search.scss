@@ -371,14 +371,12 @@ input[type="search"] { /* reset normalize */
         @include transition(all 0.2s);
         background: $search-bg;
         &:hover {
-            box-shadow: inset 0 0 0 2px $lightblue;
             cursor: pointer;
             @include transition(all 0.2s);
         }
 	}
 
     @include placeholderHover(morphsearch-input){
-        color: $lightblue;
         cursor: pointer;
         @include transition(all 0.2s);
     }
