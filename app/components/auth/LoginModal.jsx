@@ -26,7 +26,9 @@ export const LoginModal = React.createClass({
             		<div>
                         <Input name="Email or Username" />
                         <Input name="Password" type="password" />
-                        <Button iconClass="icon-arrow-right" iconText="Sign In" />
+                        <Button btnIcon="" btnText="Sign In" hoverArrow="true" />
+                        <p className="text-center">-OR-</p>
+                        <Button btnIcon="fa-facebook-official" btnText="Sign In With Facebook" hoverArrow="false" />
             		</div>
             	</div>
             </div>

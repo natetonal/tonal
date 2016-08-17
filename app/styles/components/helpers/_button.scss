@@ -8,12 +8,16 @@
     transition: all 0.3s;
     text-transform: uppercase;
 
+    .fa{
+        margin: 0 10px;
+    }
+
     &::before{
         position: absolute;
         color: $white;
         font-family: FontAwesome;
         content: "\f105";
-        left: 90%;
+        right: 40px;
         opacity: 0;
         @include transition(all 0.3s);
     }
@@ -38,7 +42,7 @@
         &::before{
             font-family: FontAwesome;
             content: "\f105";
-            left: 90%;
+            right: 60px;
             opacity: 0;
             color: $orange;
             @include transition(all 0.3s);
@@ -51,7 +55,7 @@
         &::before{
             font-family: FontAwesome;
             content: "\f105";
-            left: 80%;
+            right: 60px;
             opacity: 1;
             @include keyframes(blinking-arrow) {
               0%   { color: $orange; }
