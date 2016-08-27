@@ -69,7 +69,7 @@
             // color: $header-link-hover;
             content: attr(data-hover);
             @include gradient(top, $header-link-hover1 0, $header-link-hover2 50%);
-            @include transition(0.3s);
+            @include transition(all 0.3s);
 
             background-position: 0 100%;
             background-size: 200% 200%;
@@ -149,7 +149,7 @@
         top: ($header-height - $header-icon-div-size) / 4;
         left: 0;
         padding: 0;
-        box-shadow: inset 0 0 0 2px #9ef6ec;
+        box-shadow: inset 0 0 0 2px $highlight2;
         @include transition(0.2s, opacity 0.2s);
         @include transform(scale(.8));
     	opacity: 0;
@@ -161,12 +161,13 @@
         margin-right: -15px;
         left: -15px;
         z-index: 100;
-        padding: .6em;
+        padding: 4px;
         display: inline-block;
-        min-width: 2.1em;
+        min-width: 0;
+        height: 8px;
         font-size: .3rem;
         text-align: center;
-        border-radius: 50%;
+        border-radius: 5px;
     }
 
     .nt-right{
@@ -188,19 +189,19 @@
     }
 
     .hi-icon-effect-1b.hi-icon-notify .hi-icon:hover{
-        color: lighten(saturate($orange, 10%), 10%);
+        color: $highlight2;
     }
 
     .hi-icon-effect-1.hi-icon-notify .hi-icon:after{
-        box-shadow: inset 0 0 0 2px lighten(saturate($orange, 10%), 10%);
+        box-shadow: inset 0 0 0 2px $highlight2;
     }
 
     .hi-icon-effect-1b.hi-icon-post .hi-icon:hover{
-        color: lighten(saturate($lightgreen, 10%), 10%);
+        color: $highlight2;
     }
 
     .hi-icon-effect-1.hi-icon-post .hi-icon:after{
-        box-shadow: inset 0 0 0 2px lighten(saturate($lightgreen, 10%), 10%);
+        box-shadow: inset 0 0 0 2px $highlight2;
     }
 
     .hi-icon-effect-1b .hi-icon:after {

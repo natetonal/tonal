@@ -51,7 +51,7 @@ export const Header = React.createClass({
                             <a href="#" className="hi-icon hi-icon-mobile">
                                 <i className="fa fa-bell" aria-hidden="true"></i>
                             </a>
-                            <span className="alert badge">X</span>
+                            <span className="alert badge"></span>
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a href="#" className="hi-icon hi-icon-mobile">

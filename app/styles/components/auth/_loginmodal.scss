@@ -39,7 +39,7 @@
 	color: $light-text;
 	background: rgba($dark-bg, 0.9);
 	position: relative;
-	border-radius: 10px;
+	border-radius: 1px;
 	margin: 0 auto;
 }
 
@@ -55,7 +55,6 @@
 }
 
 .md-content > div {
-	padding: 15px 40px 30px;
 	margin: 0;
 }
 
@@ -107,5 +106,36 @@
 		color: $white;
 		box-shadow: 0 1px 0 0 $white;
 		@include transition(all 0.3s);
+	}
+}
+
+.login-area{
+	padding: 15px 40px 30px;
+}
+
+.login-tab{
+	width: 50%;
+	display: inline-block;
+	text-align: center;
+	background: rgba($black, 0.1);
+
+	&:hover{
+		cursor: pointer;
+		background: rgba($highlight2, 0.5);
+		color: $white;
+		@include transition(all 0.2s);
+	}
+
+	a{
+		padding: 20px 0;
+		display: block;
+		color: $inactive-light;
+	}
+}
+
+.login-tab.selected{
+	background: transparent;
+	&:hover{
+		color: inherit;
 	}
 }

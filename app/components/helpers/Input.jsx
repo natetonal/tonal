@@ -16,7 +16,6 @@ export const Input = React.createClass({
         } else {
             this.setState({ filled: true });
         }
-        console.log('refs.tonalInput: ', this.refs.tonalInput.value);
     },
 
     render(){
