@@ -32,6 +32,7 @@
     "ot-node-env": "^1.1.0",
     "phantomjs": "^2.1.7",
     "react": "^0.14.7",
+    "react-addons-css-transition-group": "^15.3.1",
     "react-addons-test-utils": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-hammerjs": "^0.5.0",

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Login from './Login';
 import Signup from './Signup';
@@ -36,7 +37,9 @@ export const LoginModal = React.createClass({
             <div className={`md-modal md-effect-1 ${isOpen ? "md-show" : ""}`} id="modal-1">
             	<div className="md-content">
             		<div className="login-area">
-                        { tabSelected === "login" ? <Login /> : <Signup /> }
+                        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
+                            { tabSelected === "login" ? <Login key="login" /> : <Signup key="signup" /> }
+                        </ReactCSSTransitionGroup>
             		</div>
                     <div className="login-tabs">
                         <div className={`login-tab ${tabSelected === 'login' ? 'selected' : ''} `}>

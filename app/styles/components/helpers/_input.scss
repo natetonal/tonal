@@ -69,6 +69,7 @@
 	height: calc(100% - 1em);
 	text-align: left;
 	pointer-events: none;
+	letter-spacing: .15em;
 }
 
 .input__label-content--hoshi {
@@ -80,7 +81,7 @@
 	content: '';
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: -1px;
 	width: 100%;
 	height: calc(100% - 10px);
 	border-bottom: 1px solid #B9C1CA;
