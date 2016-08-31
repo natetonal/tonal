@@ -122,7 +122,6 @@
 	width: 50%;
 	display: inline-block;
 	text-align: center;
-	background: rgba($black, 0.1);
 
 	a{
 		padding: 20px 0;
@@ -140,7 +139,7 @@
 .login-tab.selected{
 	background: transparent;
 	color: $white;
-	box-shadow: 0 5px 0 0 rgba($highlight2, 0.8);
+	box-shadow: 0 5px 0 0 rgba($highlight1, 1);
 
 	a{
 		&:hover{

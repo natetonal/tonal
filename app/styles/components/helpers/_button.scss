@@ -4,7 +4,7 @@
 @mixin buttonTheme{
 
     $btnThemes: (
-        main: $highlight2,
+        main: $highlight1,
         alert: $red,
         facebook: $facebook
     );
@@ -13,7 +13,7 @@
 
         .#{$themeName}{
 
-            background: rgba($color, 0.6);
+            background: rgba($color, 1);
 
             .icon-arrow-right{
                 &:active::before{
@@ -35,12 +35,12 @@
 
             &:hover{
                 color: $white;
-                background: rgba($color, 0.7);
+                background: lighten(rgba($color, 1), 5%);
             }
 
             &:active{
                 color: $white;
-                background: rgba($color, 0.8);
+                background: lighten(rgba($color, 1), 10%);
                 box-shadow: 5px 5px 7px 0 rgba(0, 0, 0, 0.3)
             }
         }
