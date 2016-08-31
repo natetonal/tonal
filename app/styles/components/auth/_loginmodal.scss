@@ -127,6 +127,7 @@
 		padding: 20px 0;
 		display: block;
 		color: $inactive-light;
+		box-shadow: inset 1px 1px 0 1px rgba($black,.1);
 
 		&:hover{
 			cursor: pointer;
