@@ -17,7 +17,7 @@ export const HeaderLoggedOut = React.createClass({
         const { isModalOpen } = this.props;
 
         return(
-            <div className="tonal-header">
+            <div className={`tonal-header ${ isModalOpen ? "blur" : "" }`}>
                 <div className="logo float-center"></div>
                 <div className="row">
                     <div className="small-12 columns">

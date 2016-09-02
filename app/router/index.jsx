@@ -3,7 +3,7 @@ import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 
 // Components
 import TonalApp from 'TonalApp';
-import Auth from 'auth/Auth.jsx';
+import Landing from 'landing/Landing.jsx';
 import Connect from 'connect/Connect.jsx';
 import Discover from 'discover/Discover.jsx';
 import MyMusic from 'mymusic/MyMusic.jsx';
@@ -31,7 +31,7 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
 export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>
-            <IndexRoute component={ Auth } onEnter={ redirectIfLoggedIn } />
+            <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
             <Route path="connect" component = { Connect } onEnter = { requireLogin } />
             <Route path="discover" component = { Discover } onEnter = { requireLogin } />
             <Route path="mymusic" component = { MyMusic } onEnter = { requireLogin } />

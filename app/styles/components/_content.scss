@@ -38,7 +38,14 @@ body,
 }
 
 .tonal-content{
-	padding: ($header-height + 10px) 2em 0 2em;
 	color: $white;
+}
 
+.blur{
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -o-filter: blur(2px);
+  filter: blur(2px);
+  @include transition(all 0.3s);
 }

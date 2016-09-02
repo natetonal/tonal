@@ -15,14 +15,14 @@ export const TonalApp = React.createClass({
 
     render(){
 
-        const { uid }  = this.props.auth;
+        const { uid, isModalOpen }  = this.props.auth;
 
         // Flip this to switch between headers:
         if(uid){
             return(
                 <MenuWrapper>
                     <Header />
-                    <div className="tonal-content">
+                    <div className={`tonal-content ${ isModalOpen ? "blur" : "" }`}>
                         { this.props.children }
                     </div>
                     <Tabs />
@@ -34,7 +34,7 @@ export const TonalApp = React.createClass({
             <div>
                 <HeaderLoggedOut />
                 <div className="tonal-main">
-                    <div className="tonal-content">
+                    <div className={`tonal-content ${ isModalOpen ? "blur" : "" }`}>
                         { this.props.children }
                     </div>
                 </div>
@@ -46,6 +46,7 @@ export const TonalApp = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        isModalOpen: state.uiState.loginModalIsOpen
     };
 })(TonalApp);
