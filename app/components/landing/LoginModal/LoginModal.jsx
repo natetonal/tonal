@@ -9,36 +9,23 @@ import Signup from './Signup';
 
 export const LoginModal = React.createClass({
 
-    componentWillMount(){
-        this.setState({
-            tabSelected: 'login'
-        });
-    },
-
     handleTabs(event){
         event.preventDefault();
-        this.setState({
-            tabSelected: event.target.getAttribute('name')
-        });
-    },
-
-    toggleLoginModal(event){
-        event.preventDefault();
+        const tabSelected = event.target.getAttribute('name')
         const { dispatch } = this.props;
-        dispatch(actions.toggleLoginModal());
+        dispatch(actions.toggleLoginModalTab(tabSelected));
     },
 
     render(){
 
-        const { isOpen } = this.props;
-        const { tabSelected } = this.state;
+        const { isOpen, tabSelected } = this.props;
 
         return(
             <div className={`md-modal md-effect-1 ${isOpen ? "md-show" : ""}`} id="modal-1">
             	<div className="md-content">
             		<div className="login-area">
                         <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
-                            { tabSelected === "login" ? <Login key="login" /> : <Signup key="signup" /> }
+                            { tabSelected === 'login' ? <Login key="login" /> : <Signup key="signup" /> }
                         </ReactCSSTransitionGroup>
             		</div>
                     <div className="login-tabs">
@@ -62,5 +49,8 @@ export const LoginModal = React.createClass({
 });
 
 export default Redux.connect(state => {
-    return { isOpen: state.uiState.loginModalIsOpen };
+    return {
+        isOpen: state.uiState.loginModalIsOpen,
+        tabSelected: state.uiState.loginModalTabSelected || 'login'
+    };
 })(LoginModal);

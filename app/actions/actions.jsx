@@ -18,10 +18,16 @@ export var logout = () => {
 
 export var toggleLoginModal = () => {
     return{
-        type: 'TOGGLE_LOGIN_MODAL'
+        type: 'TOGGLE_LOGIN_MODAL',
     };
 };
 
+export var toggleLoginModalTab = (tabSelected) => {
+    return{
+        type: 'TOGGLE_LOGIN_MODAL_TAB',
+        tabSelected
+    }
+}
 export var toggleMenu = () => {
     return{
         type: 'TOGGLE_MENU'

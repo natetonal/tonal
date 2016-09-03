@@ -35,7 +35,13 @@ export var uiStateReducer = (state = {}, action) => {
         case 'TOGGLE_LOGIN_MODAL':
             return{
                 ...state,
-                loginModalIsOpen: !state.loginModalIsOpen
+                loginModalIsOpen: !state.loginModalIsOpen,
+            };
+        case 'TOGGLE_LOGIN_MODAL_TAB':
+            console.log("which tab is selected? " , action.tabSelected);
+            return{
+                ...state,
+                loginModalTabSelected: action.tabSelected
             };
         default:
             return state;

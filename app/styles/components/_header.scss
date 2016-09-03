@@ -24,6 +24,30 @@
     .header-login{
 
     }
+
+    .tonal-links-loggedout{
+        nav{
+            display: block;
+            overflow: hidden;
+            a {
+            	position: relative;
+            	display: inline-block;
+            	outline: none;
+            	text-decoration: none;
+                // text-transform: uppercase;
+            	font-weight: 400;
+            	// text-shadow: 0 0 1px $shadow-light;
+            	font-size: $header-link-fontsize;
+                cursor: pointer;
+                height: $header-height;
+
+                &:hover, &:focus{
+                    outline: none;
+                }
+            }
+        }
+    }
+
     .tonal-links{
 
         nav{
