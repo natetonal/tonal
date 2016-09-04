@@ -1,12 +1,10 @@
 export var authReducer = (state = {}, action) => {
-    console.log("action.type from authReducer: ", action.type);
     switch(action.type){
         case 'LOGIN':
             return action.uid;
         case 'LOGOUT':
             return {};
         default:
-            console.log("authReducer returning default");
             return state;
     }
 };
@@ -38,7 +36,6 @@ export var uiStateReducer = (state = {}, action) => {
                 loginModalIsOpen: !state.loginModalIsOpen,
             };
         case 'TOGGLE_LOGIN_MODAL_TAB':
-            console.log("which tab is selected? " , action.tabSelected);
             return{
                 ...state,
                 loginModalTabSelected: action.tabSelected

@@ -77,6 +77,14 @@
         }
     }
 
+    .links button{
+        max-width: 80px;
+        letter-spacing: 0;
+        padding: 10px 5px;
+        text-transform: capitalize;
+        margin-right: 5px;
+    }
+
     .links a {
     	color: $header-link;
         padding: (($header-height - $header-link-fontsize) / 2) 12px;
