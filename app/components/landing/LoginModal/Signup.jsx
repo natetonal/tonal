@@ -10,7 +10,8 @@ export const Signup = React.createClass({
     render(){
         return(
             <div>
-                <Input name="Email or Username" />
+                <Input name="Email" />
+                <Input name="Username" />
                 <Input name="Password" type="password" />
                 <Input name="Confirm Password" type="password" />
                 <Button btnType="main" btnIcon="" btnText="Create Account" />

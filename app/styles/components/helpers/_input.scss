@@ -9,13 +9,13 @@
 	border: none;
 	-webkit-appearance: none; /* for box shadows to show on iOS */
 	box-shadow: none;
-}
 
-.input__field:focus {
-	outline: none;
-	background: transparent;
-	box-shadow: none;
-	border: none;
+	&:focus{
+		outline: none;
+		background: transparent;
+		box-shadow: none;
+		border: none;
+	}
 }
 
 .input__label {

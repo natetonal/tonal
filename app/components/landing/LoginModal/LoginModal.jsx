@@ -29,17 +29,17 @@ export const LoginModal = React.createClass({
                         </ReactCSSTransitionGroup>
             		</div>
                     <div className="login-tabs">
-                        <div className={`login-tab ${tabSelected === 'login' ? 'selected' : ''} `}>
-                            <Link name="login"
-                                  to="#"
-                                  onClick={this.handleTabs}
-                                  className="login-tabs-label">Log In</Link>
-                        </div>
                         <div className={`login-tab ${tabSelected === 'signup' ? 'selected' : ''} `}>
                             <Link name="signup"
                                   to="#"
                                   onClick={this.handleTabs}
                                   className="login-tabs-label">Sign Up</Link>
+                        </div>
+                        <div className={`login-tab ${tabSelected === 'login' ? 'selected' : ''} `}>
+                            <Link name="login"
+                                  to="#"
+                                  onClick={this.handleTabs}
+                                  className="login-tabs-label">Log In</Link>
                         </div>
                     </div>
             	</div>
