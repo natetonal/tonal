@@ -16,10 +16,10 @@ export const Button = React.createClass({
 
     render(){
 
-        const { hoverArrow, btnText, btnType } = this.props;
+        const { hoverArrow, btnText, btnType, type } = this.props;
 
         return(
-            <button className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
+            <button type={ type } className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
                 { this.displayIcon() }{ btnText }
             </button>
         );

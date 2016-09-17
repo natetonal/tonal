@@ -96,8 +96,23 @@
 	transition: transform 0.3s;
 }
 
-.input__label--hoshi-color-1::after {
+.input__label--hoshi-color-main::after {
 	border-color: $lightblue;
+	@include transition(0.3s all);
+}
+
+.input__label--hoshi-color-bad::before,
+.input__label--hoshi-color-bad::after {
+	margin-top: 2px;
+	border-bottom: 4px solid red;
+	@include transition(0.3s all);
+}
+
+.input__label--hoshi-color-good::before,
+.input__label--hoshi-color-good::after {
+	margin-top: 2px;
+	border-bottom: 4px solid $lightgreen;
+	@include transition(0.3s all);
 }
 
 .input__field--hoshi:focus + .input__label--hoshi::after,
@@ -110,6 +125,11 @@
 .input--filled .input__label-content--hoshi {
 	-webkit-animation: anim-1 0.3s forwards;
 	animation: anim-1 0.3s forwards;
+}
+
+.input-error{
+	color: lighten($red, 20%);
+	@include transition(0.3s all);
 }
 
 @-webkit-keyframes anim-1 {

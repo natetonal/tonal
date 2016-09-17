@@ -6,22 +6,18 @@ import * as actions from 'actions';
 import Search from './Search';
 import Button from './helpers/Button';
 
-{/*<div className="small-6 columns">
-    <button className="button header-login" onClick={ isModalOpen ? false : this.toggleLoginModal } href="#">GoodLoginButton.jpg</button>
-</div>*/}
-
-{/*<Link to="#" className="signup" name="signup" onClick={ isModalOpen ? false : this.toggleLoginModal } data-hover="Sign Up">Sign Up</Link>*/}
-
 export const HeaderLoggedOut = React.createClass({
 
     toggleLoginModal(event){
         event.preventDefault();
-        const { dispatch } = this.props;
-        const tabSelected = event.target.getAttribute('name')
-        dispatch(actions.toggleLoginModalTab(tabSelected));
-        dispatch(actions.toggleLoginModal());
-        console.log("tab selected: ", tabSelected);
-        console.log("event.target: ", event.target);
+
+        const { dispatch, isModalOpen } = this.props;
+
+        if(!isModalOpen){
+            const tabSelected = event.target.getAttribute('name')
+            dispatch(actions.toggleLoginModalTab(tabSelected));
+            dispatch(actions.toggleLoginModal());
+        }
     },
 
     render(){
@@ -34,8 +30,8 @@ export const HeaderLoggedOut = React.createClass({
                 <div className="row">
                     <div className="small-6 tonal-links-loggedout columns">
                         <nav className="links">
-                            <button name="signup" onClick={ isModalOpen ? false : this.toggleLoginModal } className="tonal-btn main">Sign Up</button>
-                            <Link to="#" name="login" onClick={ isModalOpen ? false : this.toggleLoginModal } data-hover="Log In">Log In</Link>
+                            <button name="signup" onClick={ this.toggleLoginModal } className="tonal-btn main">Sign Up</button>
+                            <Link to="#" name="login" onClick={ this.toggleLoginModal } data-hover="Log In">Log In</Link>
                         </nav>
                     </div>
                     <div className="small-6 text-right columns">

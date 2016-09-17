@@ -1,35 +1,33 @@
 import React from 'react';
-import * as Redux from 'react-redux';
-import * as actions from 'actions';
 
 export const Input = React.createClass({
 
-    componentWillMount(){
-        this.setState({
-            filled: false
-        });
-    },
-
-    handleInput(){
-        if(this.refs.tonalInput.value == ''){
-            this.setState({ filled: false });
-        } else {
-            this.setState({ filled: true });
-        }
-    },
 
     render(){
 
-        const { name, type } = this.props;
-        const { filled } = this.state;
+        const { label, input, type, filled, touched, error } = this.props;
+        const color = () => {
+            if(touched && error){
+                return "bad";
+            } else if(touched && !error){
+                return "good";
+            }
+            return "main";
+        }
+
+        console.log(`color for ${ label }: `, color());
 
         return(
 
-            <span className={`input input--hoshi ${filled ? "input--filled" : ""}`}>
-				<input ref="tonalInput" className="input__field input__field--hoshi" type={ type || "text" } onKeyUp={this.handleInput} id="input-4" />
-				<label className="input__label input__label--hoshi input__label--hoshi-color-1" htmlFor="input-4">
+            <span className={`input input--hoshi ${ filled || touched && error ? "input--filled" : ""}`}>
+				<input { ...input }
+                       ref="tonalInput"
+                       className="input__field input__field--hoshi"
+                       type={ type || "text" }
+                       id="input-4" />
+				<label className={`input__label input__label--hoshi input__label--hoshi-color-${ color() }`} htmlFor="input-4">
 					<span className="input__label-content input__label-content--hoshi">
-                        { name }
+                        { label } { touched && error && <span className="input-error">({error})</span> }
                     </span>
 				</label>
 			</span>
@@ -37,4 +35,4 @@ export const Input = React.createClass({
     }
 });
 
-export default Redux.connect()(Input);
+export default Input;
