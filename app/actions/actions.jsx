@@ -58,6 +58,14 @@ export var getImgUrl = (path) => {
     };
 };
 
+export var createUserWithEmailAndPassword = (email, password) => {
+    return (dispatch, getState) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
+            console.log("something bad happened: ", error);
+        });
+    };
+};
+
 // This needs to be edited to accommodate FB & user/email login:
 export var startEmailLogin = () => {
     return (dispatch, getState) => {

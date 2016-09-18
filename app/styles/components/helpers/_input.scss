@@ -132,6 +132,12 @@
 	@include transition(0.3s all);
 }
 
+.fa-spinner{
+	position: absolute;
+	top: 50%;
+	right: 0;
+}
+
 @-webkit-keyframes anim-1 {
 	50% {
 		opacity: 0;

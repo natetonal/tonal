@@ -15,38 +15,38 @@ export const TonalApp = React.createClass({
 
     render(){
 
-        const { uid, isModalOpen }  = this.props.auth;
+        const { uid }  = this.props;
+        console.log("uid from TonalApp: ", uid);
 
-        // Flip this to switch between headers:
-        if(uid){
+        if(Object.keys(uid).length === 0 && uid.constructor === Object){
             return(
-                <MenuWrapper>
-                    <Header />
-                    <div className={`tonal-content ${ isModalOpen ? "blur" : "" }`}>
-                        { this.props.children }
+                <div>
+                    <HeaderLoggedOut />
+                    <div className="tonal-main">
+                        <div className="tonal-content">
+                            { this.props.children }
+                        </div>
                     </div>
-                    <Tabs />
-                </MenuWrapper>
+                    <ModalOverlay />
+                </div>
             );
         }
-
+        
         return(
-            <div>
-                <HeaderLoggedOut />
-                <div className="tonal-main">
-                    <div className={`tonal-content ${ isModalOpen ? "blur" : "" }`}>
-                        { this.props.children }
-                    </div>
+            <MenuWrapper>
+                <Header />
+                <div className="tonal-content">
+                    { this.props.children }
                 </div>
-                <ModalOverlay />
-            </div>
+                <Tabs />
+            </MenuWrapper>
         );
+
     }
 });
 
 export default Redux.connect(state => {
     return {
-        auth: state.auth,
-        isModalOpen: state.uiState.loginModalIsOpen
+        uid: state.auth,
     };
 })(TonalApp);

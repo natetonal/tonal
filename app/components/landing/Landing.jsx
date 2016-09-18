@@ -6,22 +6,14 @@ import LoginModal from './LoginModal/LoginModal';
 
 export const Landing = React.createClass({
 
-    onEmailLogin(){
-
-    },
-
-    onFacebookLogin(){
-
-    },
-
     render(){
 
-        const { isOpen } = this.props;
+        const { isModalOpen } = this.props;
 
         return(
             <div>
                 <LoginModal />
-                <div className={`auth-content ${ isOpen ? "blur" : "" }`}>
+                <div className={`auth-content ${ isModalOpen ? "blur" : "" }`}>
                     <div className="landing-section section-1">
                     </div>
                 </div>
