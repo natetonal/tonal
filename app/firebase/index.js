@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 
 try {
-    var config = {
+    const config = {
         apiKey: process.env.API_KEY,
         authDomain: process.env.AUTH_DOMAIN,
         databaseURL: process.env.DATABASE_URL,
@@ -9,7 +9,9 @@ try {
     };
 
     firebase.initializeApp(config);
+
 } catch (e) {
+
     console.log('Error with Firebase: ', e);
 }
 

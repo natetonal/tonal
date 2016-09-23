@@ -4,23 +4,21 @@ import * as actions from 'actions';
 
 export const Button = React.createClass({
 
-    displayIcon(){
-        const { btnIcon } = this.props;
-        if(btnIcon){
-            return(
-                <i className={`fa ${ btnIcon }`} aria-hidden="true"></i>
-            );
-        }
-        return "";
+    displayIcon(btnIcon){
+        return btnIcon ? <i className={`fa ${ btnIcon }`} aria-hidden="true"></i> : "";
+    },
+
+    loading(isLoading){
+        return isLoading ? <i className="fa fa-cog fa-spin fa-fw"></i> : "";
     },
 
     render(){
 
-        const { hoverArrow, btnText, btnType, type } = this.props;
-
+        const { hoverArrow, btnText, btnType, btnIcon, isLoading, type } = this.props;
+        console.log("from the button: isLoading? ", isLoading);
         return(
             <button type={ type } className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
-                { this.displayIcon() }{ btnText }
+                { this.displayIcon(btnIcon) }{ btnText }{ this.loading(isLoading) }
             </button>
         );
     }

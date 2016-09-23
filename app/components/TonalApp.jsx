@@ -18,7 +18,7 @@ export const TonalApp = React.createClass({
         const { uid }  = this.props;
         console.log("uid from TonalApp: ", uid);
 
-        if(Object.keys(uid).length === 0 && uid.constructor === Object){
+        if(!uid){
             return(
                 <div>
                     <HeaderLoggedOut />
@@ -31,7 +31,7 @@ export const TonalApp = React.createClass({
                 </div>
             );
         }
-        
+
         return(
             <MenuWrapper>
                 <Header />
@@ -47,6 +47,6 @@ export const TonalApp = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        uid: state.auth,
+        uid: state.auth.uid
     };
 })(TonalApp);

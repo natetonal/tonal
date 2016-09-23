@@ -10,14 +10,19 @@ import Button from './../../helpers/Button';
 export const Signup = React.createClass({
 
     handleFormSubmit(values){
+
         const { email, password } = values;
         const { dispatch } = this.props;
-        dispatch(actions.createUserWithEmailAndPassword(email, password));
+
+        return dispatch(actions.createUserWithEmailAndPassword(email, password));
+
     },
 
     render(){
 
-        const { handleSubmit } = this.props;
+        const { handleSubmit, submitting } = this.props;
+        console.log("isSubmitting? ", this.props);
+
 
         return(
             <div>
@@ -25,7 +30,7 @@ export const Signup = React.createClass({
                     <Field name="email" label="Email" type="text" component={ Input } />
                     <Field name="password" label="Password" type="password" component={ Input } />
                     <Field name="confirmPassword" label="Confirm Password" type="password" component={ Input } />
-                    <Button type="submit" btnType="main" btnIcon="" btnText="Create Account" />
+                    <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Create Account"} />
                 </form>
             </div>
         );

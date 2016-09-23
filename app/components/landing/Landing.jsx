@@ -8,8 +8,10 @@ export const Landing = React.createClass({
 
     render(){
 
-        const { isModalOpen } = this.props;
+        const { isModalOpen, location: { query }} = this.props;
 
+        console.log("query from Landing.jsx: ", query);
+        
         return(
             <div>
                 <LoginModal />

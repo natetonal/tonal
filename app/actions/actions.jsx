@@ -40,6 +40,18 @@ export var toggleSearch = () => {
     };
 };
 
+export var verificationEmailSent = () => {
+    return{
+        type: 'FLAG_VERIFICATION_EMAIL_AS_SENT'
+    };
+};
+
+export var resetAuthState = () => {
+    return{
+        type: 'RESET_AUTH_STATE'
+    };
+};
+
 export var getImgUrl = (path) => {
     return(dispatch, getState) => {
         console.log('getImgUrl request received.');
@@ -58,10 +70,24 @@ export var getImgUrl = (path) => {
     };
 };
 
+export var sendVerificationEmail = (user) => {
+    return (dispatch) => {
+        user.sendEmailVerification().then(() => {
+            console.log("Verification has been sent to ", user.email);
+            return dispatch(verificationEmailSent());
+        }, (error) => {
+            console.log("Error sending user verification email: ", error);
+        });
+    }
+};
+
 export var createUserWithEmailAndPassword = (email, password) => {
-    return (dispatch, getState) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
-            console.log("something bad happened: ", error);
+    return (dispatch) => {
+        return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+            console.log(`User created: ${email} : ${password}`);
+            return dispatch(sendVerificationEmail(user));
+        }, (error) => {
+            console.log("error creating user: ", error);
         });
     };
 };

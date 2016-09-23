@@ -12,10 +12,18 @@ import router from 'app/router/';
 
 firebase.auth().onAuthStateChanged((user) => {
     if(user){
-        store.dispatch(actions.login(user.uid));
-        // Dispatch an action to collect the user's stream for "connect"
-        browserHistory.push('connect');
+        if(user.providerId == 'facebook.com'){
+            browserHistory.push('connect');
+        } else {
+            if(user.emailVerified){
+                store.dispatch(actions.login(user.uid));
+                // Dispatch an action to collect the user's stream for "connect"
+                browserHistory.push('connect');
+            }
+        }
     } else {
+        // There should be a way to check if the user has ever logged in before down the road
+        // (i.e. checking our own user data)
         store.dispatch(actions.logout());
         // Dispatch an action to clear any lingering data.
         // Might want to push to a "Goodbye" marketing page.

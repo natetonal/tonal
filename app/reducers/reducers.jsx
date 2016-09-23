@@ -1,9 +1,21 @@
 export var authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
-            return action.uid;
+            return {
+                ...state,
+                uid: action.uid
+            };
         case 'LOGOUT':
-            return {};
+            return {
+                ...state,
+                uid: false
+            };
+        case 'FLAG_VERIFICATION_EMAIL_AS_SENT':
+            console.log("from reducer: verification email sent");
+            return {
+                ...state,
+                verificationEmailSent: true
+            };
         default:
             return state;
     }
@@ -33,7 +45,7 @@ export var uiStateReducer = (state = {}, action) => {
         case 'TOGGLE_LOGIN_MODAL':
             return{
                 ...state,
-                loginModalIsOpen: !state.loginModalIsOpen,
+                loginModalIsOpen: !state.loginModalIsOpen
             };
         case 'TOGGLE_LOGIN_MODAL_TAB':
             return{
