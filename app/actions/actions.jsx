@@ -75,9 +75,8 @@ export var verifyEmail = (mode, oobCode) => {
         console.log('Verifying email');
         return firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('Email verified!', success);
-            console.log('uid? ', firebase.UserInfo.uid);
-            return dispatch(login(firebase.UserInfo.uid));
-
+            console.log('firebase.auth.app: ', firebase.auth().app);
+            console.log('firebase.auth.currentUser: ', firebase.auth().currentUser);
         }, (error) => {
             console.log('Error: Email not verified:', error);
         });
