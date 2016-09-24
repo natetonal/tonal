@@ -28,6 +28,11 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     next();
 };
 
+const logThisVerfication = (nextState, replace, next) => {
+    console.log("nextState from logThisVerification: ", nextState);
+    next();
+}
+
 export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>

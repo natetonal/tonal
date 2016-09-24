@@ -6,12 +6,25 @@ import LoginModal from './LoginModal/LoginModal';
 
 export const Landing = React.createClass({
 
+    handleQuery(query){
+        const { dispatch } = this.props;
+        const { mode, oobCode } = query;
+        if(mode == 'verifyEmail' && oobCode){
+            console.log('from Landing: all needs are met to dispatch verifyEmail action!');
+            return dispatch(actions.verifyEmail(mode, oobCode));
+        }
+    },
+
     render(){
 
         const { isModalOpen, location: { query }} = this.props;
 
+        if(query){
+            this.handleQuery(query);
+        }
+
         console.log("query from Landing.jsx: ", query);
-        
+
         return(
             <div>
                 <LoginModal />

@@ -70,6 +70,17 @@ export var getImgUrl = (path) => {
     };
 };
 
+export var verifyEmail = (mode, oobCode) => {
+    return (dispatch) => {
+        console.log('Verifying email');
+        return firebase.auth().applyActionCode(oobCode).then((success) => {
+            console.log('Email verified!', success);
+        }, (error) => {
+            console.log('Error: Email not verified:', error);
+        });
+    }
+};
+
 export var sendVerificationEmail = (user) => {
     return (dispatch) => {
         user.sendEmailVerification().then(() => {
