@@ -17,6 +17,7 @@ const requireLogin = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(!currentUser){
         // replace is similar to browserHistory.push()
+        console.log('redirecting to / since user is not valid');
         replace('/');
     }
     next();
@@ -27,6 +28,7 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     if(currentUser){
         if(currentUser.providerId == 'password' && currentUser.emailVerified ||
            currentUser.providerId == 'facebook.com' && currentUser){
+            console.log('redirecting to connect since user is valid');
             replace('connect');
         }
     }

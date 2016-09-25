@@ -11,7 +11,6 @@ export var authReducer = (state = {}, action) => {
                 uid: false
             };
         case 'FLAG_VERIFICATION_EMAIL_AS_SENT':
-            console.log("from reducer: verification email sent");
             return {
                 ...state,
                 verificationEmailSent: true

@@ -21,8 +21,6 @@ export const Signup = React.createClass({
     render(){
 
         const { handleSubmit, submitting } = this.props;
-        console.log("isSubmitting? ", this.props);
-
 
         return(
             <div>

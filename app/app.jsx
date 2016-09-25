@@ -13,12 +13,14 @@ import router from 'app/router/';
 firebase.auth().onAuthStateChanged((user) => {
     console.log("authState has changed!", user);
     if(user){
+        console.log('there is a user.');
         if(user.providerId == 'facebook.com'){
             browserHistory.push('connect');
         } else {
+            console.log('the user is logging in with a password');
             if(user.emailVerified && user.uid){
-                console.log("user.providerId: ", user.providerId);
-                console.log("email is verified, logging in user");
+                console.log("user.providerId: ", user.providerData[0].providerId);
+                console.log("email is verified, logging in user and pushing them to connect.");
                 // Dispatch an action to collect the user's stream for "connect"
                 browserHistory.push('connect');
             }

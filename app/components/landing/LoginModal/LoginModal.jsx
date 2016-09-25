@@ -19,7 +19,6 @@ export const LoginModal = React.createClass({
     render(){
 
         const { isOpen, tabSelected, verificationEmailSent } = this.props;
-        console.log("from LoginModal: verificationEmailSent? ", verificationEmailSent);
 
         const loginModalUI = () => {
             if(verificationEmailSent){
