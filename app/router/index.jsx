@@ -24,9 +24,11 @@ const requireLogin = (nextState, replace, next) => {
 
 const redirectIfLoggedIn = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
-    if(currentUser.providerId == 'password' && currentUser.emailVerified ||
-       currentUser.providerId == 'facebook.com' && currentUser){
-        replace('connect');
+    if(currentUser){
+        if(currentUser.providerId == 'password' && currentUser.emailVerified ||
+           currentUser.providerId == 'facebook.com' && currentUser){
+            replace('connect');
+        }
     }
     next();
 };
