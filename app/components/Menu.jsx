@@ -1,8 +1,15 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
+import * as actions from 'actions';
 
 export const Menu = React.createClass({
+
+    handleLogout(){
+        const { dispatch } = this.props;
+        dispatch(actions.logout());
+    },
+
     render(){
         return(
             <nav className="tonal-menu menu-effect" id="menu-2">
@@ -23,7 +30,7 @@ export const Menu = React.createClass({
                 </ul>
                 <ul>
                     <li className="logout">
-                        <Link to="#">Log Out</Link>
+                        <Link to="#" onClick={ this.handleLogout }>Log Out</Link>
                     </li>
                 </ul>
             </nav>
