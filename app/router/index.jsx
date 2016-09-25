@@ -14,7 +14,8 @@ import firebase from 'app/firebase';
 
 // React-Router middleware (next allows async actions)
 const requireLogin = (nextState, replace, next) => {
-    if(!firebase.auth().currentUser){
+    const currentUser = firebase.auth().currentUser;
+    if(!currentUser){
         // replace is similar to browserHistory.push()
         replace('/');
     }
@@ -22,7 +23,9 @@ const requireLogin = (nextState, replace, next) => {
 };
 
 const redirectIfLoggedIn = (nextState, replace, next) => {
-    if(firebase.auth().currentUser){
+    const currentUser = firebase.auth().currentUser;
+    if(currentUser.providerId == 'password' && currentUser.emailVerified ||
+       currentUser.providerId == 'facebook.com' && currentUser){
         replace('connect');
     }
     next();
