@@ -70,17 +70,15 @@ export var getImgUrl = (path) => {
     };
 };
 
-export var verifyEmail = (mode, oobCode) => {
-    return (dispatch) => {
-        console.log('Verifying email');
-        return firebase.auth().applyActionCode(oobCode).then((success) => {
-            console.log('Email verified!', success);
-            console.log('firebase.auth.app: ', firebase.auth().app);
-            console.log('firebase.auth.currentUser: ', firebase.auth().currentUser);
-        }, (error) => {
-            console.log('Error: Email not verified:', error);
-        });
-    }
+export var verifyEmail = (oobCode) => {
+    console.log('Verifying email', oobCode);
+    return firebase.auth().applyActionCode(oobCode).then((success) => {
+        console.log('Email verified!', firebase.auth().currentUser.email);
+        console.log('firebase.auth.app: ', firebase.auth().currentUser.emailVerified);
+        console.log('firebase.auth.currentUser: ', firebase.auth().currentUser);
+    }, (error) => {
+        console.log('Error: Email not verified:', error);
+    });
 };
 
 export var sendVerificationEmail = (user) => {

@@ -11,7 +11,7 @@ export const Landing = React.createClass({
         const { mode, oobCode } = query;
         if(mode == 'verifyEmail' && oobCode){
             console.log('from Landing: all needs are met to dispatch verifyEmail action!');
-            return dispatch(actions.verifyEmail(mode, oobCode));
+            return dispatch(actions.verifyEmail(oobCode));
         }
     },
 

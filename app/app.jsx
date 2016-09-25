@@ -11,6 +11,7 @@ import firebase from 'app/firebase/';
 import router from 'app/router/';
 
 firebase.auth().onAuthStateChanged((user) => {
+    console.log("authState has changed!", user);
     if(user){
         if(user.providerId == 'facebook.com'){
             browserHistory.push('connect');
