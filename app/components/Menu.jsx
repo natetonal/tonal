@@ -8,7 +8,7 @@ export const Menu = React.createClass({
     handleLogout(){
         const { dispatch } = this.props;
         console.log("logging you out!");
-        dispatch(actions.logout());
+        dispatch(actions.startLogout());
     },
 
     render(){

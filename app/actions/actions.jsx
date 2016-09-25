@@ -70,6 +70,18 @@ export var getImgUrl = (path) => {
     };
 };
 
+
+export var startLogout = () => {
+    return (dispatch) => {
+        return firebase.auth().signOut().then((success) => {
+            console.log('user signed out in firebase, signing out in app.');
+            dispatch(logout());
+        }, (error) => {
+            console.log('there was a problem signing out');
+        }
+    }
+};
+
 export var verifyEmail = (oobCode) => {
     return (dispatch) => {
         return firebase.auth().applyActionCode(oobCode).then((success) => {
