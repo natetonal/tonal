@@ -78,8 +78,8 @@ export var startLogout = () => {
             dispatch(logout());
         }, (error) => {
             console.log('there was a problem signing out');
-        }
-    }
+        });                                                                                                          
+    };
 };
 
 export var verifyEmail = (oobCode) => {
