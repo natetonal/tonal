@@ -85,6 +85,7 @@ export var verifyEmail = (oobCode) => {
     return (dispatch) => {
         return firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('actions: Email verified!');
+            firebase.auth().currentUser.reload();
             dispatch(verificationEmailSent());
             dispatch(login(firebase.auth().currentUser.uid));
         }, (error) => {
@@ -95,7 +96,7 @@ export var verifyEmail = (oobCode) => {
 
 export var sendVerificationEmail = (user) => {
     return (dispatch) => {
-        user.sendEmailVerification().then(() => {
+        return user.sendEmailVerification().then(() => {
             console.log("actions: Verification has been sent to ", user.email);
             return dispatch(verificationEmailSent());
         }, (error) => {
