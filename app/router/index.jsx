@@ -1,9 +1,11 @@
 import React from 'react';
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
+import * as actions from 'actions';
 
 // Components
 import TonalApp from 'TonalApp';
 import Landing from 'landing/Landing.jsx';
+import Verify from 'landing/Verify.jsx';
 import Connect from 'connect/Connect.jsx';
 import Discover from 'discover/Discover.jsx';
 import MyMusic from 'mymusic/MyMusic.jsx';
@@ -36,8 +38,20 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     next();
 };
 
-const logThisVerification = (nextState, replace, next) => {
-    console.log("router: nextState from logThisVerification: ", nextState);
+const verifyUserEmail = (nextState, replace, next) => {
+    console.log("router: nextState from verifyUserEmail: ", nextState);
+    const { mode, oobCode } = nextState.location.query;
+            if(mode == 'verifyEmail' && oobCode){
+                firebase.auth().applyActionCode(oobCode).then((success) => {
+                    console.log("Email is good!");
+                    replace('connect');
+                }, (error) => {
+                    console.log("Email is no good :(");
+                    replace('/');
+                });
+            } else {
+                replace('/');
+            }
     next();
 }
 
@@ -45,7 +59,7 @@ export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>
             <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
-            <Route path="verify" component={ Landing } onEnter={ logThisVerification } />
+            <Route path="verify" component={ Verify } onEnter={ verifyUserEmail } />
             <Route path="connect" component = { Connect } onEnter = { requireLogin } />
             <Route path="discover" component = { Discover } onEnter = { requireLogin } />
             <Route path="mymusic" component = { MyMusic } onEnter = { requireLogin } />

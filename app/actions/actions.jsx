@@ -82,16 +82,9 @@ export var startLogout = () => {
 };
 
 export var verifyEmail = (oobCode) => {
-    return (dispatch) => {
-        return firebase.auth().applyActionCode(oobCode).then((success) => {
-            console.log('actions: Email verified!');
-            firebase.auth().currentUser.reload();
-            dispatch(verificationEmailSent());
-            dispatch(login(firebase.auth().currentUser.uid));
-        }, (error) => {
-            console.log('actions: Error: Email not verified:', error);
-        });
-    }
+    firebase.auth().currentUser.reload();
+    dispatch(verificationEmailSent());
+    dispatch(login(firebase.auth().currentUser.uid));
 };
 
 export var sendVerificationEmail = (user) => {

@@ -6,22 +6,9 @@ import LoginModal from './LoginModal/LoginModal';
 
 export const Landing = React.createClass({
 
-    handleQuery(query){
-        const { dispatch, verificationEmailSent } = this.props;
-        const { mode, oobCode } = query;
-        if(mode == 'verifyEmail' && oobCode && !verificationEmailSent){
-            console.log('Landing.jsx: all needs are met to dispatch verifyEmail action!');
-            return dispatch(actions.verifyEmail(oobCode));
-        }
-    },
-
     render(){
 
-        const { isModalOpen, location: { query }} = this.props;
-
-        if(query){
-            this.handleQuery(query);
-        }
+        const { isModalOpen } = this.props;
 
         return(
             <div>
@@ -38,6 +25,5 @@ export const Landing = React.createClass({
 export default Redux.connect(state => {
     return {
         isOpen: state.uiState.loginModalIsOpen,
-        verificationEmailSent: state.auth.verificationEmailSent
     };
 })(Landing);
