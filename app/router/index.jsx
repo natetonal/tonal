@@ -39,19 +39,19 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
 };
 
 const verifyUserEmail = (nextState, replace, next) => {
-    console.log("router: nextState from verifyUserEmail: ", nextState);
     const { mode, oobCode } = nextState.location.query;
-            if(mode == 'verifyEmail' && oobCode){
-                firebase.auth().applyActionCode(oobCode).then((success) => {
-                    console.log("Email is good!");
-                    replace('connect');
-                }, (error) => {
-                    console.log("Email is no good :(");
-                    replace('/');
-                });
-            } else {
+    console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
+        if(mode == 'verifyEmail' && oobCode){
+            firebase.auth().applyActionCode(oobCode).then((success) => {
+                console.log("Email is good!");
+                replace('connect');
+            }, (error) => {
+                console.log("Email is no good :(");
                 replace('/');
-            }
+            });
+        } else {
+            replace('/');
+        }
     next();
 }
 
