@@ -9,7 +9,7 @@ export var authReducer = (state = {}, action) => {
         case 'LOGOUT':
             return {
                 ...state,
-                uid: false
+                uid: ""
             };
         case 'FLAG_VERIFICATION_EMAIL_AS_SENT':
             return {
