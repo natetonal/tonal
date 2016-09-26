@@ -106,7 +106,7 @@ export var sendVerificationEmail = (user) => {
 
 export var createUserWithEmailAndPassword = (email, password) => {
     return (dispatch) => {
-        return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
             console.log(`User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {

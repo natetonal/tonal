@@ -7,6 +7,7 @@ export var authReducer = (state = {}, action) => {
                 uid: action.uid
             };
         case 'LOGOUT':
+            console.log('logging out user (this should wipe the uid from authState)');
             return {
                 ...state,
                 uid: ""
