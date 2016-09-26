@@ -36,7 +36,7 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     next();
 };
 
-const logThisVerfication = (nextState, replace, next) => {
+const logThisVerification = (nextState, replace, next) => {
     console.log("router: nextState from logThisVerification: ", nextState);
     next();
 }
