@@ -1,6 +1,7 @@
 export var authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
+            console.log('logging in user...');
             return {
                 ...state,
                 uid: action.uid

@@ -3,7 +3,6 @@ import firebase, { databaseRef, storageRef, facebookAuthProvider } from 'app/fir
 import moment from 'moment';
 
 export var login = (uid) => {
-    console.log("UID from actions: ", uid);
     return{
         type: 'LOGIN',
         uid
@@ -78,13 +77,14 @@ export var startLogout = () => {
             dispatch(logout());
         }, (error) => {
             console.log('there was a problem signing out');
-        });                                                                                                          
+        });
     };
 };
 
 export var verifyEmail = (oobCode) => {
     return (dispatch) => {
         return firebase.auth().applyActionCode(oobCode).then((success) => {
+            console.log('Email verified!');
             dispatch(login(firebase.auth().currentUser.uid));
         }, (error) => {
             console.log('Error: Email not verified:', error);

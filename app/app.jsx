@@ -26,6 +26,7 @@ firebase.auth().onAuthStateChanged((user) => {
             }
         }
     } else {
+        console.log('pushing back to index since theres no user');
         // There should be a way to check if the user has ever logged in before down the road
         // (i.e. checking our own user data)
         // Dispatch an action to clear any lingering data.
