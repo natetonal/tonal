@@ -69,6 +69,16 @@ export var getImgUrl = (path) => {
     };
 };
 
+export var verifyEmailWithCode = (oobCode) => {
+    return (dispatch) => {
+        return firebase.auth().applyActionCode(oobCode).then(() => {
+            const currentUser = firebase.auth().currentUser;
+            return dispatch(login(currentUser.uid);
+        }, (error) => {
+            console.log("router: Problem verifying email: ", error);
+        });
+    }
+};
 
 export var startLogout = () => {
     return (dispatch) => {
@@ -79,12 +89,6 @@ export var startLogout = () => {
             console.log('actions: there was a problem signing out');
         });
     };
-};
-
-export var verifyEmail = (oobCode) => {
-    firebase.auth().currentUser.reload();
-    dispatch(verificationEmailSent());
-    dispatch(login(firebase.auth().currentUser.uid));
 };
 
 export var sendVerificationEmail = (user) => {

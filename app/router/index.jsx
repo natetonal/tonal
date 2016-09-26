@@ -11,8 +11,8 @@ import Discover from 'discover/Discover.jsx';
 import MyMusic from 'mymusic/MyMusic.jsx';
 import TonalStore from 'tonalstore/TonalStore.jsx';
 
-// Database
 import firebase from 'app/firebase';
+import store from 'store';
 
 // React-Router middleware (next allows async actions)
 const requireLogin = (nextState, replace, next) => {
@@ -42,11 +42,9 @@ const verifyUserEmail = (nextState, replace, next) => {
     const { mode, oobCode } = nextState.location.query;
     console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
         if(mode == 'verifyEmail' && oobCode){
-            firebase.auth().applyActionCode(oobCode).then((success) => {
-                console.log("router: Email is verified!");
+            store.dispatch(actions.verifyEmailWithCode(oobCode)).then((success) => {
                 browserHistory.push('connect');
             }, (error) => {
-                console.log("router: Problem verifying email: ", error);
                 browserHistory.push('/');
             });
         } else {
