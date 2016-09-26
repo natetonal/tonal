@@ -43,10 +43,10 @@ const verifyUserEmail = (nextState, replace, next) => {
     console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
         if(mode == 'verifyEmail' && oobCode){
             firebase.auth().applyActionCode(oobCode).then((success) => {
-                console.log("Email is good!");
+                console.log("router: Email is verified!");
                 replace('connect');
             }, (error) => {
-                console.log("Email is no good :(");
+                console.log("router: Problem verifying email: ", error);
                 replace('/');
             });
         } else {

@@ -21,6 +21,7 @@ firebase.auth().onAuthStateChanged((user) => {
             if(user.emailVerified && user.uid){
                 console.log("app.jsx: user.providerId: ", user.providerData[0].providerId);
                 console.log("app.jsx: email is verified, logging in user and pushing them to connect.");
+                store.dispatch(login(user.uid));
                 // Dispatch an action to collect the user's stream for "connect"
                 browserHistory.push('connect');
             }

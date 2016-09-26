@@ -110,7 +110,7 @@ export var createUserWithEmailAndPassword = (email, password) => {
 };
 
 // This needs to be edited to accommodate FB & user/email login:
-export var startEmailLogin = () => {
+export var startEmailLogin = (email, password) => {
     return (dispatch, getState) => {
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             // There's a ton of helpful data that comes back in the result object. Remember this!!!
