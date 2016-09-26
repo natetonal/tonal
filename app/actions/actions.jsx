@@ -73,7 +73,7 @@ export var verifyEmailWithCode = (oobCode) => {
     return (dispatch) => {
         return firebase.auth().applyActionCode(oobCode).then(() => {
             const currentUser = firebase.auth().currentUser;
-            return dispatch(login(currentUser.uid);
+            return dispatch(login(currentUser.uid));
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
         });

@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 
-var actions = require('actions');
-var store = require('configureStore').configure();
+import * as actions from 'actions';
+import * as store from 'store';
 
 import firebase from 'app/firebase/';
 import router from 'app/router/';
@@ -43,7 +43,7 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={store.configure()}>
         { router }
     </Provider>,
 document.getElementById('app')
