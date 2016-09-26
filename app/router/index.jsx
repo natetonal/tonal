@@ -17,7 +17,7 @@ const requireLogin = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(!currentUser){
         // replace is similar to browserHistory.push()
-        console.log('redirecting to / since user is not valid');
+        console.log('router: redirecting to / since user is not valid');
         replace('/');
     }
     next();
@@ -27,8 +27,9 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(currentUser){
         console.log(`from redirectIfLoggedIn: currentUser.providerId: ${currentUser.providerId}, currentUser.emailVerified: ${currentUser.emailVerified}`);
-        if(currentUser.providerId == 'password' && currentUser.emailVerified){
-            console.log('redirecting to connect since user is valid');
+        if(currentUser.providerId == 'password' && currentUser.emailVerified ||
+           currentUser.providerId == 'firebase' && currentUser){
+            console.log('router: redirecting to connect since user is valid');
             replace('connect');
         }
     }
@@ -36,7 +37,7 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
 };
 
 const logThisVerfication = (nextState, replace, next) => {
-    console.log("nextState from logThisVerification: ", nextState);
+    console.log("router: nextState from logThisVerification: ", nextState);
     next();
 }
 

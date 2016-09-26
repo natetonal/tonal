@@ -10,7 +10,7 @@ export const Landing = React.createClass({
         const { dispatch, verificationEmailSent } = this.props;
         const { mode, oobCode } = query;
         if(mode == 'verifyEmail' && oobCode && !verificationEmailSent){
-            console.log('from Landing: all needs are met to dispatch verifyEmail action!');
+            console.log('Landing.jsx: all needs are met to dispatch verifyEmail action!');
             return dispatch(actions.verifyEmail(oobCode));
         }
     },
@@ -22,8 +22,6 @@ export const Landing = React.createClass({
         if(query){
             this.handleQuery(query);
         }
-
-        console.log("query from Landing.jsx: ", query);
 
         return(
             <div>

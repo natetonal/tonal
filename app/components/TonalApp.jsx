@@ -16,7 +16,7 @@ export const TonalApp = React.createClass({
     render(){
 
         const { uid }  = this.props;
-        console.log("uid from TonalApp: ", uid);
+        console.log("TonalApp.jsx: uid:", uid);
 
         if(!uid){
             return(

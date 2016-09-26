@@ -10,7 +10,6 @@ export const Header = React.createClass({
 
     onClick(event){
         event.preventDefault();
-        console.log(event);
         var { dispatch } = this.props;
         dispatch(actions.toggleMenu());
     },

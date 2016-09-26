@@ -1,13 +1,13 @@
 export var authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
-            console.log('logging in user...');
+            console.log('reducer: logging in user...');
             return {
                 ...state,
                 uid: action.uid
             };
         case 'LOGOUT':
-            console.log('logging out user (this should wipe the uid from authState)');
+            console.log('reducer: logging out user (this should wipe the uid from authState)');
             return {
                 ...state,
                 uid: ""

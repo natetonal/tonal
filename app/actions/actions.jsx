@@ -53,18 +53,18 @@ export var resetAuthState = () => {
 
 export var getImgUrl = (path) => {
     return(dispatch, getState) => {
-        console.log('getImgUrl request received.');
+        console.log('actions: getImgUrl request received.');
         var imgRef = storageRef.child(`assets/${path}`);
         imgRef.getDownloadURL().then(imgUrl => {
             if(imgUrl){
-                console.log('imgUrl returned: ', imgUrl);
+                console.log('actions: imgUrl returned: ', imgUrl);
                 dispatch({
                     type: 'GET_IMG_URL',
                     imgUrl
                 });
             }
         }).catch(error => {
-            console.log('There was an error fetching an image: ', error);
+            console.log('actions: There was an error fetching an image: ', error);
         });
     };
 };
@@ -73,10 +73,10 @@ export var getImgUrl = (path) => {
 export var startLogout = () => {
     return (dispatch) => {
         return firebase.auth().signOut().then((success) => {
-            console.log('user signed out in firebase, signing out in app.');
+            console.log('actions: user signed out in firebase, signing out in app.');
             dispatch(logout());
         }, (error) => {
-            console.log('there was a problem signing out');
+            console.log('actions: there was a problem signing out');
         });
     };
 };
@@ -84,11 +84,11 @@ export var startLogout = () => {
 export var verifyEmail = (oobCode) => {
     return (dispatch) => {
         return firebase.auth().applyActionCode(oobCode).then((success) => {
-            console.log('Email verified!');
+            console.log('actions: Email verified!');
             dispatch(verificationEmailSent());
             dispatch(login(firebase.auth().currentUser.uid));
         }, (error) => {
-            console.log('Error: Email not verified:', error);
+            console.log('actions: Error: Email not verified:', error);
         });
     }
 };
@@ -96,10 +96,10 @@ export var verifyEmail = (oobCode) => {
 export var sendVerificationEmail = (user) => {
     return (dispatch) => {
         user.sendEmailVerification().then(() => {
-            console.log("Verification has been sent to ", user.email);
+            console.log("actions: Verification has been sent to ", user.email);
             return dispatch(verificationEmailSent());
         }, (error) => {
-            console.log("Error sending user verification email: ", error);
+            console.log("actions: Error sending user verification email: ", error);
         });
     }
 };
@@ -107,10 +107,10 @@ export var sendVerificationEmail = (user) => {
 export var createUserWithEmailAndPassword = (email, password) => {
     return (dispatch) => {
         firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
-            console.log(`User created: ${email} : ${password}`);
+            console.log(`actions: User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {
-            console.log("error creating user: ", error);
+            console.log("actions: error creating user: ", error);
         });
     };
 };
@@ -120,9 +120,9 @@ export var startEmailLogin = () => {
     return (dispatch, getState) => {
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             // There's a ton of helpful data that comes back in the result object. Remember this!!!
-            console.log('Auth worked! ', result);
+            console.log('actions: Auth worked! ', result);
         }, (error) => {
-            console.log('Unable to auth: ', error);
+            console.log('actions: Unable to auth: ', error);
         });
     };
 };
@@ -130,19 +130,9 @@ export var startEmailLogin = () => {
 export var startFacebookLogin = () => {
     return (dispatch, getState) => {
         firebase.auth().signInWithPopup(provider).then((result) => {
-            console.log('Auth worked! ', result);
+            console.log('actions: Auth worked! ', result);
         }, (error) => {
-            console.log('Unable to auth: ', error);
-        });
-    };
-};
-
-export var startLogout = () => {
-    return (dispatch, getState) => {
-        firebase.auth().signOut().then(() => {
-            console.log('Logged out!');
-        }, (error) => {
-            console.log('Something horrible happened.');
+            console.log('actions: Unable to auth: ', error);
         });
     };
 };

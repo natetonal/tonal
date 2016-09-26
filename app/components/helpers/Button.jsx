@@ -15,7 +15,7 @@ export const Button = React.createClass({
     render(){
 
         const { hoverArrow, btnText, btnType, btnIcon, isLoading, type } = this.props;
-        console.log("from the button: isLoading? ", isLoading);
+
         return(
             <button type={ type } className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
                 { this.displayIcon(btnIcon) }{ btnText }{ this.loading(isLoading) }
