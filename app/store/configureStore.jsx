@@ -20,3 +20,5 @@ export var configure = (initialState = {}) => {
 
     return store;
 };
+
+export default configure();

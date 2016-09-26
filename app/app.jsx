@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 
 import * as actions from 'actions';
-import * as store from 'store';
+import store from 'store';
 
 import firebase from 'app/firebase/';
 import router from 'app/router/';
@@ -43,7 +43,7 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 ReactDOM.render(
-    <Provider store={store.configure()}>
+    <Provider store={ store }>
         { router }
     </Provider>,
 document.getElementById('app')

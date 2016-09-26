@@ -12,7 +12,7 @@ import MyMusic from 'mymusic/MyMusic.jsx';
 import TonalStore from 'tonalstore/TonalStore.jsx';
 
 import firebase from 'app/firebase';
-import * as store from 'store';
+import store from 'store';
 
 // React-Router middleware (next allows async actions)
 const requireLogin = (nextState, replace, next) => {
