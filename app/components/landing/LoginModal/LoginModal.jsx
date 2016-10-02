@@ -13,7 +13,7 @@ export const LoginModal = React.createClass({
         event.preventDefault();
         const tabSelected = event.target.getAttribute('name')
         const { dispatch } = this.props;
-        dispatch(actions.toggleLoginModalTab(tabSelected));
+        dispatch(actions.switchLoginModalTab(tabSelected));
     },
 
     render(){

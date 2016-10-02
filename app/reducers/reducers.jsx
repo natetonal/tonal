@@ -1,7 +1,6 @@
-export var authReducer = (state = {}, action) => {
+export const authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
-            console.log('reducer: logging in user...');
             return {
                 ...state,
                 uid: action.uid
@@ -22,7 +21,7 @@ export var authReducer = (state = {}, action) => {
     }
 };
 
-export var imgUrlReducer = (state = "", action) => {
+export const imgUrlReducer = (state = "", action) => {
     switch(action.type){
         case 'GET_IMG_URL':
             return action.imgUrl;
@@ -31,7 +30,7 @@ export var imgUrlReducer = (state = "", action) => {
     }
 };
 
-export var uiStateReducer = (state = {}, action) => {
+export const uiStateReducer = (state = {}, action) => {
     switch(action.type){
         case 'TOGGLE_MENU':
             return {
@@ -48,11 +47,13 @@ export var uiStateReducer = (state = {}, action) => {
                 ...state,
                 loginModalIsOpen: !state.loginModalIsOpen
             };
-        case 'TOGGLE_LOGIN_MODAL_TAB':
+        case 'SWITCH_LOGIN_MODAL_TAB':
             return{
                 ...state,
                 loginModalTabSelected: action.tabSelected
             };
+        case 'RESET_UI_STATE':
+            return{};
         default:
             return state;
     }

@@ -9,13 +9,27 @@ import validate from './validate';
 
 export const Login = React.createClass({
 
+    handleFormSubmit(values){
+
+        const { email, password } = values;
+        const { dispatch } = this.props;
+
+        return dispatch(actions.startEmailLogin(email, password)).catch((error) => {
+            console.log("login: there was an error: ", error);
+        });
+
+    },
+
     render(){
+
+        const { handleSubmit, submitting } = this.props;
+
         return(
             <div>
-                <form>
+                <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
                     <Field name="email" label="Email" type="text" component={ Input } />
                     <Field name="password" label="Password" type="password" component={ Input } />
-                    <Button btnType="main" btnIcon="" btnText="Sign In" />
+                    <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Sign In"} />
                     <p className="text-center">-OR-</p>
                     <Button btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign In With Facebook" />
                     <p className="text-center">

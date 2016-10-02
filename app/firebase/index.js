@@ -16,11 +16,12 @@ try {
 }
 
 // Middleware & Auth Providers
-export var facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
+export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 facebookAuthProvider.addScope('user_actions.music');
 
 // Firebase refs
-export var databaseRef = firebase.database().ref();
-export var storageRef = firebase.storage().ref();
+export const databaseRef = firebase.database().ref();
+export const storageRef = firebase.storage().ref();
+export const auth = firebase.auth();
 
 export default firebase;

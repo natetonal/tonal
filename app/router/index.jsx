@@ -12,14 +12,13 @@ import MyMusic from 'mymusic/MyMusic.jsx';
 import TonalStore from 'tonalstore/TonalStore.jsx';
 
 import firebase from 'app/firebase';
-import store from 'store';
+
+const store = require('store').configure();
 
 // React-Router middleware (next allows async actions)
 const requireLogin = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(!currentUser){
-        // replace is similar to browserHistory.push()
-        console.log('router: redirecting to / since user is not valid');
         replace('/');
     }
     next();
@@ -28,7 +27,7 @@ const requireLogin = (nextState, replace, next) => {
 const redirectIfLoggedIn = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(currentUser){
-        console.log(`from redirectIfLoggedIn: currentUser.providerId: ${currentUser.providerId}, currentUser.emailVerified: ${currentUser.emailVerified}`);
+        console.log(`from router/redirectIfLoggedIn: currentUser.providerId: ${currentUser.providerId}, currentUser.emailVerified: ${currentUser.emailVerified}`);
         if(currentUser.providerId == 'password' && currentUser.emailVerified ||
            currentUser.providerId == 'firebase' && currentUser){
             console.log('router: redirecting to connect since user is valid');
@@ -43,9 +42,9 @@ const verifyUserEmail = (nextState, replace, next) => {
     console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
         if(mode == 'verifyEmail' && oobCode){
             store.dispatch(actions.verifyEmailWithCode(oobCode)).then((success) => {
-                browserHistory.push('connect');
+                replace('connect');
             }, (error) => {
-                browserHistory.push('/');
+                replace('/');
             });
         } else {
             replace('/');

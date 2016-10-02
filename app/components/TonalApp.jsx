@@ -1,9 +1,6 @@
 import React from 'react';
-import * as Redux from 'react-redux';
-import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import * as actions from 'actions';
-import Hammer from 'react-hammerjs';
-
 
 import HeaderLoggedOut from './HeaderLoggedOut';
 import ModalOverlay from './ModalOverlay';
@@ -13,10 +10,24 @@ import Tabs from './Tabs';
 
 export const TonalApp = React.createClass({
 
+    componentWillReceiveProps(nextProps){
+        const { dispatch } = this.props;
+
+        // clear the UI state if the route changes
+        if(this.props.location.pathname !== nextProps.location.pathname){
+            console.log('TonalApp.jsx: route changed, resetting UI state');
+            dispatch(actions.resetUIState());
+        }
+    },
+
+    // componentDidMount(props){
+    //     console.log('TonalApp.jsx: component did mount with props: ', props);
+    // },
+
     render(){
 
         const { uid }  = this.props;
-        console.log("TonalApp.jsx: uid:", uid);
+        console.log("TonalApp.jsx: uid?:", uid);
 
         if(!uid){
             return(
@@ -35,9 +46,9 @@ export const TonalApp = React.createClass({
         return(
             <MenuWrapper>
                 <Header />
-                <div className="tonal-content">
-                    { this.props.children }
-                </div>
+                    <div className="tonal-content">
+                        { this.props.children }
+                    </div>
                 <Tabs />
             </MenuWrapper>
         );
@@ -45,8 +56,10 @@ export const TonalApp = React.createClass({
     }
 });
 
-export default Redux.connect(state => {
+const mapStateToProps = (state) => {
     return {
         uid: state.auth.uid
     };
-})(TonalApp);
+};
+
+export default connect(mapStateToProps)(TonalApp);

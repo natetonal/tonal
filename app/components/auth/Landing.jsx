@@ -6,14 +6,6 @@ import LoginModal from './LoginModal/LoginModal';
 
 export const Landing = React.createClass({
 
-    onEmailLogin(){
-
-    },
-
-    onFacebookLogin(){
-
-    },
-
     render(){
 
         const { isOpen } = this.props;
