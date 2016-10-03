@@ -11,7 +11,7 @@ const store = require('store').configure();
 // Load foundation
 $(document).foundation();
 
-// App css
+// Loaders for css & sass
 require('style!css!sass!applicationStyles')
 
 firebase.auth().onAuthStateChanged((user) => {

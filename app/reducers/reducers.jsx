@@ -58,3 +58,14 @@ export const uiStateReducer = (state = {}, action) => {
             return state;
     }
 };
+
+export const errorsReducer = (state = null, action) => {
+    switch(action.type){
+        case 'ADD_ERROR_MESSAGE':
+            return action.error;
+        case 'RESET_ERROR_MESSAGE':
+            return null;
+        default:
+            return state;
+    }
+};

@@ -60,8 +60,7 @@ module.exports = {
       applicationStyles: 'app/styles/app.scss',
       actions: 'app/actions/actions.jsx',
       store: 'app/store/configureStore.jsx',
-      reducers: 'app/reducers/reducers.jsx',
-      images: 'app/assets/',
+      reducers: 'app/reducers/reducers.jsx'
     },
     extensions: ['', '.js', '.jsx']
   },

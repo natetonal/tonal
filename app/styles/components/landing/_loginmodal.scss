@@ -166,3 +166,19 @@
 		@include transition(all 1ms ease-in);
   	}
 }
+
+.callout-enter{
+	opacity: 0.01;
+	&.callout-enter-active {
+		opacity: 1;
+		@include transition(all 300ms ease-in);
+	}
+}
+
+.callout-leave{
+	opacity: 1;
+	&.callout-leave-active{
+		opacity: 0;
+		@include transition(all 300ms ease-out);
+	}
+}

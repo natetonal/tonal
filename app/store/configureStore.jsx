@@ -2,7 +2,7 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import { reducer as form } from 'redux-form';
 import { browserHistory } from 'react-router';
-import { authReducer, imgUrlReducer, uiStateReducer } from 'reducers';
+import { authReducer, imgUrlReducer, uiStateReducer, errorsReducer } from 'reducers';
 
 export var configure = (initialState = {}) => {
     var reducer = redux.combineReducers({
@@ -10,6 +10,7 @@ export var configure = (initialState = {}) => {
         auth: authReducer,
         imgUrl: imgUrlReducer,
         uiState: uiStateReducer,
+        errors: errorsReducer
     });
 
     // Add middleware here --

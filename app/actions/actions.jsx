@@ -16,6 +16,19 @@ export const logout = () => {
     };
 };
 
+export const resetErrorMessage = () => {
+    return{
+        type: 'RESET_ERROR_MESSAGE'
+    };
+};
+
+export const addErrorMessage = (error) => {
+    return{
+        type: 'ADD_ERROR_MESSAGE',
+        error
+    };
+};
+
 export const toggleLoginModal = () => {
     return{
         type: 'TOGGLE_LOGIN_MODAL',
@@ -136,7 +149,8 @@ export const createUserWithEmailAndPassword = (email, password) => {
             console.log(`actions: User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {
-            console.log("actions: error creating user: ", error);
+            console.log("actions: there was an error creating this user: ");
+            return dispatch(addErrorMessage(error.message));
         });
     };
 };
@@ -145,10 +159,11 @@ export const createUserWithEmailAndPassword = (email, password) => {
 export const startEmailLogin = (email, password) => {
     return (dispatch) => {
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
-            // There's a ton of helpful data that comes back in the result object. Remember this!!!
+            console.log('actions: logged in user, result: ', result);
             return dispatch(login(result.uid));
         }, (error) => {
-            return error;
+            console.log('actions: there was an error logging in user: ', error.message);
+            return dispatch(addErrorMessage(error.message));
         });
     };
 };

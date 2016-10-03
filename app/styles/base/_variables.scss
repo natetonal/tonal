@@ -5,10 +5,20 @@ $lightgray1: #bdbdbd;
 $midgray1: #757575;
 $darkgray1: #313131;
 $orange: #f49800;
+$yellow: #fffe21;
 $red: #e30713;
+$blue: #2199e8;
 $darkblue: #009688;
 $lightblue: #9ef6ec;
 $lightgreen: #3ef669;
+
+// Alert themes
+$alert-default: lighten($black, 20%);
+$alert-info: lighten($blue, 20%);
+$alert-success: lighten($lightgreen, 10%);
+$alert-error: lighten($red, 20%);
+$alert-warning: lighten($yellow, 20%);
+$alert-admin: lighten($orange, 20%);
 
 // General
 $highlight1: $darkblue;
