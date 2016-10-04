@@ -145,7 +145,7 @@ export const sendVerificationEmail = (user) => {
 
 export const createUserWithEmailAndPassword = (email, password) => {
     return (dispatch) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+        return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
             console.log(`actions: User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {
@@ -158,7 +158,7 @@ export const createUserWithEmailAndPassword = (email, password) => {
 // This needs to be edited to accommodate FB & user/email login:
 export const startEmailLogin = (email, password) => {
     return (dispatch) => {
-        firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
+        return firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             console.log('actions: logged in user, result: ', result);
             return dispatch(login(result.uid));
         }, (error) => {

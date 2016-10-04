@@ -14,9 +14,7 @@ export const Login = React.createClass({
         const { email, password } = values;
         const { dispatch } = this.props;
 
-        return dispatch(actions.startEmailLogin(email, password)).catch((error) => {
-            console.log("login: there was an error: ", error);
-        });
+        return dispatch(actions.startEmailLogin(email, password));
 
     },
 
