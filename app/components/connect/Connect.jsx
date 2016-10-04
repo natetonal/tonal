@@ -29,7 +29,7 @@ export const Connect = React.createClass({
                 />
                 <Alert
                     type="error"
-                    title={`This is a error alert.`}
+                    title={`This is an error alert.`}
                     message={ error }
                 />
                 <Alert
