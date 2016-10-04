@@ -48,10 +48,12 @@ export const Alert = React.createClass({
 
         return(
             <div className={`tonal-alert callout ${ type }`}>
-                <h4>
-                    { this.getButton() }
-                    { title }
-                </h4>
+                <div className="tonal-alert-title">
+                    <h4>
+                        { this.getButton() }
+                        { title }
+                    </h4>
+                </div>
                 <p>{ message }</p>
             </div>
         );

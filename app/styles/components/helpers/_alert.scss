@@ -14,6 +14,10 @@
         .#{nth($item, 1)}{
             background: rgba(nth($item, 2), .97);
 
+            .tonal-alert-title{
+                background: darken(rgba(nth($item, 2), .97), 5%);
+            }
+
             h4, p{
                 color: nth($item, 3);
             }
@@ -28,14 +32,17 @@
 	width: 100%;
 	min-height: 150px;
 	color: $light-text;
+    padding: 0;
 
 	h4, p{
 		background: transparent;
+        padding: 15px;
 	}
 
     .fa{
         padding-right: 10px;
     }
+
 }
 
 @include alertTheme;
