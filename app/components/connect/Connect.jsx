@@ -9,42 +9,27 @@ export const Connect = React.createClass({
     render(){
 
         const error = "Here's a message in an alert. Bam.";
+        const { user } = this.props;
+
+        console.log('from Connect.jsx: user? ', user);
 
         return(
             <div>
-                <Alert
-                    type="default"
-                    title={`This is a default alert.`}
-                    message={ error }
-                />
-                <Alert
-                    type="info"
-                    title={`This is an info alert.`}
-                    message={ error }
-                />
-                <Alert
-                    type="success"
-                    title={`This is a success alert.`}
-                    message={ error }
-                />
-                <Alert
-                    type="error"
-                    title={`This is an error alert.`}
-                    message={ error }
-                />
-                <Alert
-                    type="warning"
-                    title={`This is a warning alert.`}
-                    message={ error }
-                />
-                <Alert
-                    type="admin"
-                    title={`This is an admin alert.`}
-                    message={ error }
-                />
+                { user &&
+                    <div>
+                        <img src={ user.photoURL } />
+                        <h3>{ user.displayName }</h3>
+                        <h5>{ user.email }</h5>
+                    </div>
+                }
             </div>
         );
     }
 });
 
-export default Redux.connect()(Connect);
+export default Redux.connect(state => {
+    console.log('from Connect.jsx: state.user? ', state.user);
+    return {
+        user: state.user
+    };
+})(Connect);

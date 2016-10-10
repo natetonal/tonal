@@ -26,8 +26,8 @@
 }
 
 .tonal-alert{
-	position: relative;
-	z-index: 500;
+	position: absolute;
+	z-index: $alert-zindex;
 	background: $alert-default;
 	width: 100%;
 	min-height: 150px;

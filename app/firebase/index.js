@@ -17,6 +17,7 @@ try {
 
 // Middleware & Auth Providers
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
+facebookAuthProvider.addScope('public_profile');
 facebookAuthProvider.addScope('user_actions.music');
 
 // Firebase refs

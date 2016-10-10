@@ -2,6 +2,9 @@
 import firebase, { databaseRef, storageRef, facebookAuthProvider } from 'app/firebase/';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
+import axios from 'axios';
+
+const facebookRootURI = 'https://graph.facebook.com';
 
 export const login = (uid) => {
     return{
@@ -78,8 +81,21 @@ export const pushToRoute = (route) => {
     };
 };
 
+export const storeFacebookDataToState = (data) => {
+    console.log('actions.jsx: adding user data to state');
+    return{
+        type: 'ADD_USER_DATA',
+        data: {
+            displayName: data.displayName ? data.displayName : '',
+            email: data.email ? data.email : '',
+            photoURL: data.photoURL ? data.photoURL : ''
+        }
+    };
+};
+
 export const startLoginForAuthorizedUser = (uid) => {
     return (dispatch) => {
+        console.log('actions.jsx: starting login for authorized user');
         dispatch(login(uid));
         dispatch(pushToRoute('/connect'));
     };
@@ -170,8 +186,20 @@ export const startEmailLogin = (email, password) => {
 
 export const startFacebookLogin = () => {
     return (dispatch, getState) => {
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            console.log('actions: Auth worked! ', result);
+        firebase.auth().signInWithPopup(facebookAuthProvider).then((result) => {
+            if(result.credential){
+                const token = result.credential.accessToken;
+                const user = result.user;
+                console.log('actions.jsx: got some creds, yo: ', token);
+                axios.get(`${ facebookRootURI }/me`, {
+                    params: {
+                        access_token: token
+                    }
+                })
+                .then(response => {
+                    console.log('actions.jsx: successful get from FB API: ', response);
+                })
+            }
         }, (error) => {
             console.log('actions: Unable to auth: ', error);
         });

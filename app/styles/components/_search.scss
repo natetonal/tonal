@@ -8,7 +8,7 @@
 	min-height: $search-height;
     display: inline-block;
 	@include gradientBG(top, darken(rgba($search-bg, .9), 10%), darken(rgba($search-bg, .9), 30%));
-	z-index: 1000;
+	z-index: $search-zindex;
     width: auto;
 	margin-top: ($header-height - $search-height) / 2;
     border-radius: 12px;
@@ -124,7 +124,6 @@ input[type="search"] { /* reset normalize */
     background-size: 100%;
 	border: none;
     color: $darkgray1;
-    z-index: 2000;
 	pointer-events: none;
 	transform-origin: 50% 50%;
 	-webkit-transform: translate3d(-30px,-50%,0) scale3d(0,0,1);

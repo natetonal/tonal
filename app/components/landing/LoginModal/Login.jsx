@@ -28,11 +28,6 @@ export const Login = React.createClass({
                     <Field name="email" label="Email" type="text" component={ Input } />
                     <Field name="password" label="Password" type="password" component={ Input } />
                     <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Sign In"} />
-                    <p className="text-center">-OR-</p>
-                    <Button btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign In With Facebook" />
-                    <p className="text-center">
-                        <Link to="#" className="forgot-password">I forgot my password</Link>
-                    </p>
                 </form>
             </div>
         );

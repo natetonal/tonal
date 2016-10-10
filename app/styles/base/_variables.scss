@@ -15,10 +15,19 @@ $lightgreen: #3ef669;
 // Alert themes
 $alert-default: lighten($black, 20%);
 $alert-info: lighten($blue, 20%);
-$alert-success: lighten($lightgreen, 10%);
+$alert-success: lighten($lightgreen, 20%);
 $alert-error: lighten($red, 20%);
 $alert-warning: lighten($yellow, 20%);
 $alert-admin: lighten($orange, 20%);
+
+// Layering
+$menu-pusher-zindex: 10000;
+$loginmodal-zindex: 200;
+$modaloverlay-zindex: 150;
+$search-zindex: 150;
+$header-zindex: 100;
+$tabs-zindex: 100;
+$alert-zindex: 50;
 
 // General
 $highlight1: $darkblue;

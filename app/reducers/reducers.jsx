@@ -69,3 +69,21 @@ export const errorsReducer = (state = null, action) => {
             return state;
     }
 };
+
+const userInitialState = {
+    displayName: null,
+    email: null,
+    photoURL: null
+};
+
+export const userReducer = (state = userInitialState, action) => {
+    switch(action.type){
+        case 'ADD_USER_DATA':
+            console.log('reducers.jsx: storing data to state: ', action.data);
+            return action.data;
+        case 'RESET_USER_DATA':
+            return userInitialState;
+        default:
+            return state;
+    }
+};

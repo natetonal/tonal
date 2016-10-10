@@ -14,12 +14,12 @@ export const Button = React.createClass({
 
     render(){
 
-        const { hoverArrow, btnText, btnType, btnIcon, isLoading, type } = this.props;
+        const { hoverArrow, btnText, btnType, btnIcon, isLoading, type, onClick } = this.props;
 
         console.log('Button.jsx: isLoading? ', isLoading);
-        
+
         return(
-            <button type={ type } className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
+            <button onClick={ onClick } type={ type } className={`tonal-btn ${btnType || "main"} ${hoverArrow ? "icon-arrow-right" : ""}`}>
                 { this.displayIcon(btnIcon) }{ btnText }{ this.loading(isLoading) }
             </button>
         );

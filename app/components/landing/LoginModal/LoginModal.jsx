@@ -7,20 +7,32 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Login from './Login';
 import Signup from './Signup';
 import Alert from 'helpers/Alert';
+import Button from 'helpers/Button';
 
 export const LoginModal = React.createClass({
 
     handleTabs(event){
+
         event.preventDefault();
         const tabSelected = event.target.getAttribute('name')
         const { dispatch } = this.props;
         dispatch(actions.switchLoginModalTab(tabSelected));
     },
 
-    clearErrors(){
+    clearErrors(value){
+
         console.log('LoginModal.jsx: clearing errors');
         const { dispatch } = this.props;
         dispatch(actions.resetErrorMessage());
+    },
+
+    handleFacebookLogin(event){
+
+        event.preventDefault();
+        console.log('Login.jsx: logging into FB');
+        const { dispatch } = this.props;
+        return dispatch(actions.startFacebookLogin());
+
     },
 
     render(){
@@ -50,6 +62,15 @@ export const LoginModal = React.createClass({
                             <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
                                 { tabSelected === 'login' ? <Login key="login" /> : <Signup key="signup" /> }
                             </ReactCSSTransitionGroup>
+                            { tabSelected === 'login' && (
+                                <div>
+                                    <p className="text-center">-OR-</p>
+                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign In With Facebook" />
+                                    <p className="text-center">
+                                        <Link to="#" className="forgot-password">I forgot my password</Link>
+                                    </p>
+                                </div>
+                            )}
                         </div>
                         <div className="login-tabs">
                             <div className={`login-tab ${tabSelected === 'signup' ? 'selected' : ''} `}>
