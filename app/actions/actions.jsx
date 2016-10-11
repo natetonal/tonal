@@ -188,7 +188,7 @@ export const startFacebookLogin = () => {
                 const user = result.user;
                 if(user.photoURL){
                     dispatch(storeFacebookDataToState({
-                        avatarURL: user.photoURL,
+                        photoURL: user.photoURL,
                         displayName: user.displayName
                     }));
                 }
@@ -202,7 +202,7 @@ export const startFacebookLogin = () => {
                     console.log('actions.jsx: successful get from FB API: ', response);
                     dispatch(storeFacebookDataToState({
                         firstName: response.data.first_name,
-                        photoURL: response.data.picture.data.url
+                        largePhotoURL: response.data.picture.data.url
                     }));
                 })
                 .catch(error => {

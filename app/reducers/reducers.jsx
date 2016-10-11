@@ -75,7 +75,7 @@ const userInitialState = {
     firstName: null,
     email: null,
     photoURL: null,
-    avatarURL: null
+    largePhotoURL: null
 };
 
 export const userReducer = (state = userInitialState, action) => {

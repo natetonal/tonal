@@ -18,7 +18,7 @@ export const Connect = React.createClass({
                 { user &&
                     <div>
                         <img src={ user.photoURL } />
-                        <img src={ user.avatarURL } />
+                        <img src={ user.largePhotoURL } />
                         <h3>{ user.displayName } ({ user.firstName })</h3>
                         <h5>{ user.email }</h5>
 
@@ -30,7 +30,6 @@ export const Connect = React.createClass({
 });
 
 export default Redux.connect(state => {
-    console.log('from Connect.jsx: state.user? ', state.user);
     return {
         user: state.user
     };
