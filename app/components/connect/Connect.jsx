@@ -18,8 +18,10 @@ export const Connect = React.createClass({
                 { user &&
                     <div>
                         <img src={ user.photoURL } />
-                        <h3>{ user.displayName }</h3>
+                        <img src={ user.avatarURL } />
+                        <h3>{ user.displayName } ({ user.firstName })</h3>
                         <h5>{ user.email }</h5>
+
                     </div>
                 }
             </div>

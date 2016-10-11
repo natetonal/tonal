@@ -15,7 +15,6 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 firebase.auth().onAuthStateChanged((user) => {
-    console.log('app.jsx: auth state changed: ', user);
 
     if(user.providerData[0]){
 
@@ -23,25 +22,20 @@ firebase.auth().onAuthStateChanged((user) => {
 
         switch(providerData.providerId){
             case 'facebook.com':
-                console.log('app.jsx: user is facebook verified: logging in.');
                 if(providerData.uid){
-                    console.log('app.jsx: user has a UID, storing data: ', providerData);
                     store.dispatch(actions.storeFacebookDataToState(providerData));
                     store.dispatch(actions.startLoginForAuthorizedUser(providerData.uid));
                 }
                 break;
             case 'password':
             case 'firebase':
-                console.log('app.jsx: user is firebase/password verified: logging in');
                 user.emailVerified && user.uid && store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
                 break;
             default:
-                console.log('app.jsx: there was a problem logging in.')
                 store.dispatch(actions.pushToRoute('/'));
         }
 
     } else {
-        console.log('from app.jsx: pushing back to index since theres no user');
         // There should be a way to check if the user has ever logged in before down the road
         // (i.e. checking our own user data)
         // Dispatch an action to clear any lingering data.

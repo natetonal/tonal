@@ -72,15 +72,20 @@ export const errorsReducer = (state = null, action) => {
 
 const userInitialState = {
     displayName: null,
+    firstName: null,
     email: null,
-    photoURL: null
+    photoURL: null,
+    avatarURL: null
 };
 
 export const userReducer = (state = userInitialState, action) => {
     switch(action.type){
         case 'ADD_USER_DATA':
-            console.log('reducers.jsx: storing data to state: ', action.data);
-            return action.data;
+            console.log('reducers.jsx: adding data: ', action.data);
+            return {
+                ...state,
+                ...action.data
+            };
         case 'RESET_USER_DATA':
             return userInitialState;
         default:

@@ -82,14 +82,10 @@ export const pushToRoute = (route) => {
 };
 
 export const storeFacebookDataToState = (data) => {
-    console.log('actions.jsx: adding user data to state');
+    console.log('actions.jsx: adding user data to state', data);
     return{
         type: 'ADD_USER_DATA',
-        data: {
-            displayName: data.displayName ? data.displayName : '',
-            email: data.email ? data.email : '',
-            photoURL: data.photoURL ? data.photoURL : ''
-        }
+        data
     };
 };
 
@@ -190,18 +186,31 @@ export const startFacebookLogin = () => {
             if(result.credential){
                 const token = result.credential.accessToken;
                 const user = result.user;
-                console.log('actions.jsx: got some creds, yo: ', token);
+                if(user.photoURL){
+                    dispatch(storeFacebookDataToState({
+                        avatarURL: user.photoURL,
+                        displayName: user.displayName
+                    }));
+                }
                 axios.get(`${ facebookRootURI }/me`, {
                     params: {
-                        access_token: token
+                        access_token: token,
+                        fields: 'first_name, last_name, picture.width(300)'
                     }
                 })
                 .then(response => {
                     console.log('actions.jsx: successful get from FB API: ', response);
+                    dispatch(storeFacebookDataToState({
+                        firstName: response.data.first_name,
+                        photoURL: response.data.picture.data.url
+                    }));
                 })
+                .catch(error => {
+                    console.log('actions.jsx: there was an error getting FB data: ', error);
+                });
             }
         }, (error) => {
-            console.log('actions: Unable to auth: ', error);
+            console.log('actions.jsx: Unable to auth: ', error);
         });
     };
 };

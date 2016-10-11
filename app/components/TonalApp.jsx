@@ -15,7 +15,6 @@ export const TonalApp = React.createClass({
 
         // clear the UI state if the route changes
         if(this.props.location.pathname !== nextProps.location.pathname){
-            console.log('TonalApp.jsx: route changed, resetting UI state');
             dispatch(actions.resetUIState());
         }
     },
@@ -27,7 +26,6 @@ export const TonalApp = React.createClass({
     render(){
 
         const { uid }  = this.props;
-        console.log("TonalApp.jsx: uid?:", uid);
 
         if(!uid){
             return(
