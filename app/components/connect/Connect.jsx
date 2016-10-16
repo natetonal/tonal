@@ -26,7 +26,6 @@ export const Connect = React.createClass({
                         <p><b>Display Name: </b>{ user.displayName }</p>
                         <p><b>Time Zone: </b>{ user.timeZone }</p>
                         <p><b>Avatar Photo: </b><img src={ user.avatarPhoto } /></p>
-                        <p><b>Profile Photo: </b><img src={ user.profilePhoto } /></p>
                         <p><b>Updated At: </b>{ user.updatedAt }</p>
                     </div>
                 }
