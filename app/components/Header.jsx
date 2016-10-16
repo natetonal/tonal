@@ -16,7 +16,7 @@ export const Header = React.createClass({
 
     render(){
 
-        var { isOpen } = this.props;
+        var { isOpen, photoURL } = this.props;
 
         return(
             <div className="tonal-header">
@@ -24,16 +24,25 @@ export const Header = React.createClass({
                 <div className="row">
                     <Hammer onTap={ !isOpen ? this.onClick : false }>
                         <div className="small-5 medium-1 columns">
-                            <div className="hi-icon-effect-1 hi-icon-effect-1b">
-                                <a href="#" className="hi-icon hi-icon-mobile">
-                                    <i className="fa fa-user" aria-hidden="true"></i>
-                                </a>
-                            </div>
+                            { photoURL ? (
+                                    <div className="tonal-header-avatar">
+                                        <a href="#">
+                                            <img src={ photoURL } className="tonal-header-avatar-image" />
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div className="hi-icon-effect-1 hi-icon-effect-1b">
+                                        <a href="#" className="hi-icon hi-icon-mobile">
+                                            <i className="fa fa-user" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                )
+                            }
                             <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-left">
                                 <a href="#" className="hi-icon hi-icon-mobile">
                                     <i className="fa fa-bell" aria-hidden="true"></i>
                                 </a>
-                                <span className="alert badge">X</span>
+                                <span className="alert badge"></span>
                             </div>
                         </div>
                     </Hammer>
@@ -66,5 +75,8 @@ export const Header = React.createClass({
 });
 
 export default Redux.connect(state => {
-    return { isOpen: state.uiState.menuIsOpen };
+    return {
+        isOpen: state.uiState.menuIsOpen,
+        photoURL: state.user.avatarPhoto
+     };
 })(Header);

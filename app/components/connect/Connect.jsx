@@ -17,11 +17,17 @@ export const Connect = React.createClass({
             <div>
                 { user &&
                     <div>
-                        <img src={ user.photoURL } />
-                        <img src={ user.largePhotoURL } />
-                        <h3>{ user.displayName } ({ user.firstName })</h3>
-                        <h5>{ user.email }</h5>
-
+                        <h3>Data we have about you:</h3>
+                        <p><b>User ID: </b>{ user.uid }</p>
+                        <p><b>Facebook Access Token: </b>{ user.fbToken }</p>
+                        <p><b>Email: </b>{ user.email }</p>
+                        <p><b>First Name: </b>{ user.firstName }</p>
+                        <p><b>Last Name: </b>{ user.lastName }</p>
+                        <p><b>Display Name: </b>{ user.displayName }</p>
+                        <p><b>Time Zone: </b>{ user.timeZone }</p>
+                        <p><b>Avatar Photo: </b><img src={ user.avatarPhoto } /></p>
+                        <p><b>Profile Photo: </b><img src={ user.profilePhoto } /></p>
+                        <p><b>Updated At: </b>{ user.updatedAt }</p>
                     </div>
                 }
             </div>

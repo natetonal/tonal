@@ -23,7 +23,6 @@ firebase.auth().onAuthStateChanged((user) => {
         switch(providerData.providerId){
             case 'facebook.com':
                 if(providerData.uid){
-                    store.dispatch(actions.storeFacebookDataToState(providerData));
                     store.dispatch(actions.startLoginForAuthorizedUser(providerData.uid));
                 }
                 break;
