@@ -15,25 +15,10 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 firebase.auth().onAuthStateChanged((user) => {
-
-    if(user.providerData[0]){
-
-        const providerData = user.providerData[0];
-
-        switch(providerData.providerId){
-            case 'facebook.com':
-                if(providerData.uid){
-                    store.dispatch(actions.startLoginForAuthorizedUser(providerData.uid));
-                }
-                break;
-            case 'password':
-            case 'firebase':
-                user.emailVerified && user.uid && store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
-                break;
-            default:
-                store.dispatch(actions.pushToRoute('/'));
-        }
-
+    if(user.uid){
+        console.log('app.jsx: user object: ', user);
+        store.dispatch(actions.fetchUserData(user.uid));
+        store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
     } else {
         // There should be a way to check if the user has ever logged in before down the road
         // (i.e. checking our own user data)

@@ -133,6 +133,16 @@
 		width: 250px;
 		@include gradientBG(top, $white, #d3d3d3);
 
+		.avatar-overlay {
+		    position: absolute;
+		    height: 50%;
+		    width: 100%;
+		    top: 50%;
+		    text-align: center;
+		    color: white;
+		    background: rgba(0,0,0,0.5);
+		    padding: 10px 5px;
+		}
 	}
 }
 

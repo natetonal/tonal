@@ -253,6 +253,12 @@
             width: 50px;
             margin-top: 8px;
             border-radius: 50%;
+            opacity: 0.8;
+
+            &:hover{
+                opacity: 1;
+                @include transition(0.3s opacity);
+            }
         }
     }
 }

@@ -137,6 +137,7 @@ export const startLogout = () => {
     return (dispatch) => {
         firebase.auth().signOut().then((success) => {
             console.log('actions: user signed out in firebase, signing out in app.', success);
+            dispatch({ type: 'RESET_USER_DATA' });
             dispatch(logoutAndPushToRootRoute());
         }, (error) => {
             console.log('actions: there was a problem signing out');
@@ -180,6 +181,32 @@ export const startEmailLogin = (email, password) => {
     };
 };
 
+export const fetchUserData = (uid) => {
+    return (dispatch, getState) => {
+        console.log('actions.jsx: actions/fetchUserData: uid: ', uid);
+        databaseRef.child(`users/${uid}`).once('value').then(snapshot => {
+            console.log('actions.jsx: user data: ', snapshot.val());
+            if(snapshot.val()){
+                const user = {
+                    uid: snapshot.val().uid,
+                    fbToken: snapshot.val().fbToken,
+                    email: snapshot.val().email,
+                    firstName: snapshot.val().firstName,
+                    lastName: snapshot.val().lastName,
+                    displayName: snapshot.val().displayName,
+                    timeZone: snapshot.val().timeZone,
+                    avatarPhoto: snapshot.val().avatarPhoto,
+                    updatedAt: snapshot.val().updatedAt
+                };
+
+                dispatch(storeUserDataToState(user));
+            }
+        }, error => {
+            console.log('actions.jsx: error checking if user exists: ', error);
+        });
+    }
+};
+
 export const startFacebookLogin = () => {
     return (dispatch, getState) => {
         firebase.auth().signInWithPopup(facebookAuthProvider).then((result) => {
@@ -200,7 +227,7 @@ export const startFacebookLogin = () => {
                     updatedAt: moment().format('LLLL')
                 };
 
-                databaseRef.child(`users/${uid}`).set(user);
+                databaseRef.child(`users/${uid}`).update(user);
                 dispatch(storeUserDataToState(user));
 
                 axios.get(`${ facebookRootURI }/me`, {
@@ -222,7 +249,7 @@ export const startFacebookLogin = () => {
                         updatedAt: moment().format('LLLL')
                     };
 
-                    databaseRef.child(`users/${uid}`).update(user);
+                    databaseRef.child(`users/${uid}`).update(updatedUser);
                     dispatch(storeUserDataToState(updatedUser));
 
                 })

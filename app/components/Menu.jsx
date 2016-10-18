@@ -12,10 +12,20 @@ export const Menu = React.createClass({
     },
 
     render(){
+
+        const { avatarPhoto, displayName } = this.props;
+
         return(
             <nav className="tonal-menu menu-effect" id="menu-2">
                 <div className="avatar">
+                { avatarPhoto ?
+                    <img src={ avatarPhoto } />
+                    :
                     <img src="https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-avatar.png?alt=media&token=f7e23557-bc15-44fd-bfb5-1ddff07bc954" />
+                }
+                    <div className="avatar-overlay">
+                        { displayName && <h5>{ displayName }</h5> }
+                    </div>
                 </div>
                 <ul>
                     <li className="special">
@@ -39,4 +49,9 @@ export const Menu = React.createClass({
     }
 });
 
-export default Redux.connect()(Menu);
+export default Redux.connect(state => {
+    return {
+        avatarPhoto: state.user.avatarPhoto,
+        displayName: state.user.displayName
+    };
+})(Menu);
