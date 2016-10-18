@@ -65,7 +65,7 @@ export const LoginModal = React.createClass({
                             { tabSelected === 'login' && (
                                 <div>
                                     <p className="text-center">-OR-</p>
-                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign In With Facebook" />
+                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Log In With Facebook" />
                                     <p className="text-center">
                                         <Link to="#" className="forgot-password">I forgot my password</Link>
                                     </p>

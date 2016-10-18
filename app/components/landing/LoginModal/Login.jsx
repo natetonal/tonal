@@ -27,7 +27,7 @@ export const Login = React.createClass({
                 <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
                     <Field name="email" label="Email" type="text" component={ Input } />
                     <Field name="password" label="Password" type="password" component={ Input } />
-                    <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Sign In"} />
+                    <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Log In"} />
                 </form>
             </div>
         );
