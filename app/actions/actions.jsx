@@ -124,9 +124,10 @@ export const getImgUrl = (path) => {
 
 export const verifyEmailWithCode = (oobCode) => {
     return (dispatch) => {
-        firebase.auth().applyActionCode(oobCode).then(() => {
-            const currentUser = firebase.auth().currentUser;
-            return dispatch(login(currentUser.uid));
+        firebase.auth().applyActionCode(oobCode).then((success) => {
+            console.log('action.jsx: action code applied!', success);
+            const uid = firebase.auth().currentUser.uid;
+            dispatch(startLoginForAuthorizedUser(uid));
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
         });
