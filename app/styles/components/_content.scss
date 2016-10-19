@@ -53,10 +53,10 @@ body,
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow:0 0 0 50px transparent inset; /* Change the color to your own background color */
+    -webkit-box-shadow:0 0 0 50px $darkgray1 inset; /* Change the color to your own background color */
     -webkit-text-fill-color: $yellow;
 }
 input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 50px transparent inset;
+    -webkit-box-shadow: 0 0 0 50px $darkgray1 inset;
     -webkit-text-fill-color: $alert-warning;
 }

@@ -124,7 +124,7 @@ export const getImgUrl = (path) => {
 
 export const verifyEmailWithCode = (oobCode) => {
     return (dispatch) => {
-        return firebase.auth().applyActionCode(oobCode).then(() => {
+        firebase.auth().applyActionCode(oobCode).then(() => {
             const currentUser = firebase.auth().currentUser;
             return dispatch(login(currentUser.uid));
         }, (error) => {
