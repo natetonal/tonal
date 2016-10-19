@@ -51,3 +51,12 @@ body,
   filter: blur(1px);
   @include transition(all 0.3s);
 }
+
+input:-webkit-autofill {
+    -webkit-box-shadow:0 0 0 50px $darkgray1 inset; /* Change the color to your own background color */
+    -webkit-text-fill-color: $light-text;
+}
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 50px $darkgray1 inset;
+    -webkit-text-fill-color: $white;
+}

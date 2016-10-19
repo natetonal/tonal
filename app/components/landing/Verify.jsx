@@ -2,6 +2,8 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
+import Alert from 'helpers/Alert';
+
 export const Verify = React.createClass({
 
     // handleQuery(query){
@@ -22,11 +24,16 @@ export const Verify = React.createClass({
 
         return(
             <div>
-                <div className="callout verifying-email">
-                    <h4>Verifying E-Mail</h4>
-                    <p>One moment please while we verify your e-mail...</p>
-                    <i className="fa fa-cog fa-spin fa-3x fa-fw float-center"></i>
-                </div>
+                <Alert
+                    type="error"
+                    title="Verifying E-Mail"
+                    message={(
+                        <div>
+                            <p>One moment please while we verify your e-mail...</p>
+                            <i className="fa fa-cog fa-spin fa-3x fa-fw float-center"></i>
+                        </div>
+                    )}
+                />
                 <div className={`auth-content blur`}>
 
                 </div>

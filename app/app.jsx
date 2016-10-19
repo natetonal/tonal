@@ -16,9 +16,11 @@ require('style!css!sass!applicationStyles')
 
 firebase.auth().onAuthStateChanged((user) => {
     if(user.uid){
-        console.log('app.jsx: user object: ', user);
-        store.dispatch(actions.fetchUserData(user.uid));
-        store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
+        if(user.providerId == 'facebook.com' || user.emailVerified){
+            console.log('app.jsx: user object: ', user);
+            store.dispatch(actions.fetchUserData(user.uid));
+            store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
+        }
     } else {
         // There should be a way to check if the user has ever logged in before down the road
         // (i.e. checking our own user data)

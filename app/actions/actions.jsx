@@ -172,8 +172,12 @@ export const createUserWithEmailAndPassword = (email, password) => {
 export const startEmailLogin = (email, password) => {
     return (dispatch) => {
         return firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
-            console.log('actions: logged in user, result: ', result);
-            return dispatch(login(result.uid));
+            if(!result.emailVerified){
+                return dispatch(addErrorMessage("You have not verified your e-mail address. Please check your inbox for a verification e-mail from Tonal."));
+            } else {
+                console.log('actions: logged in user, result: ', result);
+                return dispatch(login(result.uid));
+            }
         }, (error) => {
             console.log('actions: there was an error logging in user: ', error.message);
             return dispatch(addErrorMessage(error.message));
@@ -259,7 +263,7 @@ export const startFacebookLogin = () => {
 
             }
         }, (error) => {
-            console.log('actions.jsx: Unable to auth: ', error);
+            return dispatch(addErrorMessage(error.message));
         });
     };
 };
