@@ -127,6 +127,7 @@ export const verifyEmailWithCode = (oobCode) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('action.jsx: action code applied!', success);
             const uid = firebase.auth().currentUser.uid;
+            console.log('action.jsx: is there a currentUser? ', firebase.auth().currentUser);
             dispatch(startLoginForAuthorizedUser(uid));
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
