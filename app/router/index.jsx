@@ -41,11 +41,7 @@ const verifyUserEmail = (nextState, replace, next) => {
     const { mode, oobCode } = nextState.location.query;
     console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
         if(mode == 'verifyEmail' && oobCode){
-            store.dispatch(actions.verifyEmailWithCode(oobCode)).then((success) => {
-                replace('connect');
-            }, (error) => {
-                replace('/');
-            });
+            store.dispatch(actions.verifyEmailWithCode(oobCode));
         } else {
             replace('/');
         }
