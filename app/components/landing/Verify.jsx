@@ -25,7 +25,7 @@ export const Verify = React.createClass({
         return(
             <div>
                 <Alert
-                    type="default"
+                    type="warning"
                     title="Verifying E-Mail"
                     message={(
                         <div>
