@@ -161,6 +161,7 @@ export const sendVerificationEmail = (user) => {
 export const createUserWithEmailAndPassword = (email, password) => {
     return (dispatch) => {
         return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+            console.log('actions.jsx: creating new user: ', user);
             console.log(`actions: User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {
@@ -175,10 +176,10 @@ export const startEmailLogin = (email, password) => {
     return (dispatch) => {
         return firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             if(!result.emailVerified){
-                return dispatch(addErrorMessage("You have not verified your e-mail address. Please check your inbox for a verification e-mail from Tonal."));
+                dispatch(addErrorMessage("You have not verified your e-mail address. Please check your inbox for a verification e-mail from Tonal."));
             } else {
                 console.log('actions: logged in user, result: ', result);
-                return dispatch(login(result.uid));
+                dispatch(startLoginForAuthorizedUser(result.uid));
             }
         }, (error) => {
             console.log('actions: there was an error logging in user: ', error.message);
@@ -235,6 +236,7 @@ export const startFacebookLogin = () => {
 
                 databaseRef.child(`users/${uid}`).update(user);
                 dispatch(storeUserDataToState(user));
+                dispatch(startLoginForAuthorizedUser(uid));
 
                 axios.get(`${ facebookRootURI }/me`, {
                     params: {

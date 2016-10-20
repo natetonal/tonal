@@ -33,6 +33,8 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
             console.log('router: redirecting to connect since user is valid');
             replace('connect');
         }
+    } else {
+        console.log('router: not redirecting for some reason.', currentUser);
     }
     next();
 };

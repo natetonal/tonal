@@ -15,7 +15,9 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 firebase.auth().onAuthStateChanged((user) => {
+    conosle.log('app.jsx: auth state changed: ', user);
     if(user.uid){
+        conosle.log('app.jsx: user.providerId: ', user.providerId);
         if(user.providerId == 'facebook.com' || user.emailVerified){
             console.log('app.jsx: user object: ', user);
             store.dispatch(actions.fetchUserData(user.uid));
