@@ -191,7 +191,7 @@ export const startEmailLogin = (email, password) => {
 export const fetchUserData = (uid) => {
     return (dispatch, getState) => {
         console.log('actions.jsx: actions/fetchUserData: uid: ', uid);
-        databaseRef.child(`users/${uid}`).once('value').then(snapshot => {
+        databaseRef.child(`users/${uid}`).once('value').then((snapshot) => {
             console.log('actions.jsx: user data: ', snapshot.val());
             if(snapshot.val()){
                 const user = {
@@ -223,48 +223,54 @@ export const startFacebookLogin = () => {
                 const firebaseUser = result.user;
                 const uid = firebaseUser.uid;
 
-                console.log('action.jsx: signed in with FB, initial result: ', result);
+                databaseRef.child(`users/${uid}`).once('value').then(snapshot => {
+                    if(snapshot.val()){
+                        console.log('action.jsx: starting login for user that already exists in our DB');
+                        dispatch(fetchUserData(uid));
+                    } else {
+                        console.log('action.jsx: signed in with FB, initial result: ', result);
 
-                const user = {
-                    uid: uid,
-                    fbToken: token,
-                    email: firebaseUser.email,
-                    displayName: firebaseUser.displayName,
-                    avatarPhoto: firebaseUser.photoURL,
-                    updatedAt: moment().format('LLLL')
-                };
+                        const user = {
+                            uid: uid,
+                            fbToken: token,
+                            email: firebaseUser.email,
+                            displayName: firebaseUser.displayName,
+                            avatarPhoto: firebaseUser.photoURL,
+                            updatedAt: moment().format('LLLL')
+                        };
 
-                databaseRef.child(`users/${uid}`).update(user);
-                dispatch(storeUserDataToState(user));
-                dispatch(startLoginForAuthorizedUser(uid));
+                        databaseRef.child(`users/${uid}`).update(user);
+                        dispatch(storeUserDataToState(user));
+                        dispatch(startLoginForAuthorizedUser(uid));
 
-                axios.get(`${ facebookRootURI }/me`, {
-                    params: {
-                        access_token: token,
-                        fields: 'first_name, last_name, email, timezone, picture.width(300)'
+                        axios.get(`${ facebookRootURI }/me`, {
+                            params: {
+                                access_token: token,
+                                fields: 'first_name, last_name, email, timezone, picture.width(300)'
+                            }
+                        })
+                        .then(response => {
+                            console.log('actions.jsx: successful get from FB API: ', response);
+
+                            const updatedUser = {
+                                ...user,
+                                email: response.data.email,
+                                firstName: response.data.first_name,
+                                lastName:response.data.last_name,
+                                timeZone: response.data.timezone,
+                                avatarPhoto: response.data.picture.data.url,
+                                updatedAt: moment().format('LLLL')
+                            };
+
+                            databaseRef.child(`users/${uid}`).update(updatedUser);
+                            dispatch(storeUserDataToState(updatedUser));
+
+                        })
+                        .catch(error => {
+                            console.log('actions.jsx: there was an error getting FB data: ', error);
+                        });
                     }
-                })
-                .then(response => {
-                    console.log('actions.jsx: successful get from FB API: ', response);
-
-                    const updatedUser = {
-                        ...user,
-                        email: response.data.email,
-                        firstName: response.data.first_name,
-                        lastName:response.data.last_name,
-                        timeZone: response.data.timezone,
-                        avatarPhoto: response.data.picture.data.url,
-                        updatedAt: moment().format('LLLL')
-                    };
-
-                    databaseRef.child(`users/${uid}`).update(updatedUser);
-                    dispatch(storeUserDataToState(updatedUser));
-
-                })
-                .catch(error => {
-                    console.log('actions.jsx: there was an error getting FB data: ', error);
                 });
-
             }
         }, (error) => {
             return dispatch(addErrorMessage(error.message));

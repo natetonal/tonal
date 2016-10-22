@@ -71,6 +71,12 @@ export const LoginModal = React.createClass({
                                     </p>
                                 </div>
                             )}
+                            { tabSelected === 'signup' && (
+                                <div>
+                                    <p className="text-center">-OR-</p>
+                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign Up With Facebook" />
+                                </div>
+                            )}
                         </div>
                         <div className="login-tabs">
                             <div className={`login-tab ${tabSelected === 'signup' ? 'selected' : ''} `}>
