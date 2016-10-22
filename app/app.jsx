@@ -12,14 +12,13 @@ const store = require('store').configure();
 $(document).foundation();
 
 // Loaders for css & sass
-require('style!css!sass!applicationStyles')
+require('style!css!sass!applicationStyles');
 
 firebase.auth().onAuthStateChanged((user) => {
-    conosle.log('app.jsx: auth state changed: ', user);
-    if(user.uid){
-        conosle.log('app.jsx: user.providerId: ', user.providerId);
-        if(user.providerId == 'facebook.com' || user.emailVerified){
-            console.log('app.jsx: user object: ', user);
+    console.log('app.jsx: auth state changed', user);
+    if(user){
+        if(user.providerData[0].providerId == 'facebook.com' ||
+           user.providerData[0].providerId == 'password' && user.emailVerified){
             store.dispatch(actions.fetchUserData(user.uid));
             store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
         }
