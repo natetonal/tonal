@@ -130,7 +130,7 @@ export const verifyEmailWithCode = (oobCode) => {
             const user = {
                 uid,
                 email: firebase.auth().currentUser.email,
-                updatedAt: snapshot.val().updatedAt
+                updatedAt: moment().format('LLLL')
             };
             databaseRef.child(`users/${uid}`).update(user);
             dispatch(storeUserDataToState(user));
