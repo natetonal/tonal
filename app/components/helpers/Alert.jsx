@@ -6,8 +6,11 @@ export const Alert = React.createClass({
     propTypes: {
         type: React.PropTypes.string.isRequired,
         title: React.PropTypes.string.isRequired,
-        message: React.PropTypes.string.isRequired,
         button: React.PropTypes.string,
+        message: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.object
+        ])
     },
 
     getDefaultProps(){
@@ -54,7 +57,7 @@ export const Alert = React.createClass({
                         { title }
                     </h4>
                 </div>
-                <p>{ message }</p>
+                <div>{ message }</div>
             </div>
         );
     }

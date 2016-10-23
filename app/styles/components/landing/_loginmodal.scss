@@ -182,3 +182,19 @@
 		@include transition(all 300ms ease-out);
 	}
 }
+
+.login-verification-email-sent{
+    padding: 40px;
+	display: block;
+	text-align: center;
+
+	.fa{
+	    padding: 20px;
+	    border: 10px solid white;
+		border-radius: 50%;
+	}
+
+	h2, h5{
+		padding-top: 20px;
+	}
+}

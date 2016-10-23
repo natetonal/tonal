@@ -12,7 +12,6 @@ import Button from 'helpers/Button';
 export const LoginModal = React.createClass({
 
     handleTabs(event){
-
         event.preventDefault();
         const tabSelected = event.target.getAttribute('name')
         const { dispatch } = this.props;
@@ -20,31 +19,31 @@ export const LoginModal = React.createClass({
     },
 
     clearErrors(value){
-
         console.log('LoginModal.jsx: clearing errors');
         const { dispatch } = this.props;
         dispatch(actions.resetErrorMessage());
     },
 
     handleFacebookLogin(event){
-
         event.preventDefault();
-        console.log('Login.jsx: logging into FB');
+        console.log('LoginModal.jsx: logging into FB');
         const { dispatch } = this.props;
-        return dispatch(actions.startFacebookLogin());
-
+        return dispatch(actions.createUserWithFacebookAuth());
     },
 
     render(){
 
         const { isOpen, tabSelected, verificationEmailSent, error } = this.props;
-
         if(error){ console.log('LoginModal.jsx: error: ', error); }
 
         const loginModalUI = () => {
             if(verificationEmailSent){
                 return(
-                    <div>Account verification email has been sent. Click the link in your email to confirm your account.</div>
+                    <div className="login-verification-email-sent">
+                        <i className="fa fa-thumbs-o-up fa-5x" aria-hidden="true"></i>
+                        <h2>Email Sent!</h2>
+                        <h5>Account verification email has been sent. Click the link in your email to confirm your account.</h5>
+                    </div>
                 );
             } else {
                 return(
@@ -82,13 +81,13 @@ export const LoginModal = React.createClass({
                             <div className={`login-tab ${tabSelected === 'signup' ? 'selected' : ''} `}>
                                 <Link name="signup"
                                       to="#"
-                                      onClick={this.handleTabs}
+                                      onClick={ this.handleTabs }
                                       className="login-tabs-label">Sign Up</Link>
                             </div>
                             <div className={`login-tab ${tabSelected === 'login' ? 'selected' : ''} `}>
                                 <Link name="login"
                                       to="#"
-                                      onClick={this.handleTabs}
+                                      onClick={ this.handleTabs }
                                       className="login-tabs-label">Log In</Link>
                             </div>
                         </div>
