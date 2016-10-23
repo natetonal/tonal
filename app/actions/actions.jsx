@@ -127,9 +127,12 @@ export const verifyEmailWithCode = (oobCode) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('action.jsx: action code applied!', success);
             const uid = firebase.auth().currentUser.uid;
+            const email = firebase.auth().currentUser.email;
+            console.log('actions.jsx: uid ', uid);
+            console.log('actions.jsx: email ', email);
             const user = {
                 uid,
-                email: firebase.auth().currentUser.email,
+                email,
                 updatedAt: moment().format('LLLL')
             };
             databaseRef.child(`users/${uid}`).update(user);
