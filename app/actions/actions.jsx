@@ -133,10 +133,14 @@ export const verifyEmailWithCode = (oobCode) => {
             const user = {
                 uid,
                 email,
-                updatedAt: moment().format('LLLL')
+                updatedAt: moment().format('LLLL'),
+                createdAt: moment().format('LLLL')
             };
             databaseRef.child(`users/${uid}`).update(user);
-            dispatch(storeUserDataToState(user));
+            dispatch({
+                type: 'CREATE_USER_DATA',
+                user
+            });
             dispatch(startLoginForAuthorizedUser(uid));
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
@@ -239,7 +243,8 @@ export const createUserWithFacebookAuth = () => {
                     email: firebaseUser.email,
                     displayName: firebaseUser.displayName,
                     avatarPhoto: firebaseUser.photoURL,
-                    updatedAt: moment().format('LLLL')
+                    updatedAt: moment().format('LLLL'),
+                    createdAt: moment().format('LLLL')
                 };
 
                 databaseRef.child(`users/${uid}`).update(user);
