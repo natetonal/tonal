@@ -73,8 +73,8 @@ export const errorsReducer = (state = null, action) => {
 export const userReducer = (state = {}, action) => {
     switch(action.type){
         case 'CREATE_USER_DATA':
-            console.log('reducers.jsx: creating data: ', action.data);
-            return action.data;
+            console.log('reducers.jsx: creating user: ', action.user);
+            return action.user;
         case 'ADD_USER_DATA':
             console.log('reducers.jsx: adding data: ', action.data);
             return {
