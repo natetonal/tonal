@@ -139,7 +139,7 @@ export const verifyEmailWithCode = (oobCode) => {
             databaseRef.child(`users/${uid}`).update(user);
             dispatch({
                 type: 'CREATE_USER_DATA',
-                user
+                data
             });
             dispatch(startLoginForAuthorizedUser(uid));
         }, (error) => {
