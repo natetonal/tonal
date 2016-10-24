@@ -70,19 +70,7 @@ export const errorsReducer = (state = null, action) => {
     }
 };
 
-const userInitialState = {
-    uid: '',
-    fbToken: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    displayName: '',
-    timeZone: '',
-    avatarPhoto: '',
-    updatedAt: ''
-};
-
-export const userReducer = (state = userInitialState, action) => {
+export const userReducer = (state = {}, action) => {
     switch(action.type){
         case 'ADD_USER_DATA':
             console.log('reducers.jsx: adding data: ', action.data);
