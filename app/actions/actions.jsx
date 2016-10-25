@@ -137,11 +137,8 @@ export const verifyEmailWithCode = (oobCode) => {
                 createdAt: moment().format('LLLL')
             };
             databaseRef.child(`users/${uid}`).update(user);
-            dispatch({
-                type: 'CREATE_USER_DATA',
-                user
-            });
             dispatch(startLoginForAuthorizedUser(uid));
+            dispatch(storeUserDataToState(user);
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
         });
