@@ -1,12 +1,13 @@
 export const authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
+            console.log('reducer: adding uid to auth reducer: ', action.uid);
             return {
                 ...state,
                 uid: action.uid
             };
         case 'LOGOUT':
-            console.log('reducer: logging out user (this should wipe the uid from authState)');
+            console.log('reducer: logging out user (this should wipe the uid from authState');
             return {
                 ...state,
                 uid: ""

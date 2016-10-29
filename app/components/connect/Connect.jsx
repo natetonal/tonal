@@ -12,6 +12,7 @@ export const Connect = React.createClass({
         const { user, uid } = this.props;
 
         console.log('from Connect.jsx: user? ', user);
+        console.log('from Connect.jsx: uid? ', uid);
 
         return(
             <div>
