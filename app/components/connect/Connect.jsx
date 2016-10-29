@@ -9,13 +9,13 @@ export const Connect = React.createClass({
     render(){
 
         const error = "Here's a message in an alert. Bam.";
-        const { user } = this.props;
+        const { user, uid } = this.props;
 
         console.log('from Connect.jsx: user? ', user);
 
         return(
             <div>
-                { user &&
+                { uid &&
                     <div>
                         <h3>Data we have about you:</h3>
                         <p><b>User ID: </b>{ user.uid }</p>
@@ -37,6 +37,7 @@ export const Connect = React.createClass({
 export default Redux.connect(state => {
     console.log('connect.jsx: state: ', state);
     return {
-        user: state.user
+        user: state.user,
+        uid: state.auth.uid
     };
 })(Connect);
