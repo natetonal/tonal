@@ -71,7 +71,20 @@ export const errorsReducer = (state = null, action) => {
     }
 };
 
-export const userReducer = (state = {}, action) => {
+const initialUserState = {
+    uid: null,
+    fbToken: null,
+    email: null,
+    firstName: null,
+    lastName: null,
+    displayName: null,
+    timeZone: null,
+    avatarPhoto: null,
+    updatedAt: null,
+    createdAt: null
+};
+
+export const userReducer = (state = initialUserState, action) => {
     switch(action.type){
         case 'CREATE_USER_DATA':
             console.log('reducers.jsx: creating user: ', action.user);
