@@ -74,7 +74,10 @@ export const userReducer = (state = {}, action) => {
     switch(action.type){
         case 'CREATE_USER_DATA':
             console.log('reducers.jsx: creating user: ', action.user);
-            return action.user;
+            return {
+                ...state,
+                ...action.user
+            };
         case 'ADD_USER_DATA':
             console.log('reducers.jsx: adding data: ', action.data);
             return {

@@ -35,6 +35,7 @@ export const Connect = React.createClass({
 });
 
 export default Redux.connect(state => {
+    console.log('connect.jsx: state: ', state);
     return {
         user: state.user
     };
