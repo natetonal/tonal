@@ -93,7 +93,7 @@ export const startLoginForAuthorizedUser = (uid) => {
     return (dispatch) => {
         console.log('actions.jsx: starting login for authorized user');
         dispatch(login(uid));
-        dispatch(pushToRoute('/connect'));
+        dispatch(pushToRoute('/'));
     };
 };
 
