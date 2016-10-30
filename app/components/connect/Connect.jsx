@@ -6,6 +6,11 @@ import Alert from 'helpers/Alert';
 
 export const Connect = React.createClass({
 
+    componentWillMount(){
+        // update data manually when component mounts?
+        console.log('from Connect.jsx: update data manually here');
+    },
+
     componentWillReceiveProps(nextProps){
         console.log('from Connect.jsx: nextProps: ', nextProps);
     },

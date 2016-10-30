@@ -275,7 +275,8 @@ export const createUserWithFacebookAuth = () => {
                     };
 
                     databaseRef.child(`users/${uid}`).update(updatedUser);
-                    dispatch(storeUserDataToState(updatedUser));
+                    dispatch(fetchUserData(uid));
+                    dispatch(startLoginForAuthorizedUser(uid));
 
                 })
                 .catch(error => {
