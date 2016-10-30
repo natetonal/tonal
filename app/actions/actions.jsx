@@ -140,9 +140,8 @@ export const verifyEmailWithCode = (oobCode) => {
                 };
                 console.log('actions.jsx: saving user to database');
                 databaseRef.child(`users/${uid}`).update(user);
-                console.log('actions.jsx: attempting to flip user emailVerified to true');
                 console.log('actions.jsx: storing user to state');
-                dispatch(storeUserDataToState(user));
+                dispatch(fetchUserData(uid));
                 console.log('actions.jsx: starting login for authorized user');
                 dispatch(startLoginForAuthorizedUser(uid));
             }
@@ -275,8 +274,7 @@ export const createUserWithFacebookAuth = () => {
                     };
 
                     databaseRef.child(`users/${uid}`).update(updatedUser);
-                    dispatch(fetchUserData(uid));
-                    dispatch(startLoginForAuthorizedUser(uid));
+                    dispatch(storeUserDataToState(updatedUser));
 
                 })
                 .catch(error => {
