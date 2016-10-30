@@ -141,14 +141,10 @@ export const verifyEmailWithCode = (oobCode) => {
                 console.log('actions.jsx: saving user to database');
                 databaseRef.child(`users/${uid}`).update(user);
                 console.log('actions.jsx: attempting to flip user emailVerified to true');
-                currentUser.updateProfile({
-                    emailVerified: true
-                });
-                console.log('actions.jsx: did user change?', currentUser);
-                // console.log('actions.jsx: storing user to state');
-                // dispatch(storeUserDataToState(user));
-                // console.log('actions.jsx: starting login for authorized user');
-                // dispatch(startLoginForAuthorizedUser(uid));
+                console.log('actions.jsx: storing user to state');
+                dispatch(storeUserDataToState(user));
+                console.log('actions.jsx: starting login for authorized user');
+                dispatch(startLoginForAuthorizedUser(uid));
             }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
