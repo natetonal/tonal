@@ -56,7 +56,7 @@ export const TonalApp = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        uid: state.auth.uid
+        uid: state.user.uid
     };
 };
 

@@ -25,7 +25,7 @@ export const Connect = React.createClass({
 
         return(
             <div>
-                { uid &&
+                { user.uid &&
                     <div>
                         <h3>Data we have about you:</h3>
                         <p><b>User ID: </b>{ user.uid }</p>
@@ -47,7 +47,6 @@ export const Connect = React.createClass({
 export default Redux.connect(state => {
     console.log('connect.jsx: state: ', state);
     return {
-        user: state.user,
-        uid: state.auth.uid
+        user: state.user
     };
 })(Connect);
