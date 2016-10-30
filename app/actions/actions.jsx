@@ -126,22 +126,29 @@ export const verifyEmailWithCode = (oobCode) => {
     return (dispatch) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('action.jsx: action code applied!', success);
-            const uid = firebase.auth().currentUser.uid;
-            const email = firebase.auth().currentUser.email;
-            console.log('actions.jsx: uid ', uid);
-            console.log('actions.jsx: email ', email);
-            const user = {
-                uid,
-                email,
-                updatedAt: moment().format('LLLL'),
-                createdAt: moment().format('LLLL')
-            };
-            console.log('actions.jsx: saving user to database');
-            databaseRef.child(`users/${uid}`).update(user);
-            console.log('actions.jsx: storing user to state');
-            dispatch(storeUserDataToState(user));
-            console.log('actions.jsx: starting login for authorized user');
-            dispatch(startLoginForAuthorizedUser(uid));
+            if(firebase.auth().currentUser){
+                const currentUser = firebase.auth().currentUser;
+                const uid = currentUser.uid;
+                const email = currentUser.email;
+                console.log('actions.jsx: uid ', uid);
+                console.log('actions.jsx: email ', email);
+                const user = {
+                    uid,
+                    email,
+                    updatedAt: moment().format('LLLL'),
+                    createdAt: moment().format('LLLL')
+                };
+                console.log('actions.jsx: saving user to database');
+                databaseRef.child(`users/${uid}`).update(user);
+                console.log('actions.jsx: attempting to flip user emailVerified to true');
+                currentUser.updateProfile({
+                    emailVerified: true
+                });
+                // console.log('actions.jsx: storing user to state');
+                // dispatch(storeUserDataToState(user));
+                // console.log('actions.jsx: starting login for authorized user');
+                // dispatch(startLoginForAuthorizedUser(uid));
+            }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
         });
