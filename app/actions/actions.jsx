@@ -123,7 +123,7 @@ export const getImgUrl = (path) => {
 };
 
 export const verifyEmailWithCode = (oobCode) => {
-    return (dispatch, getState => {
+    return (dispatch) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('action.jsx: action code applied!', success);
             const uid = firebase.auth().currentUser.uid;
