@@ -72,16 +72,16 @@ export const errorsReducer = (state = null, action) => {
 };
 
 const initialUserState = {
-    uid: null,
-    fbToken: null,
-    email: null,
-    firstName: null,
-    lastName: null,
-    displayName: null,
-    timeZone: null,
-    avatarPhoto: null,
-    updatedAt: null,
-    createdAt: null
+    uid: "",
+    fbToken: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    displayName: "",
+    timeZone: "",
+    avatarPhoto: "",
+    updatedAt: "",
+    createdAt: ""
 };
 
 export const userReducer = (state = initialUserState, action) => {
