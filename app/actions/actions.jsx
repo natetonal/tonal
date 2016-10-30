@@ -144,6 +144,7 @@ export const verifyEmailWithCode = (oobCode) => {
                 currentUser.updateProfile({
                     emailVerified: true
                 });
+                console.log('actions.jsx: did user change?', currentUser);
                 // console.log('actions.jsx: storing user to state');
                 // dispatch(storeUserDataToState(user));
                 // console.log('actions.jsx: starting login for authorized user');
