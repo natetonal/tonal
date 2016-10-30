@@ -6,6 +6,15 @@ import Alert from 'helpers/Alert';
 
 export const Connect = React.createClass({
 
+    componentWillReceiveProps(nextProps){
+        console.log('from Connect.jsx: nextProps: ', nextProps);
+    },
+
+    componentWillUpdate(nextProps, nextState){
+        console.log('from Connect.jsx: nextProps: ', nextProps);
+        console.log('from Connext.jsx: nextState: ', nextState);
+    },
+
     render(){
 
         const error = "Here's a message in an alert. Bam.";
