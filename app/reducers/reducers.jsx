@@ -93,7 +93,7 @@ export const userReducer = (state = initialUserState, action) => {
                 ...action.data
             };
         case 'RESET_USER_DATA':
-            return userInitialState;
+            return initialUserState;
         default:
             return state;
     }
