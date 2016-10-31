@@ -6,7 +6,7 @@ import router from 'app/router/';
 import firebase from 'app/firebase';
 import * as actions from 'actions';
 
-const store = require('store').configure();
+const store = require('configureStore').configure();
 
 // Load foundation
 $(document).foundation();
