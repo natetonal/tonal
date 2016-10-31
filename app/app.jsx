@@ -6,7 +6,7 @@ import router from 'app/router/';
 import firebase from 'app/firebase';
 import * as actions from 'actions';
 
-const store = require('configureStore').configure();
+import { configure as store } from 'store';
 
 // Load foundation
 $(document).foundation();
@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 ReactDOM.render(
-    <Provider store={ store }>
+    <Provider store={ store() }>
         { router }
     </Provider>,
 document.getElementById('app')
