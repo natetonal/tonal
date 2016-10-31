@@ -11,16 +11,18 @@ export const Verify = React.createClass({
         const { mode, oobCode } = query;
         if(mode == 'verifyEmail' && oobCode){
             console.log('Verify.jsx: all needs are met to dispatch verifyEmail action!');
-            return dispatch(actions.verifyEmail(oobCode));
+            return dispatch(actions.verifyEmailWithCode(oobCode));
         } else {
             return dispatch(actions.pushToRoute('/'));
         }
     },
-    
-    render(){
 
+    componentDidMount(){
         const { location: { query }} = this.props;
         this.handleQuery(query);
+    },
+
+    render(){
 
         return(
             <div>
