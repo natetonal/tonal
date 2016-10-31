@@ -91,7 +91,7 @@ export const storeUserDataToState = (data) => {
 
 export const startLoginForAuthorizedUser = (uid) => {
     return (dispatch) => {
-        console.log('actions.jsx: starting login for authorized user');
+        console.log('actions.jsx/sLFAU: starting login for authorized user');
         dispatch(login(uid));
         dispatch(pushToRoute('/'));
     };
@@ -142,8 +142,8 @@ export const verifyEmailWithCode = (oobCode) => {
                 databaseRef.child(`users/${uid}`).update(user);
                 console.log('actions.jsx: storing user to state');
                 dispatch(storeUserDataToState(user));
-                console.log('actions.jsx: starting login for authorized user');
-                dispatch(startLoginForAuthorizedUser(uid));
+                // console.log('actions.jsx: starting login for authorized user');
+                // dispatch(startLoginForAuthorizedUser(uid));
             }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
