@@ -132,8 +132,6 @@ export const verifyEmailWithCode = (oobCode) => {
                 const email = currentUser.email;
                 console.log('actions.jsx: uid ', uid);
                 console.log('actions.jsx: email ', email);
-                console.log('actions.jsx: starting login for authorized user');
-                dispatch(startLoginForAuthorizedUser(uid));
                 const user = {
                     uid,
                     email,
@@ -144,6 +142,8 @@ export const verifyEmailWithCode = (oobCode) => {
                 databaseRef.child(`users/${uid}`).update(user);
                 console.log('actions.jsx: storing user to state');
                 dispatch(fetchUserData(uid));
+                console.log('actions.jsx: starting login for authorized user');
+                dispatch(startLoginForAuthorizedUser(uid));
             }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
