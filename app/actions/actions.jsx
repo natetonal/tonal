@@ -123,7 +123,7 @@ export const getImgUrl = (path) => {
 };
 
 export const verifyEmailWithCode = (oobCode) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             console.log('action.jsx: action code applied!', success);
             if(firebase.auth().currentUser){
@@ -143,7 +143,8 @@ export const verifyEmailWithCode = (oobCode) => {
                 console.log('actions.jsx: storing user to state');
                 dispatch(storeUserDataToState(user));
                 // console.log('actions.jsx: starting login for authorized user');
-                // dispatch(startLoginForAuthorizedUser(uid));
+                dispatch(startLoginForAuthorizedUser(uid));
+                console.log('actions.jsx: getState(): ', getState());
             }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
