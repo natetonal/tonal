@@ -6,16 +6,6 @@ import Alert from 'helpers/Alert';
 
 export const Connect = React.createClass({
 
-    componentWillMount(){
-        // update data manually when component mounts?
-        console.log('from Connect.jsx: update data manually here');
-        const { user } = this.props;
-        if (!user){
-            console.log('from Connect.jsx: no user, so forcing update of component.');
-            this.forceUpdate();
-        }
-    },
-
     componentWillReceiveProps(nextProps){
         console.log('from Connect.jsx: nextProps: ', nextProps);
     },

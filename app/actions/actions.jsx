@@ -141,7 +141,7 @@ export const verifyEmailWithCode = (oobCode) => {
                 console.log('actions.jsx: saving user to database');
                 databaseRef.child(`users/${uid}`).update(user);
                 console.log('actions.jsx: storing user to state');
-                dispatch(fetchUserData(uid));
+                dispatch(storeUserDataToState(user));
                 console.log('actions.jsx: starting login for authorized user');
                 dispatch(startLoginForAuthorizedUser(uid));
             }
