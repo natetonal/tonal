@@ -15,6 +15,10 @@ export const Connect = React.createClass({
         console.log('from Connext.jsx: nextState: ', nextState);
     },
 
+    shouldComponentUpdate(nextState){
+        console.log('from Connect.jsx: checking nextState: ', nextState);
+    },
+
     render(){
 
         const error = "Here's a message in an alert. Bam.";
