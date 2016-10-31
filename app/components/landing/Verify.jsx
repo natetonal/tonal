@@ -6,21 +6,21 @@ import Alert from 'helpers/Alert';
 
 export const Verify = React.createClass({
 
-    // handleQuery(query){
-    //     const { dispatch } = this.props;
-    //     const { mode, oobCode } = query;
-    //     if(mode == 'verifyEmail' && oobCode){
-    //         console.log('Verify.jsx: all needs are met to dispatch verifyEmail action!');
-    //         return dispatch(actions.verifyEmail(oobCode));
-    //     } else {
-    //         return dispatch(actions.rerouteUser('/'));
-    //     }
-    // },
-
+    handleQuery(query){
+        const { dispatch } = this.props;
+        const { mode, oobCode } = query;
+        if(mode == 'verifyEmail' && oobCode){
+            console.log('Verify.jsx: all needs are met to dispatch verifyEmail action!');
+            return dispatch(actions.verifyEmail(oobCode));
+        } else {
+            return dispatch(actions.pushToRoute('/'));
+        }
+    },
+    
     render(){
 
-        // const { location: { query }} = this.props;
-        // this.handleQuery(query);
+        const { location: { query }} = this.props;
+        this.handleQuery(query);
 
         return(
             <div>
@@ -42,8 +42,4 @@ export const Verify = React.createClass({
     }
 });
 
-export default Redux.connect(state => {
-    return {
-        verificationEmailSent: state.auth.verificationEmailSent
-    };
-})(Verify);
+export default Redux.connect()(Verify);

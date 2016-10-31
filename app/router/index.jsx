@@ -39,22 +39,11 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
     next();
 };
 
-const verifyUserEmail = (nextState, replace, next) => {
-    const { mode, oobCode } = nextState.location.query;
-    console.log("router: mode & oobCode from verifyUserEmail: ", mode, oobCode);
-        if(mode == 'verifyEmail' && oobCode){
-            store.dispatch(actions.verifyEmailWithCode(oobCode));
-        } else {
-            replace('/');
-        }
-    next();
-}
-
 export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>
             <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
-            <Route path="verify" component={ Verify } onEnter={ verifyUserEmail } />
+            <Route path="verify" component={ Verify } />
             <Route path="connect" component = { Connect } onEnter = { requireLogin } />
             <Route path="discover" component = { Discover } onEnter = { requireLogin } />
             <Route path="mymusic" component = { MyMusic } onEnter = { requireLogin } />
