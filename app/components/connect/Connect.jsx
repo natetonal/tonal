@@ -6,30 +6,13 @@ import Alert from 'helpers/Alert';
 
 export const Connect = React.createClass({
 
-    componentWillReceiveProps(nextProps){
-        console.log('from Connect.jsx: nextProps: ', nextProps);
-    },
-
-    componentWillUpdate(nextProps, nextState){
-        console.log('from Connect.jsx: nextProps: ', nextProps);
-        console.log('from Connext.jsx: nextState: ', nextState);
-    },
-
-    shouldComponentUpdate(nextState){
-        console.log('from Connect.jsx: checking nextState: ', nextState);
-    },
-
     render(){
 
-        const error = "Here's a message in an alert. Bam.";
-        const { user, uid } = this.props;
-
-        console.log('from Connect.jsx: user? ', user);
-        console.log('from Connect.jsx: uid? ', uid);
+        const { user } = this.props;
 
         return(
             <div>
-                { user.uid &&
+                { user &&
                     <div>
                         <h3>Data we have about you:</h3>
                         <p><b>User ID: </b>{ user.uid }</p>
@@ -49,7 +32,6 @@ export const Connect = React.createClass({
 });
 
 export default Redux.connect(state => {
-    console.log('connect.jsx: state: ', state);
     return {
         user: state.user
     };
