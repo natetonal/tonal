@@ -19,10 +19,6 @@ export const TonalApp = React.createClass({
         }
     },
 
-    // componentDidMount(props){
-    //     console.log('TonalApp.jsx: component did mount with props: ', props);
-    // },
-
     render(){
 
         const { uid }  = this.props;

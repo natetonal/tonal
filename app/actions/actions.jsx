@@ -130,11 +130,12 @@ export const verifyEmailWithCode = (oobCode) => {
                 const currentUser = firebase.auth().currentUser;
                 const uid = currentUser.uid;
                 const email = currentUser.email;
-                console.log('actions.jsx: uid ', uid);
-                console.log('actions.jsx: email ', email);
+                const displayName = currentUser.email.match(/^[^@]*/g);
+                console.log('actions.jsx: displayName: ', displayName);
                 const user = {
                     uid,
                     email,
+                    displayName,
                     updatedAt: moment().format('LLLL'),
                     createdAt: moment().format('LLLL')
                 };

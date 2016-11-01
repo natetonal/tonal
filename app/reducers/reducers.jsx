@@ -31,7 +31,14 @@ export const imgUrlReducer = (state = "", action) => {
     }
 };
 
-export const uiStateReducer = (state = {}, action) => {
+const initialUIState = {
+    menuIsOpen: false,
+    searchIsOpen: false,
+    loginModalIsOpen: false,
+    loginModalTabSelected: 'signup'
+};
+
+export const uiStateReducer = (state = initialUIState, action) => {
     switch(action.type){
         case 'TOGGLE_MENU':
             return {
@@ -54,7 +61,7 @@ export const uiStateReducer = (state = {}, action) => {
                 loginModalTabSelected: action.tabSelected
             };
         case 'RESET_UI_STATE':
-            return{};
+            return initialUIState;
         default:
             return state;
     }

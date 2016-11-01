@@ -8,7 +8,7 @@ export const Verify = React.createClass({
 
     // For future reference:
     // Handle oobCode verification in the component, NOT in the router.
-    
+
     handleQuery(query){
         const { dispatch } = this.props;
         const { mode, oobCode } = query;
@@ -39,9 +39,7 @@ export const Verify = React.createClass({
                         </div>
                     )}
                 />
-                <div className={`auth-content blur`}>
-
-                </div>
+                <div className={`auth-content blur`}></div>
             </div>
         );
     }

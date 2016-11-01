@@ -52,6 +52,7 @@ export const Menu = React.createClass({
 export default Redux.connect(state => {
     return {
         avatarPhoto: state.user.avatarPhoto,
-        displayName: state.user.displayName
+        displayName: state.user.displayName,
+        email: state.user.email
     };
 })(Menu);
