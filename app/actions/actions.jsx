@@ -125,27 +125,23 @@ export const getImgUrl = (path) => {
 export const verifyEmailWithCode = (oobCode) => {
     return (dispatch, getState) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
-            console.log('action.jsx: action code applied!', success);
             if(firebase.auth().currentUser){
                 const currentUser = firebase.auth().currentUser;
+                const defaultUser = getState().uiState;
                 const uid = currentUser.uid;
                 const email = currentUser.email;
                 const displayName = "" + email.match(/^[^@]*/g)[0];
-                console.log('actions.jsx: displayName: ', displayName);
                 const user = {
+                    ...defaultUser,
                     uid,
                     email,
                     displayName,
                     updatedAt: moment().format('LLLL'),
                     createdAt: moment().format('LLLL')
                 };
-                console.log('actions.jsx: saving user to database');
                 databaseRef.child(`users/${uid}`).update(user);
-                console.log('actions.jsx: storing user to state');
                 dispatch(storeUserDataToState(user));
-                // console.log('actions.jsx: starting login for authorized user');
                 dispatch(startLoginForAuthorizedUser(uid));
-                console.log('actions.jsx: getState(): ', getState());
             }
         }, (error) => {
             console.log("router: Problem verifying email: ", error);
