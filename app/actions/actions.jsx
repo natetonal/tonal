@@ -127,7 +127,7 @@ export const verifyEmailWithCode = (oobCode) => {
         firebase.auth().applyActionCode(oobCode).then((success) => {
             if(firebase.auth().currentUser){
                 const currentUser = firebase.auth().currentUser;
-                const defaultUser = getState().uiState;
+                const defaultUser = getState().user;
                 const uid = currentUser.uid;
                 const email = currentUser.email;
                 const displayName = "" + email.match(/^[^@]*/g)[0];
