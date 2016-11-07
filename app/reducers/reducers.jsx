@@ -1,3 +1,10 @@
+const initialAuthState = {
+    uid: "",
+    verificationEmailSent: false,
+    userForgotPassword: false,
+    userIsResettingPassword: false
+};
+
 export const authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
@@ -16,6 +23,11 @@ export const authReducer = (state = {}, action) => {
             return {
                 ...state,
                 verificationEmailSent: true
+            };
+        case 'USER_IS_RESETTING_PASSWORD':
+            return {
+                ...state,
+                userIsResettingPassword: true
             };
         default:
             return state;

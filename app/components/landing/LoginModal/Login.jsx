@@ -10,12 +10,11 @@ import validate from './validate';
 export const Login = React.createClass({
 
     handleFormSubmit(values){
-
-        const { email, password } = values;
+        
+        const { email } = values;
         const { dispatch } = this.props;
 
-        return dispatch(actions.startEmailLogin(email, password));
-
+        return dispatch(actions.sendPasswordResetEmail(email));
     },
 
     render(){

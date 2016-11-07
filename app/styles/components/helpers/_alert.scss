@@ -43,6 +43,10 @@
         padding-right: 10px;
     }
 
+    .tonal-alert-body{
+        padding: 25px;
+    }
+
 }
 
 @include alertTheme;

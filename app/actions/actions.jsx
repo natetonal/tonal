@@ -63,6 +63,12 @@ export const verificationEmailSent = () => {
     };
 };
 
+export const userIsResettingPassword = () => {
+    return{
+        type: 'USER_IS_RESETTING_PASSWORD'
+    };
+};
+
 export const resetAuthState = () => {
     return{
         type: 'RESET_AUTH_STATE'
@@ -149,6 +155,29 @@ export const verifyEmailWithCode = (oobCode) => {
     }
 };
 
+export const verifyPasswordResetCode = (oobCode) => {
+    return (dispatch) => {
+        firebase.auth().verifyPasswordResetCode(oobCode).then((email) => {
+            console.log('actions.jsx: password reset code verified for user ', email);
+            dispatch(storeUserDataToState({ email }));
+        }, (error) => {
+            console.log('actions.jsx: problem resetting you password: ', error.message);
+        });
+    }
+};
+
+export const resetPasswordAndLoginUser = (oobCode, email, password) => {
+    return (dispatch) => {
+        firebase.auth().confirmPasswordReset(oobCode, password).then((success) => {
+            console.log('actions.jsx: password reset confirmed, logging you in');
+            dispatch(startEmailLogin(email, password));
+        }, (error) => {
+            console.log('actions.jsx: problem resetting your password with FB: ', error.message);
+            dispatch(addErrorMessage(error.message));
+        });
+    }
+};
+
 export const startLogout = () => {
     return (dispatch) => {
         firebase.auth().signOut().then((success) => {
@@ -170,6 +199,16 @@ export const sendVerificationEmail = (user) => {
             console.log("actions: Error sending user verification email: ", error);
         });
     }
+};
+
+export const sendPasswordResetEmail = (email) => {
+    return (dispatch) => {
+        return firebase.auth().sendPasswordResetEmail(email).then((success) => {
+            console.log('actions.jsx: pw reset email sent to ', email);
+        }, (error) => {
+            return dispatch(addErrorMessage(error.message));
+        });
+    };
 };
 
 export const createUserWithEmailAndPassword = (email, password) => {

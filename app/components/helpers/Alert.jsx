@@ -57,7 +57,7 @@ export const Alert = React.createClass({
                         { title }
                     </h4>
                 </div>
-                <div>{ message }</div>
+                <div className="tonal-alert-body">{ message }</div>
             </div>
         );
     }

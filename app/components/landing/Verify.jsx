@@ -9,9 +9,10 @@ export const Verify = React.createClass({
     // For future reference:
     // Handle oobCode verification in the component, NOT in the router.
 
-    handleQuery(query){
+    // Load in your component here
+
+    handleQuery(mode, oobCode){
         const { dispatch } = this.props;
-        const { mode, oobCode } = query;
         if(mode == 'verifyEmail' && oobCode){
             console.log('Verify.jsx: all needs are met to dispatch verifyEmail action!');
             return dispatch(actions.verifyEmailWithCode(oobCode));
@@ -21,8 +22,8 @@ export const Verify = React.createClass({
     },
 
     componentDidMount(){
-        const { location: { query }} = this.props;
-        this.handleQuery(query);
+        const { location: { query: { mode, oobCode }}} = this.props;
+        this.handleQuery(mode, oobCode);
     },
 
     render(){
