@@ -11,6 +11,8 @@ export const ResetPassword = React.createClass({
 
     handleFormSubmit(values){
 
+        console.log('ResetPassword.jsx: handleFormSubmit called with values: ', values);
+
         const { password } = values;
         const { dispatch, userEmail, location: { query: { mode, oobCode }}} = this.props;
 
@@ -39,7 +41,7 @@ export const ResetPassword = React.createClass({
         );
     }
 });
-//
+
 export default reduxForm({
   form: 'reset-password',
   validate
