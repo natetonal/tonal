@@ -23,13 +23,14 @@ firebase.auth().onAuthStateChanged((user) => {
             store.dispatch(actions.fetchUserData(user.uid));
             store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
         }
-    } else {
-        // There should be a way to check if the user has ever logged in before down the road
-        // (i.e. checking our own user data)
-        // Dispatch an action to clear any lingering data.
-        // Might want to push to a "Goodbye" marketing page.
-        store.dispatch(actions.pushToRoute('/'));
     }
+    // } else {
+    //     // There should be a way to check if the user has ever logged in before down the road
+    //     // (i.e. checking our own user data)
+    //     // Dispatch an action to clear any lingering data.
+    //     // Might want to push to a "Goodbye" marketing page.
+    //     store.dispatch(actions.pushToRoute('/'));
+    // }
 });
 
 ReactDOM.render(
