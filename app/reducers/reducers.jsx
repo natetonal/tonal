@@ -47,7 +47,7 @@ const initialUIState = {
     menuIsOpen: false,
     searchIsOpen: false,
     loginModalIsOpen: false,
-    loginModalTabSelected: 'signup'
+    loginModalUI: 'signup'
 };
 
 export const uiStateReducer = (state = initialUIState, action) => {
@@ -67,10 +67,10 @@ export const uiStateReducer = (state = initialUIState, action) => {
                 ...state,
                 loginModalIsOpen: !state.loginModalIsOpen
             };
-        case 'SWITCH_LOGIN_MODAL_TAB':
+        case 'SWITCH_LOGIN_MODAL_UI':
             return{
                 ...state,
-                loginModalTabSelected: action.tabSelected
+                loginModalUI: action.loginModalUI
             };
         case 'RESET_UI_STATE':
             return initialUIState;

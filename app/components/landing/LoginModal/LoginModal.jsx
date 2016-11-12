@@ -1,142 +1,84 @@
 import React from 'react';
-import { Link } from 'react-router';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Login from './Login';
-import Signup from './Signup';
 import Alert from 'helpers/Alert';
 import Button from 'helpers/Button';
+
+import Login from './Login';
+import Signup from './Signup';
+import LoginTabs from './LoginTabs';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import VerifyingEmail from './VerifyingEmail';
+import LoginEmailSent from './LoginEmailSent';
 
 export const LoginModal = React.createClass({
 
-    handleTabs(event){
-        event.preventDefault();
-        const tabSelected = event.target.getAttribute('name')
-        const { dispatch } = this.props;
-        dispatch(actions.switchLoginModalTab(tabSelected));
-    },
-
     clearErrors(value){
-        console.log('LoginModal.jsx: clearing errors');
         const { dispatch } = this.props;
         dispatch(actions.resetErrorMessage());
     },
 
-    handleFacebookLogin(event){
-        event.preventDefault();
-        console.log('LoginModal.jsx: logging into FB');
-        const { dispatch } = this.props;
-        return dispatch(actions.createUserWithFacebookAuth());
-    },
-
-    componentDidMount(){
-        if(this.props.location){
-            const { dispatch, location: { query: { mode, oobCode }}} = this.props;
-            if(mode == 'resetPassword' && oobCode){
-                console.log('LoginModal.jsx: resetting password');
-                dispatch(actions.verifyPasswordResetCode(oobCode));
-                dispatch(actions.toggleLoginModal());
-                dispatch(actions.userIsResettingPassword());
-            }
-        }
-    },
-
     render(){
 
-        const { email, isOpen, tabSelected, verificationEmailSent, userIsResettingPassword, error } = this.props;
+        const { email, isOpen, loginModalUI, error } = this.props;
 
-        console.log('LoginModal.jsx: tabSelected: ', tabSelected);
+        console.log('LoginModal.jsx: loginModalUI: ', loginModalUI);
         if(error){ console.log('LoginModal.jsx: error: ', error); }
 
-        const loginModalUI = () => {
-            if(verificationEmailSent){
-                return(
-                    <div className="login-verification-email-sent">
-                        <i className="fa fa-thumbs-o-up fa-5x" aria-hidden="true"></i>
-                        <h2>Email Sent!</h2>
-                        <h5>Account verification email has been sent. Click the link in your email to confirm your account.</h5>
-                    </div>
-                );
-            } else if(userIsResettingPassword){
-                return(
-                    <ResetPassword userEmail={ email } />
-                );
-            } else {
-                return(
-                    <div onClick={ this.clearErrors }>
-                        <ReactCSSTransitionGroup transitionName="callout" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-                        { error && (
-                            <Alert
-                                type="error"
-                                title={ tabSelected == 'login' ? 'Error with your login' : 'Error with your signup' }
-                                message={ error }
-                            />
-                        )}
-                        </ReactCSSTransitionGroup>
-                        <div className="login-area">
-                            <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
-                                { tabSelected === 'login' && <Login key="login" /> }
-                                { tabSelected === 'signup' && <Signup key="signup" /> }
-                                { tabSelected === 'forgot-password' && <ForgotPassword key="forgot-password" /> }
-                            </ReactCSSTransitionGroup>
-                            { tabSelected === 'login' && (
-                                <div>
-                                    <p className="text-center">-OR-</p>
-                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Log In With Facebook" />
-                                    <p className="text-center">
-                                        <Link name="forgot-password"
-                                              to="#"
-                                              onClick= { this.handleTabs }
-                                              className="forgot-password">I forgot my password</Link>
-                                    </p>
-                                </div>
-                            )}
-                            { tabSelected === 'signup' && (
-                                <div>
-                                    <p className="text-center">-OR-</p>
-                                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign Up With Facebook" />
-                                </div>
-                            )}
-                            { tabSelected === 'forgot-password' && (
-                                <div>
-                                    <br />
-                                    <p className="text-center">
-                                    <Link name="login"
-                                          to="#"
-                                          onClick= { this.handleTabs }
-                                          className="forgot-password">Just kidding, I remembered it.</Link>
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                        <div className="login-tabs">
-                            <div className={`login-tab ${ tabSelected === 'signup' ? 'selected' : '' }`}>
-                                <Link name="signup"
-                                      to="#"
-                                      onClick={ this.handleTabs }
-                                      className="login-tabs-label">Sign Up</Link>
-                            </div>
-                            <div className={`login-tab ${ tabSelected === 'login' || tabSelected === 'forgot-password' ? 'selected' : '' }`}>
-                                <Link name="login"
-                                      to="#"
-                                      onClick={ this.handleTabs }
-                                      className="login-tabs-label">Log In</Link>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
+        const displayError = () => {
+            return error && (
+                <ReactCSSTransitionGroup transitionName="callout" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                <Alert
+                    type="error"
+                    title={ 'We have a problem.' }
+                    message={ error }
+                />
+                </ReactCSSTransitionGroup>
+            );
+        };
+
+        const loginModalView = () => {
+            switch(loginModalUI){
+                case 'login':
+                    console.log('LoginModal.jsx: loading Login component.');
+                    return <Login key="login" />;
+                case 'signup':
+                    console.log('LoginModal.jsx: loading Signup component.');
+                    return <Signup key="signup" />;
+                case 'forgot-password':
+                    console.log('LoginModal.jsx: loading ForgotPassword component.');
+                    return <ForgotPassword key="forgot-password" />;
+                case 'reset-password':
+                    console.log('LoginModal.jsx: loading ResetPassword component.');
+                    return <ResetPassword userEmail={ email } key="reset-password" />;
+                case 'verifying-email':
+                    console.log('LoginModal.jsx: loading VerifyingEmail component.');
+                    return <VerifyingEmail key="verifying-email" />
+                case 'email-sent-verify':
+                case 'email-sent-password':
+                    console.log('LoginModal.jsx: loading LoginEmailSent component.');
+                    return <LoginEmailSent key="email-sent" />;
+                default:
+                    return <div></div>;
+            };
         };
 
         return(
             <div className={`md-modal md-effect-1 ${isOpen ? "md-show" : ""}`} id="modal-1">
             	<div className="md-content">
                     <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
-                        { loginModalUI() }
+                        <div onClick={ this.clearErrors }>
+                            { this.displayError }
+                            <div className="login-area">
+                                <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
+                                    { loginModalView() }
+                                </ReactCSSTransitionGroup>
+                            </div>
+                            <LoginTabs />
+                        </div>
                     </ReactCSSTransitionGroup>
             	</div>
             </div>
@@ -148,9 +90,7 @@ export default Redux.connect(state => {
     return {
         email: state.user.email,
         isOpen: state.uiState.loginModalIsOpen,
-        tabSelected: state.uiState.loginModalTabSelected,
-        verificationEmailSent: state.auth.verificationEmailSent,
-        userIsResettingPassword: state.auth.userIsResettingPassword,
+        loginModalUI: state.uiState.loginModalUI,
         error: state.errors
     };
 })(LoginModal);

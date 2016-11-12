@@ -43,8 +43,7 @@ export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>
             <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
-            <Route path="verify" component={ Verify } />
-            <Route path="reset-password" component={ Landing } />
+            <Route path="verify" component={ Landing } />
             <Route path="connect" component = { Connect } onEnter = { requireLogin } />
             <Route path="discover" component = { Discover } onEnter = { requireLogin } />
             <Route path="mymusic" component = { MyMusic } onEnter = { requireLogin } />

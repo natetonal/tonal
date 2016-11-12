@@ -15,7 +15,7 @@ export const HeaderLoggedOut = React.createClass({
 
         if(!isModalOpen){
             const tabSelected = event.target.getAttribute('name')
-            dispatch(actions.switchLoginModalTab(tabSelected));
+            dispatch(actions.switchLoginModalUI(tabSelected));
             dispatch(actions.toggleLoginModal());
         }
     },

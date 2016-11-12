@@ -38,10 +38,11 @@ export const toggleLoginModal = () => {
     };
 };
 
-export const switchLoginModalTab = (tabSelected) => {
+
+export const switchLoginModalUI = (loginModalUI) => {
     return{
-        type: 'SWITCH_LOGIN_MODAL_TAB',
-        tabSelected
+        type: 'SWITCH_LOGIN_MODAL_UI',
+        loginModalUI
     };
 };
 
