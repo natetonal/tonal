@@ -169,6 +169,8 @@ export const verifyPasswordResetCode = (oobCode) => {
 
 export const resetPasswordAndLoginUser = (oobCode, email, password) => {
     return (dispatch) => {
+        console.log('actions/resetPasswordAndLoginUser: resetting PW for ', email);
+        console.log('actions/resetPasswordAndLoginUser: PW: ', password);
         firebase.auth().confirmPasswordReset(oobCode, password).then((success) => {
             console.log('actions.jsx: password reset confirmed, logging you in');
             dispatch(startEmailLogin(email, password));
