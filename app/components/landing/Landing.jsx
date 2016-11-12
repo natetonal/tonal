@@ -7,6 +7,7 @@ import LoginModal from './LoginModal/LoginModal';
 export const Landing = React.createClass({
 
     componentDidMount(){
+        console.log('Landing.jsx: props: ', this.props);
         if(this.props.location){
             const { dispatch, location: { query: { mode, oobCode }}} = this.props;
             if(mode == 'resetPassword' && oobCode){
