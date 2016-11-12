@@ -12,6 +12,7 @@ export const ResetPassword = React.createClass({
     handleFormSubmit(values){
 
         console.log('ResetPassword.jsx: handleFormSubmit called with values: ', values);
+        console.log('ResetPassword.jsx: this.props?', this.props);
 
         const { password } = values;
         const { dispatch, userEmail, location: { query: { mode, oobCode }}} = this.props;
