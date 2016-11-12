@@ -9,19 +9,21 @@ import validate from './validate';
 
 export const ResetPassword = React.createClass({
 
-    // handleFormSubmit(values){
-    //
-    //     const { password } = values;
-    //     const { dispatch, email, location: { query: { mode, oobCode }}} = this.props;
-    //
-    //     return dispatch(actions.resetPasswordAndLoginUser(oobCode, email, password));
-    //
-    // },
+    handleFormSubmit(values){
+
+        const { password } = values;
+        const { dispatch, email, location: { query: { mode, oobCode }}} = this.props;
+
+        return dispatch(actions.resetPasswordAndLoginUser(oobCode, email, password));
+
+    },
 
     render(){
 
         const { userEmail, handleSubmit, submitting } = this.props;
 
+        console.log('ResetPassword.jsx: userEmail is ', userEmail);
+        
         return(
             <div className="login-reset-password">
                 <h3>Reset Password</h3>
