@@ -7,16 +7,13 @@ import LoginModal from './LoginModal/LoginModal';
 export const Landing = React.createClass({
 
     componentDidMount(){
-        console.log('Landing.jsx: props: ', this.props);
         if(this.props.location){
             const { dispatch, location: { query: { mode, oobCode }}} = this.props;
             if(mode == 'resetPassword' && oobCode){
-                console.log('Landing.jsx: resetting password');
                 dispatch(actions.toggleLoginModal());
                 dispatch(actions.switchLoginModalUI('reset-password'));
                 dispatch(actions.verifyPasswordResetCode(oobCode));
             } else if(mode == 'verifyEmail' && oobCode){
-                console.log('Landing.jsx: verifying email');
                 dispatch(actions.toggleLoginModal());
                 dispatch(actions.switchLoginModalUI('verifying-email'));
                 dispatch(actions.verifyEmailWithCode(oobCode));

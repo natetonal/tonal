@@ -11,7 +11,6 @@ export const Signup = React.createClass({
 
     handleFacebookLogin(event){
         event.preventDefault();
-        console.log('LoginModal.jsx: logging into FB');
         const { dispatch } = this.props;
         return dispatch(actions.createUserWithFacebookAuth());
     },

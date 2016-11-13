@@ -11,13 +11,10 @@ export const ResetPassword = React.createClass({
 
     handleFormSubmit(values){
 
-        console.log('ResetPassword.jsx: handleFormSubmit called with values: ', values);
-        console.log('ResetPassword.jsx: this.props.oobCode?', this.props.oobCode);
 
         const { password } = values;
         const { dispatch, userEmail, oobCode } = this.props;
 
-        console.log(`ResetPassword.jsx: dispatching resetPasswordAndLoginUser with email ${userEmail} and pw ${password}`);
         return dispatch(actions.resetPasswordAndLoginUser(oobCode, userEmail, password));
 
     },
@@ -26,7 +23,6 @@ export const ResetPassword = React.createClass({
 
         const { userEmail, handleSubmit, submitting } = this.props;
 
-        console.log('ResetPassword.jsx: userEmail is ', userEmail);
 
         return(
             <div className="login-reset-password">

@@ -23,7 +23,7 @@ const LoginEmailSent = React.createClass({
         return (
             <div className="login-verification-email-sent">
                 <h2>Email Sent!</h2>
-                <h3><i className="fa fa-thumbs-o-up fa-5x" aria-hidden="true"></i></h3>
+                <h3><i className="fa fa-thumbs-o-up fa-3x" aria-hidden="true"></i></h3>
                 <h5>{ messaging() }</h5>
             </div>
         );

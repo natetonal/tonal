@@ -8,7 +8,6 @@ const LoginTabs = React.createClass({
     handleTabs(event){
         event.preventDefault();
         const tabSelected = event.target.getAttribute('name')
-        console.log('LoginTabs.jsx: changing tab to ', tabSelected);
         const { dispatch } = this.props;
         dispatch(actions.switchLoginModalUI(tabSelected));
     },

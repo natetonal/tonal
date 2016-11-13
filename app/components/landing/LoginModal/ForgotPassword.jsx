@@ -12,7 +12,6 @@ export const ForgotPassword = React.createClass({
     handleLoginModalUI(event){
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name')
-        console.log('LoginModal.jsx: swapping UI: ', loginModalUI);
         const { dispatch } = this.props;
         return dispatch(actions.switchLoginModalUI(loginModalUI));
     },
@@ -22,9 +21,8 @@ export const ForgotPassword = React.createClass({
         const { email } = values;
         const { dispatch } = this.props;
 
-        console.log('ForgotPassword.jsx: dispatch action to send email for resetting password', email);
         return dispatch(actions.sendPasswordResetEmail(email));
-        
+
     },
 
     render(){

@@ -10,7 +10,6 @@ export const MenuWrapper = React.createClass({
 
     handleClick(event){
         event.preventDefault();
-        console.log(event);
         var { dispatch } = this.props;
         dispatch(actions.toggleMenu());
     },

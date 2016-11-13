@@ -6,13 +6,11 @@ const initialAuthState = {
 export const authReducer = (state = {}, action) => {
     switch(action.type){
         case 'LOGIN':
-            console.log('reducer: adding uid to auth reducer: ', action.uid);
             return {
                 ...state,
                 uid: action.uid
             };
         case 'LOGOUT':
-            console.log('reducer: logging out user (this should wipe the uid from authState');
             return {
                 ...state,
                 uid: ""
@@ -99,7 +97,6 @@ const initialUserState = {
 export const userReducer = (state = initialUserState, action) => {
     switch(action.type){
         case 'ADD_USER_DATA':
-            console.log('reducers.jsx: adding data: ', action.data);
             return {
                 ...state,
                 ...action.data

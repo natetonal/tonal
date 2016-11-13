@@ -84,7 +84,6 @@ export const pushToRoute = (route) => {
 };
 
 export const storeUserDataToState = (data) => {
-    console.log('actions.jsx: adding user data to state', data);
     return{
         type: 'ADD_USER_DATA',
         data
@@ -93,7 +92,6 @@ export const storeUserDataToState = (data) => {
 
 export const startLoginForAuthorizedUser = (uid) => {
     return (dispatch) => {
-        console.log('actions.jsx/sLFAU: starting login for authorized user');
         dispatch(login(uid));
         dispatch(pushToRoute('connect'));
     };
@@ -108,18 +106,15 @@ export const logoutAndPushToRootRoute = () => {
 
 export const getImgUrl = (path) => {
     return(dispatch, getState) => {
-        console.log('actions: getImgUrl request received.');
         var imgRef = storageRef.child(`assets/${path}`);
         imgRef.getDownloadURL().then(imgUrl => {
             if(imgUrl){
-                console.log('actions: imgUrl returned: ', imgUrl);
                 dispatch({
                     type: 'GET_IMG_URL',
                     imgUrl
                 });
             }
         }).catch(error => {
-            console.log('actions: There was an error fetching an image: ', error);
         });
     };
 };
@@ -146,7 +141,6 @@ export const verifyEmailWithCode = (oobCode) => {
                 dispatch(startLoginForAuthorizedUser(uid));
             }
         }, (error) => {
-            console.log("router: Problem verifying email: ", error);
         });
     }
 };
@@ -154,25 +148,18 @@ export const verifyEmailWithCode = (oobCode) => {
 export const verifyPasswordResetCode = (oobCode) => {
     return (dispatch) => {
         firebase.auth().verifyPasswordResetCode(oobCode).then((email) => {
-            console.log('actions.jsx: password reset code verified for user ', email);
             dispatch(storeUserDataToState({ email }));
             dispatch(storeVerifiedEmailCode(oobCode));
         }, (error) => {
-            console.log('actions.jsx: problem resetting you password: ', error.message);
         });
     }
 };
 
 export const resetPasswordAndLoginUser = (oobCode, email, password) => {
     return (dispatch) => {
-        console.log('actions/resetPasswordAndLoginUser: resetting PW for ', email);
-        console.log('actions/resetPasswordAndLoginUser: PW: ', password);
-        console.log('actions/resetPasswordAndLoginUser: oobCode: ', oobCode);
-        firebase.auth().confirmPasswordReset(oobCode, password).then((success) => {
-            console.log('actions.jsx: password reset confirmed, logging you in');
+        return firebase.auth().confirmPasswordReset(oobCode, password).then((success) => {
             dispatch(startEmailLogin(email, password));
         }, (error) => {
-            console.log('actions.jsx: problem resetting your password with FB: ', error.message);
             dispatch(addErrorMessage(error.message));
         });
     }
@@ -181,11 +168,9 @@ export const resetPasswordAndLoginUser = (oobCode, email, password) => {
 export const startLogout = () => {
     return (dispatch) => {
         firebase.auth().signOut().then((success) => {
-            console.log('actions: user signed out in firebase, signing out in app.', success);
             dispatch({ type: 'RESET_USER_DATA' });
             dispatch(logoutAndPushToRootRoute());
         }, (error) => {
-            console.log('actions: there was a problem signing out');
         });
     };
 };
@@ -193,10 +178,8 @@ export const startLogout = () => {
 export const sendVerificationEmail = (user) => {
     return (dispatch) => {
         return user.sendEmailVerification().then(() => {
-            console.log("actions: Verification has been sent to ", user.email);
             dispatch(switchLoginModalUI('email-sent-verify'));
         }, (error) => {
-            console.log("actions: Error sending user verification email: ", error);
         });
     }
 };
@@ -204,8 +187,7 @@ export const sendVerificationEmail = (user) => {
 export const sendPasswordResetEmail = (email) => {
     return (dispatch) => {
         return firebase.auth().sendPasswordResetEmail(email).then((success) => {
-            console.log('actions.jsx: pw reset email sent to ', email);
-            dispatch(actions.switchLoginModalUI('email-sent-password'));
+            dispatch(switchLoginModalUI('email-sent-password'));
         }, (error) => {
             return dispatch(addErrorMessage(error.message));
         });
@@ -215,11 +197,8 @@ export const sendPasswordResetEmail = (email) => {
 export const createUserWithEmailAndPassword = (email, password) => {
     return (dispatch) => {
         return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
-            console.log('actions.jsx: creating new user: ', user);
-            console.log(`actions: User created: ${email} : ${password}`);
             return dispatch(sendVerificationEmail(user));
         }, (error) => {
-            console.log("actions: there was an error creating this user: ");
             return dispatch(addErrorMessage(error.message));
         });
     };
@@ -232,11 +211,9 @@ export const startEmailLogin = (email, password) => {
             if(!result.emailVerified){
                 dispatch(addErrorMessage("You have not verified your e-mail address. Please check your inbox for a verification e-mail from Tonal."));
             } else {
-                console.log('actions: logged in user, result: ', result);
                 dispatch(startLoginForAuthorizedUser(result.uid));
             }
         }, (error) => {
-            console.log('actions: there was an error logging in user: ', error.message);
             return dispatch(addErrorMessage(error.message));
         });
     };
@@ -244,9 +221,7 @@ export const startEmailLogin = (email, password) => {
 
 export const fetchUserData = (uid) => {
     return (dispatch, getState) => {
-        console.log('actions.jsx: actions/fetchUserData: uid: ', uid);
         databaseRef.child(`users/${uid}`).once('value').then((snapshot) => {
-            console.log('actions.jsx: user data: ', snapshot.val());
             if(snapshot.val()){
                 const user = {
                     uid: snapshot.val().uid,
@@ -262,7 +237,6 @@ export const fetchUserData = (uid) => {
                 dispatch(storeUserDataToState(user));
             }
         }, (error) => {
-            console.log('actions.jsx: error checking if user exists: ', error);
         });
     }
 };
@@ -276,7 +250,6 @@ export const createUserWithFacebookAuth = () => {
                 const firebaseUser = result.user;
                 const uid = firebaseUser.uid;
 
-                console.log('action.jsx: signed in with FB, initial result: ', result);
 
                 const user = {
                     uid: uid,
@@ -299,7 +272,6 @@ export const createUserWithFacebookAuth = () => {
                     }
                 })
                 .then(response => {
-                    console.log('actions.jsx: successful get from FB API: ', response);
 
                     const updatedUser = {
                         ...user,
@@ -316,7 +288,6 @@ export const createUserWithFacebookAuth = () => {
 
                 })
                 .catch(error => {
-                    console.log('actions.jsx: there was an error getting FB data: ', error);
                 });
             }
         }, (error) => {

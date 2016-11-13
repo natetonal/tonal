@@ -19,7 +19,6 @@ export const Login = React.createClass({
 
     handleFacebookLogin(event){
         event.preventDefault();
-        console.log('Login.jsx: logging into FB');
         const { dispatch } = this.props;
         return dispatch(actions.createUserWithFacebookAuth());
     },
@@ -27,7 +26,6 @@ export const Login = React.createClass({
     handleLoginModalUI(event){
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name')
-        console.log('Login.jsx: swapping UI: ', loginModalUI);
         const { dispatch } = this.props;
         return dispatch(actions.switchLoginModalUI(loginModalUI));
     },

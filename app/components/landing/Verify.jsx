@@ -14,7 +14,6 @@ export const Verify = React.createClass({
     handleQuery(mode, oobCode){
         const { dispatch } = this.props;
         if(mode == 'verifyEmail' && oobCode){
-            console.log('Verify.jsx: all needs are met to dispatch verifyEmail action!');
             return dispatch(actions.verifyEmailWithCode(oobCode));
         } else {
             return dispatch(actions.pushToRoute('/'));

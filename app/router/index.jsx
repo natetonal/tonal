@@ -27,14 +27,11 @@ const requireLogin = (nextState, replace, next) => {
 const redirectIfLoggedIn = (nextState, replace, next) => {
     const currentUser = firebase.auth().currentUser;
     if(currentUser){
-        console.log(`from router/redirectIfLoggedIn: currentUser.providerId: ${currentUser.providerId}, currentUser.emailVerified: ${currentUser.emailVerified}`);
         if(currentUser.providerId == 'password' && currentUser.emailVerified ||
            currentUser.providerId == 'firebase' && currentUser){
-            console.log('router: redirecting to connect since user is valid');
             replace('connect');
         }
     } else {
-        console.log('router: not redirecting for some reason.', currentUser);
     }
     next();
 };

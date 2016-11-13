@@ -25,8 +25,6 @@ export const LoginModal = React.createClass({
 
         const { email, isOpen, loginModalUI, error, oobCode } = this.props;
 
-        console.log('LoginModal.jsx: loginModalUI: ', loginModalUI);
-        if(error){ console.log('LoginModal.jsx: error: ', error); }
 
         const displayError = () => {
             if(error){
@@ -45,23 +43,17 @@ export const LoginModal = React.createClass({
         const loginModalView = () => {
             switch(loginModalUI){
                 case 'login':
-                    console.log('LoginModal.jsx: loading Login component.');
                     return <Login key="login" />;
                 case 'signup':
-                    console.log('LoginModal.jsx: loading Signup component.');
                     return <Signup key="signup" />;
                 case 'forgot-password':
-                    console.log('LoginModal.jsx: loading ForgotPassword component.');
                     return <ForgotPassword key="forgot-password" />;
                 case 'reset-password':
-                    console.log('LoginModal.jsx: loading ResetPassword component.');
                     return <ResetPassword oobCode={ oobCode } userEmail={ email } key="reset-password" />;
                 case 'verifying-email':
-                    console.log('LoginModal.jsx: loading VerifyingEmail component.');
                     return <VerifyingEmail key="verifying-email" />
                 case 'email-sent-verify':
                 case 'email-sent-password':
-                    console.log('LoginModal.jsx: loading LoginEmailSent component.');
                     return <LoginEmailSent key="email-sent" />;
                 default:
                     return <div></div>;

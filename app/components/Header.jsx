@@ -17,7 +17,6 @@ export const Header = React.createClass({
 
         var { isOpen, photoURL } = this.props;
 
-        console.log('Header.jsx: isOpen? ', isOpen);
 
         return(
             <div className="tonal-header">
@@ -74,7 +73,6 @@ export const Header = React.createClass({
 });
 
 export default Redux.connect(state => {
-    console.log('state in Header.jsx: ', state);
     return {
         isOpen: state.uiState.menuIsOpen,
         photoURL: state.user.avatarPhoto

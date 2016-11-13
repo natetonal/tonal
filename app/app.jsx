@@ -15,11 +15,9 @@ $(document).foundation();
 require('style!css!sass!applicationStyles');
 
 firebase.auth().onAuthStateChanged((user) => {
-    console.log('app.jsx: auth state changed', user);
     if(user){
         if(user.providerData[0].providerId == 'facebook.com' ||
            user.providerData[0].providerId == 'password' && user.emailVerified){
-            console.log('app.jsx: Either user is from FB, or PW & emailVerified');
             store.dispatch(actions.fetchUserData(user.uid));
             store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
         }
