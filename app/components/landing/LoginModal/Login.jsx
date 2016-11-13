@@ -11,10 +11,10 @@ export const Login = React.createClass({
 
     handleFormSubmit(values){
 
-        const { email } = values;
+        const { email, password } = values;
         const { dispatch } = this.props;
 
-        return dispatch(actions.sendPasswordResetEmail(email));
+        return dispatch(actions.startEmailLogin(email, password));
     },
 
     handleFacebookLogin(event){

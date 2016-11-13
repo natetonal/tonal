@@ -23,7 +23,7 @@ export const LoginModal = React.createClass({
 
     render(){
 
-        const { email, isOpen, loginModalUI, error } = this.props;
+        const { email, isOpen, loginModalUI, error, oobCode } = this.props;
 
         console.log('LoginModal.jsx: loginModalUI: ', loginModalUI);
         if(error){ console.log('LoginModal.jsx: error: ', error); }
@@ -53,7 +53,7 @@ export const LoginModal = React.createClass({
                     return <ForgotPassword key="forgot-password" />;
                 case 'reset-password':
                     console.log('LoginModal.jsx: loading ResetPassword component.');
-                    return <ResetPassword oobCode={ this.props.oobCode } userEmail={ email } key="reset-password" />;
+                    return <ResetPassword oobCode={ oobCode } userEmail={ email } key="reset-password" />;
                 case 'verifying-email':
                     console.log('LoginModal.jsx: loading VerifyingEmail component.');
                     return <VerifyingEmail key="verifying-email" />
