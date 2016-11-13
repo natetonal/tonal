@@ -15,14 +15,14 @@ export const Signup = React.createClass({
         const { dispatch } = this.props;
         return dispatch(actions.createUserWithFacebookAuth());
     },
-    
+
     handleFormSubmit(values){
 
         const { email, password } = values;
         const { dispatch } = this.props;
 
-        return dispatch(actions.createUserWithEmailAndPassword(email, password));
-
+        dispatch(actions.createUserWithEmailAndPassword(email, password));
+        dispatch(actions.switchLoginModalUI('email-sent-verify'));
     },
 
     render(){
