@@ -194,7 +194,7 @@ export const sendVerificationEmail = (user) => {
     return (dispatch) => {
         return user.sendEmailVerification().then(() => {
             console.log("actions: Verification has been sent to ", user.email);
-            dispatch(actions.switchLoginModalUI('email-sent-verify'));
+            dispatch(switchLoginModalUI('email-sent-verify'));
         }, (error) => {
             console.log("actions: Error sending user verification email: ", error);
         });
