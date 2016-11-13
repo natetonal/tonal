@@ -21,7 +21,7 @@ export const Signup = React.createClass({
         const { email, password } = values;
         const { dispatch } = this.props;
 
-        dispatch(actions.createUserWithEmailAndPassword(email, password));
+        return dispatch(actions.createUserWithEmailAndPassword(email, password));
     },
 
     render(){

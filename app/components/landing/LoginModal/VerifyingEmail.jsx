@@ -4,15 +4,13 @@ import * as Redux from 'react-redux';
 const VerifyingEmail = React.createClass({
 
     render(){
-
         return (
             <div className="login-verification-email-sent">
-                <i className="fa fa-thumbs-o-up fa-5x" aria-hidden="true"></i>
-                <h2>Email Sent!</h2>
-                <h5>{ messaging() }</h5>
+                <h2>Verifying Email</h2>
+                <h3><i className="fa fa-spinner fa-spin fa-3x fa-fw"></i></h3>
             </div>
         );
-    }
+    };
 });
 
 export default Redux.connect()(VerifyingEmail);
