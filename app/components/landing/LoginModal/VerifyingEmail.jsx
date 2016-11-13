@@ -10,7 +10,8 @@ const VerifyingEmail = React.createClass({
                 <h3><i className="fa fa-spinner fa-spin fa-3x fa-fw"></i></h3>
             </div>
         );
-    };
+    }
+    
 });
 
 export default Redux.connect()(VerifyingEmail);
