@@ -10,7 +10,7 @@ const VerifyingEmail = React.createClass({
                 <h3>
                     <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                 </h3>
-                <p>Your patience is appreciated while we verify that you're [more than likely] not a robot.</p>
+                <h5>Your patience is appreciated while we verify that you're [more than likely] not a robot.</h5>
             </div>
         );
     }
