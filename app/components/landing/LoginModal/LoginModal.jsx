@@ -29,15 +29,17 @@ export const LoginModal = React.createClass({
         if(error){ console.log('LoginModal.jsx: error: ', error); }
 
         const displayError = () => {
-            return error && (
-                <ReactCSSTransitionGroup transitionName="callout" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-                <Alert
-                    type="error"
-                    title={ 'We have a problem.' }
-                    message={ error }
-                />
-                </ReactCSSTransitionGroup>
-            );
+            if(error){
+                return(
+                    <ReactCSSTransitionGroup transitionName="callout" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                    <Alert
+                        type="error"
+                        title={ 'We have a problem.' }
+                        message={ error }
+                    />
+                    </ReactCSSTransitionGroup>
+                );
+            }
         };
 
         const loginModalView = () => {
@@ -71,7 +73,7 @@ export const LoginModal = React.createClass({
             	<div className="md-content">
                     <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
                         <div onClick={ this.clearErrors }>
-                            { this.displayError }
+                            { displayError() }
                             <div className="login-area">
                                 <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
                                     { loginModalView() }
