@@ -205,6 +205,7 @@ export const sendPasswordResetEmail = (email) => {
     return (dispatch) => {
         return firebase.auth().sendPasswordResetEmail(email).then((success) => {
             console.log('actions.jsx: pw reset email sent to ', email);
+            dispatch(actions.switchLoginModalUI('email-sent-password'));
         }, (error) => {
             return dispatch(addErrorMessage(error.message));
         });

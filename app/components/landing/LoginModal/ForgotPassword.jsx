@@ -23,9 +23,8 @@ export const ForgotPassword = React.createClass({
         const { dispatch } = this.props;
 
         console.log('ForgotPassword.jsx: dispatch action to send email for resetting password', email);
-        dispatch(actions.sendPasswordResetEmail(email));
-        dispatch(actions.switchLoginModalUI('email-sent-password'));
-
+        return dispatch(actions.sendPasswordResetEmail(email));
+        
     },
 
     render(){
