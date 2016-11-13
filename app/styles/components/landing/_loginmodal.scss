@@ -183,25 +183,9 @@
 	}
 }
 
-.login-verification-email-sent{
+.login-verification-email-sent, .login-verifying-email{
     padding: 40px;
-	display: block;
 	text-align: center;
-
-	.fa{
-	    padding: 20px;
-	    border: 10px solid white;
-		border-radius: 50%;
-	}
-
-	h2, h5{
-		padding-top: 20px;
-	}
-}
-
-.login-verifying-email {
-    padding: 40px;
-    text-align: center;
 
 	h2, h3, h5{
 		padding-top: 20px;
