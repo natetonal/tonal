@@ -64,9 +64,10 @@ export const verificationEmailSent = () => {
     };
 };
 
-export const userIsResettingPassword = () => {
+export const storeVerifiedEmailCode = (oobCode) => {
     return{
-        type: 'USER_IS_RESETTING_PASSWORD'
+        type: 'VERIFIED_EMAIL_CODE',
+        oobCode
     };
 };
 
@@ -161,6 +162,7 @@ export const verifyPasswordResetCode = (oobCode) => {
         firebase.auth().verifyPasswordResetCode(oobCode).then((email) => {
             console.log('actions.jsx: password reset code verified for user ', email);
             dispatch(storeUserDataToState({ email }));
+            dispatch(storeVerifiedEmailCode({ oobCode }));
         }, (error) => {
             console.log('actions.jsx: problem resetting you password: ', error.message);
         });

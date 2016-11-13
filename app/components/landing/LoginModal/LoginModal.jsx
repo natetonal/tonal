@@ -53,7 +53,7 @@ export const LoginModal = React.createClass({
                     return <ForgotPassword key="forgot-password" />;
                 case 'reset-password':
                     console.log('LoginModal.jsx: loading ResetPassword component.');
-                    return <ResetPassword location={ this.props.location } userEmail={ email } key="reset-password" />;
+                    return <ResetPassword oobCode={ this.props.oobCode } userEmail={ email } key="reset-password" />;
                 case 'verifying-email':
                     console.log('LoginModal.jsx: loading VerifyingEmail component.');
                     return <VerifyingEmail key="verifying-email" />
@@ -91,6 +91,7 @@ export default Redux.connect(state => {
         email: state.user.email,
         isOpen: state.uiState.loginModalIsOpen,
         loginModalUI: state.uiState.loginModalUI,
-        error: state.errors
+        error: state.errors,
+        oobCode: state.auth.oobCode
     };
 })(LoginModal);
