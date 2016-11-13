@@ -58,12 +58,6 @@ export const toggleSearch = () => {
     };
 };
 
-export const verificationEmailSent = () => {
-    return{
-        type: 'FLAG_VERIFICATION_EMAIL_AS_SENT'
-    };
-};
-
 export const storeVerifiedEmailCode = (oobCode) => {
     return{
         type: 'VERIFIED_EMAIL_CODE',
@@ -200,7 +194,7 @@ export const sendVerificationEmail = (user) => {
     return (dispatch) => {
         return user.sendEmailVerification().then(() => {
             console.log("actions: Verification has been sent to ", user.email);
-            return dispatch(verificationEmailSent());
+            dispatch(actions.switchLoginModalUI('email-sent-verify'));
         }, (error) => {
             console.log("actions: Error sending user verification email: ", error);
         });

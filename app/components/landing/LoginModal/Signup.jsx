@@ -22,7 +22,6 @@ export const Signup = React.createClass({
         const { dispatch } = this.props;
 
         dispatch(actions.createUserWithEmailAndPassword(email, password));
-        dispatch(actions.switchLoginModalUI('email-sent-verify'));
     },
 
     render(){

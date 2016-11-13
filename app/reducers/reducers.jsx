@@ -1,8 +1,6 @@
 const initialAuthState = {
     uid: "",
-    oobCode: "",
-    verificationEmailSent: false,
-    userForgotPassword: false,
+    oobCode: ""
 };
 
 export const authReducer = (state = {}, action) => {
@@ -23,11 +21,6 @@ export const authReducer = (state = {}, action) => {
             return {
                 ...state,
                 oobCode: action.oobCode
-            };
-        case 'FLAG_VERIFICATION_EMAIL_AS_SENT':
-            return {
-                ...state,
-                verificationEmailSent: true
             };
         default:
             return state;
