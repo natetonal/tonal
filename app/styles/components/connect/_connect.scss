@@ -1,0 +1,22 @@
+// Sunken feed, drop shadow on l & r.
+.connect-container-1{
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: inset -2px -5px 5px 0 rgba(0,0,0,0.5),
+                inset 2px -5px 5px 0 rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.1);
+}
+
+// No drop shadow, border on l & r, lighter bg inside.
+.connect-container-2 {
+    max-width: 600px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+// Relatively flat, small/no color change on inside.
+.connect-container-3 {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.1);
+}

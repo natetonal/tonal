@@ -4,8 +4,8 @@ import * as actions from 'actions';
 
 import validate from './validate';
 import asyncValidate from './asyncValidate';
-import Input from './../../helpers/Input';
-import Button from './../../helpers/Button';
+import Input from './../../elements/Input';
+import Button from './../../elements/Button';
 
 export const Signup = React.createClass({
 

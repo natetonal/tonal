@@ -3,8 +3,8 @@ import * as Redux from 'react-redux';
 import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Alert from 'helpers/Alert';
-import Button from 'helpers/Button';
+import Alert from 'elements/Alert';
+import Button from 'elements/Button';
 
 import Login from './Login';
 import Signup from './Signup';

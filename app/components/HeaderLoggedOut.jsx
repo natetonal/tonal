@@ -4,7 +4,7 @@ import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
 import Search from './Search';
-import Button from './helpers/Button';
+import Button from './elements/Button';
 
 export const HeaderLoggedOut = React.createClass({
 

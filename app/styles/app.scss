@@ -20,10 +20,12 @@
 @import "components/content";
 @import "components/tabs";
 @import "components/search";
+@import "components/post/post";
 @import "components/landing/loginmodal";
 @import "components/landing/landing";
+@import "components/connect/connect";
 
-// Helper Components
-@import "components/helpers/input";
-@import "components/helpers/button";
-@import "components/helpers/alert";
+// Element Components
+@import "components/elements/input";
+@import "components/elements/button";
+@import "components/elements/alert";

@@ -3,8 +3,8 @@ import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router';
 import * as actions from 'actions';
 
-import Input from 'helpers/Input';
-import Button from 'helpers/Button';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 import validate from './validate';
 
 export const ResetPassword = React.createClass({

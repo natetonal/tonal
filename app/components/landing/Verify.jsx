@@ -2,7 +2,7 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
-import Alert from 'helpers/Alert';
+import Alert from 'elements/Alert';
 
 export const Verify = React.createClass({
 

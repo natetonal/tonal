@@ -1,0 +1,121 @@
+// This is where button themes will reside.
+// You may need to move these to your "mixins" later on if you repeat this structure with other custom elements.
+
+@mixin buttonTheme{
+
+    $btnThemes: (
+        main: $highlight1,
+        alert: $red,
+        facebook: $facebook
+    );
+
+    @each $themeName, $color in $btnThemes{
+
+        .#{$themeName}{
+
+            background: rgba($color, 1);
+
+            .icon-arrow-right{
+                &:active::before{
+                    color: $color;
+                }
+                &:hover::before{
+                    @include keyframes(blinking-arrow) {
+                             0%   { color: $color; }
+                             50%  { color: $white; }
+                             100% { color: $color; }
+                    }
+                    @include animation('blinking-arrow .5s infinite');
+                }
+            }
+
+            &:focus{
+                // box-shadow: 0px 0px 5px 0px rgba($color, 0.7);
+            }
+
+            &:hover{
+                color: $white;
+                background: darken(rgba($color, 1), 5%);
+            }
+
+            &:active{
+                color: $white;
+                background: lighten(rgba($color, 1), 5%);
+                box-shadow: 5px 5px 7px 0 rgba(0, 0, 0, 0.3)
+            }
+        }
+    }
+}
+
+.tonal-btn{
+    border-radius: 2px;
+    overflow: hidden;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.3);
+    transition: all 0.3s;
+    text-transform: uppercase;
+    color: rgba($white, 0.85);
+    letter-spacing: .15em;
+    @include transition(all 0.2s);
+
+    .fa{
+        margin: 0 10px;
+    }
+
+    .fa-cog{
+        margin: 0 0 0 10px;
+    }
+
+    .icon-arrow-right{
+        &::before{
+            position: absolute;
+            color: $white;
+            font-family: FontAwesome;
+            content: "\f105";
+            right: 40px;
+            opacity: 0;
+            @include transition(all 0.2s);
+        }
+
+        &::after{
+            content: '';
+            position: absolute;
+            z-index: -1;
+            @include transition(all 0.2s);
+        }
+
+        &:active::before{
+            font-family: FontAwesome;
+            content: "\f105";
+            right: 60px;
+            opacity: 0;
+            @include transition(all 0.2s);
+        }
+
+        &:hover::before{
+            font-family: FontAwesome;
+            content: "\f105";
+            right: 60px;
+            opacity: 1;
+            @include transition(all 0.2s);
+        }
+    }
+
+    &:focus{
+        outline: none;
+        @include transition(all 0.2s);
+    }
+
+    &:hover{
+        background: rgba(255,255,255, 0.1);
+        @include transition(all 0.2s);
+    }
+
+    &:active{
+        outline: none;
+        @include transition(all 0.2s);
+    }
+}
+
+@include buttonTheme;
