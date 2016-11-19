@@ -49,10 +49,10 @@ export const Connect = React.createClass({
 
         return(
             <div className="connect-container-2">
-                <Post data={ data } number='1' />
                 <Post data={ data } number='2' />
-                <Post data={ data } number='3' />
-                <Post data={ data } number='4' />
+                <Post data={ data } number='2' />
+                <Post data={ data } number='2' />
+                <Post data={ data } number='2' />
             </div>
         );
     }
