@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'actions';
 
-import HeaderLoggedOut from './HeaderLoggedOut';
-import ModalOverlay from './ModalOverlay';
+import HeaderLoggedOut from 'header/HeaderLoggedOut';
+import ModalOverlay from 'header/ModalOverlay';
 import MenuWrapper from './MenuWrapper';
-import Header from './Header';
+import Header from 'header/Header';
 import Tabs from './Tabs';
 
 export const TonalApp = React.createClass({

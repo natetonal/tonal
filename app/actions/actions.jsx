@@ -58,6 +58,12 @@ export const toggleSearch = () => {
     };
 };
 
+export const toggleNotifs = () => {
+    return{
+        type: 'TOGGLE_NOTIFS'
+    };
+};
+
 export const storeVerifiedEmailCode = (oobCode) => {
     return{
         type: 'VERIFIED_EMAIL_CODE',

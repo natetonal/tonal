@@ -15,7 +15,8 @@
 @import "base/mixins";
 
 // Components
-@import "components/header";
+@import "components/header/header";
+@import "components/header/headernotifications";
 @import "components/settings";
 @import "components/content";
 @import "components/tabs";
