@@ -117,6 +117,12 @@
 
             .fa{
                 font-size: 14px;
+                color: darken($white, 30%);
+                text-shadow: none;
+
+                &:hover{
+                    color: $white;
+                }
             }
         }
     }
