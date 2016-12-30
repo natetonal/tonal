@@ -20,11 +20,10 @@ export const HeaderNotificationMenu = onClickOutside(React.createClass({
     },
 
     render(){
-
         return(
             <div className="header-notification-menu">
                 <div className="header-notifiaction-menu-option"></div>
-                <div className="header-notifiaction-menu-option"></div>    
+                <div className="header-notifiaction-menu-option"></div>
             </div>
         );
     }
