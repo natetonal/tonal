@@ -20,7 +20,7 @@
         width: auto;
         background: lighten($darkgray1, 5%);
         margin-bottom: 2px;
-        border-left: 5px solid $lightblue;
+        border-left: 5px solid darken($lightblue, 20%);
         font-size: 14px;
         cursor: pointer;
 
@@ -101,7 +101,7 @@
 
         &:hover{
             background: lighten($darkgray1, 10%);
-            border-left: 5px solid darken($lightblue, 20%);
+            border-left: 5px solid $lightblue;
 
             .header-notification-img{
                 img{
@@ -131,9 +131,15 @@
 .header-notifications-lip {
     display: block;
     position: fixed;
-    width: 100%;
+    width: 50%;
     top: $header-height + $header-notification-height - 1;
-    left: 0;
-    box-shadow: 0 -10px 10px 0 rgba(0,0,0,.5);
+    right: 0;
+    box-shadow: 5px -10px 10px 0 rgba(0,0,0,.5);
     height: 20px;
+
+    @include breakpoint(medium down) {
+        width: 100%;
+        left: 0;
+    }
+
 }
