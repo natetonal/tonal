@@ -55,7 +55,6 @@ export const uiStateReducer = (state = initialUIState, action) => {
                 searchIsOpen: !state.searchIsOpen
             };
         case 'TOGGLE_NOTIFS':
-            console.log('from TOGGLE_NOTIFS: this is what the state is right before the change: ', state.notifsIsOpen);
             return{
                 ...state,
                 notifsIsOpen: !state.notifsIsOpen

@@ -115,13 +115,42 @@
             padding-left: 10px;
             padding-top: 0;
 
-            .fa{
+            .fa-angle-down{
                 font-size: 14px;
                 color: darken($white, 30%);
                 text-shadow: none;
 
                 &:hover{
                     color: $white;
+                }
+            }
+
+            .header-notification-menu {
+                border-radius: 2px;
+                box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+                background: rgba(10,10,10,0.3);
+                color: #eee;
+                position: absolute;
+                right: 20px;
+                font-size: 13px;
+
+                .header-notification-menu-option {
+                    padding: 8px 15px;
+
+                    strong{
+                        font-weight: 900;
+                    }
+
+                    .fa{
+                        font-size: 13px;
+                        padding: 0 8px 0 0;
+                        margin: 0 auto;
+                        color: inherit;
+                    }
+
+                    &:hover{
+                        background: $orange;
+                    }
                 }
             }
         }

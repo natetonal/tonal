@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
-import onClickOutside from 'react-onclickoutside';
 
 import HeaderNotification from './HeaderNotification';
 
@@ -10,9 +9,10 @@ import HeaderNotification from './HeaderNotification';
 import moment from 'moment';
 // temporary
 
-export const HeaderNotificationsList = onClickOutside(React.createClass({
+export const HeaderNotificationsList = React.createClass({
 
-    handleClickOutside(event){
+
+    handleNotifsMenu(event){
         event.preventDefault();
         const { dispatch, isNotifsOpen } = this.props;
         if(isNotifsOpen){
@@ -91,7 +91,7 @@ export const HeaderNotificationsList = onClickOutside(React.createClass({
         };
 
         return(
-            <div>
+            <div onMouseLeave={ this.handleNotifsMenu } >
                 <div className="header-notifications-list">
                     { makeSomeNotifs() }
                 </div>
@@ -99,7 +99,7 @@ export const HeaderNotificationsList = onClickOutside(React.createClass({
             </div>
         );
     }
-}));
+});
 
 export default Redux.connect(state => {
     return {

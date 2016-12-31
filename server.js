@@ -12,6 +12,10 @@ app.use(function (req, res, next){
     }
 });
 
+app.configure(function() {
+    app.use('/favicon.ico', express.static(__dirname + '[route/to/favicon]'));
+});
+
 app.use(express.static('public'));
 
 app.listen(PORT, function () {
