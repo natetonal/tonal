@@ -5,6 +5,7 @@ import * as actions from 'actions';
 
 import Search from 'Search';
 import HeaderNotificationsList from './HeaderNotificationsList';
+import HeaderCompose from './HeaderCompose';
 
 export const Header = React.createClass({
 
@@ -16,15 +17,25 @@ export const Header = React.createClass({
 
     onClickNotifs(event){
         event.preventDefault();
-        const { dispatch, isNotifsOpen } = this.props;
-        if(!isNotifsOpen){
+        const { dispatch, isNotifsOpen, isComposeOpen } = this.props;
+        if(isComposeOpen){
+            dispatch(actions.toggleCompose());
+        }
+        dispatch(actions.toggleNotifs());
+    },
+
+    onClickCompose(event){
+        event.preventDefault();
+        const { dispatch, isNotifsOpen, isComposeOpen } = this.props;
+        if(isNotifsOpen){
             dispatch(actions.toggleNotifs());
         }
+        dispatch(actions.toggleCompose());
     },
 
     render(){
 
-        const { isMenuOpen, isNotifsOpen, photoURL } = this.props;
+        const { isMenuOpen, isNotifsOpen, isComposeOpen, photoURL } = this.props;
 
         return(
             <div className="tonal-header">
@@ -70,9 +81,10 @@ export const Header = React.createClass({
                             { isNotifsOpen && <HeaderNotificationsList /> }
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
-                            <a href="#" className="hi-icon hi-icon-mobile">
+                            <a href="javascript:;" onMouseDown={ this.onClickCompose } className="hi-icon hi-icon-mobile">
                                 <i className="fa fa-pencil" aria-hidden="true"></i>
                             </a>
+                            { isComposeOpen && <HeaderCompose /> }
                         </div>
                         <Search />
                     </div>
@@ -86,6 +98,7 @@ export default Redux.connect(state => {
     return {
         isMenuOpen: state.uiState.menuIsOpen,
         isNotifsOpen: state.uiState.notifsIsOpen,
+        isComposeOpen: state.uiState.composeIsOpen,
         photoURL: state.user.avatarPhoto
      };
 })(Header);

@@ -68,7 +68,7 @@ export const HeaderNotification = React.createClass({
                         </div>
                     <div className="header-notification-message">
                         <p>
-                            <span className="header-notification-message-link">{ displayName }</span> commented on your  <span className="header-notification-message-link">post.</span>
+                            <span className="header-notification-message-link">{ displayName }</span> commented on commented on your commented on your commented on your commented on your commented on your  <span className="header-notification-message-link">post.</span>
                         </p>
                     </div>
                     <div className="header-notification-timestamp">

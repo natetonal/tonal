@@ -32,35 +32,41 @@ export const addErrorMessage = (error) => {
     };
 };
 
-export const toggleLoginModal = () => {
-    return{
-        type: 'TOGGLE_LOGIN_MODAL',
-    };
-};
-
-
 export const switchLoginModalUI = (loginModalUI) => {
     return{
-        type: 'SWITCH_LOGIN_MODAL_UI',
+        type: 'UI_SWITCH_LOGIN_MODAL',
         loginModalUI
     };
 };
 
+// UI TOGGLES
+
+export const toggleLoginModal = () => {
+    return{
+        type: 'UI_TOGGLE_LOGIN_MODAL',
+    };
+};
 export const toggleMenu = () => {
     return{
-        type: 'TOGGLE_MENU'
+        type: 'UI_TOGGLE_MENU'
     };
 };
 
 export const toggleSearch = () => {
     return{
-        type: 'TOGGLE_SEARCH'
+        type: 'UI_TOGGLE_SEARCH'
     };
 };
 
 export const toggleNotifs = () => {
     return{
-        type: 'TOGGLE_NOTIFS'
+        type: 'UI_TOGGLE_NOTIFS'
+    };
+};
+
+export const toggleCompose = () => {
+    return{
+        type: 'UI_TOGGLE_COMPOSE'
     };
 };
 

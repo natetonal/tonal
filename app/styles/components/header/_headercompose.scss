@@ -1,0 +1,92 @@
+.header-compose{
+    width: 50%;
+    background: rgba(33,33,33,.95);
+    border-bottom: 1px solid $lightblue;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.4);
+    text-align: left;
+
+    @include breakpoint(medium down) {
+        width: 100%;
+        left: 0;
+    }
+    .header-compose-title {
+        display: block;
+        padding: 20px;
+        @include gradientBG(top, $header-background 0, darken($header-background, 5%) 50%, $header-background 100%);
+
+        .header-compose-teaser{
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 15px;
+            letter-spacing: .5px;
+        }
+    }
+
+    .header-compose-tab-set {
+        padding-top: 5px;
+        overflow-x: scroll;
+        display: block;
+
+        .header-compose-tab {
+            cursor: pointer;
+            color: #ddd;
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 20%;
+            padding: 8px 12px;
+            border: 1px solid rgba(100,100,100,0.5);
+            border-bottom: none;
+            border-right: none;
+            box-shadow: 0 -5px 0 0 transparent;
+            text-align: center;
+
+            &:hover{
+                box-shadow: 0 -5px 0 0 #444;
+                color: white;
+                @include transition(all 0.3s);
+            }
+
+            &:last-child{
+                border-right: 1px solid rgba(100,100,100,0.5);
+                color: $orange;
+
+                &:hover{
+                    color: $white;
+                    box-shadow: 0 -5px 0 0 $white;
+                    @include gradientBG(left, $red, $orange);
+                    @include transition(all 0.3s);
+                }
+            }
+
+            &.selected{
+                color: $lightblue;
+                background: #444;
+                box-shadow: 0 -5px 0 0 $lightblue;
+                @include transition(all 0.3s);
+            }
+
+            .fa{
+                display: block;
+                font-size: 14px;
+                padding-top: 0;
+                padding-bottom: 7px;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            }
+        }
+    }
+
+    .header-compose-contentarea {
+        padding: 10px;
+        border: 1px solid #444;
+        background: #444;
+    }
+
+    .header-compose-button {
+        padding: 10px;
+    }
+}

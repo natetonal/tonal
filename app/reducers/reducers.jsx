@@ -38,33 +38,39 @@ const initialUIState = {
     menuIsOpen: false,
     searchIsOpen: false,
     notifsIsOpen: false,
+    composeIsOpen: false,
     loginModalIsOpen: false,
     loginModalUI: 'signup'
 };
 
 export const uiStateReducer = (state = initialUIState, action) => {
     switch(action.type){
-        case 'TOGGLE_MENU':
+        case 'UI_TOGGLE_MENU':
             return {
                 ...state,
                 menuIsOpen: !state.menuIsOpen
             };
-        case 'TOGGLE_SEARCH':
+        case 'UI_TOGGLE_SEARCH':
             return{
                 ...state,
                 searchIsOpen: !state.searchIsOpen
             };
-        case 'TOGGLE_NOTIFS':
+        case 'UI_TOGGLE_NOTIFS':
             return{
                 ...state,
                 notifsIsOpen: !state.notifsIsOpen
             };
-        case 'TOGGLE_LOGIN_MODAL':
+        case 'UI_TOGGLE_COMPOSE':
+            return{
+                ...state,
+                composeIsOpen: !state.composeIsOpen
+            };
+        case 'UI_TOGGLE_LOGIN_MODAL':
             return{
                 ...state,
                 loginModalIsOpen: !state.loginModalIsOpen
             };
-        case 'SWITCH_LOGIN_MODAL_UI':
+        case 'UI_SWITCH_LOGIN_MODAL':
             return{
                 ...state,
                 loginModalUI: action.loginModalUI
