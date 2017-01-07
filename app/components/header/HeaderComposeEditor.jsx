@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import * as actions from 'actions';
 import { Editor, EditorState, RichUtils, CompositeDecorator } from 'draft-js';
 
+import Button from 'elements/Button';
+
 export const HeaderComposeEditor = React.createClass({
 
     componentWillMount(){
@@ -90,24 +92,16 @@ export const HeaderComposeEditor = React.createClass({
 
         return (
             <div className="header-compose-post">
-                <div className="header-compose-editor-controls">
-                    <div className="header-compose-editor-control" onClick={ this._onBoldClick }>
-                        <i className="fa fa-bold" aria-hidden="true"></i>
-                    </div>
-                    <div className="header-compose-editor-control" onClick={ this._onItalicClick }>
-                        <i className="fa fa-italic" aria-hidden="true"></i>
-                    </div>
-                    <div className="header-compose-editor-control" onClick={ this._onUnderlineClick }>
-                        <i className="fa fa-underline" aria-hidden="true"></i>
-                    </div>
-                </div>
                 <div className="header-compose-editor">
                     <Editor editorState={ editorState }
                             onChange={ this.onChange }
                             handleKeyCommand={this.handleKeyCommand }
-                            placeholder="Talk to us, friend..."
+                            placeholder="Share your thoughts"
                             spellCheck={ true }
                             ref="editor" />
+                </div>
+                <div className="header-compose-button">
+                    <Button type="submit" btnType="main" btnText="Share it!" />
                 </div>
             </div>
         );

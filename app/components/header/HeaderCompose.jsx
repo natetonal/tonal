@@ -3,7 +3,6 @@ import * as Redux from 'react-redux';
 import { Link } from 'react-router';
 import * as actions from 'actions';
 
-import Button from 'elements/Button';
 import HeaderComposeEditor from './HeaderComposeEditor';
 
 export const HeaderCompose = React.createClass({
@@ -27,9 +26,6 @@ export const HeaderCompose = React.createClass({
 
         return(
             <div className="header-compose">
-                <div className="header-compose-title">
-                    <span className="header-compose-teaser">Share something with us!</span>
-                </div>
                 <div className="header-compose-tab-set">
                     <div onClick={ () => this.handleTabClick('post') }
                          className={`header-compose-tab ${ tabSelected == 'post' ? 'selected' : '' }`}>
@@ -60,9 +56,7 @@ export const HeaderCompose = React.createClass({
                 <div className="header-compose-contentarea">
                     <HeaderComposeEditor />
                 </div>
-                <div className="header-compose-button">
-                    <Button type="submit" btnType="main" btnText="Share it!" />
-                </div>
+
 
             </div>
         );

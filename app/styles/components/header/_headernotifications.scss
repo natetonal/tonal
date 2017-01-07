@@ -1,17 +1,27 @@
-.header-notifications-list{
-    height: $header-notification-height;
-    width: 50%;
+$header-notifications-list-width: 500px;
+$header-notifications-list-translate: -($header-notifications-list-width / 2) + 25px;
+$header-notifications-list-lip-height: 20px;
+
+.header-notifications-list {
+    height: 300px;
+    width: $header-notifications-list-width;
     background: rgba(33,33,33,.95);
-    border-bottom: 1px solid $lightblue;
+    border-bottom: 1px solid #9ef6ec;
     position: absolute;
     top: 60px;
-    right: 0;
+    transform: translateX($header-notifications-list-translate);
     overflow-y: scroll;
     box-shadow: 0 4px 7px 2px rgba(0,0,0,.4);
 
-    @include breakpoint(medium down) {
+    @include breakpoint(medium only) {
+        right: 0;
+        transform: none;
+    }
+
+    @include breakpoint(small only) {
         width: 100%;
         left: 0;
+        transform: none;
     }
 
     .header-notification{
@@ -156,15 +166,21 @@
 .header-notifications-lip {
     display: block;
     position: fixed;
-    width: 50%;
-    top: $header-height + $header-notification-height - 1;
-    right: 0;
-    box-shadow: 5px -10px 10px 0 rgba(0,0,0,.5);
-    height: 20px;
+    width: $header-notifications-list-width;
+    transform: translateX($header-notifications-list-translate);
+    top: $header-height + $header-notification-height - $header-notifications-list-lip-height;
+    background: -webkit-linear-gradient(top, transparent, rgba(0,0,0,0.9));
+    height: $header-notifications-list-lip-height;
 
-    @include breakpoint(medium down) {
+    @include breakpoint(medium only) {
+        right: 0;
+        transform: none;
+    }
+
+    @include breakpoint(small only) {
         width: 100%;
         left: 0;
+        transform: none;
     }
 
 }

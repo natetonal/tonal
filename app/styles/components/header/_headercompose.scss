@@ -1,17 +1,26 @@
+$header-compose-width: 500px;
+
 .header-compose{
-    width: 50%;
+    width: $header-notifications-list-width;
     background: rgba(33,33,33,.95);
     border-bottom: 1px solid $lightblue;
     position: absolute;
     top: 60px;
-    right: 0;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.4);
+    transform: translateX(-($header-notifications-list-width / 2) + 25px);
+    box-shadow: 0 4px 7px 2px rgba(0,0,0,.4);
     text-align: left;
 
-    @include breakpoint(medium down) {
+    @include breakpoint(medium only) {
+        right: 0;
+        transform: none;
+    }
+
+    @include breakpoint(small only) {
         width: 100%;
         left: 0;
+        transform: none;
     }
+
     .header-compose-title {
         display: block;
         padding: 20px;
@@ -56,9 +65,8 @@
                 color: $orange;
 
                 &:hover{
-                    color: $white;
-                    box-shadow: 0 -5px 0 0 $white;
-                    @include gradientBG(left, $red, $orange);
+                    color: lighten($orange, 20%);
+                    box-shadow: 0 -5px 0 0 $orange;
                     @include transition(all 0.3s);
                 }
             }
