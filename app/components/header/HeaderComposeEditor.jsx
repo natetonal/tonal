@@ -57,13 +57,11 @@ export const HeaderComposeEditor = React.createClass({
     },
 
     handleStrategy(contentBlock, callback){
-        console.log('handleStrategy called with contentBlock: ', contentBlock);
         const HANDLE_REGEX = /\@[\w]+/g;
         this.findWithRegex(HANDLE_REGEX, contentBlock, callback);
     },
 
     hashtagStrategy(contentBlock, callback){
-        console.log('hashtagStrategy called with contentBlock: ', contentBlock);
         const HASHTAG_REGEX = /\#[\w\u0590-\u05ff]+/g;
         this.findWithRegex(HASHTAG_REGEX, contentBlock, callback);
     },
@@ -75,6 +73,7 @@ export const HeaderComposeEditor = React.createClass({
         while ((matchArr = regex.exec(text)) !== null) {
             start = matchArr.index;
             callback(start, start + matchArr[0].length);
+            console.log(matchArr);
         }
     },
 

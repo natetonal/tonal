@@ -81,7 +81,13 @@ module.exports = {
             {
                 name: 'app/styles/fonts/[name].[ext]'
             },
-        }
+        },
+        {
+            test: /plugin\.css$/,
+            loaders: [
+              'style', 'css',
+            ],
+      },
     ]
   },
   sassLoader: {

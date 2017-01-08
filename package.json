@@ -21,6 +21,7 @@
     "deep-freeze-strict": "^1.1.1",
     "dotenv": "^2.0.0",
     "draft-js": "^0.9.1",
+    "draft-js-plugins-editor": "^2.0.0-beta9",
     "expect": "^1.14.0",
     "express": "^4.13.4",
     "firebase": "^3.0.5",
