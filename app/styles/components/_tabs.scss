@@ -106,12 +106,5 @@
                 @include transition(all .3s);
             }
         }
-
-        @include breakpoint(small down) {
-            .link-name{
-                display: none;
-            }
-
-        }
     }
 }
