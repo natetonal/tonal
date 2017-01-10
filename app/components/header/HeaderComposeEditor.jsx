@@ -2,9 +2,43 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
 import * as actions from 'actions';
-import { Editor, EditorState, RichUtils, CompositeDecorator } from 'draft-js';
+import { fromJS, get } from 'immutable'; // temporary
+import Editor from 'draft-js-plugins-editor';
+import { EditorState, CompositeDecorator, RichUtils } from 'draft-js';
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin';
 
 import Button from 'elements/Button';
+
+const mentionPlugin = createMentionPlugin({
+    mentions,
+    mentionComponent: (props) => (
+        <span className={ props.className } onClick={() => console.log(props.mention.get("link")) } >
+            { props.decoratedText }
+        </span>
+    ),
+});
+const { MentionSuggestions } = mentionPlugin;
+const plugins = [mentionPlugin];
+
+// temporary fake data
+const mentions = fromJS([
+  {
+    name: 'Max Acree',
+    link: 'http://www.tonal.co/Max.Acree',
+    avatar: 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Ftestdata%2Favatar1.jpg?alt=media&token=781bf32f-4b8c-4e29-a241-d2339d730d87',
+  },
+  {
+    name: 'Scott Teeple',
+    link: 'http://www.tonal.co/Scott.Teeple',
+    avatar: 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Ftestdata%2Favatar2.jpg?alt=media&token=8e780831-36be-4dc1-9023-e8e0da091cb8',
+  },
+  {
+    name: 'Julian Tanaka',
+    link: 'http://www.tonal.co/Julian.Tanaka',
+    avatar: 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Ftestdata%2Favatar3.jpg?alt=media&token=3893b253-da4d-4cdb-be70-e1489daeabb2',
+  }
+]);
+//
 
 export const HeaderComposeEditor = React.createClass({
 
@@ -23,28 +57,27 @@ export const HeaderComposeEditor = React.createClass({
 
         this.setState({
             editorState: EditorState.createEmpty(compositeDecorator),
-            placeholderEmpty: false
+            editorZoomIn: false,
+            suggestions: mentions
         });
-    },
-
-    focusOnEditor(){
-        this.refs.editor.focus();
     },
 
     onChange(editorState){
         this.setState({ editorState });
     },
 
-    _onBoldClick(){
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    onSearchChange({ value }){
+        this.setState({
+            suggestions: defaultSuggestionsFilter(value, mentions),
+        });
     },
 
-    _onItalicClick(){
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
+    onAddMention(){
+        // get the mention object selected
     },
 
-    _onUnderlineClick(){
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'));
+    toggleZoomIn(){
+        this.setState({ editorZoomIn: !this.state.editorZoomIn })
     },
 
     handleKeyCommand(command){
@@ -87,17 +120,24 @@ export const HeaderComposeEditor = React.createClass({
 
     render(){
 
-        const { editorState, placeholderEmpty } = this.state;
+        const { editorState, editorZoomIn } = this.state;
 
         return (
             <div className="header-compose-post">
-                <div className="header-compose-editor">
+                <div className={`header-compose-editor ${ editorZoomIn ? "editor-zoom-in" : "" }`}>
                     <Editor editorState={ editorState }
                             onChange={ this.onChange }
                             handleKeyCommand={this.handleKeyCommand }
                             placeholder="Share your thoughts"
                             spellCheck={ true }
-                            ref="editor" />
+                            ref="editor"
+                            plugins={ plugins }
+                            onFocus={ this.toggleZoomIn }
+                            onBlur={ this.toggleZoomIn } />
+                    <MentionSuggestions
+                            onSearchChange={ this.onSearchChange }
+                            suggestions={ this.state.suggestions }
+                            onAddMention={ this.onAddMention } />
                 </div>
                 <div className="header-compose-button">
                     <Button type="submit" btnType="main" btnText="Share it!" />
