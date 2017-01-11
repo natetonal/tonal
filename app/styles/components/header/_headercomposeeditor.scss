@@ -121,8 +121,357 @@
     display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-          flex-direction: column;
+    flex-direction: column;
     box-sizing: border-box;
     -webkit-transform: scale(0);
-          transform: scale(0);
+    transform: scale(0);
+}
+
+// COPIED FROM DRAFT-JS-EMOJI-PLUGIN.CSS FILE
+.draftJsEmojiPlugin__emoji__2oqBk {
+    /* make sure the background the image is only shown once */
+    background-repeat: no-repeat;
+    /* move it a bit further down to align it nicer with the text */
+    vertical-align: middle;
+
+    /*
+    We need to limit the emoji width because it can be multiple characters
+    long if it is a 32bit unicode. Since the proper width depends on the font and
+    it's relationship between 0 and other characters it's not ideal. 1.85ch is not
+    the best value, but hopefully a good enough approximation for most fonts.
+    */
+    display: inline-block;
+    overflow: hidden;
+    max-width: 1.95ch;
+    /*
+    Needed for iOS rendering to avoid some icons using a lot of height without
+    actually needing it.
+    */
+    max-height: 1em;
+    line-height: inherit;
+}
+
+.draftJsEmojiPlugin__emojiCharacter__osX-n {
+    /*
+    Hide the original Emoji icon no matter what system it is. color: transparent
+    would have been nice to avoid the extra span, but it doesn't work on iOS.
+    */
+    opacity: 0;
+}
+.draftJsEmojiPlugin__emojiSuggestionsEntry__2-2p_ {
+    padding: 5px 10px 1px 10px;
+    -webkit-transition: background-color 0.4s cubic-bezier(.27,1.27,.48,.56);
+    transition: background-color 0.4s cubic-bezier(.27,1.27,.48,.56);
+}
+
+.draftJsEmojiPlugin__emojiSuggestionsEntry__2-2p_:active {
+    background-color: $alert-admin;
+}
+
+.draftJsEmojiPlugin__emojiSuggestionsEntryFocused__XDntY {
+    background-color: #e6f3ff;
+}
+
+.draftJsEmojiPlugin__emojiSuggestionsEntryText__2sPjk {
+    display: inline-block;
+    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 368px;
+    font-size: 0.9em;
+}
+
+.draftJsEmojiPlugin__emojiSuggestionsEntryIcon__1qC2V {
+    width: 1em;
+    height: 1em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    display: inline-block;
+}
+.draftJsEmojiPlugin__emojiSuggestions__2ffcV {
+    border: 1px solid #eee;
+    margin-top: 1.75em;
+    position: absolute;
+    min-width: 220px;
+    max-width: 440px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 2;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    box-sizing: border-box;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.draftJsEmojiPlugin__selectSticker__3VCSX {
+    border: 0;
+    border-radius: 4px;
+    background: #fff;
+    margin: 5px 0px 5px 0px;
+    box-sizing: border-box;
+}
+
+.draftJsEmojiPlugin__selectSticker__3VCSX:hover, .draftJsEmojiPlugin__root__32LE-:focus {
+    background: #efefef;
+    outline: 0; /* reset for :focus */
+}
+
+.draftJsEmojiPlugin__selectSticker__3VCSX:active {
+    background: #dfdfdf;
+}
+
+.draftJsEmojiPlugin__selectStickerImage__HoOE2 {
+    height: 80px;
+    width: 80px;
+}
+.draftJsEmojiPlugin__select__30KbO {
+    background: #FFF;
+    display: inline-block;
+}
+
+.draftJsEmojiPlugin__selectPopover__20IIM {
+    margin-top: 10px;
+    background: #FFF;
+    position: absolute;
+    height: 250px;
+    width: 230px;
+    border-radius: 2px;
+    padding: 10px;
+    box-shadow: 0px 4px 30px 0px rgba(220,220,220,1);
+    z-index: 1000;
+}
+
+.draftJsEmojiPlugin__selectClosedPopover__1UXVa {
+    display: none;
+}
+
+.draftJsEmojiPlugin__selectButton__3voOt {
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 0;
+    color: #888;
+    margin: 0;
+    border-radius: 1.5em;
+    cursor: pointer;
+    height: 1.5em;
+    width: 2.5em;
+    font-size: 1.5em;
+    line-height: 1.2em;
+    margin: 0;
+}
+
+.draftJsEmojiPlugin__selectButton__3voOt:focus {
+    outline: 0; /* reset for :focus */
+}
+
+.draftJsEmojiPlugin__selectButton__3voOt:hover {
+    background: #f3f3f3;
+}
+
+.draftJsEmojiPlugin__selectButton__3voOt:active {
+    background: #e6e6e6;
+}
+
+.draftJsEmojiPlugin__selectPressedButton__1xYeW {
+    background: #ededed;
+}
+
+.draftJsEmojiPlugin__selectBottomGradient__1DA_0 {
+    width: 100%;
+    height: 1em;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: white;
+    pointer-events: none;
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+
+.draftJsEmojiPlugin__selectStickerList__3F4Za {
+    position: absolute;
+    overflow-x: none;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    flex-flow: row wrap;
+    align-content: flex-start;
+}
+
+
+// COPIED FROM EMOJIONE-PICKER PICKER.CSS FILE
+.emoji-dialog {
+    width: 276px;
+    height: 220px;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 2px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0px 4px 30px 0px rgba(0,0,0,0.5);
+}
+
+.emoji-dialog .emoji-dialog-header {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 42px;
+    padding: 0 10px;
+    background-color: #F5F7F9;
+}
+
+.emoji-dialog .emoji-dialog-header ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.emoji-dialog .emoji-dialog-header li {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 32px;
+    height: 42px;
+    padding: 9px 4px;
+}
+
+.emoji-dialog .emoji-dialog-header img {
+    width: 22px;
+    height: 22px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.emoji-dialog .emoji-dialog-header li.active {
+    background: #fff;
+}
+
+.emoji-dialog .emoji-dialog-header li.active img {
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+}
+
+.emoji-dialog .emoji-grandlist {
+    position: absolute;
+    top: 42px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100% - 42px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.emoji-dialog .emoji-category-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.emoji-dialog .emoji-category-list li {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.emoji-dialog .emoji-category-header {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: normal;
+    color: #444;
+    padding: 0 4px;
+}
+
+.emoji-dialog .modifiers {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 22px;
+    right: 15px;
+}
+
+.emoji-dialog.with-search .modifiers {
+    top: 52px;
+}
+
+.emoji-dialog .modifiers li {
+    display: inline-block;
+    padding: 0 2px;
+}
+
+.emoji-dialog .modifiers .modifier {
+    display: inline-block;
+    border-radius: 10px;
+    width: 15px;
+    height: 15px;
+    position: relative;
+}
+
+.emoji-dialog .modifiers .modifier.active::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    top: 2px;
+    left: 2px;
+}
+
+.emoji-dialog .modifiers li:hover {
+    -moz-transition-duration: 200ms;
+    -webkit-transition-duration: 200ms;
+    transition-duration: 200ms;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+.emoji-dialog .emoji-search-wrapper {
+    padding: 0 5px;
+}
+
+.emoji-dialog .emoji-search {
+    font-size: 12px;
+    padding: 6px 4px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.emoji-dialog .emoji-category-list li:hover {
+    background: #F5F7F9;
+}
+
+.emoji-dialog .emoji-category-list .emoji img {
+    width: 22px;
+    height: 22px;
 }

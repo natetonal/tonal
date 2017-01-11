@@ -75,6 +75,10 @@ module.exports = {
             exclude: /(node_modules|bower_components)/
         },
         {
+            test: /\.json$/,
+            loader: "json-loader"
+        },
+        {
             test: /\.woff$|\.woff2$|\.ttf$|\.eot$|\.svg$/,
             loader: 'url',
             query:
