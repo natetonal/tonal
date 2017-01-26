@@ -3,7 +3,8 @@ import * as Redux from 'react-redux';
 import { Link } from 'react-router';
 import * as actions from 'actions';
 
-import HeaderComposeEditor from './HeaderComposeEditor';
+// import HeaderComposeEditor from './HeaderComposeEditor'; - TEMPORARILY ABANDONED. REMEMBER TO DELETE IF NOT NEEDED.
+import Composer from 'composer/Composer';
 
 export const HeaderCompose = React.createClass({
 
@@ -54,7 +55,7 @@ export const HeaderCompose = React.createClass({
                     </div>
                 </div>
                 <div className="header-compose-contentarea">
-                    <HeaderComposeEditor />
+                    <Composer />
                 </div>
 
 
