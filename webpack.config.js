@@ -17,7 +17,7 @@ console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 module.exports = {
   entry: [
     'script!jquery/dist/jquery.min.js',
-    'script!foundation-sites/dist/foundation.min.js',
+    'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
   ],
   externals: {
@@ -87,11 +87,9 @@ module.exports = {
             },
         },
         {
-            test: /plugin\.css$/,
-            loaders: [
-              'style', 'css',
-            ],
-      },
+          test: /plugin\.css$/,
+          loaders: [ 'style', 'css'],
+        }
     ]
   },
   sassLoader: {
