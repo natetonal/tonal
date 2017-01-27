@@ -52,7 +52,7 @@ module.exports = {
   output: {
     path: '/',
     filename: 'bundle.js',
-    publicPath: 'http://ocalhost:3000/public/'
+    publicPath: 'http://localhost:3000/public/'
   },
   resolve: {
     root: __dirname,
