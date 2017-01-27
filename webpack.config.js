@@ -16,6 +16,7 @@ console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
 module.exports = {
   entry: [
+    'webpack-hot-middleware/client',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
@@ -24,6 +25,9 @@ module.exports = {
     jquery: 'jQuery'
   },
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       '$': 'jquery'
     //   'jQuery': 'jquery'
