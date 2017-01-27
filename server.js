@@ -17,6 +17,8 @@ app.use('/favicon.ico', express.static(__dirname + '[route/to/favicon]'));
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use('/*', express.static(path.join(__dirname, 'public')));
+
 app.listen(PORT, function () {
     console.log('Express server is up on port ' + PORT);
 });
