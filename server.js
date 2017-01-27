@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 
 // Create our app
 var app = express();
@@ -14,7 +15,7 @@ app.use(function (req, res, next){
 
 app.use('/favicon.ico', express.static(__dirname + '[route/to/favicon]'));
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.listen(PORT, function () {
     console.log('Express server is up on port ' + PORT);
