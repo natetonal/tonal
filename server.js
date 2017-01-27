@@ -18,19 +18,21 @@ app.use(function (req, res, next){
 
 app.use('/favicon.ico', express.static(__dirname + '[route/to/favicon]'));
 
-app.use('/bundle.js',express.static(path.join(__dirname, 'public/bundle.js')))
-
-app.use('/*', express.static(path.join(__dirname, 'public')));
 app.use(webpackMiddleware(webpack(webpackConfig), {
   quiet: false,
   lazy: false,
-  publicPath: "/public/",
+  stats: { color: true },
   watchOptions: {
       aggregateTimeout: 1000,
       poll: true
   },
   publicPath: webpackConfig.output.publicPath
 }));
+
+app.use('/', function (req, res, next) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+});
+
 app.use(require("webpack-hot-middleware")(webpack(webpackConfig)));
 
 app.listen(PORT, function () {

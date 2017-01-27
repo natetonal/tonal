@@ -16,6 +16,7 @@ console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
 module.exports = {
   entry: [
+    'webpack/hot/dev-server',
     'webpack-hot-middleware/client',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
@@ -49,8 +50,9 @@ module.exports = {
     })
   ],
   output: {
-    path: __dirname,
-    filename: './public/bundle.js'
+    path: '/',
+    filename: 'bundle.js',
+    publicPath: 'http://ocalhost:3000/public/'
   },
   resolve: {
     root: __dirname,
