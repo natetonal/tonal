@@ -1,3 +1,4 @@
+/* eslint-disable */
 var webpack = require('webpack');
 var path = require('path');
 var envFile = require('node-env-file');
@@ -14,8 +15,14 @@ try {
 
 console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
+const babelQuery = {
+  presets: ['react', 'es2015', 'stage-0']
+};
+
 module.exports = {
   entry: [
+    'webpack/hot/dev-server',
+    'webpack-hot-middleware/client?http://localhost:3000',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
@@ -24,6 +31,9 @@ module.exports = {
     jquery: 'jQuery'
   },
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       '$': 'jquery'
     //   'jQuery': 'jquery'
@@ -45,8 +55,9 @@ module.exports = {
     })
   ],
   output: {
-    path: __dirname,
-    filename: './public/bundle.js'
+    path: '/',
+    filename: 'bundle.js',
+    publicPath: 'http://localhost:3000/public/'
   },
   resolve: {
     root: __dirname,
@@ -69,9 +80,9 @@ module.exports = {
         {
             test: /\.jsx?$/,
             loader: 'babel-loader',
-            query: {
-                presets: ['react', 'es2015', 'stage-0']
-            },
+            query: babelQuery,
+            // loaders: ['react-hot', 'babel-loader?' + JSON.stringify(babelQuery)],
+            include: path.join(__dirname, 'app'),
             exclude: /(node_modules|bower_components)/
         },
         {

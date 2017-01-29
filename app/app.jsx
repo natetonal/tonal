@@ -1,39 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { Provider } from 'react-redux';
 import router from 'app/router/';
 import firebase from 'app/firebase';
 import * as actions from 'actions';
+import configure from './store/configureStore';
+import DevTools from './containers/DevTools';
 
-const store = require('store').configure();
+let DevToolsC = null;
+if (process.env.NODE_ENV === 'development') {
+  DevToolsC = DevTools;
+}
+
+const store = configure();
 
 // Load foundation
-$(document).foundation();
+$(document).foundation(); // eslint-disable-line
 
 // Loaders for css & sass
-require('style!css!sass!applicationStyles');
+require('style!css!sass!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged((user) => {
-    if(user){
-        if(user.providerData[0].providerId == 'facebook.com' ||
-           user.providerData[0].providerId == 'password' && user.emailVerified){
-            store.dispatch(actions.fetchUserData(user.uid));
-            store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
-        }
+  if (user) {
+    const providerId = user.providerData[0].providerId;
+    if ((providerId === 'facebook.com' ||
+       providerId === 'password') && user.emailVerified) {
+      store.dispatch(actions.fetchUserData(user.uid));
+      store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
     }
-    // } else {
-    //     // There should be a way to check if the user has ever logged in before down the road
-    //     // (i.e. checking our own user data)
-    //     // Dispatch an action to clear any lingering data.
-    //     // Might want to push to a "Goodbye" marketing page.
-    //     store.dispatch(actions.pushToRoute('/'));
-    // }
+  }
+  // } else {
+  //     // There should be a way to check if the user has ever logged in before down the road
+  //     // (i.e. checking our own user data)
+  //     // Dispatch an action to clear any lingering data.
+  //     // Might want to push to a "Goodbye" marketing page.
+  //     store.dispatch(actions.pushToRoute('/'));
+  // }
 });
 
 ReactDOM.render(
-    <Provider store={ store }>
-        { router }
-    </Provider>,
-document.getElementById('tonal')
+  <Provider store={store}>
+    <div>
+      {router}
+      {process.env.NODE_ENV === 'development' &&
+        <DevToolsC />
+      }
+    </div>
+  </Provider>,
+  document.getElementById('tonal')
 );
