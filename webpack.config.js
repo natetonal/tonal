@@ -107,5 +107,14 @@ module.exports = {
         path.resolve(__dirname, './node_modules/foundation-sites/scss')
     ]
   },
+  stats: {
+    assets: false,
+    colors: true,
+    version: false,
+    hash: false,
+    timings: false,
+    chunks: false,
+    chunkModules: false
+  },
   devtool: process.env.NODE_ENV === 'production' ? undefined : 'cheap-module-eval-source-map'
 };

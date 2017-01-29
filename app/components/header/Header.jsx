@@ -18,16 +18,16 @@ export const Header = React.createClass({
     onClickNotifs(event){
         event.preventDefault();
         const { dispatch, isNotifsOpen, isComposeOpen } = this.props;
-        if(isComposeOpen){
+        if (isComposeOpen){
             dispatch(actions.toggleCompose());
         }
         dispatch(actions.toggleNotifs());
     },
 
-    onClickCompose(event){
+    onClickCompose(event) {
         event.preventDefault();
         const { dispatch, isNotifsOpen, isComposeOpen } = this.props;
-        if(isNotifsOpen){
+        if (isNotifsOpen) {
             dispatch(actions.toggleNotifs());
         }
         dispatch(actions.toggleCompose());
@@ -37,30 +37,32 @@ export const Header = React.createClass({
 
         const { isMenuOpen, isNotifsOpen, isComposeOpen, photoURL } = this.props;
 
-        return(
+        return (
             <div className="tonal-header">
-                <div className="logo float-center"></div>
+                <div className="logo float-center" />
                 <div className="row">
                     <div className="small-5 medium-1 columns">
                         { photoURL ? (
-                                <div className="tonal-header-avatar">
-                                    <a onMouseDown={ !isMenuOpen && this.onClickMenu } href="">
-                                        <img src={ photoURL } className="tonal-header-avatar-image" />
-                                    </a>
-                                </div>
-                            ) : (
-                                <div className="hi-icon-effect-1 hi-icon-effect-1b">
-                                    <a onMouseDown={ !isMenuOpen && this.onClickMenu } href="" className="hi-icon hi-icon-mobile">
-                                        <i className="fa fa-user" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            )
-                        }
+                            <div className="tonal-header-avatar">
+                                <a onMouseDown={ !isMenuOpen && this.onClickMenu } href="">
+                                    <img alt="header avatar" src={ photoURL } className="tonal-header-avatar-image" />
+                                </a>
+                            </div>
+                        ) : (
+                            <div className="hi-icon-effect-1 hi-icon-effect-1b">
+                                <a
+                                    onMouseDown={ !isMenuOpen && this.onClickMenu }
+                                    href=""
+                                    className="hi-icon hi-icon-mobile">
+                                    <i className="fa fa-user" aria-hidden="true" />
+                                </a>
+                            </div>
+                        )}
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-left">
-                            <a href="javascript:;" onMouseDown={ this.onClickNotifs } className="hi-icon hi-icon-mobile">
-                                <i className="fa fa-bell" aria-hidden="true"></i>
+                            <a onMouseDown={ this.onClickNotifs } className="hi-icon hi-icon-mobile">
+                                <i className="fa fa-bell" aria-hidden="true" />
                             </a>
-                            <span className="alert badge"></span>
+                            <span className="alert badge" />
                             { isNotifsOpen && <HeaderNotificationsList /> }
                         </div>
                     </div>
@@ -74,15 +76,15 @@ export const Header = React.createClass({
                     </div>
                     <div className="small-6 text-right columns">
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-right">
-                            <a href="javascript:;" onMouseDown={ this.onClickNotifs } className="hi-icon hi-icon-mobile">
-                                <i className="fa fa-bell" aria-hidden="true"></i>
+                            <a onMouseDown={ this.onClickNotifs } className="hi-icon hi-icon-mobile">
+                                <i className="fa fa-bell" aria-hidden="true" />
                             </a>
-                            <span className="alert badge"></span>
+                            <span className="alert badge" />
                             { isNotifsOpen && <HeaderNotificationsList /> }
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
-                            <a href="javascript:;" onMouseDown={ this.onClickCompose } className="hi-icon hi-icon-mobile">
-                                <i className="fa fa-pencil" aria-hidden="true"></i>
+                            <a onMouseDown={ this.onClickCompose } className="hi-icon hi-icon-mobile">
+                                <i className="fa fa-pencil" aria-hidden="true" />
                             </a>
                             { isComposeOpen && <HeaderCompose /> }
                         </div>
@@ -94,11 +96,11 @@ export const Header = React.createClass({
     }
 });
 
-export default Redux.connect(state => {
+export default Redux.connect((state) => {
     return {
         isMenuOpen: state.uiState.menuIsOpen,
         isNotifsOpen: state.uiState.notifsIsOpen,
         isComposeOpen: state.uiState.composeIsOpen,
         photoURL: state.user.avatarPhoto
-     };
+    };
 })(Header);
