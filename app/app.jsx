@@ -46,7 +46,6 @@ ReactDOM.render(
         <DevToolsC />
       }
     </div>
-    <h2> Hola</h2>
   </Provider>,
   document.getElementById('tonal')
 );

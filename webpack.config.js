@@ -22,7 +22,7 @@ const babelQuery = {
 module.exports = {
   entry: [
     'webpack/hot/dev-server',
-    'webpack-hot-middleware/client',
+    'webpack-hot-middleware/client?http://localhost:3000',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
@@ -79,9 +79,9 @@ module.exports = {
     loaders: [
         {
             test: /\.jsx?$/,
-            // loader: 'babel-loader',
-            // query: babelQuery,
-            loaders: ['react-hot', 'babel-loader?' + JSON.stringify(babelQuery)],
+            loader: 'babel-loader',
+            query: babelQuery,
+            // loaders: ['react-hot', 'babel-loader?' + JSON.stringify(babelQuery)],
             include: path.join(__dirname, 'app'),
             exclude: /(node_modules|bower_components)/
         },
