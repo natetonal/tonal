@@ -39,6 +39,7 @@ export const Header = React.createClass({
 
         return(
             <div className="tonal-header">
+            <h1> hola</h1>
                 <div className="logo float-center"></div>
                 <div className="row">
                     <div className="small-5 medium-1 columns">

@@ -1,16 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import router from 'app/router/';
+import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
 import * as actions from 'actions';
 import configure from './store/configureStore';
-import DevTools from './containers/DevTools';
-
-let DevToolsC = null;
-if (process.env.NODE_ENV === 'development') {
-  DevToolsC = DevTools;
-}
+import Root from './containers/Root';
 
 const store = configure();
 
@@ -38,14 +32,23 @@ firebase.auth().onAuthStateChanged((user) => {
   // }
 });
 
-ReactDOM.render(
-  <Provider store={store}>
-    <div>
-      {router}
-      {process.env.NODE_ENV === 'development' &&
-        <DevToolsC />
-      }
-    </div>
-  </Provider>,
+render(
+  <AppContainer>
+    <Root store={store} />
+  </AppContainer>,
   document.getElementById('tonal')
 );
+
+if (module.hot) {
+  module.hot.accept('./containers/Root', () => {
+    const RootContainer = require('./containers/Root').default;
+    render(
+      <AppContainer>
+        <RootContainer
+          store={store}
+        />
+      </AppContainer>,
+      document.getElementById('tonal')
+    );
+  });
+}

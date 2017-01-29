@@ -30,7 +30,7 @@ export const Menu = React.createClass({
                     <li className="special">
                         <Link to="#"><i className="fa fa-cloud-upload" aria-hidden="true"></i>Upload Music</Link>
                     </li>
-                    <li><Link to="#">View/Edit Profile</Link></li>
+                    <li><Link to="#">AAAView/Edit Profile</Link></li>
                     <li><Link to="#">Account Settings</Link></li>
                 </ul>
                 <ul>
