@@ -1,3 +1,4 @@
+/* eslint-disable */
 var webpack = require('webpack');
 var path = require('path');
 var envFile = require('node-env-file');
@@ -14,10 +15,14 @@ try {
 
 console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
+const babelQuery = {
+  presets: ['react', 'es2015', 'stage-0']
+};
+
 module.exports = {
   entry: [
-    'webpack/hot/dev-server',
-    'webpack-hot-middleware/client',
+    'webpack/hot/dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
@@ -74,10 +79,10 @@ module.exports = {
     loaders: [
         {
             test: /\.jsx?$/,
-            loader: 'babel-loader',
-            query: {
-                presets: ['react', 'es2015', 'stage-0']
-            },
+            // loader: 'babel-loader',
+            // query: babelQuery,
+            loaders: ['react-hot', 'babel-loader?' + JSON.stringify(babelQuery)],
+            include: path.join(__dirname, 'app'),
             exclude: /(node_modules|bower_components)/
         },
         {
