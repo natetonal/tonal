@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import * as actions from 'actions';
 
 // import HeaderComposeEditor from './HeaderComposeEditor'; - TEMPORARILY ABANDONED. REMEMBER TO DELETE IF NOT NEEDED.
-import Composer from 'composer/Composer';
+import Composer2 from 'composer/Composer2';
 
 export const HeaderCompose = React.createClass({
 
@@ -55,7 +55,7 @@ export const HeaderCompose = React.createClass({
                     </div>
                 </div>
                 <div className="header-compose-contentarea">
-                    <Composer />
+                    <Composer2 />
                 </div>
 
 
