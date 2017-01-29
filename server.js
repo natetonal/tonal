@@ -30,11 +30,17 @@ app.use(webpackMiddleware(webpack(webpackConfig), {
   publicPath: webpackConfig.output.publicPath
 }));
 
-app.use('/', (req, res) => {
+app.use(require('webpack-hot-middleware')(
+  webpack(webpackConfig), {
+    log: console.log,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000
+  }
+));
+
+app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
 });
-
-app.use(require('webpack-hot-middleware')(webpack(webpackConfig)));
 
 app.listen(PORT, () => {
   console.log('Express server is up on port ' + PORT);
