@@ -21,8 +21,8 @@ const babelQuery = {
 
 module.exports = {
   entry: [
-    'webpack/hot/dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    'webpack/hot/dev-server',
+    'webpack-hot-middleware/client',
     'script!jquery/dist/jquery.min.js',
     'script!foundation-sites/dist/js/foundation.min.js',
     './app/app.jsx'
