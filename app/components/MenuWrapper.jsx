@@ -1,8 +1,7 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
 import * as actions from 'actions';
-import Hammer from 'react-hammerjs';
+// import Hammer from 'react-hammerjs'; - add this back in later for swiping.
 
 import Menu from './Menu';
 
@@ -18,26 +17,23 @@ export const MenuWrapper = React.createClass({
 
         var { isOpen } = this.props;
 
-        return(
-            <Hammer onSwipe={ !isOpen ? this.handleClick : false} direction="DIRECTION_RIGHT">
-                <div id="tonal-container" className={`tonal-container menu-effect ${isOpen ? "tonal-menu-open" : ""}`}>
-                    <Menu />
-                    <Hammer onSwipe={ isOpen ? this.handleClick : false }
-                            direction="DIRECTION_LEFT">
-                        <div className="tonal-pusher" onMouseDown={ isOpen ? this.handleClick : false }>
-                            <div className="tonal-main">
-                                <div className="tonal-main-inner">
-                                        {this.props.children}
-                                </div>
-                            </div>
+        return (
+            <div
+                id="tonal-container"
+                className={ `tonal-container menu-effect ${ isOpen ? 'tonal-menu-open' : '' }` }>
+                <Menu />
+                <div className="tonal-pusher" onMouseDown={ isOpen ? this.handleClick : false }>
+                    <div className="tonal-main">
+                        <div className="tonal-main-inner">
+                            { this.props.children }
                         </div>
-                    </Hammer>
+                    </div>
                 </div>
-            </Hammer>
+            </div>
         );
     }
 });
 
-export default Redux.connect(state => {
+export default Redux.connect((state) => {
     return { isOpen: state.uiState.menuIsOpen };
 })(MenuWrapper);

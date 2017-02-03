@@ -33,22 +33,22 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 render(
-  <AppContainer>
-    <Root store={store} />
-  </AppContainer>,
-  document.getElementById('tonal')
+    <AppContainer>
+        <Root store={ store } />
+    </AppContainer>,
+    document.getElementById('tonal')
 );
 
 if (module.hot) {
-  module.hot.accept('./containers/Root', () => {
-    const RootContainer = require('./containers/Root').default;
-    render(
-      <AppContainer>
-        <RootContainer
-          store={store}
-        />
-      </AppContainer>,
-      document.getElementById('tonal')
-    );
-  });
+    module.hot.accept('./containers/Root', () => {
+        const RootContainer = require('./containers/Root').default;
+        render(
+            <AppContainer>
+                <RootContainer
+                    store={ store }
+                />
+            </AppContainer>,
+            document.getElementById('tonal')
+        );
+    });
 }

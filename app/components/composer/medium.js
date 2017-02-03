@@ -12,7 +12,7 @@
 (function (w, d) {
 	'use strict';
 	var Medium = (function () {
-		
+
 		var trim = function (string) {
 				return string.replace(/^\s+|\s+$/g, '');
 			},
@@ -403,7 +403,7 @@
 						attributes: {
 							remove: ['style', 'class']
 						},
-						pasteAsText: true,
+						pasteAsText: false,
 						beforeInvokeElement: function () {
 							//this = Medium.Element
 						},

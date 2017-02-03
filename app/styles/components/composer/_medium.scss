@@ -12,6 +12,8 @@
 .Medium,
 .Medium p:first-child{
     margin-top:0;
+    outline: none;
+    @include transition(none);
 }
 
 .Medium p:last-child{
@@ -37,6 +39,7 @@
     filter: alpha(opacity=50);
     opacity: 0.5;
     position: absolute;
+    @include transition(none);
 }
 
 .Medium-inline, .Medium-placeholder-inline div{
