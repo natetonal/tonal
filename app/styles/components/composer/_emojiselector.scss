@@ -63,9 +63,9 @@
 .emoji-item{
     height: 32px;
     width: 32px;
-    font-size: 28px;
     text-align: center;
-    padding-top: 2px;
+    padding: 2px;
+    margin: 2px;
 
     &:hover{
         box-shadow: 0 0 1px 2px $alert-info;
@@ -77,7 +77,6 @@
         pointer-events: none;
         height: 28px;
         width: 28px;
-        align: center;
     }
 }
 

@@ -58,7 +58,7 @@ module.exports = {
   output: {
     path: '/',
     filename: 'bundle.js',
-    publicPath: '/public/'
+    publicPath: 'http://localhost:3000/public/'
     },
   resolve: {
     root: __dirname,
