@@ -1,183 +1,165 @@
+
 import React from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
-import * as actions from 'actions';
-import { fromJS, get, set } from 'immutable'; // temporary
-import validator from 'validator';
 import Button from 'elements/Button';
 import select from 'selection-range';
+import emojione from 'emojione';
 
-import EditableDiv from './EditableDiv';
+import Medium from './medium';
+import EmojiSelector from './EmojiSelector';
 
-const placeholder = '<span class="composer-placeholder">Share your thoughts</span>';
 const entityTypes = [
     {
         name: 'mention',
-        type: 'wrap',
         regex: /(^|\B)@\b([-a-zA-Z0-9._]{3,25})\b/ig,
         className: 'composer-mention',
         tag: 'span'
     },
     {
         name: 'hashtag',
-        type: 'wrap',
-        regex: /(^|\B)#\b([-a-zA-Z0-9._]{1,30})\b/ig,
+        regex: /(^|\B)#\b([-a-zA-Z0-9._]{1,30})(\b|\r)/ig,
         className: 'composer-hashtag',
         tag: 'span'
-    },
-    {
-        name: 'linebreak',
-        type: 'single',
-        regex: /(?!".*)\n(?!.*")/ig,
-        tag: 'br'
     }
 ];
 
+const stripHTML = /<\/?(span|font|p)[^>]*>/gi; // this dumps styling tags.
+
 export const Composer = React.createClass({
 
-    componentWillMount(){
-        this.setState({
-            editorZoomIn: false,
-            placeholder: true,
-            mentions: [],
-            hashtags: [],
-            html: placeholder,
-        });
+    getInitialState(){
+        return {
+            focused: false,
+            showEmojiSelector: false,
+            pos: ''
+        };
     },
 
-    decorateEntities(value){
-        var decoratedText = value;
-        entityTypes.forEach(entity => {
-            const { type, regex, className, tag } = entity;
-            var tempArray = [];
-            let checkArray;
-            while ((checkArray = regex.exec(value)) !== null){
-                tempArray.push(checkArray[0]);
-            }
-
-            tempArray.forEach(word => {
-                const re = new RegExp(word, "gi");
-                const newStr = type === 'wrap' ?
-                               `<${tag} class='${className}'>${word}</${tag}>` :
-                               `<${tag} />`;
-                decoratedText = decoratedText.replace(re, newStr);
-            });
-        });
-
-        console.log('decoratedText: ', decoratedText);
-        return decoratedText;
+    componentDidMount(){
+        this.mediumSettings = {
+            element: this.composer,
+            mode: Medium.richMode,
+            placeholder: 'Share&nbsp;your&nbsp;thoughts',
+            tags: null,
+            autofocus: true,
+            attributes: null
+        };
+        this.resetMedium();
     },
 
-    handleChange({ target: { textContent, value, cursorPos }}){
-        var newHTML = value;
-        console.log('this.composer.htmlEl: ', this.composer.htmlEl);
-        if(!textContent){
-            this.setState({
-                html: placeholder,
-                placeholder: true
-            });
-        } else {
-            newHTML = this.decorateEntities(textContent);
-            this.setState({ html: newHTML });
-        }
-
-
-        select(this.composer.htmlEl, { start: cursorPos });
+    resetMedium(){
+        this.medium = new Medium(this.mediumSettings);
     },
 
-    handleKeyPress({ key, target: { textContent }}){
-        console.log('key pressed: ', key);
-        switch(key){
-            case '@':
-                console.log('@ pressed - execute mention function.');
-                break;
-            case ':':
-                console.log(': pressed - execute emoji function.');
-                break;
-            case '#':
-                console.log('# pressed - execute hashtag function.');
-                break;
-            default:
-                console.log(`${key} pressed - do nothing!`);
-                break;
-        }
-    },
-
-    handleClick(){
-        const { placeholder } = this.state;
-        if(placeholder){
-            this.setState({
-                html: '',
-                placeholder: false
-            });
-        }
-    },
-
-    handleBlur(){
-        const { html } = this.state;
-        if(!html){
-            this.setState({
-                html: placeholder,
-                placeholder: true,
-                editorZoomIn: !this.state.editorZoomIn
-            });
-        } else {
-            this.setState({ editorZoomIn: !this.state.editorZoomIn })
-        }
+    handleMention(evt, element){
+        console.log('handleMention evoked: ', element);
     },
 
     handleFocus(){
-        const { placeholder } = this.state;
-        if(placeholder){
-            this.setState({
-                html: '',
-                placeholder: false,
-                editorZoomIn: !this.state.editorZoomIn
-            });
-        } else {
-            this.setState({ editorZoomIn: !this.state.editorZoomIn })
+        this.setState({ focused: true });
+    },
+
+    handleBlur(){
+        this.setState({ focused: false });
+    },
+
+    handleKeyUp({ key, target: { textContent } }){
+        if (key !== 'Enter'){
+            if (textContent.length === 0){
+                this.resetMedium();
+                this.medium.value('');
+            } else if (textContent.length === 1){
+                const pos = select(this.composer).end;
+                this.medium.value(textContent);
+                select(this.composer, { start: pos });
+            } else {
+                const newVal = this.decorateEntities();
+                const pos = select(this.composer);
+                console.log('newVal for medium: ', newVal);
+                this.medium.value(`${ newVal }`);
+                select(this.composer, pos);
+            }
         }
+    },
+
+    handleEmojiBtn(evt){
+        console.log('handleEmojiBtn clicked.');
+        evt.preventDefault();
+        this.setState({ showEmojiSelector: !this.state.showEmojiSelector });
+    },
+
+    buildTag(tag, word, className){
+        return `<${ tag } class="${ className }">${ word }</${ tag }>`;
+    },
+
+    stripPrevTags(){
+        const value = this.medium.value();
+        let newVal = value;
+        let checkArray = [];
+        while ((checkArray = stripHTML.exec(value)) !== null){
+            const thisTag = new RegExp(checkArray[0], 'gi');
+            newVal = newVal.replace(thisTag, '');
+        }
+
+        return newVal;
+    },
+
+    decorateEntities(){
+        const value = this.stripPrevTags();
+        let decoratedText = value;
+        entityTypes.forEach(entity => {
+            const { regex, className, tag } = entity;
+            let checkArray;
+            while ((checkArray = regex.exec(value)) !== null){
+                const word = checkArray[0];
+                const re = new RegExp(word, 'gi');
+                const newStr = this.buildTag(tag, word, className);
+                decoratedText = decoratedText.replace(re, newStr);
+            }
+        });
+
+        console.log('decoratedText: ', decoratedText);
+
+        return decoratedText;
     },
 
     submitPost(){
         event.preventDefault();
-        console.log("Formatted post for submission: ", this.state.html);
+        console.log('Formatted post for submission: ?');
     },
 
     render(){
 
-        const { editorZoomIn, html } = this.state;
-        const editableDivClass = `composer ${ editorZoomIn ? "composer-zoom-in" : "" }`;
+        const { focused, showEmojiSelector } = this.state;
+        const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' }`;
 
         return (
             <div className="header-compose-post">
                 <div className="composer-controls">
-                    <div className="composer-control">
-                        <i className="fa fa-smile-o" aria-hidden="true"></i>
+                    <div
+                        className="composer-control"
+                        onMouseDown={ this.handleEmojiBtn }>
+                        <i
+                            className="fa fa-smile-o"
+                            aria-hidden="true" />
                     </div>
                 </div>
-                <div className="composer-wrapper">
-                    <EditableDiv
-                        className={ editableDivClass }
-                        onClick={ this.handleClick }
-                        onChange={ this.handleChange }
-                        onFocus={ this.handleFocus }
-                        onBlur={ this.handleBlur }
-                        onKeyPress={ this.handleKeyPress }
-                        html={ html }
-                        ref={ (e) => this.composer = e }
-                        disabled="false" />
+                { showEmojiSelector && <EmojiSelector /> }
+                <div
+                    className={ composerClass }
+                    onFocus={ this.handleFocus }
+                    onBlur={ this.handleBlur }>
+                    <div
+                        id="composer"
+                        ref={ element => this.composer = element }
+                        onKeyUp={ this.handleKeyUp } />
                 </div>
                 <div className="composer-button">
-                    <Button type="submit" btnType="main" btnText="Share it!" onClick={ this.submitPost }/>
+                    <Button type="submit" btnType="main" btnText="Share it!" onClick={ this.submitPost } />
                 </div>
             </div>
         );
     }
 });
 
-export default Redux.connect(state => {
-    return {
-
-     };
-})(Composer);
+export default Redux.connect()(Composer);

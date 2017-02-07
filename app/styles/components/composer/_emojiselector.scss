@@ -1,0 +1,93 @@
+.emoji-selector{
+    position: absolute;
+    max-width: 300px;
+    height: 300px;
+    background: #fefefe;
+    z-index: 1;
+    border: 1px solid #ccc;
+    box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+}
+
+.emoji-selector-title {
+    color: #aaa;
+    padding: 15px 12px 0;
+}
+
+.emoji-selector-tabs {
+    display: block;
+    padding: 8px 0 0;
+    font-size: 30px;
+    border-bottom: 1px solid #ccc;
+
+    .emoji-selector-tab{
+        display: inline-block;
+        -webkit-filter: grayscale(1);
+        filter: grayscale(1);
+        padding: 3px;
+
+        &:hover{
+            cursor: pointer;
+            -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
+            filter: contrast(1.4) saturate(1.8) sepia(.6);
+            @include transition(0.2s all);
+        }
+
+        &.selected{
+            background: $alert-info;
+            -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
+            filter: contrast(1.4) saturate(1.8) sepia(.6);
+            @include transition(0.2s all);
+        }
+    }
+}
+
+.emoji-test-button{
+    font-size: 48px;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.emoji-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    max-height: 225px;
+    overflow-y: scroll;
+    padding-top: 2px;
+}
+
+.emoji-item{
+    height: 32px;
+    width: 32px;
+    font-size: 28px;
+    text-align: center;
+    padding-top: 2px;
+
+    &:hover{
+        box-shadow: 0 0 1px 2px $alert-info;
+        cursor: pointer;
+        @include transition(box-shadow 0.2s cubic-bezier(.27,1.27,.48,.56));
+    }
+
+    .emoji-img{
+        pointer-events: none;
+        height: 28px;
+        width: 28px;
+        align: center;
+    }
+}
+
+.smooth-popin-appear {
+    opacity: 0.01;
+    @include transform(scale(0.9));
+}
+
+.smooth-popin-appear.smooth-popin-appear-active {
+    opacity: 1;
+    @include transform(scale(1));
+    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+}

@@ -1,11 +1,5 @@
 // This will be a series of imports usually.
 
-// Fonts
-@import "base/fonts";
-
-// Variables
-@import "base/variables";
-
 // Foundation
 @import "base/foundation-settings";
 @import "foundation";
@@ -14,6 +8,12 @@
 // Mixins
 @import "base/mixins";
 
+// Fonts
+@import "base/fonts";
+
+// Variables
+@import "base/variables";
+
 // Components
 @import "components/header/header";
 @import "components/header/headernotifications";
@@ -21,6 +21,7 @@
 @import "components/header/headercomposeeditor";
 @import "components/composer/composer";
 @import "components/composer/medium";
+@import "components/composer/emojiselector";
 @import "components/settings";
 @import "components/content";
 @import "components/tabs";

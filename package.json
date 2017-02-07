@@ -1,7 +1,7 @@
 {
   "name": "Tonal",
   "version": "1.0.0",
-  "description": "Tonal Web Application",
+  "description": "Tonal Social Music Marketplace",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test karma start",
@@ -36,6 +36,7 @@
     "draft-js-linkify-plugin": "^2.0.0-beta9",
     "draft-js-mention-plugin": "^2.0.0-beta9",
     "draft-js-plugins-editor": "^2.0.0-beta9",
+    "emojione": "^2.2.7",
     "emojione-picker": "^1.1.0",
     "expect": "^1.14.0",
     "express": "^4.13.4",
