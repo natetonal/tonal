@@ -6,7 +6,7 @@ import select from 'selection-range';
 import emojione from 'emojione';
 
 import Medium from './medium';
-import EmojiSelector from './EmojiSelector';
+import EmojiSelector from './emojiselector/EmojiSelector';
 
 const entityTypes = [
     {

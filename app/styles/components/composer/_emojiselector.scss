@@ -1,6 +1,6 @@
 .emoji-selector{
     position: absolute;
-    max-width: 300px;
+    width: 340px;
     height: 300px;
     background: #fefefe;
     z-index: 1;
@@ -10,7 +10,8 @@
 
 .emoji-selector-title {
     color: #aaa;
-    padding: 15px 12px 0;
+    height: 15px;
+    margin: 15px 12px 0;
 }
 
 .emoji-selector-tabs {
@@ -38,6 +39,12 @@
             filter: contrast(1.4) saturate(1.8) sepia(.6);
             @include transition(0.2s all);
         }
+
+        .emoji-tab-img {
+            height: 30px;
+            width: 30px;
+            pointer-events: none;
+        }
     }
 }
 
@@ -53,11 +60,24 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     align-content: flex-start;
-    height: 220px;
+    height: 180px;
     overflow-y: scroll;
     padding: 5px;
+    color: #aaa;
+
+    .emoji-placeholder{
+        color: #aaa;
+    }
+    
+    .emoji-placeholder-text {
+        padding-left: 5px;
+    }
+}
+
+.emoji-selector-search-input {
+    margin-bottom: 0;
 }
 
 .emoji-item{
@@ -70,13 +90,12 @@
     &:hover{
         box-shadow: 0 0 1px 2px $alert-info;
         cursor: pointer;
-        @include transition(box-shadow 0.2s cubic-bezier(.27,1.27,.48,.56));
     }
 
     .emoji-img{
         pointer-events: none;
-        height: 28px;
-        width: 28px;
+        height: 24px;
+        width: 24px;
     }
 }
 

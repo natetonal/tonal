@@ -14,11 +14,11 @@ $(document).foundation(); // eslint-disable-line
 // Loaders for css & sass
 require('style!css!sass!applicationStyles'); // eslint-disable-line
 
-firebase.auth().onAuthStateChanged((user) => {
+firebase.auth().onAuthStateChanged(user => {
     if (user) {
         const providerId = user.providerData[0].providerId;
-        if ((providerId === 'facebook.com' ||
-        providerId === 'password') && user.emailVerified) {
+        if (providerId === 'facebook.com' ||
+        (providerId === 'password' && user.emailVerified)) {
             store.dispatch(actions.fetchUserData(user.uid));
             store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
         }

@@ -1,10 +1,10 @@
 const initialAuthState = {
-    uid: "",
-    oobCode: ""
+    uid: '',
+    oobCode: ''
 };
 
-export const authReducer = (state = {}, action) => {
-    switch(action.type){
+export const authReducer = (state = initialAuthState, action) => {
+    switch (action.type){
         case 'LOGIN':
             return {
                 ...state,
@@ -13,7 +13,7 @@ export const authReducer = (state = {}, action) => {
         case 'LOGOUT':
             return {
                 ...state,
-                uid: ""
+                uid: ''
             };
         case 'VERIFIED_EMAIL_CODE':
             return {
@@ -25,8 +25,8 @@ export const authReducer = (state = {}, action) => {
     }
 };
 
-export const imgUrlReducer = (state = "", action) => {
-    switch(action.type){
+export const imgUrlReducer = (state = '', action) => {
+    switch (action.type){
         case 'GET_IMG_URL':
             return action.imgUrl;
         default:
@@ -44,34 +44,34 @@ const initialUIState = {
 };
 
 export const uiStateReducer = (state = initialUIState, action) => {
-    switch(action.type){
+    switch (action.type){
         case 'UI_TOGGLE_MENU':
             return {
                 ...state,
                 menuIsOpen: !state.menuIsOpen
             };
         case 'UI_TOGGLE_SEARCH':
-            return{
+            return {
                 ...state,
                 searchIsOpen: !state.searchIsOpen
             };
         case 'UI_TOGGLE_NOTIFS':
-            return{
+            return {
                 ...state,
                 notifsIsOpen: !state.notifsIsOpen
             };
         case 'UI_TOGGLE_COMPOSE':
-            return{
+            return {
                 ...state,
                 composeIsOpen: !state.composeIsOpen
             };
         case 'UI_TOGGLE_LOGIN_MODAL':
-            return{
+            return {
                 ...state,
                 loginModalIsOpen: !state.loginModalIsOpen
             };
         case 'UI_SWITCH_LOGIN_MODAL':
-            return{
+            return {
                 ...state,
                 loginModalUI: action.loginModalUI
             };
@@ -83,7 +83,7 @@ export const uiStateReducer = (state = initialUIState, action) => {
 };
 
 export const errorsReducer = (state = null, action) => {
-    switch(action.type){
+    switch (action.type){
         case 'ADD_ERROR_MESSAGE':
             return action.error;
         case 'RESET_ERROR_MESSAGE':
@@ -94,20 +94,20 @@ export const errorsReducer = (state = null, action) => {
 };
 
 const initialUserState = {
-    uid: "",
-    fbToken: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    displayName: "",
-    timeZone: "",
-    avatarPhoto: "",
-    updatedAt: "",
-    createdAt: ""
+    uid: '',
+    fbToken: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    displayName: '',
+    timeZone: '',
+    avatarPhoto: '',
+    updatedAt: '',
+    createdAt: ''
 };
 
 export const userReducer = (state = initialUserState, action) => {
-    switch(action.type){
+    switch (action.type){
         case 'ADD_USER_DATA':
             return {
                 ...state,
@@ -115,6 +115,46 @@ export const userReducer = (state = initialUserState, action) => {
             };
         case 'RESET_USER_DATA':
             return initialUserState;
+        default:
+            return state;
+    }
+};
+
+const initialEmojiSelectorState = {
+    currentTab: 'people',
+    currentTabTitle: 'Smileys & People',
+    currentTitleDisplay: 'Smileys & People',
+    currentEmoji: [],
+    searchText: ''
+};
+
+export const emojiSelectorReducer = (state = initialEmojiSelectorState, action) => {
+    switch (action.type){
+        case 'ES_CHANGE_TAB':
+            return {
+                ...state,
+                currentTab: action.tab
+            };
+        case 'ES_CHANGE_TAB_TITLE':
+            return {
+                ...state,
+                currentTabTitle: action.tabTitle
+            };
+        case 'ES_CHANGE_TITLE_DISPLAY':
+            return {
+                ...state,
+                currentTitleDisplay: action.titleDisplay
+            };
+        case 'ES_CHANGE_EMOJI':
+            return {
+                ...state,
+                currentEmoji: action.emoji
+            };
+        case 'ES_SEARCH_TEXT':
+            return {
+                ...state,
+                searchText: action.searchText
+            };
         default:
             return state;
     }
