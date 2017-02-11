@@ -1,112 +1,76 @@
 
 import React from 'react';
 import * as Redux from 'react-redux';
-import { EmojiSelectionChangeEmoji } from 'actions';
-import ImageLoader from 'react-imageloader';
 
 import {
     getEmojiForCategory,
-    getPathFromShortname,
-    getEmojiFromSearchText
+    getEmojiFromCategoryAndSearchText
 } from './emojidata';
 
 export const EmojiSelectorContainer = React.createClass({
-    //
-    // componentDidMount(){
-    //     const {
-    //         dispatch,
-    //         currentEmoji,
-    //         currentTab
-    //     } = this.props;
-    //     if (currentEmoji.length === 0){
-    //         const emoji = getEmojiForCategory(currentTab);
-    //         dispatch(EmojiSelectionChangeEmoji(emoji));
-    //     }
-    // },
-    //
-    // componentWillReceiveProps(nextProps){
-    //     console.log('componentWillReceipve props nextProps: ', nextProps);
-    //     const {
-    //         dispatch,
-    //         currentTab,
-    //         searchText
-    //     } = this.props;
-    //     if (currentTab !== nextProps.currentTab){
-    //
-    //         let emoji;
-    //         if (searchText){
-    //             emoji = getEmojiFromSearchText(searchText);
-    //         } else {
-    //             emoji = getEmojiForCategory(nextProps.currentTab);
-    //         }
-    //         dispatch(EmojiSelectionChangeEmoji(emoji));
-    //     }
-    // },
 
-    shouldComponentUpdate(nextProps){
-        const {
-            searchText,
-            currentTab
-        } = this.props;
-        console.log('shouldComponentUpdate nextProps: ', nextProps);
-        return (currentTab !== nextProps.currentTab || searchText);
+    handleMouseEnter(title, event){
+        event.preventDefault();
+        const { onMouseEnter } = this.props;
+        onMouseEnter(title);
     },
 
-    preloader(text){
-        return (
-            <div className="emoji-item-placeholder">
-                <i className="fa fa-circle-o-notch fa-spin fa-fw emoji-placeholder" />
-                { text ? <span className="emoji-placeholder-text">{ text }</span> : '' }
-            </div>
-        );
+    handleMouseLeave(event){
+        event.preventDefault();
+        const { onMouseLeave } = this.props;
+        onMouseLeave(event.target.value);
     },
 
-    renderEmoji(emoji){
-        const {
-            onMouseEnter,
-            onMouseLeave,
-            onClick
-        } = this.props;
-        const {
-            path,
-            shortname,
-            alt
-        } = emoji;
+    handleClick(name, event){
+        event.preventDefault();
+        const { onClick } = this.props;
+        onClick(name);
+    },
+
+    renderEmoji({ path, shortname, alt }, index){
 
         return (
-            <ImageLoader
-                key={ alt }
-                src={ path }
-                wrapper={ React.DOM.div }
+            <div
+                key={ alt + index }
                 className="emoji-item"
-                name={ shortname }
-                title={ shortname }
-                onMouseEnter={ () => onMouseEnter(shortname) }
-                onMouseLeave={ () => onMouseLeave() }
-                onClick={ () => onClick(shortname) }
-                preloader={ () => this.preloader() }>
-                ?
-            </ImageLoader>
+                onMouseEnter={ event => this.handleMouseEnter(shortname, event) }
+                onMouseLeave={ event => this.handleMouseLeave(event) }
+                onClick={ event => this.handleClick(shortname, event) }>
+                <img
+                    className="emoji-img"
+                    src={ path }
+                    alt={ alt } />
+            </div>
         );
     },
 
     render(){
 
-        console.log('ESContainer render called. current props: ', this.props);
-        
         const {
             currentTab,
-            searchText
+            searchText,
         } = this.props;
 
         const currentEmoji =
             searchText ?
-            getEmojiFromSearchText(searchText) :
+            getEmojiFromCategoryAndSearchText(currentTab, searchText) :
             getEmojiForCategory(currentTab);
 
+        if (!currentEmoji){
+            return (
+                <div
+                    className="emoji-container"
+                    ref={ el => this.emojiContainer = el }>
+                    <i className="fa fa-meh-o" aria-hidden="true" />
+                    <span className="emoji-not-found">No matches found.</span>
+                </div>
+            );
+        }
         return (
-            <div className="emoji-container">
-                { currentEmoji.map(emoji => this.renderEmoji(emoji)) }
+            <div
+                className="emoji-container"
+                ref={ el => this.emojiContainer = el }>
+                { currentEmoji.map((emoji, index) => this.renderEmoji(emoji, index)) }
             </div>
         );
     }
@@ -116,6 +80,6 @@ export default Redux.connect(state => {
     return {
         currentTab: state.emojiSelector.currentTab,
         searchText: state.emojiSelector.searchText,
-        currentEmoji: state.emojiSelector.currentEmoji
+        currentEmoji: state.emojiSelector.currentEmoji,
     };
 })(EmojiSelectorContainer);

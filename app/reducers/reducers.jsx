@@ -124,7 +124,6 @@ const initialEmojiSelectorState = {
     currentTab: 'people',
     currentTabTitle: 'Smileys & People',
     currentTitleDisplay: 'Smileys & People',
-    currentEmoji: [],
     searchText: ''
 };
 
@@ -144,11 +143,6 @@ export const emojiSelectorReducer = (state = initialEmojiSelectorState, action) 
             return {
                 ...state,
                 currentTitleDisplay: action.titleDisplay
-            };
-        case 'ES_CHANGE_EMOJI':
-            return {
-                ...state,
-                currentEmoji: action.emoji
             };
         case 'ES_SEARCH_TEXT':
             return {

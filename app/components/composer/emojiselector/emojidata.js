@@ -108,3 +108,31 @@ export const getEmojiFromSearchText = searchText => {
 
     return emoji;
 };
+
+export const getEmojiFromCategoryAndSearchText = (category, searchText) => {
+    let emoji = [];
+    if (category !== 'search'){
+        Object.keys(emojiJSON).forEach(key => {
+            const value = emojiJSON[key];
+            if (category === value.category){
+                const regex = new RegExp(searchText, 'gi');
+                let match = regex.test(value.shortname);
+                if (!match){
+                    value.keywords.forEach(keyword => {
+                        if (regex.test(keyword)){
+                            match = true;
+                        }
+                    });
+                }
+
+                if (match){
+                    emoji.push(getImageFromValue(value));
+                }
+            }
+        });
+    } else {
+        emoji = this.getEmojiFromSearchText(searchText);
+    }
+
+    return emoji;
+};

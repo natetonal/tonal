@@ -339,10 +339,3 @@ export const EmojiSelectionSearchText = searchText => {
         searchText
     };
 };
-
-export const EmojiSelectionChangeEmoji = emoji => {
-    return {
-        type: 'ES_CHANGE_EMOJI',
-        emoji
-    };
-};

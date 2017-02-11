@@ -34,9 +34,8 @@ export const EmojiSelector = React.createClass({
         dispatch(EmojiSelectionChangeTabTitle(title));
     },
 
-    selectEmoji(event){
-        const currentTitle = event.target.getAttribute('title');
-        console.log('Emoji selected: ', currentTitle);
+    selectEmoji(shortname, path){
+        console.log('Emoji selected: ', shortname, path);
     },
 
     render(){
