@@ -60,6 +60,6 @@ export const EmojiSelectorTabs = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        currentTab: state.emojiSelector.currentTab,
+        currentTab: state.emojiSelector.currentTab
     };
 })(EmojiSelectorTabs);

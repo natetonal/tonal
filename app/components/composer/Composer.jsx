@@ -3,12 +3,22 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
-import emojione from 'emojione';
+import urlRegex from 'superhuman-url-regex';
 
 import Medium from './medium';
 import EmojiSelector from './emojiselector/EmojiSelector';
+import StickerSelector from './stickerselector/StickerSelector';
 
+import { composerChangeMenu } from 'actions';
+
+// You can add new entity types here.
 const entityTypes = [
+    {
+        name: 'link',
+        regex: urlRegex({ liberal: true }),
+        className: 'composer-link',
+        tag: 'span'
+    },
     {
         name: 'mention',
         regex: /(^|\B)@\b([-a-zA-Z0-9._]{3,25})\b/ig,
@@ -23,7 +33,25 @@ const entityTypes = [
     }
 ];
 
-const stripHTML = /<\/?(span|font|p)[^>]*>/gi; // this dumps styling tags.
+// You can add new buttons here.
+const controlBtns = [
+    {
+        name: 'emoji',
+        icon: 'fa fa-smile-o'
+    },
+    {
+        name: 'stickers',
+        icon: 'icon-unicorn'
+    }
+];
+
+// You can add new URLs for the decorator to ignore here.
+const regexIgnoreList = [
+    'https://cdn.jsdelivr.net/emojione/assets/png/'
+];
+
+// This dumps styling tags.
+const stripHTML = /<\/?(span|font|p)[^>]*>/gi;
 
 export const Composer = React.createClass({
 
@@ -31,6 +59,7 @@ export const Composer = React.createClass({
         return {
             focused: false,
             showEmojiSelector: false,
+            showStickerSelector: false,
             pos: ''
         };
     },
@@ -39,12 +68,12 @@ export const Composer = React.createClass({
         this.mediumSettings = {
             element: this.composer,
             mode: Medium.richMode,
-            placeholder: 'Share&nbsp;your&nbsp;thoughts',
             tags: null,
             autofocus: true,
             attributes: null
         };
         this.resetMedium();
+        this.composer.focus();
     },
 
     resetMedium(){
@@ -68,10 +97,10 @@ export const Composer = React.createClass({
             if (textContent.length === 0){
                 this.resetMedium();
                 this.medium.value('');
-            } else if (textContent.length === 1){
-                const pos = select(this.composer).end;
-                this.medium.value(textContent);
-                select(this.composer, { start: pos });
+            // } else if (textContent.length === 1){
+            //     const pos = select(this.composer).end;
+            //     this.medium.value(textContent);
+            //     select(this.composer, { start: pos });
             } else {
                 const newVal = this.decorateEntities();
                 const pos = select(this.composer);
@@ -82,10 +111,23 @@ export const Composer = React.createClass({
         }
     },
 
-    handleEmojiBtn(evt){
-        console.log('handleEmojiBtn clicked.');
-        evt.preventDefault();
+    handleInsertEmoji(shortname, path){
+        const { pos } = this.state;
         this.setState({ showEmojiSelector: !this.state.showEmojiSelector });
+        this.medium.focus();
+        if (pos && !pos.atStart) {
+            select(this.composer, pos);
+        }
+        this.medium.insertHtml(`<img class="composer-emoji" src=${ path } alt=${ shortname } />&nbsp;`);
+        console.log('pos after: ', select(this.composer));
+    },
+
+    // refactor this shit.
+    handleControl(name, evt){
+        evt.preventDefault();
+        const { dispatch } = this.props;
+        console.log('button pressed: ', name);
+        dispatch(composerChangeMenu(name));
     },
 
     buildTag(tag, word, className){
@@ -104,17 +146,37 @@ export const Composer = React.createClass({
         return newVal;
     },
 
+    shouldIgnoreWord(word){
+        // Innocent until proven guilty
+        let shouldIgnore = false;
+        regexIgnoreList.forEach(blacklistItem => {
+            const re = new RegExp(blacklistItem, 'gi');
+            if (word.match(re)){
+                console.log('this word is on the blacklist.');
+                shouldIgnore = true;
+            }
+        });
+
+        return shouldIgnore;
+    },
+
     decorateEntities(){
         const value = this.stripPrevTags();
         let decoratedText = value;
         entityTypes.forEach(entity => {
             const { regex, className, tag } = entity;
-            let checkArray;
-            while ((checkArray = regex.exec(value)) !== null){
-                const word = checkArray[0];
-                const re = new RegExp(word, 'gi');
-                const newStr = this.buildTag(tag, word, className);
-                decoratedText = decoratedText.replace(re, newStr);
+            if (decoratedText.match(regex)){
+                let checkArray;
+                while ((checkArray = regex.exec(value)) !== null){
+                    const word = checkArray[0];
+                    console.log('word: ', word);
+                    if (!this.shouldIgnoreWord(word)){
+                        console.log('the ignore list doesnt include this word.');
+                        const re = new RegExp(word, 'gi');
+                        const newStr = this.buildTag(tag, word, className);
+                        decoratedText = decoratedText.replace(re, newStr);
+                    }
+                }
             }
         });
 
@@ -130,21 +192,42 @@ export const Composer = React.createClass({
 
     render(){
 
-        const { focused, showEmojiSelector } = this.state;
+        const { focused } = this.state;
+        const { currentMenu } = this.props;
         const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' }`;
+
+        const btns = () => {
+            return controlBtns.map(btn => {
+                return (
+                    <div
+                        key={ btn.name }
+                        className="composer-control"
+                        onMouseDown={ evt => this.handleControl(btn.name, evt) }>
+                        <i
+                            className={ btn.icon }
+                            aria-hidden="true" />
+                    </div>
+                );
+            });
+        };
+
+        const menu = () => {
+            switch (currentMenu){
+                case 'emoji':
+                    return <EmojiSelector handleEmoji={ this.handleInsertEmoji } />;
+                case 'stickers':
+                    return <StickerSelector handleSticker={ this.handleInsertSticker } />;
+                default:
+                    return '';
+            }
+        };
 
         return (
             <div className="header-compose-post">
                 <div className="composer-controls">
-                    <div
-                        className="composer-control"
-                        onMouseDown={ this.handleEmojiBtn }>
-                        <i
-                            className="fa fa-smile-o"
-                            aria-hidden="true" />
-                    </div>
+                    { btns() }
                 </div>
-                { showEmojiSelector && <EmojiSelector /> }
+                { menu() }
                 <div
                     className={ composerClass }
                     onFocus={ this.handleFocus }
@@ -162,4 +245,8 @@ export const Composer = React.createClass({
     }
 });
 
-export default Redux.connect()(Composer);
+export default Redux.connect(state => {
+    return {
+        currentMenu: state.composer.currentMenu
+    };
+})(Composer);

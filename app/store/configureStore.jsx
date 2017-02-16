@@ -7,7 +7,8 @@ import {
     uiStateReducer,
     errorsReducer,
     userReducer,
-    emojiSelectorReducer
+    emojiSelectorReducer,
+    composerReducer
 } from 'reducers';
 import DevTools from '../containers/DevTools';
 
@@ -31,6 +32,7 @@ const reducer = combineReducers({
     uiState: uiStateReducer,
     errors: errorsReducer,
     user: userReducer,
+    composer: composerReducer,
     emojiSelector: emojiSelectorReducer
 });
 

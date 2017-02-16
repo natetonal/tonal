@@ -1,7 +1,6 @@
 .emoji-selector{
     position: absolute;
-    width: 340px;
-    height: 300px;
+    width: 375px;
     background: #fefefe;
     z-index: 1;
     border: 1px solid #ccc;
@@ -10,39 +9,39 @@
 
 .emoji-selector-title {
     color: #aaa;
-    height: 15px;
-    margin: 15px 12px 0;
+    font-size: 14px;
+    padding: 4px 8px;
+    text-align: right;
+    box-shadow: 0 -2px 1px 0 rgba(0,0,0,0.3);
 }
 
 .emoji-selector-tabs {
     display: block;
-    padding: 8px 0 0;
-    font-size: 30px;
-    border-bottom: 1px solid #ccc;
+    background: $black;
 
     .emoji-selector-tab{
         display: inline-block;
         -webkit-filter: grayscale(1);
         filter: grayscale(1);
-        padding: 3px;
+        padding: 7px;
+        cursor: pointer;
 
         &:hover{
-            cursor: pointer;
             -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
             filter: contrast(1.4) saturate(1.8) sepia(.6);
             @include transition(0.2s all);
         }
 
         &.selected{
-            background: $alert-info;
-            -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
-            filter: contrast(1.4) saturate(1.8) sepia(.6);
+            filter: none;
+            -webkit-filter: none;
+            background: $white;
             @include transition(0.2s all);
         }
 
         .emoji-tab-img {
-            height: 30px;
-            width: 30px;
+            height: 26px;
+            width: 26px;
             pointer-events: none;
         }
     }
@@ -108,16 +107,75 @@
     padding-left: 5px;
 }
 
+.emoji-skin-tone-modifiers {
+    display: flex;
+    height: 32px;
+    width: 100%;
+    padding-right: 10px;
+    justify-content: flex-end;
+}
+
+.emoji-skin-tone-modifier {
+    display: inline-block;
+    height: 18px;
+    text-align: center;
+    padding: 2px;
+    margin: 0 1px;
+    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+
+    &:first-child{
+        -webkit-filter: saturate(4);
+        filter: saturate(4);
+    }
+
+    &:hover{
+        cursor: pointer;
+
+        img{
+            @include transform(scale(1.4));
+            @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+        }
+    }
+
+    img{
+        pointer-events: none;
+        height: 16px;
+        width: 16px;
+    }
+
+    &.selected{
+
+        cursor: auto;
+        @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+
+        img{
+            box-shadow: inset 0 0 0 1px $black,
+                        0 0 0 1px $black;
+            border-radius: 50%;
+        }
+
+        &:hover{
+
+            img{
+                @include transform(none);
+                @include transition(none);
+            }
+        }
+    }
+}
+
 .emoji-item{
     height: 32px;
     width: 32px;
     text-align: center;
-    padding: 2px;
+    padding: 4px 2px 2px;
     margin: 2px;
+    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
 
     &:hover{
         box-shadow: 0 0 1px 2px $alert-info;
         cursor: pointer;
+        @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
     }
 
     .emoji-img{
@@ -125,15 +183,4 @@
         height: 24px;
         width: 24px;
     }
-}
-
-.smooth-popin-appear {
-    opacity: 0.01;
-    @include transform(scale(0.9));
-}
-
-.smooth-popin-appear.smooth-popin-appear-active {
-    opacity: 1;
-    @include transform(scale(1));
-    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
 }

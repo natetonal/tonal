@@ -5,6 +5,13 @@ import { EmojiSelectionSearchText } from 'actions';
 
 export const EmojiSelectorSearch = React.createClass({
 
+    componentDidMount(){
+        const { searchText } = this.props;
+        if (searchText.length > 1){
+            this.emojiSearch.value = searchText;
+        }
+    },
+
     handleInput(evt){
         evt.preventDefault();
         const { dispatch } = this.props;
@@ -39,4 +46,8 @@ export const EmojiSelectorSearch = React.createClass({
     }
 });
 
-export default Redux.connect()(EmojiSelectorSearch);
+export default Redux.connect(state => {
+    return {
+        searchText: state.emojiSelector.searchText
+    };
+})(EmojiSelectorSearch);

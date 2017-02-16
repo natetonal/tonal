@@ -120,10 +120,29 @@ export const userReducer = (state = initialUserState, action) => {
     }
 };
 
+const initialComposerState = {
+    currentMenu: false
+};
+
+export const composerReducer = (state = initialComposerState, action) => {
+    switch (action.type){
+        case 'COM_CHANGE_MENU':
+            return {
+                ...state,
+                currentMenu: action.menu
+            };
+        default:
+            return state;
+    }
+};
+
 const initialEmojiSelectorState = {
     currentTab: 'people',
+    previousTab: 'people',
     currentTabTitle: 'Smileys & People',
+    previousTabTitle: 'Smileys & People',
     currentTitleDisplay: 'Smileys & People',
+    skinToneModifier: 'default',
     searchText: ''
 };
 
@@ -132,11 +151,13 @@ export const emojiSelectorReducer = (state = initialEmojiSelectorState, action) 
         case 'ES_CHANGE_TAB':
             return {
                 ...state,
+                previousTab: state.currentTab,
                 currentTab: action.tab
             };
         case 'ES_CHANGE_TAB_TITLE':
             return {
                 ...state,
+                previousTabTitle: state.currentTabTitle,
                 currentTabTitle: action.tabTitle
             };
         case 'ES_CHANGE_TITLE_DISPLAY':
@@ -148,6 +169,11 @@ export const emojiSelectorReducer = (state = initialEmojiSelectorState, action) 
             return {
                 ...state,
                 searchText: action.searchText
+            };
+        case 'ES_MODIFY_SKIN_TONE':
+            return {
+                ...state,
+                skinToneModifier: action.skinTone
             };
         default:
             return state;

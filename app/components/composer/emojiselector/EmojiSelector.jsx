@@ -18,6 +18,26 @@ import EmojiSelectorContainer from './EmojiSelectorContainer';
 
 export const EmojiSelector = React.createClass({
 
+    componentWillReceiveProps(nextProps){
+
+        const {
+            searchText,
+            currentTab,
+            previousTab,
+            previousTabTitle
+        } = this.props;
+
+        // If the user entered text and they're not on the search tab, switch them to it.
+        if ((searchText.length === 0 && nextProps.searchText.length > 0) &&
+            nextProps.currentTab !== 'search'){
+            this.changeTab('search', 'Search');
+        // If the user wiped the search text and we're on the search tab, load the previous tab.
+        } else if ((searchText.length > 0 && nextProps.searchText.length === 0) &&
+                    currentTab === 'search'){
+            this.changeTab(previousTab, previousTabTitle);
+        }
+    },
+
     changeTitleDisplay(title){
         const { dispatch } = this.props;
         dispatch(EmojiSelectionChangeTitleDisplay(title));
@@ -35,7 +55,10 @@ export const EmojiSelector = React.createClass({
     },
 
     selectEmoji(shortname, path){
-        console.log('Emoji selected: ', shortname, path);
+        const { handleEmoji } = this.props;
+        if (shortname && path){
+            handleEmoji(shortname, path);
+        }
     },
 
     render(){
@@ -48,7 +71,6 @@ export const EmojiSelector = React.createClass({
                 transitionEnter={ false }
                 transitionLeave={ false }>
                 <div className="emoji-selector">
-                    <EmojiSelectorTitle />
                     <EmojiSelectorTabs
                         onMouseEnter={ this.changeTitleDisplay }
                         onMouseLeave={ this.clearTitleDisplay }
@@ -58,6 +80,7 @@ export const EmojiSelector = React.createClass({
                         onMouseEnter={ this.changeTitleDisplay }
                         onMouseLeave={ this.clearTitleDisplay }
                         onClick={ this.selectEmoji } />
+                    <EmojiSelectorTitle />
                 </div>
             </ReactCSSTransitionGroup>
         );
@@ -66,6 +89,10 @@ export const EmojiSelector = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        currentTabTitle: state.emojiSelector.currentTabTitle
+        searchText: state.emojiSelector.searchText,
+        currentTab: state.emojiSelector.currentTab,
+        previousTab: state.emojiSelector.previousTab,
+        currentTabTitle: state.emojiSelector.currentTabTitle,
+        previousTabTitle: state.emojiSelector.previousTabTitle
     };
 })(EmojiSelector);

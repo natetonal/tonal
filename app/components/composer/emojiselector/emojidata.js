@@ -49,6 +49,39 @@ export const tabsArray = [
     }
 ];
 
+export const skinToneArray = [
+    {
+        name: 'default',
+        title: 'No Modifier',
+        shortname: ':tone1:'
+    },
+    {
+        name: 'tone1',
+        title: 'Skin Tone Modifier 1',
+        shortname: ':tone1:'
+    },
+    {
+        name: 'tone2',
+        title: 'Skin Tone Modifier 2',
+        shortname: ':tone2:'
+    },
+    {
+        name: 'tone3',
+        title: 'Skin Tone Modifier 3',
+        shortname: ':tone3:'
+    },
+    {
+        name: 'tone4',
+        title: 'Skin Tone Modifier 4',
+        shortname: ':tone4:'
+    },
+    {
+        name: 'tone5',
+        title: 'Skin Tone Modifier 5',
+        shortname: ':tone5:'
+    }
+];
+
 export const getImageFromValue = value => {
     const imgPath = emojione.imagePathPNG;
     const imgCode = value.unicode;
@@ -89,6 +122,8 @@ export const getPathFromShortname = shortname => {
 
 export const getEmojiFromSearchText = searchText => {
     const emoji = [];
+    if (!searchText || searchText.length === 0){ return emoji; }
+
     Object.keys(emojiJSON).forEach(key => {
         const value = emojiJSON[key];
         const regex = new RegExp(searchText, 'gi');
@@ -109,30 +144,66 @@ export const getEmojiFromSearchText = searchText => {
     return emoji;
 };
 
-export const getEmojiFromCategoryAndSearchText = (category, searchText) => {
+const matchSearchText = (emoji, searchText = '') => {
+    if (!searchText || searchText.length === 0){ return true; }
+
+    const regex = new RegExp(searchText, 'gi');
+    let match = regex.test(emoji.shortname);
+    if (!match){
+        emoji.keywords.forEach(keyword => {
+            if (regex.test(keyword)){
+                match = true;
+            }
+        });
+    }
+
+    return match;
+};
+
+const matchModifier = (emoji, category, modifier = 'default') => {
+
+    if (category !== 'people' && category !== 'activity'){ return true; }
+
+    if (modifier === 'default'){
+        const tone = '_tone';
+        const regex = new RegExp(tone, 'gi');
+        if (regex.test(emoji.shortname)){
+            return false;
+        }
+        return true;
+    }
+
+    const regex = new RegExp(modifier, 'gi');
+    if (regex.test(emoji.shortname)){
+        return true;
+    }
+
+    return false;
+};
+
+export const getEmoji = (category = 'people', searchText = '', modifier = 'default') => {
     let emoji = [];
     if (category !== 'search'){
         Object.keys(emojiJSON).forEach(key => {
             const value = emojiJSON[key];
-            if (category === value.category){
-                const regex = new RegExp(searchText, 'gi');
-                let match = regex.test(value.shortname);
-                if (!match){
-                    value.keywords.forEach(keyword => {
-                        if (regex.test(keyword)){
-                            match = true;
-                        }
-                    });
-                }
-
-                if (match){
-                    emoji.push(getImageFromValue(value));
-                }
+            if (category === value.category &&
+                matchSearchText(value, searchText) &&
+                matchModifier(value, category, modifier)){
+                emoji.push(getImageFromValue(value));
             }
         });
     } else {
-        emoji = this.getEmojiFromSearchText(searchText);
+        emoji = getEmojiFromSearchText(searchText);
     }
 
     return emoji;
+};
+
+export const onlyPaths = emojiArray => {
+    const paths = [];
+    emojiArray.forEach(emoji => {
+        paths.push(emoji.path);
+    });
+
+    return paths;
 };

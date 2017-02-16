@@ -57,6 +57,7 @@
     text-transform: uppercase;
     color: rgba($white, 0.85);
     letter-spacing: .15em;
+    cursor: pointer;
     @include transition(all 0.2s);
 
     .fa{

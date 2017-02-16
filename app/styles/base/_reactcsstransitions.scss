@@ -1,0 +1,10 @@
+.smooth-popin-appear {
+    opacity: 0.01;
+    @include transform(scale(0.9));
+}
+
+.smooth-popin-appear.smooth-popin-appear-active {
+    opacity: 1;
+    @include transform(scale(1));
+    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+}

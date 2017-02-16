@@ -310,6 +310,15 @@ export const createUserWithFacebookAuth = () => {
     });
 };
 
+// Composer actions:
+
+export const composerChangeMenu = menu => {
+    return {
+        type: 'COM_CHANGE_MENU',
+        menu
+    };
+};
+
 // EmojiSelection actions:
 
 export const EmojiSelectionChangeTab = tab => {
@@ -337,5 +346,12 @@ export const EmojiSelectionSearchText = searchText => {
     return {
         type: 'ES_SEARCH_TEXT',
         searchText
+    };
+};
+
+export const EmojiSelectionModifySkinTone = skinTone => {
+    return {
+        type: 'ES_MODIFY_SKIN_TONE',
+        skinTone
     };
 };
