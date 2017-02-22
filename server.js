@@ -30,9 +30,7 @@ const app = new WebpackDevServer(webpack(webpackConfig), {
 app.use('/favicon.ico',
 express.static(path.join(__dirname, '[route/to/favicon]')));
 
-app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'));
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
     console.log('Webpack Dev server is up on port ' + PORT);
