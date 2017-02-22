@@ -8,6 +8,7 @@ import {
     errorsReducer,
     userReducer,
     emojiSelectorReducer,
+    giphySelectorReducer,
     composerReducer
 } from 'reducers';
 import DevTools from '../containers/DevTools';
@@ -33,7 +34,8 @@ const reducer = combineReducers({
     errors: errorsReducer,
     user: userReducer,
     composer: composerReducer,
-    emojiSelector: emojiSelectorReducer
+    emojiSelector: emojiSelectorReducer,
+    giphySelector: giphySelectorReducer
 });
 
 export default function configure(initialState) {

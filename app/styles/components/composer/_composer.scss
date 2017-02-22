@@ -57,6 +57,12 @@ $composer-font-size: 20px;
             color: $lightblue;
             @include transition(0.2s all);
         }
+
+        &.selected{
+            border: 1px solid $lightgreen;
+            color: $lightgreen;
+            @include transition(0.2s all);
+        }
     }
 }
 

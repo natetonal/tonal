@@ -1,8 +1,174 @@
-.sticker-selector{
+.giphy-selector{
     position: absolute;
-    width: 375px;
-    background: #fefefe;
+    width: 350px;
+    background: $light-bg;
     z-index: 1;
-    border: 1px solid #ccc;
+    border: 1px solid $light-gray;
     box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+}
+
+.giphy-selector-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    height: 235px;
+    overflow-y: scroll;
+    padding: 5px;
+    background: $light-bg;
+    color: #aaa;
+}
+
+.giphy-item {
+    height: 75px;
+    width: 75px;
+    display: inline-flex;
+    align-content: center;
+    margin: 4px;
+    background: darken($white, 10%);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    @include transition(0.2s all);
+
+    img {
+        @include transform(scale(1));
+        @include transition(0.2s all cubic-bezier(.27,1.27,.48,.56));
+    }
+
+    &:hover{
+        background: $white;
+        box-shadow: 0 0 0 2px $alert-info;
+        @include transition(0.2s background, box-shadow);
+
+        img {
+            @include transform(scale(1.3));
+            @include transition(0.2s all cubic-bezier(.27,1.27,.48,.56));
+        }
+    }
+}
+
+.giphy-selector-search{
+    background: $light-bg;
+}
+
+
+.giphy-selector-search-clear{
+    position: absolute;
+    right: 0;
+    padding-right: 10px;
+    padding-top: 10px;
+    cursor: pointer;
+
+    .fa{
+        color: $lightgray1
+    }
+
+    &:hover{
+        .fa{
+            color: $alert-error;
+            @include transition(color 0.2s);
+        }
+    }
+}
+
+.giphy-selector-search-button{
+    position: absolute;
+    left: 0;
+    padding-left: 10px;
+    padding-top: 11px;
+    cursor: pointer;
+
+    .fa{
+        color: $lightgray1
+    }
+
+    &:hover{
+        .fa{
+            color: $blue;
+            @include transition(color 0.2s);
+        }
+    }
+}
+
+.giphy-selector-search-input {
+    margin-bottom: 0;
+    text-indent: 25px;
+}
+
+.giphy-placeholder {
+    color: #aaa;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.giphy-placeholder-text {
+    padding-left: 5px;
+}
+
+.giphy-selector-tabs {
+    background: $dark-bg;
+    cursor: pointer;
+    border-bottom: 1px solid #555;
+    box-shadow: 0 0 2px 2px rgba(0,0,0,0.4);
+
+    .giphy-selector-tab {
+        display: inline-block;
+        padding: 10px 15px;
+
+        .giphy-selector-tab-name {
+            text-transform: capitalize;
+            font-size: 12px;
+            color: #ddd;
+        }
+
+        .fa{
+            display: block;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        &:last-child{
+            float: right;
+        }
+
+        &:hover{
+            .giphy-selector-tab-name,
+            .fa {
+                color: $lightblue;
+            }
+        }
+
+        &.selected{
+            cursor: auto;
+            background: $light-bg;
+            color: $dark-text;
+
+            .giphy-selector-tab-name {
+                color: $dark-text;
+            }
+
+            &:hover{
+                .giphy-selector-tab-name,
+                .fa {
+                    color: $dark-text;
+                }
+            }
+        }
+    }
+}
+
+@include breakpoint(medium up) {
+    .giphy-selector{
+        width: 500px;
+    }
+
+    .giphy-item {
+        height: 100px;
+        width: 100px;
+        margin: 10px;
+    }
 }

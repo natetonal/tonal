@@ -6,6 +6,17 @@ import axios from 'axios';
 
 const facebookRootURI = 'https://graph.facebook.com';
 
+// REMEMBER - you're using giphy dev mode. Get API KEY BEFORE DEPLOYMENT!
+const giphyURI = {
+    default: 'http://api.giphy.com/v1/stickers/trending',
+    stickers_trending: 'http://api.giphy.com/v1/stickers/trending',
+    stickers_search: 'http://api.giphy.com/v1/stickers/search',
+    stickers_random: 'http://api.giphy.com/v1/stickers/random',
+    gifs_trending: 'http://api.giphy.com/v1/gifs/trending',
+    gifs_search: 'http://api.giphy.com/v1/gifs/search',
+    gifs_random: 'http://api.giphy.com/v1/gifs/random',
+};
+
 export const login = uid => {
     return {
         type: 'LOGIN',
@@ -312,7 +323,7 @@ export const createUserWithFacebookAuth = () => {
 
 // Composer actions:
 
-export const composerChangeMenu = menu => {
+export const composerChangeMenu = (menu = '') => {
     return {
         type: 'COM_CHANGE_MENU',
         menu
@@ -354,4 +365,77 @@ export const EmojiSelectionModifySkinTone = skinTone => {
         type: 'ES_MODIFY_SKIN_TONE',
         skinTone
     };
+};
+
+
+// StickerSelection actions
+
+export const GiphySelectionSearchText = searchText => {
+    return {
+        type: 'GIPHY_SEARCH_TEXT',
+        searchText
+    };
+};
+
+export const GiphySelectionSwitchTabs = tab => {
+    return {
+        type: 'GIPHY_SWITCH_TABS',
+        tab
+    };
+};
+
+export const GiphySelectionReset = () => {
+    return {
+        type: 'GIPHY_RESET'
+    };
+};
+
+export const GiphySelectionFetchImages = (mode, searchText) => {
+
+    // Test API for Giphy. Get your own!!
+    const api_key = 'dc6zaTOxFJmzC';
+
+    // The type of image to pull
+    // API ref: https://github.com/Giphy/GiphyAPI
+    const imgType = 'fixed_width_small';
+
+    // Modes should match the keys in the giphyURI object
+    const getURI = giphyURI[mode] || giphyURI.default;
+
+    return ((dispatch, getState) => {
+
+        const limit = getState().giphySelector.imgLimit;
+        const offset = getState().giphySelector.offset;
+        const images = getState().giphySelector.images;
+        const tab = getState().giphySelector.currentTab;
+        const q = searchText;
+
+        const normParams = {
+            api_key,
+            limit,
+            offset
+        };
+
+        const params = tab === 'search' ? { ...normParams, q } : normParams;
+
+        dispatch({ type: 'GIPHY_STATUS_FETCHING' });
+        axios.get(getURI, { params })
+        .then(response => {
+
+            const { data } = response.data;
+
+            data.forEach(item => {
+                images.push(item.images[imgType].url);
+            });
+
+            dispatch({
+                type: 'GIPHY_STATUS_SUCCESS',
+                offset: limit + offset,
+                images
+            });
+        })
+        .catch(error => {
+            dispatch({ type: 'GIPHY_STATUS_FAILURE' });
+        });
+    });
 };
