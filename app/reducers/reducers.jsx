@@ -121,7 +121,8 @@ export const userReducer = (state = initialUserState, action) => {
 };
 
 const initialComposerState = {
-    currentMenu: ''
+    currentMenu: '',
+    previewImage: ''
 };
 
 export const composerReducer = (state = initialComposerState, action) => {
@@ -130,6 +131,11 @@ export const composerReducer = (state = initialComposerState, action) => {
             return {
                 ...state,
                 currentMenu: action.menu
+            };
+        case 'COM_PREVIEW_IMAGE':
+            return {
+                ...state,
+                previewImage: action.image
             };
         default:
             return state;
@@ -222,13 +228,19 @@ export const giphySelectorReducer = (state = initialGiphySelectorState, action) 
                 offset: 0,
                 currentTab: action.tab
             };
-        case 'GIPHY_RESET':
+        case 'GIPHY_RESET_STATE':
             return {
                 ...state,
                 status: 'default',
                 currentTab: 'trending',
                 images: [],
                 searchText: '',
+                offset: 0
+            };
+        case 'GIPHY_RESET_IMAGES':
+            return {
+                ...state,
+                images: [],
                 offset: 0
             };
         default:

@@ -1,10 +1,32 @@
 .smooth-popin-appear {
     opacity: 0.01;
     @include transform(scale(0.9));
+
+    &.smooth-popin-appear-active {
+        opacity: 1;
+        @include transform(scale(1));
+        @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+    }
 }
 
-.smooth-popin-appear.smooth-popin-appear-active {
-    opacity: 1;
-    @include transform(scale(1));
-    @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+.fade-and-grow-appear {
+    opacity: 0.01;
+    @include transform(scaleY(0));
+
+    &.fade-and-grow-appear-active {
+        opacity: 1;
+        @include transform(scaleY(1));
+        @include transition(all 200ms cubic-bezier(0.095, 0.995, 0.040, 1.005));
+    }
+}
+
+.fade-and-grow-leave{
+	opacity: 1;
+    @include transform(scaleY(1));
+
+	&.fade-and-grow-leave-active{
+		opacity: 0;
+        @include transform(scaleY(0));
+		@include transition(all 200ms cubic-bezier(0.095, 0.995, 0.040, 1.005));
+	}
 }

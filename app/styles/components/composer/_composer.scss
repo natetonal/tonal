@@ -6,7 +6,6 @@ $composer-font-size: 20px;
     cursor: text;
     min-height: 100px;
     max-height: 200px;
-    padding: 10px;
     line-height: 1.2;
     letter-spacing: 0.1px;
     font-size: $composer-font-size;
@@ -34,6 +33,7 @@ $composer-font-size: 20px;
     font-size: $composer-font-size;
     font-family: $main-font;
     color: #333;
+    padding: 10px;
 }
 
 .composer-controls {
@@ -74,9 +74,63 @@ $composer-font-size: 20px;
     color: $light-gray;
 }
 
-.composer-emoji {
+.composer-emoji,
+.emojione {
     height: $composer-font-size;
     width: $composer-font-size;
+}
+
+.composer-sticker {
+    display: block;
+}
+
+.composer-image-previewer {
+    display: block;
+    text-align: center;
+    max-height: 125px;
+    overflow: scroll;
+    background: #eaeaea;
+    padding: 10px 0 0;
+    border-bottom: 1px solid #ccc;
+    @include transition(0.2s all);
+
+    &.warning-light{
+        background: lighten($alert-error, 29%);
+        @include transition(0.2s all);
+    }
+}
+
+.composer-image-previewer-label {
+    position: absolute;
+    font-size: 10px;
+    text-indent: 10px;
+    letter-spacing: 1px;
+    color: #aaa;
+    @include transition(0.2s all);
+
+    &.warning-light{
+        color: $alert-error;
+        @include transition(0.2s all);
+    }
+}
+
+.composer-image-previewer-clear {
+    position: absolute;
+    right: 20px;
+    margin-top: -5px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #bbb;
+
+    &:hover{
+        color: $alert-error;
+        @include transition(0.2s all);
+    }
+}
+
+.composer-image-preview-wrapper {
+    width: 50%;
+    margin: 0 auto;
 }
 
 .composer-hashtag {

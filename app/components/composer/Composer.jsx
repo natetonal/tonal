@@ -4,14 +4,18 @@ import * as Redux from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
 import urlRegex from 'superhuman-url-regex';
+import { shortnameToImage } from 'emojione';
+import {
+    composerChangeMenu,
+    composerSetPreviewImage
+ } from 'actions';
 
 import Medium from './medium';
 import EmojiSelector from './emojiselector/EmojiSelector';
 import GiphySelector from './giphyselector/GiphySelector';
+import ComposerImagePreviewer from './ComposerImagePreviewer';
 
-import { composerChangeMenu } from 'actions';
-
-// You can add new entity types here.
+// You can add new entity types here. It's best to stick with span tags.
 const entityTypes = [
     {
         name: 'link',
@@ -72,7 +76,7 @@ export const Composer = React.createClass({
     componentDidMount(){
         this.mediumSettings = {
             element: this.composer,
-            mode: Medium.richMode,
+            mode: Medium.partialMode,
             tags: null,
             autofocus: true,
             attributes: null,
@@ -86,7 +90,22 @@ export const Composer = React.createClass({
         this.medium = new Medium(this.mediumSettings);
     },
 
-    handleMention(evt, element){
+    handlePaste(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        const pos = select(this.composer).end;
+        const clipboardData = evt.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+
+        select(this.composer, { start: pos });
+        this.medium.insertHtml(shortnameToImage(pastedData));
+        this.redecorateContent();
+    },
+
+    handleDrop(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
     },
 
     handleFocus(){
@@ -107,26 +126,15 @@ export const Composer = React.createClass({
                 this.medium.value(textContent);
                 select(this.composer, { start: pos });
             } else {
-                const newVal = this.decorateEntities();
-                const pos = select(this.composer);
-                this.medium.value(`${ newVal }`);
-                select(this.composer, pos);
+                this.redecorateContent();
             }
         }
-    },
-
-    noRepeats(){
-
     },
 
     handleInsertGiphy(path){
         const { dispatch } = this.props;
         dispatch(composerChangeMenu());
-        this.medium.focus();
-        if (this.pos && !this.pos.atStart) {
-            select(this.composer, this.pos);
-        }
-        this.medium.insertHtml(`&nbsp;<img class="composer-sticker" src=${ path } alt=${ path } />&nbsp;`);
+        dispatch(composerSetPreviewImage(path));
     },
 
     handleInsertEmoji(shortname, path){
@@ -139,13 +147,40 @@ export const Composer = React.createClass({
         this.medium.insertHtml(`&nbsp;<img class="composer-emoji" src=${ path } alt=${ shortname } />&nbsp;`);
     },
 
-    // refactor this shit.
     handleControl(name, evt){
         evt.preventDefault();
         this.pos = select(this.composer);
         const { dispatch, currentMenu } = this.props;
         const menu = currentMenu === name ? '' : name;
         dispatch(composerChangeMenu(menu));
+    },
+
+    // Strips down the current innerHTML value's style decorators
+    decorateEntities(){
+        const value = this.stripPrevTags();
+        let decoratedText = value;
+        entityTypes.forEach(entity => {
+            const { regex, className, tag } = entity;
+            if (decoratedText.match(regex)){
+                let checkArray;
+                let adjIndex = 0;
+                const newVal = decoratedText;
+                while ((checkArray = regex.exec(newVal)) !== null){
+                    const word = checkArray[0];
+                    const index = checkArray.index + adjIndex;
+                    if (!this.shouldIgnoreWord(word)){
+                        const newStr = this.buildTag(tag, word, className);
+                        const preStr = decoratedText.substr(0, index);
+                        const postStr = decoratedText.substr(index + word.length);
+                        decoratedText = `${ preStr }${ newStr }${ postStr }`;
+                        adjIndex += newStr.length - word.length;
+                    }
+                }
+            }
+        });
+
+
+        return decoratedText;
     },
 
     buildTag(tag, word, className){
@@ -177,32 +212,11 @@ export const Composer = React.createClass({
         return shouldIgnore;
     },
 
-    decorateEntities(){
-        const value = this.stripPrevTags();
-        let decoratedText = value;
-        entityTypes.forEach(entity => {
-            const { regex, className, tag } = entity;
-            if (decoratedText.match(regex)){
-                let checkArray;
-                let adjIndex = 0;
-                const newVal = decoratedText;
-                while ((checkArray = regex.exec(newVal)) !== null){
-                    const word = checkArray[0];
-                    const index = checkArray.index + adjIndex;
-                    if (!this.shouldIgnoreWord(word)){
-                        const newStr = this.buildTag(tag, word, className);
-                        const preStr = decoratedText.substr(0, index);
-                        const postStr = decoratedText.substr(index + word.length);
-                        decoratedText = `${ preStr }${ newStr }${ postStr }`;
-                        adjIndex += newStr.length - word.length;
-                        // decoratedText = decoratedText.replace(re, newStr);
-                    }
-                }
-            }
-        });
-
-
-        return decoratedText;
+    redecorateContent(){
+        const newVal = this.decorateEntities();
+        const pos = select(this.composer);
+        this.medium.value(`${ newVal }`);
+        select(this.composer, pos);
     },
 
     submitPost(){
@@ -239,6 +253,8 @@ export const Composer = React.createClass({
                     component = <EmojiSelector handleEmoji={ this.handleInsertEmoji } />;
                     break;
                 case 'stickers':
+                    component = <GiphySelector handleGiphy={ this.handleInsertGiphy } />;
+                    break;
                 case 'gifs':
                     component = <GiphySelector handleGiphy={ this.handleInsertGiphy } />;
                     break;
@@ -259,10 +275,13 @@ export const Composer = React.createClass({
                     className={ composerClass }
                     onFocus={ this.handleFocus }
                     onBlur={ this.handleBlur }>
+                    <ComposerImagePreviewer />
                     <div
                         id="composer"
                         ref={ element => this.composer = element }
-                        onKeyUp={ this.handleKeyUp } />
+                        onKeyUp={ this.handleKeyUp }
+                        onPaste={ this.handlePaste }
+                        onDrop={ this.handleDrop } />
                 </div>
                 <div className="composer-button">
                     <Button type="submit" btnType="main" btnText="Share it!" onClick={ this.submitPost } />
