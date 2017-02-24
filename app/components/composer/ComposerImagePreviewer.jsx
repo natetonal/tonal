@@ -14,9 +14,15 @@ export const ComposerImagePreviewer = React.createClass({
         dispatch(composerSetPreviewImage());
     },
 
-    warningLight(){
+    warningLightOn(){
         this.setState({
-            warningLightOn: !this.state.warningLightOn
+            warningLightOn: true
+        });
+    },
+
+    warningLightOff(){
+        this.setState({
+            warningLightOn: false
         });
     },
 
@@ -41,8 +47,8 @@ export const ComposerImagePreviewer = React.createClass({
                         </div>
                         <div
                             className="composer-image-previewer-clear"
-                            onMouseEnter={ this.warningLight }
-                            onMouseLeave={ this.warningLight }
+                            onMouseEnter={ this.warningLightOn }
+                            onMouseLeave={ this.warningLightOff }
                             onClick={ this.handleClearImage }>
                             <i className="fa fa-times" aria-hidden="true" />
                         </div>
