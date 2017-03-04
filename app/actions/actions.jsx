@@ -337,6 +337,20 @@ export const composerSetPreviewImage = (image = '') => {
     };
 };
 
+export const composerSetImageUpload = (imageFile = '') => {
+    return {
+        type: 'COM_SET_IMAGE_UPLOAD',
+        imageFile
+    };
+};
+
+export const composerUpdateSuggestionQuery = (query = '') => {
+    return {
+        type: 'COM_UPDATE_SUGGESTION_QUERY',
+        query
+    };
+};
+
 // EmojiSelection actions:
 
 export const EmojiSelectionChangeTab = tab => {
@@ -444,7 +458,6 @@ export const GiphySelectionFetchImages = (mode, searchText) => {
         .then(response => {
 
             const { data } = response.data;
-            console.log('data: ', data);
             if (Array.isArray(data)){
                 data.forEach(item => {
                     images.push(item.images[imgType].url);
@@ -453,7 +466,6 @@ export const GiphySelectionFetchImages = (mode, searchText) => {
                 images.push(data[`${ imgType }${ imgSuffix }`]);
             }
 
-            console.log('images: ', images);
             dispatch({
                 type: 'GIPHY_STATUS_SUCCESS',
                 offset: limit + offset,

@@ -122,7 +122,9 @@ export const userReducer = (state = initialUserState, action) => {
 
 const initialComposerState = {
     currentMenu: '',
-    previewImage: ''
+    previewImage: '',
+    imageFile: '',
+    query: ''
 };
 
 export const composerReducer = (state = initialComposerState, action) => {
@@ -136,6 +138,16 @@ export const composerReducer = (state = initialComposerState, action) => {
             return {
                 ...state,
                 previewImage: action.image
+            };
+        case 'COM_SET_IMAGE_UPLOAD':
+            return {
+                ...state,
+                imageFile: action.imageFile
+            };
+        case 'COM_UPDATE_SUGGESTION_QUERY':
+            return {
+                ...state,
+                query: action.query
             };
         default:
             return state;

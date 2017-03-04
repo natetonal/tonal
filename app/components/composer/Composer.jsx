@@ -7,31 +7,41 @@ import urlRegex from 'superhuman-url-regex';
 import { shortnameToImage } from 'emojione';
 import {
     composerChangeMenu,
-    composerSetPreviewImage
+    composerSetPreviewImage,
+    composerSetImageUpload,
+    composerUpdateSuggestionQuery
  } from 'actions';
 
 import Medium from './medium';
+import MentionSuggestions from './mentionsuggestions/MentionSuggestions';
 import EmojiSelector from './emojiselector/EmojiSelector';
 import GiphySelector from './giphyselector/GiphySelector';
 import ComposerImagePreviewer from './ComposerImagePreviewer';
+import ComposerImageUploader from './ComposerImageUploader';
+
+// Regex strings
+const stripHTML = /<\/?(span|font|p)[^>]*>/gi;
+const linkRegex = urlRegex({ liberal: true });
+const mentionRegex = /(^|\B)@\b([_-a-zA-Z0-9._]{2,25})\b/ig;
+const hashtagRegex = /(^|\B)#(?![-0-9_]+\b)([-a-zA-Z0-9_]{1,30})(\b|\r)/g;
 
 // You can add new entity types here. It's best to stick with span tags.
 const entityTypes = [
     {
         name: 'link',
-        regex: urlRegex({ liberal: true }),
+        regex: linkRegex,
         className: 'composer-link',
         tag: 'span'
     },
     {
         name: 'mention',
-        regex: /(^|\B)@\b([-a-zA-Z0-9._]{3,25})\b/ig,
+        regex: mentionRegex,
         className: 'composer-mention',
         tag: 'span'
     },
     {
         name: 'hashtag',
-        regex: /(^|\B)#\b([-a-zA-Z0-9._]{1,30})(\b|\r)/ig,
+        regex: hashtagRegex,
         className: 'composer-hashtag',
         tag: 'span'
     }
@@ -50,6 +60,10 @@ const controlBtns = [
     {
         name: 'gifs',
         icon: 'fa fa-rocket'
+    },
+    {
+        name: 'image',
+        icon: 'fa fa-picture-o'
     }
 ];
 
@@ -59,9 +73,6 @@ const regexIgnoreList = [
     'giphy.com/media/'
 ];
 
-// This dumps styling tags.
-const stripHTML = /<\/?(span|font|p)[^>]*>/gi;
-
 export const Composer = React.createClass({
 
     getInitialState(){
@@ -69,6 +80,7 @@ export const Composer = React.createClass({
             focused: false,
             showEmojiSelector: false,
             showStickerSelector: false,
+            inputHistory: [],
             pos: ''
         };
     },
@@ -86,8 +98,41 @@ export const Composer = React.createClass({
         this.composer.focus();
     },
 
+    componentDidUpdate(){
+        this.composer.focus();
+    },
+
     resetMedium(){
         this.medium = new Medium(this.mediumSettings);
+    },
+
+    checkForMentions(textContent){
+
+        const { dispatch } = this.props;
+        let word = '';
+        if (textContent.match(mentionRegex)){
+            let checkArray;
+            while ((checkArray = mentionRegex.exec(textContent)) !== null){
+                const thisWord = checkArray[0];
+                const startIndex = checkArray.index;
+                const endIndex = startIndex + thisWord.length;
+                const pos = select(this.composer).end;
+                if (pos >= startIndex && pos <= endIndex){
+                    word = thisWord;
+                    console.log('@@@@@@@@@@ OPEN SUGGESTION FOR ', thisWord);
+                }
+            }
+        }
+        dispatch(composerUpdateSuggestionQuery(word));
+    },
+
+    updateInputHistory(newInput){
+        const { inputHistory } = this.state;
+        inputHistory.push(newInput);
+        if (inputHistory.length > 10){
+            inputHistory.shift();
+        }
+        this.setState({ inputHistory });
     },
 
     handlePaste(evt){
@@ -101,6 +146,7 @@ export const Composer = React.createClass({
         select(this.composer, { start: pos });
         this.medium.insertHtml(shortnameToImage(pastedData));
         this.redecorateContent();
+        this.checkForMentions(this.composer.textContent);
     },
 
     handleDrop(evt){
@@ -116,7 +162,7 @@ export const Composer = React.createClass({
         this.setState({ focused: false });
     },
 
-    handleKeyUp({ key, target: { textContent } }){
+    handleKeyPress({ key, target: { textContent } }){
         if (key.length === 1){
             if (textContent.length === 0){
                 this.resetMedium();
@@ -131,7 +177,7 @@ export const Composer = React.createClass({
         }
     },
 
-    handleInsertGiphy(path){
+    handleInsertImage(path){
         const { dispatch } = this.props;
         dispatch(composerChangeMenu());
         dispatch(composerSetPreviewImage(path));
@@ -145,6 +191,12 @@ export const Composer = React.createClass({
             select(this.composer, this.pos);
         }
         this.medium.insertHtml(`&nbsp;<img class="composer-emoji" src=${ path } alt=${ shortname } />&nbsp;`);
+    },
+
+    handleUploadFile(file){
+        console.log('File received: ', file);
+        const { dispatch } = this.props;
+        dispatch(composerSetImageUpload(file));
     },
 
     handleControl(name, evt){
@@ -226,7 +278,7 @@ export const Composer = React.createClass({
     render(){
 
         const { focused } = this.state;
-        const { currentMenu } = this.props;
+        const { currentMenu, query } = this.props;
         const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' }`;
 
         const btns = () => {
@@ -238,6 +290,9 @@ export const Composer = React.createClass({
                         key={ btn.name }
                         className={ `composer-control ${ selected }` }
                         onMouseDown={ evt => this.handleControl(btn.name, evt) }>
+                        <div className="composer-control-label">
+                            { btn.name }
+                        </div>
                         <i
                             className={ btn.icon }
                             aria-hidden="true" />
@@ -253,10 +308,17 @@ export const Composer = React.createClass({
                     component = <EmojiSelector handleEmoji={ this.handleInsertEmoji } />;
                     break;
                 case 'stickers':
-                    component = <GiphySelector handleGiphy={ this.handleInsertGiphy } />;
+                    component = <GiphySelector handleGiphy={ this.handleInsertImage } />;
                     break;
                 case 'gifs':
-                    component = <GiphySelector handleGiphy={ this.handleInsertGiphy } />;
+                    component = <GiphySelector handleGiphy={ this.handleInsertImage } />;
+                    break;
+                case 'image':
+                    component = (
+                        <ComposerImageUploader
+                            handleImage={ this.handleInsertImage }
+                            handleFile={ this.handleUploadFile } />
+                    );
                     break;
                 default:
                     return '';
@@ -265,12 +327,21 @@ export const Composer = React.createClass({
             return component;
         };
 
+        const suggestions = () => {
+            console.log('from suggestions(): query - ', query);
+            if (query){
+                return <MentionSuggestions />;
+            }
+            return '';
+        };
+
         return (
             <div className="header-compose-post">
                 <div className="composer-controls">
                     { btns() }
                 </div>
                 { menu() }
+                { suggestions() }
                 <div
                     className={ composerClass }
                     onFocus={ this.handleFocus }
@@ -279,8 +350,9 @@ export const Composer = React.createClass({
                     <div
                         id="composer"
                         ref={ element => this.composer = element }
-                        onKeyUp={ this.handleKeyUp }
-                        onPaste={ this.handlePaste }
+                        onKeyUp={ e => this.handleKeyPress(e) }
+                        onInput={ e => this.checkForMentions(e.target.textContent) }
+                        onPaste={ e => this.handlePaste(e) }
                         onDrop={ this.handleDrop } />
                 </div>
                 <div className="composer-button">
@@ -293,6 +365,7 @@ export const Composer = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        currentMenu: state.composer.currentMenu
+        currentMenu: state.composer.currentMenu,
+        query: state.composer.query
     };
 })(Composer);
