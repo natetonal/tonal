@@ -1,7 +1,7 @@
 .mention-suggestions{
     position: absolute;
-    padding: 16px;
     max-width: 300px;
+    max-height: 300px;
     overflow-x: hidden;
     text-overflow: ellipsis;
     background: hsla(0,0%,100%,.95);
@@ -10,4 +10,53 @@
     margin-top: 10px;
     margin-left: 10px;
     box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+}
+
+.mention-suggestions-result {
+    display: flex;
+    cursor: pointer;
+    @include transition(0.2s all cubic-bezier(0.230, 1.000, 0.320, 1.000));
+
+    .mention-suggestions-avatar {
+        display: inline-flex;
+        overflow: hidden;
+        height: 50px;
+        width: 50px;
+
+        img{
+            @include transform(scale(1));
+            @include transition(0.5s all cubic-bezier(0.230, 1.000, 0.320, 1.000));
+        }
+    }
+
+    .mention-suggestions-highlight {
+        background: $alert-warning;
+        font-weight: 400;
+        color: black;
+        border-radius: 2px;
+    }
+
+    .mention-suggestions-info {
+        color: #444;
+        display: inline-flex;
+        justify-content: center;
+        padding: 0 15px;
+        flex-direction: column;
+
+        .mention-suggestions-username {
+            font-size: 12px;
+            padding-top: 2px;
+            color: #999;
+        }
+    }
+
+    &:hover{
+        background: $lightblue;
+        @include transition(0.2s all cubic-bezier(0.230, 1.000, 0.320, 1.000));
+
+        .mention-suggestions-avatar img{
+            @include transform(scale(1.2));
+            @include transition(0.5s all cubic-bezier(0.230, 1.000, 0.320, 1.000));
+        }
+    }
 }

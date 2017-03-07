@@ -35,7 +35,7 @@ const entityTypes = [
     },
     {
         name: 'mention',
-        regex: mentionRegex,
+        regex: ['grab from state'],
         className: 'composer-mention',
         tag: 'span'
     },
@@ -81,6 +81,7 @@ export const Composer = React.createClass({
             showEmojiSelector: false,
             showStickerSelector: false,
             inputHistory: [],
+            mentions: [],
             pos: ''
         };
     },
@@ -106,10 +107,12 @@ export const Composer = React.createClass({
         this.medium = new Medium(this.mediumSettings);
     },
 
-    checkForMentions(textContent){
+    checkMentions(textContent){
 
         const { dispatch } = this.props;
         let word = '';
+
+        // See if there are any new mentions coming in:
         if (textContent.match(mentionRegex)){
             let checkArray;
             while ((checkArray = mentionRegex.exec(textContent)) !== null){
@@ -118,12 +121,43 @@ export const Composer = React.createClass({
                 const endIndex = startIndex + thisWord.length;
                 const pos = select(this.composer).end;
                 if (pos >= startIndex && pos <= endIndex){
-                    word = thisWord;
-                    console.log('@@@@@@@@@@ OPEN SUGGESTION FOR ', thisWord);
+                    word = thisWord.substr(1);
                 }
             }
         }
         dispatch(composerUpdateSuggestionQuery(word));
+        this.checkIfMentionsRemoved(textContent);
+    },
+
+    checkIfMentionsRemoved(textContent){
+        const { mentions } = this.state;
+        const updatedMentions = [];
+        if (mentions){
+            mentions.forEach(mention => {
+                if (textContent.match(mention.fullName)){
+                    updatedMentions.push(mention);
+                }
+            });
+        }
+        this.setState({ mentions: updatedMentions });
+    },
+
+    handleMention(user, query){
+        console.log(`user: ${ user.fullName }, query: @${ query }, state query: ${ this.props.query }`);
+        const textContent = this.composer.textContent;
+        const word = `@${ query }`;
+        if (textContent.match(word)){
+            const { mentions } = this.state;
+            mentions.push(user);
+            this.setState({ mentions });
+            let innerHTML = this.medium.value();
+            let updatedHTML = innerHTML.replace(word, `${ user.fullName }&nbsp;`);
+            let decoratedHTML = this.decorateEntities(updatedHTML);
+            const pos = select(this.composer).end;
+            this.medium.value(decoratedHTML);
+            select(this.composer, { start: pos + user.fullName.length });
+        }
+        this.clearMenus();
     },
 
     updateInputHistory(newInput){
@@ -146,7 +180,7 @@ export const Composer = React.createClass({
         select(this.composer, { start: pos });
         this.medium.insertHtml(shortnameToImage(pastedData));
         this.redecorateContent();
-        this.checkForMentions(this.composer.textContent);
+        this.checkMentions(this.composer.textContent);
     },
 
     handleDrop(evt){
@@ -179,13 +213,12 @@ export const Composer = React.createClass({
 
     handleInsertImage(path){
         const { dispatch } = this.props;
-        dispatch(composerChangeMenu());
+        this.clearMenus();
         dispatch(composerSetPreviewImage(path));
     },
 
     handleInsertEmoji(shortname, path){
-        const { dispatch } = this.props;
-        dispatch(composerChangeMenu());
+        this.clearMenus();
         this.medium.focus();
         if (this.pos && !this.pos.atStart) {
             select(this.composer, this.pos);
@@ -207,13 +240,30 @@ export const Composer = React.createClass({
         dispatch(composerChangeMenu(menu));
     },
 
+    clearMenus(){
+        const { dispatch } = this.props;
+        dispatch(composerChangeMenu());
+        dispatch(composerUpdateSuggestionQuery());
+    },
+
     // Strips down the current innerHTML value's style decorators
-    decorateEntities(){
-        const value = this.stripPrevTags();
+    decorateEntities(val = this.medium.value()){
+        const value = this.stripPrevTags(val);
         let decoratedText = value;
         entityTypes.forEach(entity => {
             const { regex, className, tag } = entity;
-            if (decoratedText.match(regex)){
+            if (Array.isArray(regex)){
+                const { mentions } = this.state;
+                if (mentions){
+                    mentions.forEach(user => {
+                        const index = decoratedText.match(user.fullName).index;
+                        const newStr = `<${ tag } class="${ className }" contenteditable="false">${ user.fullName }</${ tag }>`;
+                        const preStr = decoratedText.substr(0, index);
+                        const postStr = decoratedText.substr(index + user.fullName.length);
+                        decoratedText = `${ preStr }${ newStr }${ postStr }`;
+                    });
+                }
+            } else if (!Array.isArray(regex) && decoratedText.match(regex)){
                 let checkArray;
                 let adjIndex = 0;
                 const newVal = decoratedText;
@@ -221,7 +271,7 @@ export const Composer = React.createClass({
                     const word = checkArray[0];
                     const index = checkArray.index + adjIndex;
                     if (!this.shouldIgnoreWord(word)){
-                        const newStr = this.buildTag(tag, word, className);
+                        const newStr = `<${ tag } class="${ className }">${ word }</${ tag }>`;
                         const preStr = decoratedText.substr(0, index);
                         const postStr = decoratedText.substr(index + word.length);
                         decoratedText = `${ preStr }${ newStr }${ postStr }`;
@@ -231,16 +281,10 @@ export const Composer = React.createClass({
             }
         });
 
-
         return decoratedText;
     },
 
-    buildTag(tag, word, className){
-        return `<${ tag } class="${ className }">${ word }</${ tag }>`;
-    },
-
-    stripPrevTags(){
-        const value = this.medium.value();
+    stripPrevTags(value){
         let newVal = value;
         let checkArray = [];
         while ((checkArray = stripHTML.exec(value)) !== null){
@@ -328,9 +372,8 @@ export const Composer = React.createClass({
         };
 
         const suggestions = () => {
-            console.log('from suggestions(): query - ', query);
             if (query){
-                return <MentionSuggestions />;
+                return <MentionSuggestions handleMention={ this.handleMention } />;
             }
             return '';
         };
@@ -345,13 +388,14 @@ export const Composer = React.createClass({
                 <div
                     className={ composerClass }
                     onFocus={ this.handleFocus }
-                    onBlur={ this.handleBlur }>
+                    onBlur={ this.handleBlur }
+                    onClick={ this.clearMenus }>
                     <ComposerImagePreviewer />
                     <div
                         id="composer"
                         ref={ element => this.composer = element }
                         onKeyUp={ e => this.handleKeyPress(e) }
-                        onInput={ e => this.checkForMentions(e.target.textContent) }
+                        onInput={ e => this.checkMentions(e.target.textContent) }
                         onPaste={ e => this.handlePaste(e) }
                         onDrop={ this.handleDrop } />
                 </div>

@@ -21,6 +21,10 @@ $alert-error: lighten($red, 20%);
 $alert-warning: lighten($yellow, 20%);
 $alert-admin: lighten($orange, 20%);
 
+// Highlighters
+$highlight-hashtag: #d2fffa;
+$highlight-mention: #c8ffdd;
+
 // Layering
 $menu-pusher-zindex: 10000;
 $loginmodal-zindex: 200;
