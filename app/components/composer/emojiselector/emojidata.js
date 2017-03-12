@@ -207,3 +207,15 @@ export const onlyPaths = emojiArray => {
 
     return paths;
 };
+
+export const isEmoji = emojiStr => {
+    let isAnEmoji = false;
+    Object.keys(emojiJSON).forEach(key => {
+        const emoji = emojiJSON[key];
+        if (emoji.shortname === emojiStr){
+            isAnEmoji = true;
+        }
+    });
+
+    return isAnEmoji;
+};

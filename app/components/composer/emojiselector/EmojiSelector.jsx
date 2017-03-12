@@ -7,7 +7,6 @@ import {
     EmojiSelectionChangeTitleDisplay,
 } from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
 import EmojiSelectorTitle from './EmojiSelectorTitle';
 import EmojiSelectorTabs from './EmojiSelectorTabs';
 import EmojiSelectorSearch from './EmojiSelectorSearch';
@@ -55,6 +54,7 @@ export const EmojiSelector = React.createClass({
     },
 
     selectEmoji(shortname, path){
+        console.log('selectEmoji called with ', shortname);
         const { handleEmoji } = this.props;
         if (shortname && path){
             handleEmoji(shortname, path);
