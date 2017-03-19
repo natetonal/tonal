@@ -1526,10 +1526,10 @@
 				// Empty Editor
 				if (text.length < 1 && childCount < 2) {
 					if (el.placeHolderActive) return;
-
-					if (!el.innerHTML.match('<' + s.tags.paragraph)) {
-						el.innerHTML = '';
-					}
+					// if (!el.innerHTML.match('<' + s.tags.paragraph)) {
+					//
+					// 	el.innerHTML = '';
+					// }
 
 					// We need to add placeholders
 					if (s.placeholder.length > 0) {
