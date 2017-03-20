@@ -54,7 +54,6 @@ export const EmojiSelector = React.createClass({
     },
 
     selectEmoji(shortname, path){
-        console.log('selectEmoji called with ', shortname);
         const { handleEmoji } = this.props;
         if (shortname && path){
             handleEmoji(shortname, path);

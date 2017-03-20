@@ -84,7 +84,6 @@ export const MentionSuggestions = React.createClass({
         evt.preventDefault();
         const { handleMention } = this.props;
         handleMention(user, query);
-        console.log('user selected:', user.fullName);
     },
 
     render(){
@@ -96,7 +95,6 @@ export const MentionSuggestions = React.createClass({
             return <div />;
         }
 
-        console.log('selection: ', this.getSelectionCoords());
 
         const renderSyntaxHighlighting = (word, re, className) => {
             if (!word.match(re)){

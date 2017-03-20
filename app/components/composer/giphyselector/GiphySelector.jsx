@@ -26,14 +26,11 @@ export const GiphySelector = React.createClass({
             nextProps.currentTab === 'random' &&
             nextProps.images.length === 1){
             this.selectImage(nextProps.images[0]);
-            console.log('selecting image', nextProps.images[0]);
         }
 
         if (this.props.currentTab !== nextProps.currentTab){
-            console.log('resetting images');
             dispatch(GiphySelectionResetImages());
         } else if (this.props.currentMenu !== nextProps.currentMenu){
-            console.log('resetting state');
             dispatch(GiphySelectionResetState());
         }
     },
@@ -42,7 +39,6 @@ export const GiphySelector = React.createClass({
         if ((prevProps.currentMenu !== this.props.currentMenu ||
             prevProps.currentTab !== this.props.currentTab) &&
             this.props.status !== 'fetching'){
-            console.log('getting more images', this.props);
             this.getImages();
         }
     },

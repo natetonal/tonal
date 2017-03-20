@@ -91,7 +91,6 @@ export const EmojiSelectorContainer = React.createClass({
             );
         }
 
-        console.log('container render called');
         return (
 
             <Preload

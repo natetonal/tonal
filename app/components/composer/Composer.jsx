@@ -72,7 +72,6 @@ const regexIgnoreList = [
     'giphy.com/media/'
 ];
 
-// change 2
 export const Composer = React.createClass({
 
     getInitialState(){
@@ -108,13 +107,11 @@ export const Composer = React.createClass({
     // MASSIVE thank you to YangombiUmpakati at SO for this wonderful solution
     // http://stackoverflow.com/questions/16736680/get-caret-position-in-contenteditable-div-including-tags
     getHTMLCaretPosition() {
-        const { start, end } = select(this.composer);
+        const { start, end } = this.pos;
         const textPosition = Math.max(start, end);
-        console.log('textPosition from getHTMLCaretPosition: ', textPosition);
         if (textPosition === 0) { return 0; }
 
         const htmlContent = this.medium.value();
-        console.log('htmlContent: ', htmlContent);
         const htmlBeginChars = ['&', '<'];
         const htmlEndChars = [';', '>'];
         let textIndex = 0;
@@ -137,13 +134,9 @@ export const Composer = React.createClass({
                     htmlIndex += 1;
                 }
             }
-            console.log('last char: ', htmlContent.charAt(htmlIndex));
             htmlIndex += 1;
             textIndex += 1;
         }
-        console.log('htmlIndex: ', htmlIndex);
-        console.log('textIndex: ', textIndex);
-        console.log('textPosition: ', textPosition);
         return htmlIndex;
     },
 
@@ -247,7 +240,6 @@ export const Composer = React.createClass({
 
         const index = this.getHTMLCaretPosition();
         const textIndex = this.pos.end;
-        console.log(`index: ${ index } textIndex: ${ textIndex }`);
         const clipboardData = evt.clipboardData || window.clipboardData;
         let pastedData;
         if (copiedFromComposer){
@@ -314,9 +306,6 @@ export const Composer = React.createClass({
             }
         }
 
-        console.log('key pressed: ', key);
-        console.log('this.pos: ', this.pos);
-        console.log('select pos: ', select(this.composer));
     },
 
     handleInsertImage(path){
@@ -325,12 +314,12 @@ export const Composer = React.createClass({
         dispatch(composerSetPreviewImage(path));
     },
 
-    handleInsertEmoji(shortname, path){
+    // note: this function is also passed a "path" argument
+    handleInsertEmoji(shortname){
         this.clearMenus();
         this.medium.focus();
         const innerHTML = this.medium.value();
         const index = this.getHTMLCaretPosition();
-        console.log('index from handleInsertEmoji: ', index);
         const preStr = innerHTML.substr(0, index);
         const postStr = innerHTML.substr(index);
         const emojiText = `${ preStr }${ shortname }${ postStr }`;
@@ -378,11 +367,8 @@ export const Composer = React.createClass({
 
         const { className, tag } = entity;
         mentions.forEach(user => {
-            const index = text.match(user.fullName).index;
             const newStr = `<${ tag } class="${ className }" contenteditable="false">${ user.fullName }</${ tag }>`;
-            const preStr = text.substr(0, index);
-            const postStr = text.substr(index + user.fullName.length);
-            text = `${ preStr }${ newStr }${ postStr }`;
+            text = text.replace(new RegExp(user.fullName), newStr);
         });
 
         return text;
@@ -391,20 +377,13 @@ export const Composer = React.createClass({
     decorateLinksAndHashtags(entity, text){
         const { regex, className, tag } = entity;
         if (!text.match(regex)) { return text; }
-
         let checkArray;
-        let adjIndex = 0;
         const newVal = text;
         while ((checkArray = regex.exec(newVal)) !== null){
             const word = checkArray[0];
-            // const index = checkArray.index + adjIndex;
             if (!this.shouldIgnoreWord(word)){
                 const newStr = `<${ tag } class="${ className }">${ word }</${ tag }>`;
                 text = text.replace(new RegExp(word), newStr);
-                // const preStr = text.substr(0, index);
-                // const postStr = text.substr(index + word.length);
-                // text = `${ preStr }${ newStr }${ postStr }`;
-                // adjIndex += newStr.length - word.length;
             }
         }
 
@@ -461,12 +440,37 @@ export const Composer = React.createClass({
 
     redecorateContent(){
         this.pos = select(this.composer);
-        const decoratedText = this.decorateEntities();
-        const checkText = this.checkMax(decoratedText);
-        this.medium.value(checkText);
-        console.log('checkText from RC: ', checkText);
+        const { maxLength } = this.state;
+        let decoratedText = this.decorateEntities();
+        if (this.checkLen(decoratedText) > maxLength){
+            decoratedText = this.checkMax(decoratedText);
+        }
+        this.medium.value(`${ decoratedText.charAt(decoratedText.length - 1) === '>' ? decoratedText + ' ' : decoratedText }`);
         this.medium.focus();
         select(this.composer, this.pos);
+    },
+
+    checkLen(value = this.medium.value()){
+        let charCount = 0; // Relative index while iterating through blocks.
+        let checkArray = [];
+        const replaceChars = ['>', '<', '&', ' '];
+        const escapeChars = ['&gt;', '&lt', '&amp;', '&nbsp;'];
+        while ((checkArray = countChars.exec(value)) !== null){
+            const thisBlock = checkArray[0];
+            if (thisBlock.match(matchImgTag)){
+                charCount += 1;
+            } else {
+                let replaceBlock = thisBlock;
+                if (replaceBlock.match(escapeCharsRegex)){
+                    escapeChars.forEach((char, index) => {
+                        replaceBlock = replaceBlock.replace(new RegExp(char, 'g'), replaceChars[index]);
+                    });
+                }
+                charCount += replaceBlock.length;
+            }
+        }
+
+        return charCount;
     },
 
     checkMax(value){
