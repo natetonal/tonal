@@ -361,6 +361,7 @@ export const Composer = React.createClass({
         return decoratedText;
     },
 
+    //hey 
     decorateMentions(entity, text){
         const { mentions } = this.state;
         if (!mentions){ return text; }
