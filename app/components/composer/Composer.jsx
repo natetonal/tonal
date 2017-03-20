@@ -40,7 +40,7 @@ const matchImgTag = /<\/?(?=img)[^>]*>/gi;
 const matchText = /(\B|^)[^><]+?(?=<|$)/gi;
 const linkRegex = urlRegex({ liberal: true });
 const mentionRegex = /(^|\B)@\b([_-a-zA-Z0-9._]{2,25})\b/gi;
-const hashtagRegex = /(^|\B)#(?![-0-9_]+\b)([-a-zA-Z0-9_]{1,30})(\b|\r)/g;
+const hashtagRegex = /(^|\B)#(?![-0-9_]+\b)([-a-zA-Z0-9_]{1,30})(\b|\r)(?!<)/g;
 const emojiRegex = /:([_-a-zA-Z0-9.]+):(?!")/gi;
 const countChars = /[^><]+?(?=<|$)|<\/?(?=img)[^>]*>/gi;
 const escapeCharsRegex = /&lt;|&gt;|&amp;|&nbsp;/gi;
@@ -381,12 +381,13 @@ export const Composer = React.createClass({
         const newVal = text;
         while ((checkArray = regex.exec(newVal)) !== null){
             const word = checkArray[0];
+            console.log(`decorateLinksAndHashtags / current word is ${ word } at index ${ checkArray[0].index }`);
             if (!this.shouldIgnoreWord(word)){
                 const newStr = `<${ tag } class="${ className }">${ word }</${ tag }>`;
                 text = text.replace(new RegExp(word), newStr);
             }
         }
-
+        console.log('decorateLinksAndHashtags / final output: ', text);
         return text;
     },
 
@@ -446,6 +447,7 @@ export const Composer = React.createClass({
             decoratedText = this.checkMax(decoratedText);
         }
         this.medium.value(`${ decoratedText.charAt(decoratedText.length - 1) === '>' ? decoratedText + ' ' : decoratedText }`);
+        console.log('output: ', this.medium.value());
         this.medium.focus();
         select(this.composer, this.pos);
     },
@@ -481,6 +483,7 @@ export const Composer = React.createClass({
         const replaceChars = ['>', '<', '&', ' '];
         const escapeChars = ['&gt;', '&lt', '&amp;', '&nbsp;'];
         // Check "blocks" - groups of non-html text (user text), or image tags.
+
         while ((checkArray = countChars.exec(value)) !== null){
             // Only continue as long as we're under our max length
             const thisBlock = checkArray[0];
@@ -513,6 +516,8 @@ export const Composer = React.createClass({
                     }
 
                     newVal += replaceBlock;
+                    console.log(`checkMax / replaceBlock: ${ replaceBlock }`);
+                    console.log(`checkMax / newVal: ${ newVal }`);
                 }
             }
         }
