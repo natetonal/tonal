@@ -70,6 +70,7 @@ export const Composer = React.createClass({
     getInitialState(){
         return {
             focused: false,
+            enabled: true,
             mentions: [],
             emoji: [],
             history: [],
@@ -105,9 +106,11 @@ export const Composer = React.createClass({
     getHTMLCaretPosition() {
         const { start, end } = this.pos;
         const textPosition = Math.max(start, end);
+
         if (textPosition === 0) { return 0; }
 
         const htmlContent = this.medium.value();
+        const textContent = this.composer.textContent;
         const htmlBeginChars = ['&', '<'];
         const htmlEndChars = [';', '>'];
         let textIndex = 0;
@@ -115,23 +118,25 @@ export const Composer = React.createClass({
         let insideHtml = false;
 
         while (textIndex < textPosition) {
-
             // check if next character is html and if it is, iterate with htmlIndex to the next non-html character
             while (htmlBeginChars.indexOf(htmlContent.charAt(htmlIndex)) > -1) {
                 // now iterate to the ending char
                 insideHtml = true;
                 while (insideHtml) {
                     if (htmlEndChars.indexOf(htmlContent.charAt(htmlIndex)) > -1) {
-                        // if (htmlContent.charAt(htmlIndex) === ';') {
-                        //     htmlIndex -= 1; // entity is char itself
-                        // }
+                        if (htmlContent.charAt(htmlIndex) === ';') {
+                            htmlIndex -= 1; // entity is char itself
+                        }
                         insideHtml = false;
                     }
                     htmlIndex += 1;
+
                 }
             }
-            htmlIndex += 1;
+
             textIndex += 1;
+            htmlIndex += 1;
+
         }
         return htmlIndex;
     },
@@ -142,7 +147,8 @@ export const Composer = React.createClass({
         const currentPos = this.getHTMLCaretPosition();
         const currentContent = this.medium.value();
         const preStr = currentContent.substr(0, currentPos);
-        return this.checkLen(preStr, ignoreEmoji);
+        const len = this.checkLen(preStr, ignoreEmoji);
+        return len;
     },
 
     // Keep a running history of composer states.
@@ -260,7 +266,7 @@ export const Composer = React.createClass({
         const index = this.getHTMLCaretPosition();
         const textIndex = this.pos.end;
         const clipboardData = evt.clipboardData || window.clipboardData;
-        const pastedData = validator.escape(clipboardData.getData('Text'));
+        const pastedData = validator.blacklist(clipboardData.getData('Text'), '<>&');
         let decoratedData = this.decorateEntities(pastedData);
         if (decoratedData.charAt(decoratedData.length - 1) === '>'){
             decoratedData += '&nbsp;';
@@ -337,12 +343,12 @@ export const Composer = React.createClass({
         this.clearMenus();
         this.medium.focus();
         const innerHTML = this.medium.value();
-        const index = this.getRelativeCaretPosition(true);
+        const index = this.getHTMLCaretPosition();
         const preStr = innerHTML.substr(0, index);
         const postStr = innerHTML.substr(index);
         const emojiText = `${ preStr }${ shortname }${ postStr }`;
         this.medium.value(emojiText);
-        select(this.composer, { start: index + shortname.length });
+        select(this.composer, { start: this.pos.end + shortname.length });
 
         this.redecorateContent();
     },
@@ -506,13 +512,14 @@ export const Composer = React.createClass({
 
     submitPost(){
         event.preventDefault();
+        this.setState({ enabled: !this.state.enabled });
     },
 
     render(){
 
-        const { focused } = this.state;
+        const { focused, enabled } = this.state;
         const { currentMenu, query } = this.props;
-        const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' }`;
+        const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' } ${ enabled ? '' : 'composer-disabled' }`;
 
         const btns = () => {
             return controlBtns.map(btn => {
@@ -567,6 +574,13 @@ export const Composer = React.createClass({
             return '';
         };
 
+        const imagePreviewer = () => {
+            return (
+                <ComposerImagePreviewer
+                    className={ `composer-image-previewer ${ enabled ? '' : 'composer-disabled' }` } />
+            );
+        };
+
         return (
             <div className="header-compose-post">
                 <div className="composer-controls">
@@ -579,7 +593,7 @@ export const Composer = React.createClass({
                     onFocus={ this.handleFocus }
                     onBlur={ this.handleBlur }
                     onClick={ this.clearMenus }>
-                    <ComposerImagePreviewer />
+                    { imagePreviewer() }
                     <div
                         id="composer"
                         ref={ element => this.composer = element }
@@ -587,10 +601,16 @@ export const Composer = React.createClass({
                         onInput={ e => this.checkMentions(e.target.textContent) }
                         onCopy={ this.handleCopy }
                         onPaste={ e => this.handlePaste(e) }
-                        onDrop={ this.handleDrop } />
+                        onDrop={ this.handleDrop }
+                        contentEditable={ enabled } />
                 </div>
                 <div className="composer-button">
-                    <Button type="submit" btnType="main" btnText="Share it!" onClick={ this.submitPost } />
+                    <Button
+                        type="submit"
+                        btnType="main"
+                        btnText={ enabled ? 'Share It!' : 'Submitting Post' }
+                        isLoading={ !enabled }
+                        onClick={ this.submitPost } />
                 </div>
             </div>
         );

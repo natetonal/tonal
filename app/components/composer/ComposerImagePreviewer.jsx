@@ -34,7 +34,7 @@ export const ComposerImagePreviewer = React.createClass({
 
     render(){
 
-        const { previewImage } = this.props;
+        const { previewImage, className } = this.props;
         const { warningLightOn } = this.state;
 
         if (previewImage){
@@ -47,7 +47,7 @@ export const ComposerImagePreviewer = React.createClass({
                     transitionEnter={ false }
                     transitionLeave
                     transitionLeaveTimeout={ 200 }>
-                    <div className={ `composer-image-previewer ${ warningLightOn ? 'warning-light' : '' }` }>
+                    <div className={ `${ className } ${ warningLightOn ? 'warning-light' : '' }` }>
                         <div className={ `composer-image-previewer-label ${ warningLightOn ? 'warning-light' : '' }` }>
                             { warningLightOn ? 'DELETE IMAGE?' : 'IMAGE PREVIEW' }
                         </div>

@@ -24,6 +24,13 @@ $composer-font-size: 20px;
         @include transition(all 0.5s);
     }
 
+    &.composer-disabled{
+        background: #ccc;
+        color: #999;
+        cursor: not-allowed;
+        @include transition(all 0.5s);
+    }
+
     span{
         pointer-events: none;
     }
@@ -32,7 +39,6 @@ $composer-font-size: 20px;
 #composer{
     font-size: $composer-font-size;
     font-family: $main-font;
-    color: #333;
     padding: 10px;
 }
 
@@ -126,6 +132,19 @@ $composer-font-size: 20px;
     &.warning-light{
         background: lighten($alert-error, 29%);
         @include transition(0.2s all);
+    }
+
+    &.composer-disabled{
+        background: #aaa;
+        pointer-events: none;
+        cursor: not-allowed;
+
+        img{
+            opacity: 0.5;
+            @include transition( all 0.2s);
+        }
+
+        @include transition(all 0.2s);
     }
 }
 
