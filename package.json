@@ -51,6 +51,7 @@
     "node-sass": "^4.3.0",
     "node-uuid": "^1.4.7",
     "ot-node-env": "^1.1.0",
+    "page-previewer": "^0.1.7",
     "phantomjs": "^2.1.7",
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
