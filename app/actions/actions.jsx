@@ -321,6 +321,22 @@ export const createUserWithFacebookAuth = () => {
     });
 };
 
+// HeaderCompose actions:
+
+export const headerComposeChangeTab = (tab = '') => {
+    return {
+        type: 'HC_CHANGE_TAB',
+        tab
+    };
+};
+
+export const createFakePost = postData => {
+    return {
+        type: 'HC_CREATE_FAKE_POST',
+        postData
+    };
+};
+
 // Composer actions:
 
 export const composerChangeMenu = (menu = '') => {

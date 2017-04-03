@@ -1,23 +1,26 @@
-
 import React from 'react';
 import * as Redux from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
-import urlRegex from 'superhuman-url-regex';
 import validator from 'validator';
-import { shortnameToImage } from 'emojione';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     composerChangeMenu,
     composerSetPreviewImage,
     composerSetImageUpload,
-    composerUpdateSuggestionQuery
+    composerUpdateSuggestionQuery,
+    createFakePost
  } from 'actions';
 import {
     getPathFromShortname,
     isEmoji
 } from './emojiselector/emojidata';
-
 import Medium from './medium';
+import {
+    parsePost,
+    validatePost
+} from './processpost';
+
 import MentionSuggestions from './mentionsuggestions/MentionSuggestions';
 import EmojiSelector from './emojiselector/EmojiSelector';
 import GiphySelector from './giphyselector/GiphySelector';
@@ -26,17 +29,14 @@ import ComposerImageUploader from './ComposerImageUploader';
 
 // Regex strings
 const stripHTML = /<\/?(span|font|p)[^>]*>/gi;
-const stripNonImgTags = /<\/?(?!img)[^>]*>/gi;
 const stripAltTag = /(^|\B):([_-a-zA-Z0-9._]+)(\b|\r):(?=")/gi;
 const matchImgTag = /<\/?(?=img)[^>]*>/gi;
-const matchText = /(\B|^)[^><]+?(?=<|$)/gi;
-const linkRegex = urlRegex({ liberal: false });
+const linkRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z]{2,6}\b([-a-z()A-Z0-9@:%_\+.~#?&//=]*)\b/g;
 const mentionRegex = /(^|\B)@\b([_-a-zA-Z0-9._]{2,25})\b/gi;
 const hashtagRegex = /(^|\B)#(?![-0-9_]+\b)([-a-zA-Z0-9_]{1,30})(\b|\r)(?!<)/g;
 const emojiRegex = /:([_-a-zA-Z0-9.]+):(?!")/gi;
 const countChars = /[^><]+?(?=<|$)|<\/?(?=img)[^>]*>/gi;
 const escapeCharsRegex = /&lt;|&gt;|&amp;|&nbsp;/gi;
-const unescapeCharsRegex = /<|>|&|\s/gi;
 
 // You can add new buttons here.
 const controlBtns = [
@@ -66,17 +66,20 @@ const regexIgnoreList = [
 
 export const Composer = React.createClass({
 
-    // Initialize local state.
-    getInitialState(){
-        return {
+    // Initialize local state. Optionally assign props to state.
+    componentWillMount(){
+        this.setState({
             focused: false,
             enabled: true,
+            error: false,
             mentions: [],
-            emoji: [],
             history: [],
             pos: '',
-            maxLength: 2000
-        };
+            maxLength: this.props.maxLength || 2000,
+            mainClass: this.props.mainClass || 'composer',
+            buttonPos: this.props.buttonPos || 'top',
+            buttons: this.props.buttons || controlBtns
+        });
     },
 
     // Implement a new Medium when component mounts, and focus on it.
@@ -110,7 +113,6 @@ export const Composer = React.createClass({
         if (textPosition === 0) { return 0; }
 
         const htmlContent = this.medium.value();
-        const textContent = this.composer.textContent;
         const htmlBeginChars = ['&', '<'];
         const htmlEndChars = [';', '>'];
         let textIndex = 0;
@@ -223,32 +225,37 @@ export const Composer = React.createClass({
     },
 
     // A list of entities used to decorate the composer.
+    // Note: if a new entity is added later, processpost.js will have to be updated.
+
     entityTypes(){
+        const { mainClass } = this.state;
+
         return [
             {
                 name: 'emoji',
                 regex: emojiRegex,
-                className: 'composer-emoji',
+                className: `${ mainClass }-emoji`,
                 tag: 'img',
-                strategy: this.decorateEmoji
+                strategy: this.decorateEmoji,
             },
             {
                 name: 'link',
                 regex: linkRegex,
-                className: 'composer-link',
+                className: `${ mainClass }-link`,
                 tag: 'span',
-                strategy: this.decorateLinksAndHashtags
+                strategy: this.decorateLinksAndHashtags,
             },
             {
                 name: 'mention',
-                className: 'composer-mention',
+                className: `${ mainClass }-mention`,
                 tag: 'span',
-                strategy: this.decorateMentions
+                strategy: this.decorateMentions,
+                editable: false
             },
             {
                 name: 'hashtag',
                 regex: hashtagRegex,
-                className: 'composer-hashtag',
+                className: `${ mainClass }-hashtag`,
                 tag: 'span',
                 strategy: this.decorateLinksAndHashtags
             }
@@ -281,7 +288,6 @@ export const Composer = React.createClass({
         this.checkMax(pastedText);
 
         select(this.composer, { start: textIndex + htmlLength });
-        // this.redecorateContent();
         this.checkMentions(this.composer.textContent);
     },
 
@@ -317,6 +323,7 @@ export const Composer = React.createClass({
     },
 
     handleKeyPress({ key, target: { textContent } }){
+        this.clearError();
         if (key.length === 1){
             if (textContent.length === 0){
                 this.resetMedium();
@@ -360,19 +367,28 @@ export const Composer = React.createClass({
 
     handleControl(name, evt){
         evt.preventDefault();
+        this.clearError();
         this.pos = select(this.composer);
         const { dispatch, currentMenu } = this.props;
         const menu = currentMenu === name ? '' : name;
         dispatch(composerChangeMenu(menu));
     },
 
+    clearError(){
+        const { error } = this.state;
+        if (error){
+            this.setState({ error: false });
+        }
+    },
+
     clearMenus(){
         const { dispatch } = this.props;
+        this.clearError();
         dispatch(composerChangeMenu());
         dispatch(composerUpdateSuggestionQuery());
     },
 
-    // Strips down the current innerHTML value's style decorators
+    // Processes passed entities for given input value
     decorateEntities(val = this.medium.value()){
         if (!val){ return ''; }
 
@@ -390,9 +406,9 @@ export const Composer = React.createClass({
         const { mentions } = this.state;
         if (!mentions){ return text; }
 
-        const { className, tag } = entity;
+        const { className, tag, editable } = entity;
         mentions.forEach(user => {
-            const newStr = `<${ tag } class="${ className }" contenteditable="false">${ user.fullName }</${ tag }>`;
+            const newStr = `<${ tag } class="${ className }" ${ editable ? '' : 'contenteditable="false"' }>${ user.fullName }</${ tag }>`;
             text = text.replace(new RegExp(user.fullName), newStr);
         });
 
@@ -407,7 +423,14 @@ export const Composer = React.createClass({
         let adjIndex = 0;
         const newVal = text;
         while ((checkArray = regex.exec(newVal)) !== null){
-            const word = checkArray[0];
+            let word = checkArray[0];
+
+            ['&nbsp', '&lt', '&gt', '&amp'].forEach(char => {
+                if (word.endsWith(char)){
+                    word = word.substr(0, word.length - char.length);
+                }
+            });
+
             const index = checkArray.index + adjIndex;
             if (!this.shouldIgnoreWord(word)){
                 const newStr = `<${ tag } class="${ className }">${ word }</${ tag }>`;
@@ -418,12 +441,14 @@ export const Composer = React.createClass({
             }
         }
 
+
         return text;
     },
 
     decorateEmoji(entity, text){
         const { regex, className, tag } = entity;
         if (!text.match(regex)) { return text; }
+
         let checkArray;
         const newVal = text;
         while ((checkArray = regex.exec(newVal)) !== null){
@@ -472,7 +497,8 @@ export const Composer = React.createClass({
     redecorateContent(){
         this.pos = select(this.composer);
         const decoratedText = this.decorateEntities();
-        this.medium.value(`${ decoratedText.charAt(decoratedText.length - 1) === '>' ? decoratedText + ' ' : decoratedText }`);
+        const lastChar = decoratedText.charAt(decoratedText.length - 1);
+        this.medium.value(`${ lastChar === '>' ? decoratedText + ' ' : decoratedText }`);
         this.updateHistory(this.medium.value());
         this.checkMax(decoratedText);
         this.medium.focus();
@@ -512,25 +538,92 @@ export const Composer = React.createClass({
 
     submitPost(){
         event.preventDefault();
-        this.setState({ enabled: !this.state.enabled });
+        const { dispatch, user } = this.props;
+        const postRaw = this.medium.value();
+        console.log('output: ', postRaw);
+        const postData = {
+            mentions: this.state.mentions,
+            image: this.props.previewImage,
+            file: this.props.imageFile,
+            length: this.checkLen()
+        };
+        const error = validatePost(postRaw, postData);
+        if (error){
+            this.setState({ error });
+        } else {
+            this.setState({
+                enabled: !this.state.enabled,
+                error
+            });
+            parsePost(postRaw, postData, user)
+            .then(parsedPost => {
+                console.log('parsedPost received from submitPost: ', parsedPost);
+                dispatch(createFakePost(parsedPost));
+            });
+        }
     },
 
     render(){
 
-        const { focused, enabled } = this.state;
         const { currentMenu, query } = this.props;
-        const composerClass = `composer ${ focused ? 'composer-zoom-in' : '' } ${ enabled ? '' : 'composer-disabled' }`;
+
+        const {
+            focused,
+            enabled,
+            error,
+            buttons,
+            mainClass,
+            buttonPos
+        } = this.state;
+
+        const cls = {
+            zoomIn: `${ mainClass }-zoom-in`,
+            disabled: `${ mainClass }-disabled`,
+            controls: `${ mainClass }-controls ${ buttonPos === 'bottom' ? buttonPos : '' }`,
+            control: `${ mainClass }-control`,
+            controlLabel: `${ mainClass }-control-label`,
+            imgPrev: `${ mainClass }-image-previewer`,
+            btn: `${ mainClass }-button`,
+            error: `${ mainClass }-error`,
+            errorHighlight: `${ mainClass }-highlight-err`
+        };
+
+        const composerClass = `
+            ${ mainClass }
+            ${ focused ? cls.zoomIn : '' }
+            ${ enabled ? '' : cls.disabled }
+            ${ error ? cls.errorHighlight : '' }`;
+
+        const err = () => {
+            if (error){
+                return (
+                    <ReactCSSTransitionGroup
+                        transitionName="smooth-popin"
+                        transitionAppear
+                        transitionAppearTimeout={ 200 }
+                        transitionEnter={ false }
+                        transitionLeave={ false }>
+                        <div className={ cls.error }>
+                            <span>
+                                { error }
+                            </span>
+                        </div>
+                    </ReactCSSTransitionGroup>
+                );
+            }
+            return '';
+        };
 
         const btns = () => {
-            return controlBtns.map(btn => {
+            return buttons.map(btn => {
                 const selected = btn.name === currentMenu ? 'selected' : '';
 
                 return (
                     <div
                         key={ btn.name }
-                        className={ `composer-control ${ selected }` }
+                        className={ `${ cls.control } ${ selected }` }
                         onMouseDown={ evt => this.handleControl(btn.name, evt) }>
-                        <div className="composer-control-label">
+                        <div className={ cls.controlLabel }>
                             { btn.name }
                         </div>
                         <i
@@ -577,15 +670,17 @@ export const Composer = React.createClass({
         const imagePreviewer = () => {
             return (
                 <ComposerImagePreviewer
-                    className={ `composer-image-previewer ${ enabled ? '' : 'composer-disabled' }` } />
+                    className={ `${ cls.imgPrev } ${ enabled ? '' : cls.disabled }` } />
             );
         };
 
         return (
             <div className="header-compose-post">
-                <div className="composer-controls">
+                { buttonPos !== 'bottom' && (
+                <div className={ cls.controls }>
                     { btns() }
                 </div>
+                )}
                 { menu() }
                 { suggestions() }
                 <div
@@ -595,7 +690,7 @@ export const Composer = React.createClass({
                     onClick={ this.clearMenus }>
                     { imagePreviewer() }
                     <div
-                        id="composer"
+                        id={ mainClass }
                         ref={ element => this.composer = element }
                         onKeyUp={ e => this.handleKeyPress(e) }
                         onInput={ e => this.checkMentions(e.target.textContent) }
@@ -604,7 +699,13 @@ export const Composer = React.createClass({
                         onDrop={ this.handleDrop }
                         contentEditable={ enabled } />
                 </div>
-                <div className="composer-button">
+                { buttonPos === 'bottom' && (
+                <div className={ cls.controls }>
+                    { btns() }
+                </div>
+                )}
+                { err() }
+                <div className={ cls.btn }>
                     <Button
                         type="submit"
                         btnType="main"
@@ -619,6 +720,9 @@ export const Composer = React.createClass({
 
 export default Redux.connect(state => {
     return {
+        user: state.user,
+        imageFile: state.composer.imageFile,
+        previewImage: state.composer.previewImage,
         currentMenu: state.composer.currentMenu,
         query: state.composer.query
     };

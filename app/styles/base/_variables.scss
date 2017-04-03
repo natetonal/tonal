@@ -68,6 +68,11 @@ $header-icon-div-size: 40px;
 $header-notification-height: 300px;
 $header-notification-img-length: 60px;
 
+// Composer
+$composer-font-size: 20px;
+$composer-error: #f5928b;
+$composer-error-bg: #f5dfdd;
+
 // Search Bar
 $search-bg: $darkgray1;
 $search-height: 40px;
@@ -95,3 +100,7 @@ $tabs-bg1: $darkgray1;
 $tabs-bg2: $black;
 $tabs-bg-hover: $darkgray1;
 $tabs-icon-size: 36px;
+
+// Post
+$post-font-size: 16px;
+$post-large-font-size: 24px;

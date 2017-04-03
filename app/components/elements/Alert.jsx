@@ -15,7 +15,7 @@ export const Alert = React.createClass({
 
     getDefaultProps(){
 
-        return{
+        return {
             type: 'default',
             title: 'Title',
             message: 'Message',
@@ -27,21 +27,21 @@ export const Alert = React.createClass({
 
         const { type, button } = this.props;
 
-        switch(type){
+        switch (type){
             case 'default':
-                return <i className="fa fa-bolt" aria-hidden="true"></i>;
+                return <i className="fa fa-bolt" aria-hidden="true" />;
             case 'info':
-                return <i className="fa fa-info-circle" aria-hidden="true"></i>;
+                return <i className="fa fa-info-circle" aria-hidden="true" />;
             case 'success':
-                return <i className="fa fa-hand-peace-o" aria-hidden="true"></i>;
+                return <i className="fa fa-hand-peace-o" aria-hidden="true" />;
             case 'error':
-                return <i className="fa fa-times-circle" aria-hidden="true"></i>;
+                return <i className="fa fa-times-circle" aria-hidden="true" />;
             case 'warning':
-                return <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>;
+                return <i className="fa fa-exclamation-triangle" aria-hidden="true" />;
             case 'admin':
-                return <i className="fa fa-bullhorn" aria-hidden="true"></i>;
+                return <i className="fa fa-bullhorn" aria-hidden="true" />;
             default:
-                return ''
+                return '';
         }
     },
 
@@ -49,8 +49,8 @@ export const Alert = React.createClass({
 
         const { type, title, message, button } = this.props;
 
-        return(
-            <div className={`tonal-alert callout ${ type }`}>
+        return (
+            <div className={ `tonal-alert callout ${ type }` }>
                 <div className="tonal-alert-title">
                     <h4>
                         { this.getButton() }

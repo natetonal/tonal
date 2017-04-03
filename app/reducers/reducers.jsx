@@ -120,6 +120,27 @@ export const userReducer = (state = initialUserState, action) => {
     }
 };
 
+const initialHeaderComposeState = {
+    currentTab: 'post'
+};
+
+export const headerComposeReducer = (state = initialHeaderComposeState, action) => {
+    switch (action.type){
+        case 'HC_CHANGE_TAB':
+            return {
+                ...state,
+                currentTab: action.tab
+            };
+        case 'HC_CREATE_FAKE_POST':
+            return {
+                ...state,
+                post: action.postData
+            };
+        default:
+            return state;
+    }
+};
+
 const initialComposerState = {
     currentMenu: '',
     previewImage: '',

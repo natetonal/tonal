@@ -1,173 +1,4 @@
-///////////////////
-///////////////////
-// POST STYLE #1 //
-///////////////////
-///////////////////
-
-
-
-.tonal-post-1 {
-    background: #616161;
-    padding: 20px;
-    margin: 20px 0;
-    border-top: 1px solid $lightblue;
-    border-bottom: 1px solid $lightblue;
-
-    .fa{
-        color: rgba(0,0,0,0.3);
-    }
-
-    .fa-angle-down {
-        float: right;
-    }
-
-    .tonal-post-display-name-1 {
-        font-weight: 600;
-        display: inline-block;
-        padding-left: 10px;
-        color: $lightblue;
-    }
-
-    .tonal-post-avatar-1 {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        float: left;
-    }
-
-    .tonal-post-timestamp-1 {
-        display: block;
-        text-indent: 10px;
-        font-size: 12px;
-    }
-
-    .tonal-post-message-1 {
-        display: block;
-        margin: 20px 0;
-    }
-
-    .tonal-post-interactions-1 {
-        border-top: 1px solid rgba(0,0,0,0.1);
-        border-bottom: 1px solid rgba(0,0,0,0.1);
-        padding: 5px 0;
-        font-size: 14px;
-
-        .tonal-post-interaction-1 {
-            display: inline-block;
-            padding: 0 20px;
-            .fa{
-                padding-right: 10px;
-            }
-        }
-
-        .tonal-post-interaction-likes-1 {
-            float: right;
-            color: $lightgray1;
-        }
-    }
-
-    .tonal-post-reply-1 {
-        padding: 10px 0;
-
-        .tonal-post-reply-avatar-1 {
-            padding-top: 10px;
-            display: inline-block;
-            height: 50px;
-            width: 50px;
-            float: left;
-        }
-
-        .tonal-post-reply-display-name-1 {
-            padding-left: 10px;
-            display: inline-block;
-            font-weight: 600;
-            font-size: 14px;
-            color: $lightblue;
-        }
-
-        .tonal-post-reply-message-1 {
-            margin-top: -2px;
-            text-indent: 10px;
-            font-size: 14px;
-        }
-
-        .tonal-post-reply-info-1 {
-            display: block;
-            font-size: 14px;
-
-            .fa{
-                padding-right: 5px;
-            }
-
-            .tonal-post-reply-likes-1 {
-                display: inline-block;
-                text-indent: 5px;
-            }
-
-            .tonal-post-reply-timestamp-1 {
-                display: inline-block;
-                margin-left: 10px;
-                font-size: 12px;
-                color: rgba(255,255,255,.5);
-            }
-        }
-    }
-
-    .tonal-post-display-name-1,
-    .tonal-post-reply-display-name-1 {
-        cursor: pointer;
-
-        &:hover{
-            color: darken($lightblue, 20%);
-            @include transition(0.2s color);
-        }
-    }
-
-    .tonal-post-interaction-like-1,
-    .tonal-post-interaction-reply-1,
-    .tonal-post-interaction-share-1 {
-        cursor: pointer;
-
-        &:hover{
-            .fa{
-                color: $lightblue;
-                @include transition(0.2s color);
-            }
-        }
-    }
-
-    .fa-angle-down{
-        cursor: pointer;
-
-        &:hover{
-            color: $white;
-            @include transition(0.2s color);
-        }
-    }
-
-    .tonal-post-reply-likes-1 {
-        cursor: pointer;
-
-        &:hover{
-            .fa{
-                color: $lightblue;
-                @include transition(0.2s color);
-            }
-        }
-    }
-}
-
-
-
-    ///////////////////
-    ///////////////////
-    // POST STYLE #2 //
-    ///////////////////
-    ///////////////////
-
-
-
-.tonal-post-2 {
+.tonal-post {
     background: #818181;
     margin: 20px 0;
     border-top: 1px solid $lightblue;
@@ -182,43 +13,72 @@
         float: right;
     }
 
-    .tonal-post-top-2 {
-        padding: 20px 20px 0px 20px;
+    .tonal-post-top {
+        padding: 10px;
 
-        .tonal-post-display-name-2 {
+        .tonal-post-display-name {
             font-weight: 600;
             display: inline-block;
             padding-left: 10px;
             color: $lightblue;
         }
 
-        .tonal-post-avatar-2 {
+        .tonal-post-avatar {
             display: inline-block;
             height: 60px;
             width: 60px;
             float: left;
         }
 
-        .tonal-post-timestamp-2 {
+        .tonal-post-timestamp {
             display: block;
             text-indent: 10px;
             font-size: 12px;
         }
+    }
 
-        .tonal-post-message-2 {
-            display: block;
-            padding: 30px 0 0 0;
+    .tonal-post-message {
+        padding: 20px 10px;
+        line-height: 1.2;
+        font-size: $post-font-size;
+
+        div {
+            display: inline-block;
+        }
+
+        a {
+            color: $lightblue;
+            @include transition(0.2s all);
+
+            &:hover{
+                color: darken($lightblue, 30%);
+                @include transition(0.2s all);
+            }
+        }
+
+        img {
+            height: $post-font-size;
+            width: $post-font-size;
+        }
+
+        &.large{
+            font-size: $post-large-font-size;
+
+            img {
+                height: $post-large-font-size;
+                width: $post-large-font-size;
+            }
         }
     }
 
-    .tonal-post-interactions-2 {
+    .tonal-post-interactions {
         border-top: 1px solid rgba(0,0,0,0.1);
         border-bottom: 1px solid rgba(0,0,0,0.1);
         padding: 5px 0;
         font-size: 14px;
         color: rgba(255,255,255,0.8);
 
-        .tonal-post-interaction-2 {
+        .tonal-post-interaction {
             display: inline-block;
             padding: 0 20px;
 
@@ -227,19 +87,19 @@
             }
         }
 
-        .tonal-post-interaction-likes-2 {
+        .tonal-post-interaction-likes {
             float: right;
             color: $lightgray1;
         }
     }
 
-    .tonal-post-thread-2 {
+    .tonal-post-thread {
         padding: 0 20px 10px 20px;
 
-        .tonal-post-reply-2 {
+        .tonal-post-reply {
             padding: 10px 0;
 
-            .tonal-post-reply-avatar-2 {
+            .tonal-post-reply-avatar {
                 padding-top: 10px;
                 display: inline-block;
                 height: 40px;
@@ -247,7 +107,7 @@
                 float: left;
             }
 
-            .tonal-post-reply-display-name-2 {
+            .tonal-post-reply-display-name {
                 padding-left: 10px;
                 display: inline-block;
                 font-weight: 600;
@@ -255,13 +115,13 @@
                 color: $lightblue;
             }
 
-            .tonal-post-reply-message-2 {
-                margin-top: -2px;
+            .tonal-post-reply-message {
+                margin-top: px;
                 text-indent: 10px;
                 font-size: 14px;
             }
 
-            .tonal-post-reply-info-2 {
+            .tonal-post-reply-info {
                 display: block;
                 font-size: 14px;
                 padding-left: 40px;
@@ -270,12 +130,12 @@
                     padding-right: 5px;
                 }
 
-                .tonal-post-reply-likes-2 {
+                .tonal-post-reply-likes {
                     display: inline-block;
                     text-indent: 5px;
                 }
 
-                .tonal-post-reply-timestamp-2 {
+                .tonal-post-reply-timestamp {
                     display: inline-block;
                     margin-left: 10px;
                     font-size: 12px;
@@ -285,8 +145,8 @@
         }
     }
 
-    .tonal-post-display-name-2,
-    .tonal-post-reply-display-name-2 {
+    .tonal-post-display-name,
+    .tonal-post-reply-display-name {
         cursor: pointer;
 
         &:hover{
@@ -295,9 +155,9 @@
         }
     }
 
-    .tonal-post-interaction-like-2,
-    .tonal-post-interaction-reply-2,
-    .tonal-post-interaction-share-2 {
+    .tonal-post-interaction-like,
+    .tonal-post-interaction-reply,
+    .tonal-post-interaction-share {
         cursor: pointer;
 
         &:hover{
@@ -320,396 +180,12 @@
         }
     }
 
-    .tonal-post-reply-likes-2 {
+    .tonal-post-reply-likes {
         cursor: pointer;
 
         &:hover{
             .fa{
                 color: darken($lightblue, 20%);
-                @include transition(0.2s color);
-            }
-        }
-    }
-}
-
-
-
-///////////////////
-///////////////////
-// POST STYLE #3 //
-///////////////////
-///////////////////
-
-
-
-.tonal-post-3 {
-    background: #313131;
-    margin: 20px 0;
-    border-top: 1px solid $lightblue;
-    border-bottom: 1px solid $lightblue;
-    @include boxshadow(2px 2px 4px rgba(0,0,0,0.2));
-
-    .fa{
-        color: rgba(0,0,0,0.3);
-    }
-
-    .fa-angle-down {
-        float: right;
-    }
-
-    .tonal-post-top-3 {
-        padding: 20px 20px 0px 20px;
-
-        .tonal-post-display-name-3 {
-            font-weight: 600;
-            display: inline-block;
-            padding-left: 15px;
-            margin-top: 25px;
-            color: $lightblue;
-            font-size: 24px;
-        }
-
-        .tonal-post-avatar-3 {
-            display: inline-block;
-            height: 100px;
-            width: 100px;
-            float: left;
-
-            img{
-                border: 3px solid $white;
-                border-radius: 50%;
-            }
-        }
-
-        .tonal-post-timestamp-3 {
-            display: block;
-            text-indent: 15px;
-            font-size: 12px;
-            margin-top: -5px;
-            font-style: italic;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .tonal-post-message-3 {
-            display: block;
-            padding: 30px 0 0 0;
-        }
-    }
-
-    .tonal-post-interactions-3 {
-        border-top: 1px solid rgba(255,255,255,.1);
-        border-bottom: 1px solid rgba(0,0,0,.1);
-        padding: 5px 0;
-        font-size: 14px;
-        background: rgba(0,0,0,0.1);
-        color: rgba(255,255,255,0.8);
-
-        .tonal-post-interaction-3 {
-            display: inline-block;
-            padding: 0 20px;
-
-            .fa{
-                padding-right: 10px;
-            }
-        }
-
-        .tonal-post-interaction-likes-3 {
-            float: right;
-            color: $lightgray1;
-        }
-    }
-
-    .tonal-post-thread-3 {
-        padding: 10px 20px 20px;
-
-        .tonal-post-reply-3 {
-            padding: 10px 0;
-
-            .tonal-post-reply-avatar-3 {
-                padding-top: 10px;
-                display: inline-block;
-                height: 60px;
-                width: 60px;
-                float: left;
-
-                img{
-                    border: 2px solid $white;
-                    border-radius: 50%;
-                }
-            }
-
-            .tonal-post-reply-display-name-3 {
-                padding-left: 20px;
-                display: inline-block;
-                font-weight: 600;
-                font-size: 14px;
-                color: $lightblue;
-            }
-
-            .tonal-post-reply-message-3 {
-                margin-top: -3px;
-                text-indent: 20px;
-                font-size: 14px;
-            }
-
-            .tonal-post-reply-info-3 {
-                display: block;
-                font-size: 14px;
-                text-indent: 10px;
-
-                .fa{
-                    padding-right: 5px;
-                }
-
-                .tonal-post-reply-likes-3 {
-                    display: inline-block;
-                    text-indent: 5px;
-                }
-
-                .tonal-post-reply-timestamp-3 {
-                    display: inline-block;
-                    margin-left: 10px;
-                    font-size: 12px;
-                    color: rgba(255,255,255,.5);
-                }
-            }
-        }
-    }
-
-    .tonal-post-display-name-3,
-    .tonal-post-reply-display-name-3 {
-        cursor: pointer;
-
-        &:hover{
-            color: darken($lightblue, 20%);
-            @include transition(0.2s all);
-        }
-    }
-
-    .tonal-post-interaction-like-3,
-    .tonal-post-interaction-reply-3,
-    .tonal-post-interaction-share-3 {
-        cursor: pointer;
-
-        &:hover{
-
-            color: rgba(255,255,255,1);
-
-            .fa{
-                color: $orange;
-                @include transition(0.2s color);
-            }
-        }
-    }
-
-    .fa-angle-down{
-        cursor: pointer;
-
-        &:hover{
-            color: $white;
-            @include transition(0.2s color);
-        }
-    }
-
-    .tonal-post-reply-likes-3 {
-        cursor: pointer;
-
-        &:hover{
-            .fa{
-                color: $orange;
-                @include transition(0.2s color);
-            }
-        }
-    }
-}
-
-
-
-///////////////////
-///////////////////
-// POST STYLE #4 //
-///////////////////
-///////////////////
-
-
-
-.tonal-post-4 {
-    background: darken($light-bg, 2%);
-    color: $dark-text;
-    margin: 20px 0;
-    @include boxshadow(5px 5px 15px rgba(0,0,0,.4));
-
-    .fa{
-        color: rgba(0,0,0,0.3);
-    }
-
-    .fa-angle-down {
-        float: right;
-    }
-
-    .tonal-post-top-4 {
-        display: block;
-        padding: 0 20px 10px 20px;
-        background: $light-bg;
-
-        .tonal-post-menu-4 {
-            top: 15px;
-            position: relative;
-        }
-
-        .tonal-post-display-name-4 {
-            font-weight: 600;
-            top: 150px;
-            position: relative;
-            color: $blue;
-            font-size: 18px;
-        }
-
-        .tonal-post-avatar-4 {
-            position: absolute;
-            height: 100px;
-            width: 100px;
-            margin-top: 15px;
-
-            img{
-                border-radius: 10%;
-            }
-        }
-
-        .tonal-post-timestamp-4 {
-            display: inline-block;
-            position: relative;
-            top: 140px;
-            font-size: 10px;
-        }
-
-        .tonal-post-message-4 {
-            position: relative;
-            margin: -15px 0 10px 120px;
-            padding: 0 0 20px 20px;
-            border-left: 10px solid rgba(0,0,0,0.1);
-        }
-    }
-
-    .tonal-post-interactions-4 {
-        border-top: 1px solid rgba(0,0,0,0.5);
-        border-bottom: 1px solid rgba(0,0,0,.5);
-        padding: 2px 0;
-        font-size: 12px;
-        background: $light-bg;
-        color: $dark-text;
-
-        .tonal-post-interaction-4 {
-            display: inline-block;
-            padding: 0 20px;
-
-            .fa{
-                padding-right: 10px;
-            }
-        }
-
-        .tonal-post-interaction-likes-4 {
-            float: right;
-            color: $lightgray1;
-        }
-    }
-
-    .tonal-post-thread-4 {
-        padding: 10px 20px 30px;
-
-        .tonal-post-reply-4 {
-            padding: 0 0 50px;
-
-            .tonal-post-reply-avatar-4 {
-                display: inline-block;
-                height: 60px;
-                width: 60px;
-                float: left;
-
-                img{
-                    border-radius: 10%;
-                }
-            }
-
-            .tonal-post-reply-display-name-4 {
-                position: absolute;
-                font-weight: 600;
-                padding-top: 60px;
-                width: 100px;
-                font-size: 14px;
-                border-right: 5px solid rgba(0,0,0,0.1);
-                color: $blue;
-            }
-
-            .tonal-post-reply-message-4 {
-                margin-top: 10px;
-                text-indent: 55px;
-                font-size: 14px;
-            }
-
-            .tonal-post-reply-info-4 {
-                display: block;
-                font-size: 14px;
-                margin-left: 95px;
-                text-indent: 10px;
-
-                .fa{
-                    padding-right: 5px;
-                }
-
-                .tonal-post-reply-likes-4 {
-                    display: inline-block;
-                    text-indent: 5px;
-                }
-
-                .tonal-post-reply-timestamp-4 {
-                    font-size: 12px;
-                    position: relative;
-                    display: inline-block;
-                }
-            }
-        }
-    }
-
-    .tonal-post-display-name-4,
-    .tonal-post-reply-display-name-4 {
-        cursor: pointer;
-
-        &:hover{
-            color: darken($blue, 5%);
-            @include transition(0.2s all);
-        }
-    }
-
-    .tonal-post-interaction-like-4,
-    .tonal-post-interaction-reply-4,
-    .tonal-post-interaction-share-4 {
-        cursor: pointer;
-
-        &:hover{
-
-            .fa{
-                color: saturate($purple, 20%);
-                @include transition(0.2s color);
-            }
-        }
-    }
-
-    .fa-angle-down{
-        cursor: pointer;
-
-        &:hover{
-            color: $dark-gray;
-            @include transition(0.2s color);
-        }
-    }
-
-    .tonal-post-reply-likes-4 {
-        cursor: pointer;
-
-        &:hover{
-            .fa{
-                color: saturate($purple, 20%);
                 @include transition(0.2s color);
             }
         }

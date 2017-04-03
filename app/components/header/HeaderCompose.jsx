@@ -1,61 +1,79 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
-import * as actions from 'actions';
+import { headerComposeChangeTab } from 'actions';
 
 // import HeaderComposeEditor from './HeaderComposeEditor'; - TEMPORARILY ABANDONED. REMEMBER TO DELETE IF NOT NEEDED.
 import Composer from 'composer/Composer';
 
+const headerComposeTabs = [
+    {
+        name: 'post',
+        icon: 'comment'
+    },
+    {
+        name: 'photos',
+        icon: 'camera'
+    },
+    {
+        name: 'videos',
+        icon: 'video-camera'
+    },
+    {
+        name: 'event',
+        icon: 'calendar-plus-o'
+    },
+    {
+        name: 'song',
+        icon: 'microphone'
+    }
+];
+
 export const HeaderCompose = React.createClass({
 
-    componentWillMount(){
-        this.setState({
-            tabSelected: 'post'
-        });
-    },
-
     handleTabClick(tab){
-        console.log(tab);
-        this.setState({
-            tabSelected: tab
-        });
+        const { dispatch } = this.props;
+        dispatch(headerComposeChangeTab(tab));
     },
 
     render(){
 
-        const { tabSelected } = this.state;
+        const { tabSelected } = this.props;
 
-        return(
+        const renderTabs = () => {
+            return headerComposeTabs.map((tab, index) => {
+                const { name, icon } = tab;
+                return (
+                    <div
+                        key={ name + icon + index }
+                        onClick={ () => this.handleTabClick(name) }
+                        className={ `header-compose-tab ${ tabSelected === name ? 'selected' : '' }` }>
+                        <i className={ `fa fa-${ icon }` } aria-hidden="true" />
+                        { name }
+                    </div>
+                );
+            });
+        };
+
+        const renderComponent = () => {
+            let component = '';
+            switch (tabSelected){
+                case 'post':
+                    component = <Composer />;
+                    break;
+                default:
+                    component = '';
+            }
+
+            return component;
+        };
+
+        return (
             <div className="header-compose">
                 <div className="header-compose-tab-set">
-                    <div onClick={ () => this.handleTabClick('post') }
-                         className={`header-compose-tab ${ tabSelected == 'post' ? 'selected' : '' }`}>
-                         <i className="fa fa-comment" aria-hidden="true"></i>
-                         Post
-                    </div>
-                    <div onClick={ () => this.handleTabClick('photos') }
-                         className={`header-compose-tab ${ tabSelected == 'photos' ? 'selected' : '' }`}>
-                         <i className="fa fa-camera" aria-hidden="true"></i>
-                         Photos
-                    </div>
-                    <div onClick={ () => this.handleTabClick('videos') }
-                        className={`header-compose-tab ${ tabSelected == 'videos' ? 'selected' : '' }`}>
-                        <i className="fa fa-video-camera" aria-hidden="true"></i>
-                         Videos
-                    </div>
-                    <div onClick={ () => this.handleTabClick('event') }
-                         className={`header-compose-tab ${ tabSelected == 'event' ? 'selected' : '' }`}>
-                         <i className="fa fa-calendar-plus-o" aria-hidden="true"></i>
-                         Event
-                    </div>
-                    <div onClick={ () => this.handleTabClick('song') }
-                         className={`header-compose-tab ${ tabSelected == 'song' ? 'selected' : '' }`}>
-                         <i className="fa fa-microphone" aria-hidden="true"></i>
-                         Song
-                    </div>
+                    { renderTabs() }
                 </div>
                 <div className="header-compose-contentarea">
-                    <Composer />
+                    { renderComponent() }
                 </div>
 
 
@@ -66,6 +84,6 @@ export const HeaderCompose = React.createClass({
 
 export default Redux.connect(state => {
     return {
-
-     };
+        tabSelected: state.headerCompose.currentTab
+    };
 })(HeaderCompose);

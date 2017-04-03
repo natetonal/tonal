@@ -9,7 +9,8 @@ import {
     userReducer,
     emojiSelectorReducer,
     giphySelectorReducer,
-    composerReducer
+    composerReducer,
+    headerComposeReducer
 } from 'reducers';
 import DevTools from '../containers/DevTools';
 
@@ -33,6 +34,7 @@ const reducer = combineReducers({
     uiState: uiStateReducer,
     errors: errorsReducer,
     user: userReducer,
+    headerCompose: headerComposeReducer,
     composer: composerReducer,
     emojiSelector: emojiSelectorReducer,
     giphySelector: giphySelectorReducer
