@@ -9,42 +9,84 @@
         color: rgba(0,0,0,0.3);
     }
 
-    .fa-angle-down {
-        float: right;
-    }
-
     .tonal-post-top {
+        position: relative;
+        display: flex;
         padding: 10px;
+        align-items: center;
 
-        .tonal-post-display-name {
-            font-weight: 600;
-            display: inline-block;
-            padding-left: 10px;
-            color: $lightblue;
+        .tonal-post-menu {
+            position: absolute;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            top: 10px;
+            right: 10px;
+
+            .fa{
+                color: rgba(0,0,0,0.3);
+            }
         }
 
         .tonal-post-avatar {
-            display: inline-block;
-            height: 60px;
-            width: 60px;
-            float: left;
+            display: inline-flex;
+            height: $post-avatar-size;
+            width: $post-avatar-size;
         }
 
-        .tonal-post-timestamp {
-            display: block;
-            text-indent: 10px;
-            font-size: 12px;
+        .tonal-post-info {
+            display: inline-block;
+
+            .tonal-post-display-name {
+                font-weight: 600;
+                display: inline-block;
+                padding-left: 10px;
+                color: $lightblue;
+            }
+
+            .tonal-post-timestamp {
+                display: block;
+                text-indent: 10px;
+                font-size: 12px;
+            }
+        }
+    }
+
+    .tonal-post-image {
+        padding: 10px;
+        margin-top: 10px;
+
+        &.fullwidth{
+            padding: 0px;
+            width: 100%;
+            max-height: 500px;
+            overflow: hidden;
+
+            .post-image-fullwidth{
+                object-fit: cover;
+                object-position: center center;
+                cursor: pointer;
+                @include transform(scale(1));
+                @include transition(0.5s all);
+
+                &:hover{
+                    @include transform(scale(1.04));
+                    @include transition(0.5s all);
+                }
+            }
+
+
         }
     }
 
     .tonal-post-message {
-        padding: 20px 10px;
+        padding: 10px;
         line-height: 1.2;
         font-size: $post-font-size;
-
-        div {
-            display: inline-block;
-        }
 
         a {
             color: $lightblue;
@@ -171,12 +213,14 @@
         }
     }
 
-    .fa-angle-down{
+    .tonal-post-menu{
         cursor: pointer;
 
         &:hover{
-            color: $white;
-            @include transition(0.2s color);
+            .fa{
+                color: $white;
+                @include transition(0.2s color);
+            }
         }
     }
 

@@ -9,11 +9,16 @@ const maxEmoji = 100;
 export const validatePost = (postRaw, postData) => {
     let error = false;
     const emojiCount = postRaw.match(new RegExp('<img', 'g'));
+    console.log('postRaw?', postRaw);
+    console.log('postData.file? ', postData.file);
+    console.log('postData.image? ', postData.image);
     if (!postRaw
-        && !postData.imageFile
-        && !postData.previewImage){
+        && !postData.file
+        && !postData.image){
         error = 'PRO TIP: People usually respond better to posts with content.';
-    } else if (!postRaw.match(whitespaceRegex)){
+    } else if (!postRaw.match(whitespaceRegex)
+        && !postData.file
+        && !postData.image){
         error = 'Your use of minimalism is superb, but the people demand something with a bit more substance.';
     } else if (emojiCount && emojiCount.length > maxEmoji){
         error = `Really? Are you being serious here with ${ emojiCount.length } emoji in your post?`;
@@ -68,6 +73,7 @@ export const parsePost = (html, data, userData) => {
     let type;
     const post = [];
     const links = [];
+    const hashtags = [];
     const parsedPost = new htmlparser.Parser({
         onopentag: (name, attribs) => {
             switch (name){
@@ -98,16 +104,33 @@ export const parsePost = (html, data, userData) => {
         },
         ontext: text => {
             if (assignTextToPreviousTag){
-                const updatedPost = post.pop();
+                let updatedPost = post.pop();
+                switch (type){
+                    case 'link':
+                        links.push({ url: text });
+                        break;
+                    case 'mention':
+                        data.mentions.some(mention => {
+                            if (mention.fullName === text){
+                                updatedPost = {
+                                    ...updatedPost,
+                                    mention
+                                };
+                            }
+                            return mention.fullName === text;
+                        });
+                        break;
+                    case 'hashtag':
+                        hashtags.push(text);
+                        break;
+                    default:
+                        break;
+                }
                 post.push({
                     ...updatedPost,
                     value: text
                 });
                 assignTextToPreviousTag = false;
-                if (type === 'link'){
-                    console.log(`type is ${ type }, pushing ${ text }.`);
-                    links.push({ url: text });
-                }
             } else {
                 post.push({
                     type: 'text',
@@ -126,6 +149,7 @@ export const parsePost = (html, data, userData) => {
             console.log('safePost: ', safePost);
             postData = {
                 ...postData,
+                hashtags,
                 likes: 0,
                 thread: false,
                 timeStamp: moment().calendar(),
@@ -139,6 +163,7 @@ export const parsePost = (html, data, userData) => {
 
     return {
         ...postData,
+        hashtags,
         likes: 0,
         thread: false,
         timeStamp: moment().calendar(),

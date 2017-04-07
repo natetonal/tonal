@@ -1,7 +1,7 @@
 
 import React from 'react';
 import * as Redux from 'react-redux';
-import { EmojiSelectionSearchText } from 'actions';
+import { changeSearchText } from 'actions/EmojiSelectorActions';
 
 export const EmojiSelectorSearch = React.createClass({
 
@@ -15,13 +15,13 @@ export const EmojiSelectorSearch = React.createClass({
     handleInput(evt){
         evt.preventDefault();
         const { dispatch } = this.props;
-        dispatch(EmojiSelectionSearchText(evt.target.value));
+        dispatch(changeSearchText(evt.target.value));
     },
 
     handleClearText(evt){
         evt.preventDefault();
         const { dispatch } = this.props;
-        dispatch(EmojiSelectionSearchText(''));
+        dispatch(changeSearchText(''));
         this.emojiSearch.value = '';
         this.emojiSearch.focus();
     },

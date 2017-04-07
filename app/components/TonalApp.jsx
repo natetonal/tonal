@@ -14,17 +14,17 @@ export const TonalApp = React.createClass({
         const { dispatch } = this.props;
 
         // clear the UI state if the route changes
-        if(this.props.location.pathname !== nextProps.location.pathname){
+        if (this.props.location.pathname !== nextProps.location.pathname){
             dispatch(actions.resetUIState());
         }
     },
 
     render(){
 
-        const { uid }  = this.props;
+        const { uid } = this.props;
 
-        if(!uid){
-            return(
+        if (!uid){
+            return (
                 <div>
                     <HeaderLoggedOut />
                     <div className="tonal-main">

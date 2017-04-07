@@ -5,12 +5,13 @@ import select from 'selection-range';
 import validator from 'validator';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
-    composerChangeMenu,
-    composerSetPreviewImage,
-    composerSetImageUpload,
-    composerUpdateSuggestionQuery,
-    createFakePost
- } from 'actions';
+    changeMenu,
+    setPreviewImage,
+    setImageUpload,
+    updateSuggestionQuery
+} from 'actions/ComposerActions';
+import { createFakePost } from 'actions/HeaderComposeActions';
+
 import {
     getPathFromShortname,
     isEmoji
@@ -186,7 +187,7 @@ export const Composer = React.createClass({
                 }
             }
         }
-        dispatch(composerUpdateSuggestionQuery(word));
+        dispatch(updateSuggestionQuery(word));
         this.checkIfMentionsRemoved(textContent);
     },
 
@@ -342,7 +343,7 @@ export const Composer = React.createClass({
     handleInsertImage(path){
         this.clearMenus();
         const { dispatch } = this.props;
-        dispatch(composerSetPreviewImage(path));
+        dispatch(setPreviewImage(path));
     },
 
     // note: this function is also passed a "path" argument
@@ -362,7 +363,7 @@ export const Composer = React.createClass({
 
     handleUploadFile(file){
         const { dispatch } = this.props;
-        dispatch(composerSetImageUpload(file));
+        dispatch(setImageUpload(file));
     },
 
     handleControl(name, evt){
@@ -371,7 +372,7 @@ export const Composer = React.createClass({
         this.pos = select(this.composer);
         const { dispatch, currentMenu } = this.props;
         const menu = currentMenu === name ? '' : name;
-        dispatch(composerChangeMenu(menu));
+        dispatch(changeMenu(menu));
     },
 
     clearError(){
@@ -384,8 +385,8 @@ export const Composer = React.createClass({
     clearMenus(){
         const { dispatch } = this.props;
         this.clearError();
-        dispatch(composerChangeMenu());
-        dispatch(composerUpdateSuggestionQuery());
+        dispatch(changeMenu());
+        dispatch(updateSuggestionQuery());
     },
 
     // Processes passed entities for given input value
@@ -538,7 +539,7 @@ export const Composer = React.createClass({
 
     submitPost(){
         event.preventDefault();
-        const { dispatch, user } = this.props;
+        const { dispatch, user, onClose } = this.props;
         const postRaw = this.medium.value();
         console.log('output: ', postRaw);
         const postData = {
@@ -547,6 +548,7 @@ export const Composer = React.createClass({
             file: this.props.imageFile,
             length: this.checkLen()
         };
+        console.log('postData from submitPost: ', postData);
         const error = validatePost(postRaw, postData);
         if (error){
             this.setState({ error });
@@ -559,6 +561,7 @@ export const Composer = React.createClass({
             .then(parsedPost => {
                 console.log('parsedPost received from submitPost: ', parsedPost);
                 dispatch(createFakePost(parsedPost));
+                onClose();
             });
         }
     },

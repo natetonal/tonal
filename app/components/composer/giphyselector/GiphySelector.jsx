@@ -2,12 +2,11 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as Redux from 'react-redux';
 import {
-    GiphySelectionSearchText,
-    GiphySelectionFetchImages,
-    GiphySelectionSwitchTabs,
-    GiphySelectionResetImages,
-    GiphySelectionResetState
-} from 'actions';
+    fetchImages,
+    switchTabs,
+    resetImages,
+    resetState
+} from 'actions/GiphySelectorActions';
 
 import GiphySelectorTabs from './GiphySelectorTabs';
 import GiphySelectorSearch from './GiphySelectorSearch';
@@ -29,9 +28,9 @@ export const GiphySelector = React.createClass({
         }
 
         if (this.props.currentTab !== nextProps.currentTab){
-            dispatch(GiphySelectionResetImages());
+            dispatch(resetImages());
         } else if (this.props.currentMenu !== nextProps.currentMenu){
-            dispatch(GiphySelectionResetState());
+            dispatch(resetState());
         }
     },
 
@@ -45,7 +44,7 @@ export const GiphySelector = React.createClass({
 
     componentWillUnmount(){
         const { dispatch } = this.props;
-        dispatch(GiphySelectionResetState());
+        dispatch(resetState());
     },
 
     getImages(){
@@ -57,13 +56,13 @@ export const GiphySelector = React.createClass({
         } = this.props;
         const mode = `${ currentMenu }_${ currentTab }`;
 
-        dispatch(GiphySelectionFetchImages(mode, searchText));
+        dispatch(fetchImages(mode, searchText));
     },
 
     handleTabs(tab, event){
         event.preventDefault();
         const { dispatch } = this.props;
-        dispatch(GiphySelectionSwitchTabs(tab));
+        dispatch(switchTabs(tab));
     },
 
     selectImage(path){

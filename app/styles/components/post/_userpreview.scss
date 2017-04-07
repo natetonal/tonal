@@ -1,0 +1,109 @@
+.user-preview {
+    position: fixed;
+    z-index: 10;
+    width: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+
+    .user-preview-follow-action {
+        position: absolute;
+        background: rgba(100,100,100,.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 30px;
+        top: 70px;
+        left: 0;
+        font-size: 16px;
+
+        .fa{
+            color: white;
+        }
+
+        .fa-check{
+            color: $lightgreen;
+        }
+    }
+
+    .user-preview-top {
+        background: rgba(0,0,0,0.85);
+        display: flex;
+        font-family: $main-font;
+
+        .user-preview-avatar {
+            background: rgba(255,255,255,0.9);
+            display: inline-flex;
+            height: $user-preview-avatar;
+            width: $user-preview-avatar;
+
+            img{
+                height: $user-preview-avatar;
+                width: $user-preview-avatar;
+            }
+        }
+
+        .user-preview-info {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1;
+            padding: 10px;
+            font-size: 16px;
+
+            .user-preview-name {
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .user-preview-username {
+                font-size: 14px;
+                font-weight: 100;
+                padding: 1px 0 0;
+            }
+
+            .user-preview-location {
+                padding-top: 15px;
+
+                .fa{
+                    padding-right: 3px;
+                    color: $blue;
+                }
+            }
+        }
+    }
+
+    .user-preview-bottom{
+        background: rgba(25,25,25,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: $login-font;
+
+        .user-preview-followers,
+        .user-preview-following {
+            padding: 5px 0;
+            width: 50%;
+            text-align: center;
+        }
+
+        .user-preview-followers-label,
+        .user-preview-following-label {
+            padding: 5px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: $orange;
+        }
+
+        .user-preview-followers-count,
+        .user-preview-following-count {
+            font-size: 28px;
+        }
+
+        .user-preview-followers{
+            border-right: 1px solid rgba(0,0,0,0.75);
+        }
+    }
+}

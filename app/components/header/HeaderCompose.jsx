@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { headerComposeChangeTab } from 'actions';
+import { changeTab } from 'actions/HeaderComposeActions';
 
 // import HeaderComposeEditor from './HeaderComposeEditor'; - TEMPORARILY ABANDONED. REMEMBER TO DELETE IF NOT NEEDED.
 import Composer from 'composer/Composer';
@@ -32,7 +32,7 @@ export const HeaderCompose = React.createClass({
 
     handleTabClick(tab){
         const { dispatch } = this.props;
-        dispatch(headerComposeChangeTab(tab));
+        dispatch(changeTab(tab));
     },
 
     render(){
@@ -55,10 +55,11 @@ export const HeaderCompose = React.createClass({
         };
 
         const renderComponent = () => {
+            const { onClose } = this.props;
             let component = '';
             switch (tabSelected){
                 case 'post':
-                    component = <Composer />;
+                    component = <Composer onClose={ onClose } />;
                     break;
                 default:
                     component = '';

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import * as Redux from 'react-redux';
-import { GiphySelectionSearchText } from 'actions';
+import { changeSearchText } from 'actions/GiphySelectorActions';
 
 export const GiphySelectorSearch = React.createClass({
 
@@ -14,13 +14,13 @@ export const GiphySelectorSearch = React.createClass({
 
     handleInput(){
         const { dispatch } = this.props;
-        dispatch(GiphySelectionSearchText(this.giphySearch.value));
+        dispatch(changeSearchText(this.giphySearch.value));
     },
 
     handleClearText(evt){
         evt.preventDefault();
         const { dispatch } = this.props;
-        dispatch(GiphySelectionSearchText(''));
+        dispatch(changeSearchText(''));
         this.giphySearch.value = '';
         this.giphySearch.focus();
     },

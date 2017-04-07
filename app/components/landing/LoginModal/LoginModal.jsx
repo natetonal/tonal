@@ -4,7 +4,6 @@ import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Alert from 'elements/Alert';
-import Button from 'elements/Button';
 
 import Login from './Login';
 import Signup from './Signup';
@@ -16,7 +15,7 @@ import LoginEmailSent from './LoginEmailSent';
 
 export const LoginModal = React.createClass({
 
-    clearErrors(value){
+    clearErrors(){
         const { dispatch } = this.props;
         dispatch(actions.resetErrorMessage());
     },
@@ -27,21 +26,19 @@ export const LoginModal = React.createClass({
 
 
         const displayError = () => {
-            if(error){
-                return(
-                    <ReactCSSTransitionGroup transitionName="callout" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-                    <Alert
-                        type="error"
-                        title={ 'We have a problem.' }
-                        message={ error }
-                    />
-                    </ReactCSSTransitionGroup>
+            if (error){
+                return (
+                        <Alert
+                            type="alert-error"
+                            title={ 'We have a problem.' }
+                            message={ error }
+                        />
                 );
             }
         };
 
         const loginModalView = () => {
-            switch(loginModalUI){
+            switch (loginModalUI){
                 case 'login':
                     return <Login key="login" />;
                 case 'signup':
@@ -51,30 +48,42 @@ export const LoginModal = React.createClass({
                 case 'reset-password':
                     return <ResetPassword oobCode={ oobCode } userEmail={ email } key="reset-password" />;
                 case 'verifying-email':
-                    return <VerifyingEmail key="verifying-email" />
+                    return <VerifyingEmail key="verifying-email" />;
                 case 'email-sent-verify':
                 case 'email-sent-password':
                     return <LoginEmailSent key="email-sent" />;
                 default:
-                    return <div></div>;
-            };
+                    return <div />;
+            }
         };
 
-        return(
-            <div className={`md-modal md-effect-1 ${isOpen ? "md-show" : ""}`} id="modal-1">
-            	<div className="md-content">
-                    <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
+        return (
+            <div
+                className={ `md-modal md-effect-1 ${ isOpen ? 'md-show' : '' }` }
+                id="modal-1">
+                <div className="md-content">
+                    <ReactCSSTransitionGroup
+                        transitionName="smooth-popin"
+                        transitionAppear
+                        transitionAppearTimeout={ 200 }
+                        transitionEnter={ false }
+                        transitionLeave={ false }>
                         <div onClick={ this.clearErrors }>
                             { displayError() }
                             <div className="login-area">
-                                <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={250} transitionLeaveTimeout={1}>
+                                <ReactCSSTransitionGroup
+                                    transitionName="smooth-popin"
+                                    transitionAppear
+                                    transitionAppearTimeout={ 200 }
+                                    transitionEnter={ false }
+                                    transitionLeave={ false }>
                                     { loginModalView() }
                                 </ReactCSSTransitionGroup>
                             </div>
                             <LoginTabs />
                         </div>
                     </ReactCSSTransitionGroup>
-            	</div>
+                </div>
             </div>
         );
     }

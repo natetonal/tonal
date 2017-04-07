@@ -11,7 +11,7 @@
 
     @each $item in $alertThemes{
 
-        .#{nth($item, 1)}{
+        &.#{nth($item, 1)}{
             background: rgba(nth($item, 2), .97);
 
             .tonal-alert-title{
@@ -25,28 +25,63 @@
     }
 }
 
+.fullscreen {
+    background-color: $modal-bg;
+
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 11000;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
 .tonal-alert{
-	position: absolute;
-	z-index: $alert-zindex;
 	background: $alert-default;
 	width: 100%;
 	min-height: 150px;
 	color: $light-text;
     padding: 0;
 
-	h4, p{
-		background: transparent;
-        padding: 15px;
-	}
-
     .fa{
         padding-right: 10px;
+    }
+
+    .tonal-alert-title{
+        padding: 10px 0;
+        font-size: 24px;
     }
 
     .tonal-alert-body{
         padding: 25px;
     }
 
+    .tonal-alert-message{
+        font-size: 18px;
+    }
+
+    &.alert-fullscreen{
+        text-align: center;
+        width: 90%;
+    }
+
+    .tonal-alert-buttons {
+        padding-top: 30px;
+        font-size: 18px;
+
+        .tonal-alert-button {
+            padding: 10px;
+        }
+    }
+
+    @include alertTheme;
 }
 
-@include alertTheme;
+@include breakpoint(small only){
+    .tonal-alert{
+        position: absolute;
+    }
+}

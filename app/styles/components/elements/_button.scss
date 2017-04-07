@@ -4,14 +4,19 @@
 @mixin buttonTheme{
 
     $btnThemes: (
+        default: $black,
+        info: $blue,
+        success: $lightgreen,
+        error: $red,
+        warning: $yellow,
+        admin: $orange,
         main: $highlight1,
-        alert: $red,
-        facebook: $facebook
+        facebook: $facebook,
     );
 
     @each $themeName, $color in $btnThemes{
 
-        .#{$themeName}{
+        &.#{$themeName}{
 
             background: rgba($color, 1);
 
@@ -117,6 +122,6 @@
         outline: none;
         @include transition(all 0.2s);
     }
-}
 
-@include buttonTheme;
+    @include buttonTheme;
+}

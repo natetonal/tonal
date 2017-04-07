@@ -13,15 +13,16 @@ export const Button = React.createClass({
 
     render(){
 
-        const { hoverArrow,
-                btnText,
-                btnType,
-                btnIcon,
-                isLoading,
-                type,
-                disabled,
-                onClick
-            } = this.props;
+        const {
+            hoverArrow,
+            btnText,
+            btnType,
+            btnIcon,
+            isLoading,
+            type,
+            disabled,
+            onClick
+        } = this.props;
 
         return (
             <button

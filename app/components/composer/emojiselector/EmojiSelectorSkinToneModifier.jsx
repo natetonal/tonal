@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { EmojiSelectionModifySkinTone } from 'actions';
+import { modifySkinTone } from 'actions/EmojiSelectorActions';
 import {
     getPathFromShortname,
     skinToneArray
@@ -23,7 +23,7 @@ export const EmojiSelectorSkinToneModifier = React.createClass({
     handleClick(name, event){
         event.preventDefault();
         const { dispatch } = this.props;
-        dispatch(EmojiSelectionModifySkinTone(name));
+        dispatch(modifySkinTone(name));
     },
 
     render(){

@@ -1,17 +1,6 @@
-import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { reducer as form } from 'redux-form';
-import {
-    authReducer,
-    imgUrlReducer,
-    uiStateReducer,
-    errorsReducer,
-    userReducer,
-    emojiSelectorReducer,
-    giphySelectorReducer,
-    composerReducer,
-    headerComposeReducer
-} from 'reducers';
+import reducer from 'reducers';
 import DevTools from '../containers/DevTools';
 
 const enhancer = compose(
@@ -26,19 +15,6 @@ const enhancerProd = compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
 );
-
-const reducer = combineReducers({
-    form,
-    auth: authReducer,
-    imgUrl: imgUrlReducer,
-    uiState: uiStateReducer,
-    errors: errorsReducer,
-    user: userReducer,
-    headerCompose: headerComposeReducer,
-    composer: composerReducer,
-    emojiSelector: emojiSelectorReducer,
-    giphySelector: giphySelectorReducer
-});
 
 export default function configure(initialState) {
     // Note: only Redux >= 3.1.0 supports passing enhancer as third argument.

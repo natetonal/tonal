@@ -26,6 +26,7 @@ $highlight-hashtag: #d2fffa;
 $highlight-mention: #c8ffdd;
 
 // Layering
+$fullscreen-alert-zindex: 11000;
 $menu-pusher-zindex: 10000;
 $loginmodal-zindex: 200;
 $modaloverlay-zindex: 150;
@@ -89,8 +90,9 @@ $settings-padding: 14px;
 $settings-link-text: $inactive-light;
 
 // Content Area
-$content-height: 50vh;
-$content-top-padding: $header-height + 10px;
+$content-width: 80%;
+$content-width-small-view: 100%;
+$content-top-padding: 20px;
 $content-bg1: #424242;
 $content-bg2: #686868;
 
@@ -102,5 +104,7 @@ $tabs-bg-hover: $darkgray1;
 $tabs-icon-size: 36px;
 
 // Post
+$post-avatar-size: 60px;
 $post-font-size: 16px;
-$post-large-font-size: 24px;
+$post-large-font-size: 28px;
+$user-preview-avatar: 100px;

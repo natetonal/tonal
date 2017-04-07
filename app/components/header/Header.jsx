@@ -24,9 +24,8 @@ export const Header = React.createClass({
         dispatch(actions.toggleNotifs());
     },
 
-    onClickCompose(event) {
-        event.preventDefault();
-        const { dispatch, isNotifsOpen, isComposeOpen } = this.props;
+    onClickCompose() {
+        const { dispatch, isNotifsOpen } = this.props;
         if (isNotifsOpen) {
             dispatch(actions.toggleNotifs());
         }
@@ -86,7 +85,7 @@ export const Header = React.createClass({
                             <a onMouseDown={ this.onClickCompose } className="hi-icon hi-icon-mobile">
                                 <i className="fa fa-pencil" aria-hidden="true" />
                             </a>
-                            { isComposeOpen && <HeaderCompose /> }
+                            { isComposeOpen && <HeaderCompose onClose={ this.onClickCompose } /> }
                         </div>
                         <Search />
                     </div>

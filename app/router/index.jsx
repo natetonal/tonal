@@ -3,12 +3,12 @@ import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 
 // Components
 import TonalApp from 'TonalApp';
-import Landing from 'landing/Landing.jsx';
-import Connect from 'connect/Connect.jsx';
-import Discover from 'discover/Discover.jsx';
-import MyMusic from 'mymusic/MyMusic.jsx';
-import TonalStore from 'tonalstore/TonalStore.jsx';
-
+import Landing from 'landing/Landing';
+import Connect from 'connect/Connect';
+import Discover from 'discover/Discover';
+import MyMusic from 'mymusic/MyMusic';
+import TonalStore from 'tonalstore/TonalStore';
+import NotFound from 'notfound/NotFound';
 import firebase from 'app/firebase';
 
 // React-Router middleware (next allows async actions)
@@ -33,14 +33,15 @@ const redirectIfLoggedIn = (nextState, replace, next) => {
 };
 
 export default (
-<Router history={browserHistory}>
-    <Route path="/" component={TonalApp}>
-        <IndexRoute component={Landing} onEnter={redirectIfLoggedIn} />
-        <Route path="auth" component={Landing} />
-        <Route path="connect" component={Connect} onEnter={requireLogin} />
-        <Route path="discover" component={Discover} onEnter={requireLogin} />
-        <Route path="mymusic" component={MyMusic} onEnter={requireLogin} />
-        <Route path="store" component={TonalStore} onEnter={requireLogin} />
-    </Route>
-</Router>
+    <Router history={ browserHistory }>
+        <Route path="/" component={ TonalApp }>
+            <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
+            <Route path="auth" component={ Landing } />
+            <Route path="connect" component={ Connect } onEnter={ requireLogin } />
+            <Route path="discover" component={ Discover } onEnter={ requireLogin } />
+            <Route path="mymusic" component={ MyMusic } onEnter={ requireLogin } />
+            <Route path="store" component={ TonalStore } onEnter={ requireLogin } />
+            <Route path="*" component={ NotFound } />
+        </Route>
+    </Router>
 );

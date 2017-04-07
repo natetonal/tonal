@@ -1,9 +1,9 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import {
-    composerSetPreviewImage,
-    composerSetImageUpload
-} from 'actions';
+    setPreviewImage,
+    setImageUpload
+} from 'actions/ComposerActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 export const ComposerImagePreviewer = React.createClass({
@@ -20,8 +20,8 @@ export const ComposerImagePreviewer = React.createClass({
 
     handleClearImage(){
         const { dispatch } = this.props;
-        dispatch(composerSetPreviewImage());
-        dispatch(composerSetImageUpload());
+        dispatch(setPreviewImage());
+        dispatch(setImageUpload());
     },
 
     warningLightOn(){

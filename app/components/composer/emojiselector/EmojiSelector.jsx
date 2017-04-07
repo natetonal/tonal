@@ -2,10 +2,11 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import {
-    EmojiSelectionChangeTab,
-    EmojiSelectionChangeTabTitle,
-    EmojiSelectionChangeTitleDisplay,
-} from 'actions';
+    changeTab,
+    changeTabTitle,
+    changeTitleDisplay,
+} from 'actions/EmojiSelectorActions';
+
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import EmojiSelectorTitle from './EmojiSelectorTitle';
 import EmojiSelectorTabs from './EmojiSelectorTabs';
@@ -39,18 +40,18 @@ export const EmojiSelector = React.createClass({
 
     changeTitleDisplay(title){
         const { dispatch } = this.props;
-        dispatch(EmojiSelectionChangeTitleDisplay(title));
+        dispatch(changeTitleDisplay(title));
     },
 
     clearTitleDisplay(){
         const { dispatch, currentTabTitle } = this.props;
-        dispatch(EmojiSelectionChangeTitleDisplay(currentTabTitle));
+        dispatch(changeTitleDisplay(currentTabTitle));
     },
 
     changeTab(tab, title){
         const { dispatch } = this.props;
-        dispatch(EmojiSelectionChangeTab(tab));
-        dispatch(EmojiSelectionChangeTabTitle(title));
+        dispatch(changeTab(tab));
+        dispatch(changeTabTitle(title));
     },
 
     selectEmoji(shortname, path){

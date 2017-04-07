@@ -3,11 +3,7 @@ import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
 import Post from 'post/Post';
-import Alert from 'elements/Alert';
 
-// temporary
-import moment from 'moment';
-// temporary
 
 export const Connect = React.createClass({
 
@@ -16,7 +12,7 @@ export const Connect = React.createClass({
         const { post } = this.props;
 
         return (
-            <div className="connect-container-2">
+            <div className="connect-container">
                 <Post data={ post } />
             </div>
         );
