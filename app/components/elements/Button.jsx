@@ -1,15 +1,6 @@
 import React from 'react';
-import * as Redux from 'react-redux';
 
 export const Button = React.createClass({
-
-    displayIcon(btnIcon){
-        return btnIcon ? <i className={ `fa ${ btnIcon }` } aria-hidden="true" /> : '';
-    },
-
-    loading(isLoading){
-        return isLoading ? <i className="fa fa-cog fa-spin fa-fw" /> : '';
-    },
 
     render(){
 
@@ -24,16 +15,36 @@ export const Button = React.createClass({
             onClick
         } = this.props;
 
+        const displayIcon = () => {
+            if (btnIcon){
+                return (
+                    <i
+                        className={ `fa ${ btnIcon }` }
+                        aria-hidden="true" />
+                );
+            }
+
+            return '';
+        };
+
+        const loading = () => {
+            if (isLoading){
+                return <i className="fa fa-cog fa-spin fa-fw" />;
+            }
+
+            return '';
+        };
+
         return (
             <button
                 onClick={ onClick }
                 type={ type }
                 disabled={ disabled }
                 className={ `tonal-btn ${ btnType || 'main' } ${ hoverArrow ? 'icon-arrow-right' : '' } ${ disabled ? 'disabled' : '' }` }>
-                { this.displayIcon(btnIcon) }{ btnText }{ this.loading(isLoading) }
+                { displayIcon() }{ btnText }{ loading() }
             </button>
         );
     }
 });
 
-export default Redux.connect()(Button);
+export default Button;

@@ -1,23 +1,23 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import * as actions from 'actions';
+import { toggleLoginModal } from 'actions/UIStateActions';
 
 export const ModalOverlay = React.createClass({
 
     toggleLoginModal(event){
         event.preventDefault();
         const { dispatch } = this.props;
-        dispatch(actions.toggleLoginModal());
+        dispatch(toggleLoginModal());
     },
 
     render(){
 
         const { isModalOpen } = this.props;
-        
-        return(
-            <div className={`md-overlay ${ isModalOpen ? "show-overlay" : ""}`}
-                 onClick={ this.toggleLoginModal }>
-            </div>
+
+        return (
+            <div
+                className={ `md-overlay ${ isModalOpen ? 'show-overlay' : '' }` }
+                onClick={ this.toggleLoginModal } />
         );
     }
 });

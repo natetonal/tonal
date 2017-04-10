@@ -2,7 +2,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
-import * as actions from 'actions';
+import { fetchUserData } from 'actions/UserActions';
+import { startLoginForAuthorizedUser } from 'actions/AuthActions';
 import configure from './store/configureStore';
 import Root from './containers/Root';
 
@@ -15,12 +16,13 @@ $(document).foundation(); // eslint-disable-line
 require('style!css!sass!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged(user => {
+    console.log('auth state changed: ', user);
     if (user) {
         const providerId = user.providerData[0].providerId;
         if (providerId === 'facebook.com' ||
         (providerId === 'password' && user.emailVerified)) {
-            store.dispatch(actions.fetchUserData(user.uid));
-            store.dispatch(actions.startLoginForAuthorizedUser(user.uid));
+            store.dispatch(fetchUserData(user.uid));
+            store.dispatch(startLoginForAuthorizedUser(user.uid));
         }
     }
     // } else {
@@ -31,6 +33,7 @@ firebase.auth().onAuthStateChanged(user => {
     //     store.dispatch(actions.pushToRoute('/'));
     // }
 });
+
 
 render(
     <AppContainer>

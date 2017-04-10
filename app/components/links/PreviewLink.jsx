@@ -112,6 +112,7 @@ export const PreviewLink = React.createClass({
                     className={ className }
                     onMouseEnter={ e => this.handleMentionPreview(data, type, e) }
                     onMouseOut={ () => this.handleClearMentionPreview() }
+                    onClick={ () => this.handleClearMentionPreview() }
                     to={ src }>
                     { children }
                 </Link>

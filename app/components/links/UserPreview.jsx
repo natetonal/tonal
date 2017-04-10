@@ -61,7 +61,7 @@ export const UserPreview = React.createClass({
                         </div>
                         <div className="user-preview-location">
                             <i className="fa fa-location-arrow" aria-hidden="true" />
-                            { ` ${ user.city }, ${ user.state ? user.state + ', ' + user.country : user.country }` }
+                            { ` ${ user.location }` }
                         </div>
                     </div>
                 </div>

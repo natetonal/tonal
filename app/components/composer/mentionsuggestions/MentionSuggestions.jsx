@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import DummyData from './dummydata.json';

@@ -10,6 +10,8 @@ import {
     setImageUpload,
     updateSuggestionQuery
 } from 'actions/ComposerActions';
+
+import Alert from 'elements/Alert';
 import { createFakePost } from 'actions/HeaderComposeActions';
 
 import {
@@ -73,6 +75,7 @@ export const Composer = React.createClass({
             focused: false,
             enabled: true,
             error: false,
+            warning: false,
             mentions: [],
             history: [],
             pos: '',
@@ -375,6 +378,18 @@ export const Composer = React.createClass({
         dispatch(changeMenu(menu));
     },
 
+    handleWarning(warning = false){
+        event.preventDefault();
+        const { onClose } = this.props;
+        if (warning){
+            this.setState({
+                warning
+            });
+        } else {
+            onClose();
+        }
+    },
+
     clearError(){
         const { error } = this.state;
         if (error){
@@ -541,14 +556,12 @@ export const Composer = React.createClass({
         event.preventDefault();
         const { dispatch, user, onClose } = this.props;
         const postRaw = this.medium.value();
-        console.log('output: ', postRaw);
         const postData = {
             mentions: this.state.mentions,
             image: this.props.previewImage,
             file: this.props.imageFile,
             length: this.checkLen()
         };
-        console.log('postData from submitPost: ', postData);
         const error = validatePost(postRaw, postData);
         if (error){
             this.setState({ error });
@@ -560,8 +573,12 @@ export const Composer = React.createClass({
             parsePost(postRaw, postData, user)
             .then(parsedPost => {
                 console.log('parsedPost received from submitPost: ', parsedPost);
-                dispatch(createFakePost(parsedPost));
-                onClose();
+                if (parsedPost.error){
+                    this.handleWarning(parsedPost);
+                } else {
+                    dispatch(createFakePost(parsedPost));
+                    onClose();
+                }
             });
         }
     },
@@ -574,6 +591,7 @@ export const Composer = React.createClass({
             focused,
             enabled,
             error,
+            warning,
             buttons,
             mainClass,
             buttonPos
@@ -612,6 +630,28 @@ export const Composer = React.createClass({
                             </span>
                         </div>
                     </ReactCSSTransitionGroup>
+                );
+            }
+            return '';
+        };
+
+        const warn = () => {
+            if (warning){
+                const alertBtns = [
+                    {
+                        text: 'Understood.',
+                        callback: () => this.handleWarning()
+                    }
+                ];
+                return (
+                    <Alert
+                        type="error"
+                        fullscreen
+                        title={ warning.title }
+                        message={ warning.message }
+                        buttons={ alertBtns }
+                        onClose={ () => this.handleWarning() }
+                    />
                 );
             }
             return '';
@@ -679,6 +719,7 @@ export const Composer = React.createClass({
 
         return (
             <div className="header-compose-post">
+                { warn() }
                 { buttonPos !== 'bottom' && (
                 <div className={ cls.controls }>
                     { btns() }

@@ -1,12 +1,10 @@
 import React from 'react';
-import * as Redux from 'react-redux';
 import { Link } from 'react-router';
-import * as actions from 'actions';
 
 export const Tabs = React.createClass({
 
     render(){
-        return(
+        return (
             <div className="tonal-tabs">
                 <ul>
                     <li>
@@ -39,4 +37,4 @@ export const Tabs = React.createClass({
     }
 });
 
-export default Redux.connect()(Tabs);
+export default Tabs;

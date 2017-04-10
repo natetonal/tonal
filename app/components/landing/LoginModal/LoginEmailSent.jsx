@@ -10,7 +10,7 @@ const LoginEmailSent = React.createClass({
         const { loginModalUI } = this.props;
 
         const messaging = () => {
-            switch(loginModalUI){
+            switch (loginModalUI){
                 case 'email-sent-verify':
                     return 'Account verification email has been sent. Click the link in your email to confirm your account.';
                 case 'email-sent-password':
@@ -23,7 +23,11 @@ const LoginEmailSent = React.createClass({
         return (
             <div className="login-verification-email-sent">
                 <h2>Email Sent!</h2>
-                <h3><i className="fa fa-thumbs-o-up fa-3x" aria-hidden="true"></i></h3>
+                <h3>
+                    <i
+                        className="fa fa-thumbs-o-up fa-3x"
+                        aria-hidden="true" />
+                </h3>
                 <h5>{ messaging() }</h5>
             </div>
         );
@@ -31,7 +35,7 @@ const LoginEmailSent = React.createClass({
 });
 
 export default Redux.connect(state => {
-    return{
+    return {
         loginModalUI: state.uiState.loginModalUI
     };
 })(LoginEmailSent);

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import * as actions from 'actions';
+import { resetErrorMessage } from 'actions/AuthActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Alert from 'elements/Alert';
@@ -17,22 +17,28 @@ export const LoginModal = React.createClass({
 
     clearErrors(){
         const { dispatch } = this.props;
-        dispatch(actions.resetErrorMessage());
+        dispatch(resetErrorMessage());
     },
 
     render(){
 
-        const { email, isOpen, loginModalUI, error, oobCode } = this.props;
+        const {
+            email,
+            isOpen,
+            loginModalUI,
+            error,
+            oobCode
+        } = this.props;
 
 
         const displayError = () => {
             if (error){
                 return (
-                        <Alert
-                            type="alert-error"
-                            title={ 'We have a problem.' }
-                            message={ error }
-                        />
+                    <Alert
+                        type="error"
+                        title={ 'We have a problem.' }
+                        message={ error }
+                    />
                 );
             }
         };
@@ -46,7 +52,12 @@ export const LoginModal = React.createClass({
                 case 'forgot-password':
                     return <ForgotPassword key="forgot-password" />;
                 case 'reset-password':
-                    return <ResetPassword oobCode={ oobCode } userEmail={ email } key="reset-password" />;
+                    return (
+                        <ResetPassword
+                            oobCode={ oobCode }
+                            userEmail={ email }
+                            key="reset-password" />
+                    );
                 case 'verifying-email':
                     return <VerifyingEmail key="verifying-email" />;
                 case 'email-sent-verify':
@@ -94,7 +105,7 @@ export default Redux.connect(state => {
         email: state.user.email,
         isOpen: state.uiState.loginModalIsOpen,
         loginModalUI: state.uiState.loginModalUI,
-        error: state.errors,
+        error: state.auth.error,
         oobCode: state.auth.oobCode
     };
 })(LoginModal);

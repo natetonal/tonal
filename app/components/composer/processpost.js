@@ -9,9 +9,6 @@ const maxEmoji = 100;
 export const validatePost = (postRaw, postData) => {
     let error = false;
     const emojiCount = postRaw.match(new RegExp('<img', 'g'));
-    console.log('postRaw?', postRaw);
-    console.log('postData.file? ', postData.file);
-    console.log('postData.image? ', postData.image);
     if (!postRaw
         && !postData.file
         && !postData.image){
@@ -27,10 +24,11 @@ export const validatePost = (postRaw, postData) => {
     return error;
 };
 
+// test link:
+// http://ianfette.org
 const checkIfLinksAreSafe = (links, post) => {
     if (!post) { return false; }
 
-    console.log('links sent to checkIfLinksAreSafe: ', links);
     const apiURL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find';
     const key = process.env.API_KEY;
     const request = {
@@ -54,16 +52,23 @@ const checkIfLinksAreSafe = (links, post) => {
         params: { key }
     })
     .then(response => {
-        console.log('RESPONSE: ', response);
         if (Object.keys(response.data).length === 0 &&
             response.data.constructor === Object){
-            console.log('these URLs are safe! returning post.');
             return post;
         }
+
+        return {
+            error: true,
+            title: `WARNING: ${ response.data.matches[0].threatType }`,
+            message: 'The link you have attempted to post has been flagged for harmful or malicious content. Please refrain from posting links from these sites.'
+        };
     })
     .catch(error => {
-        console.log('ERROR: ', error);
-        return post;
+        return {
+            error: true,
+            title: 'Well this is embarassing.',
+            message: 'There was an error checking the security of your post links. Please try again later.'
+        };
     });
 };
 
@@ -142,22 +147,24 @@ export const parsePost = (html, data, userData) => {
     parsedPost.write(html);
     parsedPost.end();
 
-    console.log('links val: ', links);
     if (links){
         return checkIfLinksAreSafe(links, post)
         .then(safePost => {
-            console.log('safePost: ', safePost);
-            postData = {
-                ...postData,
-                hashtags,
-                likes: 0,
-                thread: false,
-                timeStamp: moment().calendar(),
-                user: userData,
-                post: safePost
-            };
+            if (!safePost.error){
+                postData = {
+                    ...postData,
+                    hashtags,
+                    likes: 0,
+                    thread: false,
+                    timeStamp: moment().calendar(),
+                    user: userData,
+                    post: safePost
+                };
 
-            return postData;
+                return postData;
+            }
+
+            return safePost;
         });
     }
 

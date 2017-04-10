@@ -2,7 +2,6 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import { changeTab } from 'actions/HeaderComposeActions';
 
-// import HeaderComposeEditor from './HeaderComposeEditor'; - TEMPORARILY ABANDONED. REMEMBER TO DELETE IF NOT NEEDED.
 import Composer from 'composer/Composer';
 
 const headerComposeTabs = [

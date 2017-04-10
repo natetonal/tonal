@@ -1,9 +1,11 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import * as actions from 'actions';
+import {
+    createUserWithFacebookAuth,
+    createUserWithEmailAndPassword
+} from 'actions/UserActions';
 
 import validate from './validate';
-import asyncValidate from './asyncValidate';
 import Input from './../../elements/Input';
 import Button from './../../elements/Button';
 
@@ -12,32 +14,59 @@ export const Signup = React.createClass({
     handleFacebookLogin(event){
         event.preventDefault();
         const { dispatch } = this.props;
-        return dispatch(actions.createUserWithFacebookAuth());
+        return dispatch(createUserWithFacebookAuth());
     },
 
     handleFormSubmit(values){
-
-        const { email, password } = values;
+        const {
+            email,
+            password
+        } = values;
         const { dispatch } = this.props;
-
-        return dispatch(actions.createUserWithEmailAndPassword(email, password));
+        return dispatch(createUserWithEmailAndPassword(email, password));
     },
 
     render(){
 
-        const { handleSubmit, submitting } = this.props;
+        const {
+            handleSubmit,
+            submitting
+        } = this.props;
 
-        return(
+        return (
             <div>
                 <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
-                    <Field name="email" label="Email" type="text" component={ Input } />
-                    <Field name="password" label="Password" type="password" component={ Input } />
-                    <Field name="confirmPassword" label="Confirm Password" type="password" component={ Input } />
-                    <Button type="submit" btnType="main" isLoading={ submitting } btnIcon="" btnText={ submitting ? "Submitting" : "Create Account"} />
+                    <Field
+                        name="email"
+                        label="Email"
+                        type="text"
+                        component={ Input } />
+                    <Field
+                        name="password"
+                        label="Password"
+                        type="password"
+                        component={ Input } />
+                    <Field
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        component={ Input } />
+                    <Button
+                        type="submit"
+                        btnType="main"
+                        isLoading={ submitting }
+                        btnIcon=""
+                        btnText={ submitting ? 'Submitting' : 'Create Account' } />
                 </form>
                 <div>
-                    <p className="text-center">-OR-</p>
-                    <Button onClick={ this.handleFacebookLogin } btnType="facebook" btnIcon="fa-facebook-official" btnText="Sign Up With Facebook" />
+                    <p className="text-center">
+                        -OR-
+                    </p>
+                    <Button
+                        onClick={ this.handleFacebookLogin }
+                        btnType="facebook"
+                        btnIcon="fa-facebook-official"
+                        btnText="Sign Up With Facebook" />
                 </div>
             </div>
         );
@@ -45,6 +74,6 @@ export const Signup = React.createClass({
 });
 
 export default reduxForm({
-  form: 'signup',
-  validate
+    form: 'signup',
+    validate
 })(Signup);

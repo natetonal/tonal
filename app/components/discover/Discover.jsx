@@ -1,11 +1,10 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import * as actions from 'actions';
 
 export const Discover = React.createClass({
 
     render(){
-        return(
+        return (
             <div>Discover</div>
         );
     }

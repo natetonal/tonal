@@ -29,7 +29,7 @@ export const Post = React.createClass({
                 thread,
                 length,
                 user: {
-                    avatarPhoto,
+                    avatar,
                     displayName
                 }
             } = data;
@@ -83,7 +83,7 @@ export const Post = React.createClass({
                             </div>
                             <div className="tonal-post-avatar">
                                 <img
-                                    src={ avatarPhoto }
+                                    src={ avatar }
                                     alt={ displayName }
                                     className="tonal-post-1-avatar-photo" />
                             </div>

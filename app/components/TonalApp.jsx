@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as actions from 'actions';
+import { resetUIState } from 'actions/UIStateActions';
 
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
 import ModalOverlay from 'header/ModalOverlay';
-import MenuWrapper from './MenuWrapper';
 import Header from 'header/Header';
+import MenuWrapper from './MenuWrapper';
 import Tabs from './Tabs';
+
 
 export const TonalApp = React.createClass({
 
@@ -15,7 +16,7 @@ export const TonalApp = React.createClass({
 
         // clear the UI state if the route changes
         if (this.props.location.pathname !== nextProps.location.pathname){
-            dispatch(actions.resetUIState());
+            dispatch(resetUIState());
         }
     },
 
@@ -37,12 +38,12 @@ export const TonalApp = React.createClass({
             );
         }
 
-        return(
+        return (
             <MenuWrapper>
                 <Header />
-                    <div className="tonal-content">
-                        { this.props.children }
-                    </div>
+                <div className="tonal-content">
+                    { this.props.children }
+                </div>
                 <Tabs />
             </MenuWrapper>
         );
@@ -50,10 +51,8 @@ export const TonalApp = React.createClass({
     }
 });
 
-const mapStateToProps = (state) => {
+export default connect(state => {
     return {
         uid: state.user.uid
     };
-};
-
-export default connect(mapStateToProps)(TonalApp);
+})(TonalApp);

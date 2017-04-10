@@ -1,22 +1,30 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import * as actions from 'actions';
+import {
+    toggleLoginModal,
+    switchLoginModalUI
+} from 'actions/UIStateActions';
+
+import {
+    verifyEmailWithCode,
+    verifyPasswordResetCode
+} from 'actions/AuthActions';
 
 import LoginModal from './LoginModal/LoginModal';
 
 export const Landing = React.createClass({
 
     componentDidMount(){
-        if(this.props.location){
+        if (this.props.location){
             const { dispatch, location: { query: { mode, oobCode }}} = this.props;
-            if(mode == 'resetPassword' && oobCode){
-                dispatch(actions.toggleLoginModal());
-                dispatch(actions.switchLoginModalUI('reset-password'));
-                dispatch(actions.verifyPasswordResetCode(oobCode));
-            } else if(mode == 'verifyEmail' && oobCode){
-                dispatch(actions.toggleLoginModal());
-                dispatch(actions.switchLoginModalUI('verifying-email'));
-                dispatch(actions.verifyEmailWithCode(oobCode));
+            if (mode === 'resetPassword' && oobCode){
+                dispatch(toggleLoginModal());
+                dispatch(switchLoginModalUI('reset-password'));
+                dispatch(verifyPasswordResetCode(oobCode));
+            } else if (mode === 'verifyEmail' && oobCode){
+                dispatch(toggleLoginModal());
+                dispatch(switchLoginModalUI('verifying-email'));
+                dispatch(verifyEmailWithCode(oobCode));
             }
         }
     },
@@ -25,12 +33,11 @@ export const Landing = React.createClass({
 
         const { isModalOpen } = this.props;
 
-        return(
+        return (
             <div>
                 <LoginModal />
-                <div className={`auth-content ${ isModalOpen ? "blur" : "" }`}>
-                    <div className="landing-section section-1">
-                    </div>
+                <div className={ `auth-content ${ isModalOpen ? 'blur' : '' }` }>
+                    <div className="landing-section section-1" />
                 </div>
             </div>
         );

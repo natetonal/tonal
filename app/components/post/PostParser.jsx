@@ -1,33 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Alert from 'elements/Alert';
 import PreviewLink from 'links/PreviewLink';
 
 // Note - In execution, make sure to use something more user-specific than their name, such as unique ID.
 export const PostParser = React.createClass({
-
-    componentWillMount(){
-        this.setState({
-            showAlert: false,
-            link: '',
-            loading: false
-        });
-    },
-
-    handleRedirect(link){
-        this.setState({ loading: true });
-        window.location.replace(link);
-    },
-
-    handleClose(){
-        this.setState({
-            showAlert: false,
-            link: '',
-            loading: false
-        });
-    },
 
     replaceHTMLEntities(textBlock){
         const escapeCharsRegex = /&lt;|&gt;|&amp;|&nbsp;/gi;
@@ -78,15 +55,14 @@ export const PostParser = React.createClass({
         return `http://${ link }`;
     },
 
-    handleLinkClick(link, event){
-        event.preventDefault();
+    formatLink(link){
         if (!this.isThisTonal(link)){
             link = this.prependProtocol(link);
-            this.setState({
-                showAlert: true,
-                link
-            });
+            console.log('link: ', link);
+            return link;
         }
+
+        return link;
     },
 
     render(){
@@ -94,42 +70,6 @@ export const PostParser = React.createClass({
             post,
             className
         } = this.props;
-
-        const {
-            link,
-            showAlert,
-            loading
-        } = this.state;
-
-        const alert = () => {
-            if (showAlert){
-
-                const alertBtns = [
-                    {
-                        text: 'Yes, And Away I Go!',
-                        callback: () => this.handleRedirect(link),
-                        isLoading: loading
-                    },
-                    {
-                        text: 'No, I Think I\'ll Stay For A Bit.',
-                        callback: () => this.handleClose()
-                    },
-                ];
-
-                return (
-                    <Alert
-                        type="default"
-                        fullscreen
-                        title={ 'Whoa there.' }
-                        message={ 'You clicked on a link that is outside of Tonal. Did you mean to do that?' }
-                        buttons={ alertBtns }
-                        onClose={ this.handleClose }
-                    />
-                );
-            }
-
-            return '';
-        };
 
         if (post){
             const processPost = () => {
@@ -172,12 +112,12 @@ export const PostParser = React.createClass({
                                     </Link>
                                 );
                             case 'link':
+                                const src = this.formatLink(chunk.value);
                                 return (
                                     <a
                                         key={ key }
-                                        href={ chunk.value }
+                                        href={ src }
                                         target="_blank"
-                                        onClick={ e => this.handleLinkClick(chunk.value, e) }
                                         rel="noopener noreferrer">
                                         { chunk.value }
                                     </a>
@@ -195,7 +135,6 @@ export const PostParser = React.createClass({
 
             return (
                 <div className={ className }>
-                    { alert() }
                     { processPost() }
                 </div>
             );

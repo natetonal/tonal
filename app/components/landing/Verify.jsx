@@ -1,6 +1,6 @@
 import React from 'react';
-import * as Redux from 'react-redux';
-import * as actions from 'actions';
+import { verifyEmailWithCode } from 'actions/AuthActions';
+import { pushToRoute } from 'actions/RouteActions';
 
 import Alert from 'elements/Alert';
 
@@ -11,38 +11,41 @@ export const Verify = React.createClass({
 
     // Load in your component here
 
-    handleQuery(mode, oobCode){
-        const { dispatch } = this.props;
-        if(mode == 'verifyEmail' && oobCode){
-            return dispatch(actions.verifyEmailWithCode(oobCode));
-        } else {
-            return dispatch(actions.pushToRoute('/'));
-        }
-    },
-
     componentDidMount(){
         const { location: { query: { mode, oobCode }}} = this.props;
         this.handleQuery(mode, oobCode);
     },
 
+    handleQuery(mode, oobCode){
+        const { dispatch } = this.props;
+        if (mode === 'verifyEmail' && oobCode){
+            return dispatch(verifyEmailWithCode(oobCode));
+        }
+
+        return dispatch(pushToRoute('/'));
+
+    },
+
     render(){
 
-        return(
+        return (
             <div>
                 <Alert
                     type="warning"
                     title="Verifying E-Mail"
-                    message={(
-                        <div>
-                            <p>One moment please while we verify your e-mail...</p>
-                            <i className="fa fa-cog fa-spin fa-3x fa-fw float-center"></i>
-                        </div>
-                    )}
+                    message={
+                        (
+                            <div>
+                                <p>One moment please while we verify your e-mail...</p>
+                                <i className="fa fa-cog fa-spin fa-3x fa-fw float-center" />
+                            </div>
+                        )
+                    }
                 />
-                <div className={`auth-content blur`}></div>
+                <div className={ 'auth-content blur' } />
             </div>
         );
     }
 });
 
-export default Redux.connect()(Verify);
+export default Verify;

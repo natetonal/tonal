@@ -1,6 +1,7 @@
 const initialState = {
     uid: '',
-    oobCode: ''
+    oobCode: '',
+    error: ''
 };
 
 export default (state = initialState, action) => {
@@ -19,6 +20,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 oobCode: action.oobCode
+            };
+        case 'ADD_LOGIN_ERROR':
+            return {
+                ...state,
+                error: action.error
+            };
+        case 'RESET_LOGIN_ERROR':
+            return {
+                ...state,
+                error: ''
             };
         default:
             return state;

@@ -1,14 +1,23 @@
+import moment from 'moment';
+
+const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-avatar.png?alt=media&token=f7e23557-bc15-44fd-bfb5-1ddff07bc954';
+
 const initialState = {
     uid: '',
     fbToken: '',
+    fbId: '',
     email: '',
     firstName: '',
     lastName: '',
+    userName: '',
+    location: '',
     displayName: '',
-    timeZone: '',
-    avatarPhoto: '',
-    updatedAt: '',
-    createdAt: ''
+    timeZone: -7,
+    avatar: dummyPhoto,
+    updatedAt: moment().format('LLLL'),
+    createdAt: moment().format('LLLL'),
+    followers: 0,
+    following: 0
 };
 
 export default (state = initialState, action) => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Button from './Button';
@@ -24,16 +23,12 @@ export const Alert = React.createClass({
         return {
             type: 'default',
             title: 'Title',
-            button: [],
+            button: false,
             fullscreen: false,
             animate: true,
             message: 'Message',
             onClose: () => console.log('You need to pass a handler to dismiss this.')
         };
-    },
-
-    handleClose(event){
-
     },
 
     render(){
@@ -61,16 +56,18 @@ export const Alert = React.createClass({
                 const onClick = button.callback;
 
                 return (
-                    <div
-                        key={ `tonal-alert-button_${ index }` }
-                        className={ `tonal-alert-button small-12 large-${ btnWidth } columns` }>
-                        <Button
-                            type="button"
-                            isLoading={ isLoading }
-                            btnText={ btnText }
-                            btnType={ btnType }
-                            btnIcon={ btnIcon }
-                            onClick={ onClick } />
+                    <div className="tonal-alert-buttons row">
+                        <div
+                            key={ `tonal-alert-button_${ index }` }
+                            className={ `tonal-alert-button small-12 large-${ btnWidth } columns` }>
+                            <Button
+                                type="button"
+                                isLoading={ isLoading }
+                                btnText={ btnText }
+                                btnType={ btnType }
+                                btnIcon={ btnIcon }
+                                onClick={ onClick } />
+                        </div>
                     </div>
                 );
             });
@@ -116,9 +113,7 @@ export const Alert = React.createClass({
                             <div className="tonal-alert-message">
                                 { message }
                             </div>
-                            <div className="tonal-alert-buttons row">
-                                { renderButtons() }
-                            </div>
+                            { renderButtons() }
                         </div>
                     </div>
                 </div>
@@ -127,4 +122,4 @@ export const Alert = React.createClass({
     }
 });
 
-export default connect()(Alert);
+export default Alert;
