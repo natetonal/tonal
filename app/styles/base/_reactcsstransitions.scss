@@ -18,15 +18,72 @@
     }
 }
 
-.dramatic-fadein-appear {
+.smooth-fadein-enter {
+    opacity: 0.01;
+
+    &.smooth-fadein-enter-active {
+        opacity: 1;
+        @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+    }
+}
+
+.smooth-fadein-leave {
+    opacity: 1;
+
+    &.smooth-fadein-leave-active {
+        opacity: 0;
+        @include transition(all 200ms cubic-bezier(.27,1.27,.48,.56));
+    }
+}
+
+.dramatic-fadein-appear{
     opacity: 0.01;
 
     &.dramatic-fadein-appear-active {
         opacity: 1;
-        @include transition(all 1s linear);
+        @include transition(all 500ms linear);
     }
 }
 
+.dramatic-fadein-enter{
+    opacity: 0.01;
+
+    &.dramatic-fadein-enter-active {
+        opacity: 1;
+        @include transition(all 500ms linear);
+    }
+}
+
+.dramatic-fadein-leave {
+    opacity: 1;
+
+    &.dramatic-fadein-leave-active {
+        opacity: 0.01;
+        @include transition(all 500ms linear);
+    }
+}
+
+.fade-and-grow-slow-enter {
+    opacity: 0.01;
+    margin-top: -100%;
+
+    &.fade-and-grow-slow-enter-active {
+        opacity: 1;
+        margin-top: 0;
+        @include transition(all 400ms cubic-bezier(0.095, 0.995, 0.040, 1.005));
+    }
+}
+
+.fade-and-grow-slow-leave{
+	opacity: 1;
+    margin-top: 0;
+
+	&.fade-and-grow-slow-leave-active{
+		opacity: 0;
+        margin-top: -100%;
+		@include transition(all 400ms cubic-bezier(0.095, 0.995, 0.040, 1.005));
+	}
+}
 
 .fade-and-grow-appear {
     opacity: 0.01;

@@ -48,11 +48,12 @@ export const Header = React.createClass({
             isMenuOpen,
             isNotifsOpen,
             isComposeOpen,
-            photoURL
+            avatar
         } = this.props;
 
+        console.log('from header - avatar? ', avatar);
         const photo = () => {
-            if (photoURL){
+            if (avatar){
                 return (
                     <div className="tonal-header-avatar">
                         <a
@@ -60,7 +61,7 @@ export const Header = React.createClass({
                             href="">
                             <img
                                 alt="header avatar"
-                                src={ photoURL }
+                                src={ avatar }
                                 className="tonal-header-avatar-image" />
                         </a>
                     </div>
@@ -156,6 +157,6 @@ export default Redux.connect(state => {
         isMenuOpen: state.uiState.menuIsOpen,
         isNotifsOpen: state.uiState.notifsIsOpen,
         isComposeOpen: state.uiState.composeIsOpen,
-        photoURL: state.user.avatar
+        avatar: state.user.avatar
     };
 })(Header);

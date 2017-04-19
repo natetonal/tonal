@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { resetUIState } from 'actions/UIStateActions';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
 import ModalOverlay from 'header/ModalOverlay';
@@ -22,9 +23,40 @@ export const TonalApp = React.createClass({
 
     render(){
 
-        const { uid } = this.props;
+        const { uid, status } = this.props;
 
-        if (!uid){
+        const mainView = () => {
+            if (uid && status === 'success'){
+                console.log('success!');
+                return (
+                    <MenuWrapper>
+                        <Header />
+                        <div className="tonal-content">
+                            { this.props.children }
+                        </div>
+                        <Tabs />
+                    </MenuWrapper>
+                );
+            } else if (status === 'fetching'){
+                console.log('fetching!');
+                return (
+                    <div>
+                        <HeaderLoggedOut />
+                        <div className="tonal-main">
+                            <div className="tonal-content">
+                                <div className="tonal-content-loading">
+                                    <span>Loading</span>
+                                    <span>
+                                        <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            console.log('default main view!!');
             return (
                 <div>
                     <HeaderLoggedOut />
@@ -36,23 +68,22 @@ export const TonalApp = React.createClass({
                     <ModalOverlay />
                 </div>
             );
-        }
+        };
 
         return (
-            <MenuWrapper>
-                <Header />
-                <div className="tonal-content">
-                    { this.props.children }
-                </div>
-                <Tabs />
-            </MenuWrapper>
+            <ReactCSSTransitionGroup
+                transitionName="dramatic-fadein"
+                transitionEnterTimeout={ 500 }
+                transitionLeaveTimeout={ 500 }>
+                { mainView() }
+            </ReactCSSTransitionGroup>
         );
-
     }
 });
 
 export default connect(state => {
     return {
-        uid: state.user.uid
+        uid: state.auth.uid,
+        status: state.user.status
     };
 })(TonalApp);

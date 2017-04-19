@@ -79,7 +79,7 @@ export const logoutAndPushToRootRoute = () => {
 export const startLogout = () => {
     return dispatch => {
         firebase.auth().signOut().then(() => {
-            dispatch({ type: 'RESET_USER_DATA' });
+            dispatch({ type: 'USER_RESET_DATA' });
             dispatch(logoutAndPushToRootRoute());
         }, error => {
             console.log(error);

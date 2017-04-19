@@ -17,17 +17,26 @@ const initialState = {
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
     followers: 0,
-    following: 0
+    following: 0,
+    status: false
 };
 
 export default (state = initialState, action) => {
     switch (action.type){
-        case 'ADD_USER_DATA':
+        case 'USER_DATA_STATUS':
+            if (state.status !== action.status){
+                return {
+                    ...state,
+                    status: action.status
+                };
+            }
+            return state;
+        case 'USER_ADD_DATA':
             return {
                 ...state,
                 ...action.data
             };
-        case 'RESET_USER_DATA':
+        case 'USER_RESET_DATA':
             return initialState;
         default:
             return state;

@@ -43,6 +43,31 @@ body,
 	margin-bottom: 100px;
 }
 
+.tonal-content-loading{
+	height: 100vh;
+    width: 100vw;
+    position: absolute;
+    display: flex;
+	flex-flow: column;
+    justify-content: center;
+    align-items: center;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+    top: 0;
+    left: 0;
+	font-size: 36px;
+    background: rgba(0,0,0,0.4);
+
+
+	.fa{
+		color: $white;
+	}
+
+	span{
+		padding: 10px;
+	}
+}
+
 .blur{
   -webkit-filter: blur(1px);
   -moz-filter: blur(1px);

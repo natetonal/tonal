@@ -8,7 +8,9 @@ export const Connect = React.createClass({
 
     render(){
 
-        const { post } = this.props;
+        const { post, user } = this.props;
+
+        console.log('user object: ', user);
 
         return (
             <div className="connect-container">
@@ -20,6 +22,7 @@ export const Connect = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        post: state.headerCompose.post
+        post: state.headerCompose.post,
+        user: state.user
     };
 })(Connect);

@@ -15,10 +15,14 @@ try {
     console.log('Error with Firebase: ', e);
 }
 
-// Middleware & Auth Providers
+// Facebook Auth Provider
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 facebookAuthProvider.addScope('public_profile');
 facebookAuthProvider.addScope('user_actions.music');
+
+// Twitter Auth Provider
+export const twitterAuthProvider = new firebase.auth.TwitterAuthProvider();
+twitterAuthProvider.setCustomParameters({ lang: 'en' });
 
 // Firebase refs
 export const databaseRef = firebase.database().ref();

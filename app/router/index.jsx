@@ -12,24 +12,32 @@ import NotFound from 'notfound/NotFound';
 import firebase from 'app/firebase';
 
 // React-Router middleware (next allows async actions)
-const requireLogin = (nextState, replace, next) => {
-    const currentUser = firebase.auth().currentUser;
-    if (!currentUser) {
-        replace('/');
-    }
-    next();
+// const requireLogin = (nextState, replace, next) => {
+//     const currentUser = firebase.auth().currentUser;
+//     if (!currentUser) {
+//         replace('/');
+//     }
+//     next();
+// };
+//
+// const redirectIfLoggedIn = (nextState, replace, next) => {
+//     const currentUser = firebase.auth().currentUser;
+//     if (currentUser) {
+//         if ((currentUser.providerId === 'password' &&
+//         currentUser.emailVerified) ||
+//         (currentUser.providerId === 'firebase' && currentUser)) {
+//             replace('connect');
+//         }
+//     }
+//     next();
+// };
+
+const requireLogin = () => {
+
 };
 
-const redirectIfLoggedIn = (nextState, replace, next) => {
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-        if ((currentUser.providerId === 'password' &&
-        currentUser.emailVerified) ||
-        (currentUser.providerId === 'firebase' && currentUser)) {
-            replace('connect');
-        }
-    }
-    next();
+const redirectIfLoggedIn = () => {
+
 };
 
 export default (
