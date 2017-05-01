@@ -135,13 +135,61 @@
 
 		.avatar-overlay {
 		    position: absolute;
-		    height: 50%;
+		    height: 100%;
 		    width: 100%;
 		    bottom: 0;
 		    text-align: center;
 		    color: white;
-		    background: rgba(0,0,0,0.5);
-		    padding: 10px 5px;
+		    background: rgba(100, 25, 0, .2);
+
+			.avatar-content {
+				display: flex;
+			    flex-direction: column;
+			    align-items: center;
+			    justify-content: center;
+			    height: 100%;
+
+				.avatar-display-name {
+				    word-wrap: break-word;
+				    line-height: 1.4;
+				    font-size: 28px;
+					letter-spacing: 0.5px;
+					text-shadow: 1px 1px 3px rgba(0,0,0,.5);
+
+					&.med{
+						font-size: 18px;
+					}
+
+					&.sm{
+						font-size: 16px;
+					}
+				}
+
+				.avatar-stats {
+					position: absolute;
+				    bottom: 0;
+					border-top: 1px solid rgba(0,0,0,0.2);
+				    background: rgba(0,0,0,.3);
+				    padding: 15px 0 10px;
+				    width: 100%;
+
+					.avatar-followers-count,
+					.avatar-following-count {
+						font-weight: bold;
+					    font-size: 18px;
+					}
+
+					.avatar-followers,
+					.avatar-following {
+						font-size: 11px;
+					    text-transform: uppercase;
+					    letter-spacing: 1px;
+					    line-height: 1.3;
+					    display: inline-block;
+					    width: 50%;
+					}
+				}
+			}
 		}
 	}
 }

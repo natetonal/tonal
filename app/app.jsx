@@ -3,7 +3,10 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
 import { fetchUserData } from 'actions/UserActions';
-import { startLoginForAuthorizedUser } from 'actions/AuthActions';
+import {
+    startLoginForAuthorizedUser,
+    startLogout
+} from 'actions/AuthActions';
 import { pushToRoute } from 'actions/RouteActions';
 import configure from './store/configureStore';
 import Root from './containers/Root';
@@ -17,21 +20,29 @@ $(document).foundation(); // eslint-disable-line
 require('style!css!sass!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged(user => {
+    
+    // We only want the observer to initiate auth if the app isn't.
+    const userStatus = store.getState().user.status;
+
     console.log('auth state changed: ', user);
-    if (user) {
-        const providerId = user.providerData[0].providerId;
-        if (providerId === 'facebook.com' ||
-        (providerId === 'password' && user.emailVerified)) {
-            console.log('onAuthStateChanged uid: ', user.uid);
-            store.dispatch(fetchUserData(user.uid));
-            store.dispatch(startLoginForAuthorizedUser(user.uid));
+    console.log('auth state user status?: ', userStatus);
+
+    if (!userStatus){
+        if (user) {
+            const providerId = user.providerData[0].providerId;
+            if (providerId === 'facebook.com' ||
+            (providerId === 'password' && user.emailVerified)) {
+                console.log('onAuthStateChanged uid: ', user.uid);
+                store.dispatch(fetchUserData(user.uid));
+                store.dispatch(startLoginForAuthorizedUser(user.uid));
+            }
+        } else {
+            // There should be a way to check if the user has ever logged in before down the road
+            // (i.e. checking our own user data)
+            // Dispatch an action to clear any lingering data.
+            // Might want to push to a "Goodbye" marketing page.
+            store.dispatch(startLogout());
         }
-    } else {
-        // There should be a way to check if the user has ever logged in before down the road
-        // (i.e. checking our own user data)
-        // Dispatch an action to clear any lingering data.
-        // Might want to push to a "Goodbye" marketing page.
-        store.dispatch(pushToRoute('/'));
     }
 });
 

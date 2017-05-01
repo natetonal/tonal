@@ -4,7 +4,7 @@ import { resetPasswordAndLoginUser } from 'actions/AuthActions';
 
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import validate from './validate';
+import validate from './validateresetpw';
 
 export const ResetPassword = React.createClass({
 

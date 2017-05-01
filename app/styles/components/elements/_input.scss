@@ -25,7 +25,7 @@
 	width: 40%;
 	color: $white;
 	font-weight: bold;
-	font-size: 70.25%;
+	font-size: 11px;
 	text-transform: uppercase;
 	-webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -47,7 +47,6 @@
 
 .input--hoshi {
 	font-family: $login-font;
-	overflow: hidden;
 }
 
 .input__field--hoshi {
@@ -58,10 +57,16 @@
 	color: $white;
     font-weight: 700;
     font-size: 30px;
+
+	@include breakpoint(small only){
+		padding: 15px 0 15px 10px;
+		font-size: 24px;
+	}
 }
 
 .input__label--hoshi {
 	position: absolute;
+	overflow: hidden;
 	bottom: 0;
 	left: 0;
 	padding: 0 0.25em;
@@ -70,6 +75,30 @@
 	text-align: left;
 	pointer-events: none;
 	letter-spacing: .15em;
+
+	@include breakpoint(small only){
+		letter-spacing: 1px;
+	}
+}
+
+.input-options {
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+
+.input-options > * {
+    padding-left: 5px;
+}
+
+.input-option {
+	cursor: pointer;
+}
+
+.input-loader{
+	position: relative;
+	height: inherit;
+	display: inline-block;
 }
 
 .input__label-content--hoshi {
@@ -128,7 +157,22 @@
 }
 
 .input-error{
-	color: lighten($red, 20%);
+	color: $alert-error;
+	@include transition(0.3s all);
+}
+
+.input-weak{
+	color: $alert-admin;
+	@include transition(0.3s all);
+}
+
+.input-medium{
+	color: $alert-warning;
+	@include transition(0.3s all);
+}
+
+.input-strong{
+	color: $alert-success;
 	@include transition(0.3s all);
 }
 

@@ -51,7 +51,6 @@ export const Header = React.createClass({
             avatar
         } = this.props;
 
-        console.log('from header - avatar? ', avatar);
         const photo = () => {
             if (avatar){
                 return (

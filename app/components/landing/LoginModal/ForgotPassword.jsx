@@ -6,7 +6,7 @@ import { sendPasswordResetEmail } from 'actions/UserActions';
 
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import validate from './validate';
+import validate from './validatelogin';
 
 export const ForgotPassword = React.createClass({
 
@@ -34,7 +34,7 @@ export const ForgotPassword = React.createClass({
             <div>
                 <h3>Forgot Your Password?</h3>
                 <p>
-                    { 'How horribly irresponsible of you. No worries - just like your momma, Tonal\'s here to coddle you and make it all OK again. Type in your e-mail and we\'ll send you a password reset link. (If you\'re seeing this Mark, don\'t worry - this is just filler)' }
+                    { 'No worries, we\'ve got you. Go ahead and reset away. Maybe next time, you can try writing it down somewhere or, you know, not forgetting it. Whatever.' }
                 </p>
                 <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
                     <Field

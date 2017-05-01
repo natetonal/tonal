@@ -82,8 +82,8 @@ export const validate = values => {
         const userMin = 6;
         const userMax = 32;
         const userLen = values.username.length;
-        const userAllowedChars = values.username.match(/^[a-zA-Z0-9]+$/i);
-        const userStartsWithLetter = values.username.match(/^[a-zA-Z]/i);
+        const userAllowedChars = values.username.match(/[a-zA-Z0-9]+/);
+        const userStartsWithLetter = values.username.match(/^[a-zA-Z]/);
         const userBanned = isABannedName(values.username);
         const userResPartial = isReservedPartial(values.username);
         const userResFull = isReservedFull(values.username);
@@ -107,21 +107,78 @@ export const validate = values => {
 
     if (!values.password){
         errors.password = 'Required';
-    } else if (values.password.length < 8){
-        errors.password = 'Must be at least 8 characters';
-    } else if (values.password.length > 32){
-        errors.password = 'Must be less than 32 characters';
-    }
-
-    if (!values.confirmPassword){
-        errors.confirmPassword = 'Required';
-    } else if (!validator.equals(values.confirmPassword, values.password)){
-        errors.confirmPassword = 'Passwords must match';
-    } else if (errors.password){
-        errors.confirmPassword = 'Enter a valid password';
+    } else {
+        const pwMin = 8;
+        const pwMax = 32;
+        const pwLen = values.password.length;
+        const pwHasNumber = values.password.match(/[0-9]+/);
+        const pwHasLowerCase = values.password.match(/[a-z]+/);
+        const pwHasUpperCase = values.password.match(/[A-Z]+/);
+        const pwHasSymbol = values.password.match(/[`!"?$?%^&* ()_\-+={[}\]:;@'~#|<,>.?/]+/);
+        const pwAllowedChars = values.password.match(/^[0-9A-Za-z `!"?$?%^&*()_\-+={[}\]:;@'~#|\\<,>.?\/]+$/);
+        const pwHasDisplayName = values.password.match(values.displayName);
+        const pwHasUserName = values.password.match(values.username);
+        if (pwLen < pwMin){
+            errors.password = 'At least 8 characters';
+        } else if (pwLen > pwMax){
+            errors.password = 'Less than 32 characters';
+        } else if (!pwHasNumber){
+            errors.password = 'At least one number';
+        } else if (!pwHasLowerCase){
+            errors.password = 'At least one lowercase letter';
+        } else if (!pwHasUpperCase){
+            errors.password = 'At least one uppercase letter';
+        } else if (!pwHasSymbol){
+            errors.password = 'At least one symbol';
+        } else if (pwHasDisplayName && values.displayName){
+            errors.password = 'Can\'t contain your display name';
+        } else if (pwHasUserName && values.username){
+            errors.password = 'Can\'t contain your username';
+        } else if (!pwAllowedChars){
+            errors.password = 'No foreign or uncommon symbols';
+        }
     }
 
     return errors;
 };
 
-export default validate;
+export const warn = values => {
+    const warnings = {};
+
+    if (values.password){
+        const pwLen = values.password.length;
+        const pwLenGood = 10;
+        const pwLenExcellent = 16;
+        const pwHasNumber = values.password.match(/[0-9]+/g);
+        const pwHasLowerCase = values.password.match(/[a-z]+/g);
+        const pwHasUpperCase = values.password.match(/[A-Z]+/g);
+        const pwHasSymbol = values.password.match(/[`!"?$?%^&* ()_\-+={[}\]:;@'~#|<,>.?/]+/g);
+
+        const isMedium = (
+            pwLen >= pwLenGood &&
+            pwLen < pwLenExcellent &&
+            (pwHasSymbol && pwHasSymbol.join('').length > 1) &&
+            (pwHasNumber && pwHasNumber.join('').length > 1) &&
+            (pwHasLowerCase && pwHasLowerCase.join('').length > 1) &&
+            (pwHasUpperCase && pwHasUpperCase.join('').length > 1)
+        ) || false;
+
+        const isStrong = (
+            pwLen >= pwLenExcellent &&
+            (pwHasSymbol && pwHasSymbol.join('').length > 1) &&
+            (pwHasNumber && pwHasNumber.join('').length > 1) &&
+            (pwHasLowerCase && pwHasLowerCase.join('').length > 1) &&
+            (pwHasUpperCase && pwHasUpperCase.join('').length > 1)
+        ) || false;
+
+        if (isMedium) {
+            warnings.password = 'medium';
+        } else if (isStrong){
+            warnings.password = 'strong';
+        } else {
+            warnings.password = 'weak';
+        }
+    }
+
+    return warnings;
+};

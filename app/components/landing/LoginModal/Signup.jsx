@@ -4,11 +4,13 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import {
     createUserWithFacebookAuth,
-    createUserWithTwitterAuth,
     createUserWithEmailAndPassword
 } from 'actions/UserActions';
 
-import validate from './validate';
+import {
+    validate,
+    warn
+} from './validatesignup';
 import Input from './../../elements/Input';
 import Button from './../../elements/Button';
 
@@ -26,12 +28,6 @@ export const Signup = React.createClass({
         return dispatch(createUserWithFacebookAuth());
     },
 
-    handleTwitterLogin(event){
-        event.preventDefault();
-        const { dispatch } = this.props;
-        return dispatch(createUserWithTwitterAuth());
-    },
-
     handleFormSubmit(values){
         const {
             email,
@@ -39,6 +35,10 @@ export const Signup = React.createClass({
         } = values;
         const { dispatch } = this.props;
         return dispatch(createUserWithEmailAndPassword(email, password));
+    },
+
+    handleStop(event){
+        event.preventDefault();
     },
 
     toggleSignupForm(){
@@ -80,36 +80,57 @@ export const Signup = React.createClass({
         const displayForm = () => {
             if (showForm){
                 return (
-                    <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
-                        <Field
-                            name="email"
-                            label="Email"
-                            type="text"
-                            component={ Input } />
-                        <Field
-                            name="displayName"
-                            label="Full Name or Display Name"
-                            type="text"
-                            component={ Input }
-                            format={ value => formatDisplayName(value) } />
-                        <Field
-                            name="username"
-                            label="User Name"
-                            type="text"
-                            component={ Input }
-                            format={ value => formatUsername(value) } />
-                        <Field
-                            name="password"
-                            label="Password"
-                            type="password"
-                            component={ Input } />
-                        <Button
-                            type="submit"
-                            btnType="main"
-                            isLoading={ submitting }
-                            btnIcon=""
-                            btnText={ submitting ? 'Submitting' : 'Create Account' } />
-                    </form>
+                    <div className="login-form-email">
+                        <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
+                            <Field
+                                name="email"
+                                label="Email"
+                                type="text"
+                                tooltip={ 'A verification e-mail will be sent to this address to confirm your account before you can log in.' }
+                                component={ Input }
+                                onPaste={ this.handleStop }
+                                onDrop={ e => this.handleStop(e) } />
+                            <Field
+                                name="displayName"
+                                label="Full Name / Display Name"
+                                type="text"
+                                tooltip={ 'This is how everyone else will view you on our network. We recommend making it the same name you use in your day-to-day life, your artist name, or your band name.' }
+                                component={ Input }
+                                format={ value => formatDisplayName(value) }
+                                onPaste={ this.handleStop }
+                                onDrop={ e => this.handleStop(e) } />
+                            <Field
+                                name="username"
+                                label="User Name"
+                                type="text"
+                                tooltip={ 'This will be how Tonal identifies you internally. This name will appear in your profile address and in shared content from you. Choose carefully, as there is no way to change it later!' }
+                                component={ Input }
+                                format={ value => formatUsername(value) }
+                                onPaste={ this.handleStop }
+                                onDrop={ e => this.handleStop(e) } />
+                            <Field
+                                name="password"
+                                label="Password"
+                                type="password"
+                                tooltip={
+                                    `Your password must:
+                                    - Be at least 8 characters long
+                                    - Contain at least one capitalized letter
+                                    - Contain at least one lowercase letter
+                                    - Contain at least one number
+                                    - Contain at least one symbol`
+                                }
+                                component={ Input }
+                                onPaste={ this.handleStop }
+                                onDrop={ e => this.handleStop(e) } />
+                            <Button
+                                type="submit"
+                                btnType="main"
+                                isLoading={ submitting }
+                                btnIcon=""
+                                btnText={ submitting ? 'Submitting' : 'Create Account' } />
+                        </form>
+                    </div>
                 );
             }
 
@@ -129,16 +150,18 @@ export const Signup = React.createClass({
                     -OR-
                 </p>
                 <Button
-                    onClick={ this.handleTwitterLogin }
+                    onClick={ this.toggleSignupForm }
                     btnType="main"
                     btnIcon="fa-envelope"
                     btnText="Sign Up By E-Mail" />
-                <ReactCSSTransitionGroup
-                    transitionName="fade-and-grow-slow"
-                    transitionEnterTimeout={ 400 }
-                    transitionLeaveTimeout={ 400 }>
-                    { displayForm() }
-                </ReactCSSTransitionGroup>
+                <div className="login-form-email-container">
+                    <ReactCSSTransitionGroup
+                        transitionName="fade-and-grow-slow"
+                        transitionEnterTimeout={ 500 }
+                        transitionLeaveTimeout={ 500 }>
+                        { displayForm() }
+                    </ReactCSSTransitionGroup>
+                </div>
             </div>
         );
     }
@@ -146,5 +169,6 @@ export const Signup = React.createClass({
 
 export default reduxForm({
     form: 'signup',
-    validate
+    validate,
+    warn
 })(Signup);

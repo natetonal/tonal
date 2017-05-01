@@ -23,11 +23,14 @@ export const TonalApp = React.createClass({
 
     render(){
 
-        const { uid, status } = this.props;
+        const {
+            uid,
+            status
+        } = this.props;
 
         const mainView = () => {
             if (uid && status === 'success'){
-                console.log('success!');
+                console.log('from mainView: success!');
                 return (
                     <MenuWrapper>
                         <Header />
@@ -38,7 +41,7 @@ export const TonalApp = React.createClass({
                     </MenuWrapper>
                 );
             } else if (status === 'fetching'){
-                console.log('fetching!');
+                console.log('from mainView: fetching!');
                 return (
                     <div>
                         <HeaderLoggedOut />

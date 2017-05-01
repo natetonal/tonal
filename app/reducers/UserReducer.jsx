@@ -18,7 +18,8 @@ const initialState = {
     createdAt: moment().format('LLLL'),
     followers: 0,
     following: 0,
-    status: false
+    status: false,
+    authMethod: ''
 };
 
 export default (state = initialState, action) => {

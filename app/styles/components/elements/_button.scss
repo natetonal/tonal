@@ -64,6 +64,9 @@
     letter-spacing: .15em;
     cursor: pointer;
     @include transition(all 0.2s);
+    @include breakpoint(small only){
+        padding: 15px;
+    }
 
     .fa{
         margin: 0 10px;

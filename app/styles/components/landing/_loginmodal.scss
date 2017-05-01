@@ -78,6 +78,10 @@
 	display: block;
 	margin: 15px auto;
 	font-size: 0.9em;
+
+	@include breakpoint(small only){
+		font-size: 12px;
+	}
 }
 
 /* Individual modal styles with animations/transitions */
@@ -118,6 +122,9 @@
 
 .login-area{
 	padding: 30px 40px;
+	@include breakpoint(small only){
+		padding: 10px 20px;
+	}
 }
 
 .login-tab{
@@ -130,6 +137,10 @@
 		display: block;
 		color: $inactive-light;
 		box-shadow: inset 1px 1px 0 1px rgba($black,.1);
+
+		@include breakpoint(small only){
+			padding: 10px 0;
+		}
 
 		&:hover{
 			cursor: pointer;
@@ -149,6 +160,10 @@
 			color: inherit;
 		}
 	}
+}
+
+.login-form-email-container {
+    overflow: hidden;
 }
 
 .example-enter{

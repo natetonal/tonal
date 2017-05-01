@@ -10,8 +10,6 @@ export const Connect = React.createClass({
 
         const { post, user } = this.props;
 
-        console.log('user object: ', user);
-
         return (
             <div className="connect-container">
                 <Post data={ post } />
