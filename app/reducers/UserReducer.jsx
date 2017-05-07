@@ -12,14 +12,16 @@ const initialState = {
     userName: '',
     location: '',
     displayName: '',
+    authMethod: '',
+    emailVerified: false,
+    firstLogin: true,
     timeZone: -7,
     avatar: dummyPhoto,
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
     followers: 0,
     following: 0,
-    status: false,
-    authMethod: ''
+    status: false
 };
 
 export default (state = initialState, action) => {

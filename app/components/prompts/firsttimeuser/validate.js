@@ -51,9 +51,13 @@ export const validate = values => {
         errors.email = 'Invalid email address';
     }
 
+    if (!values.location){
+        errors.location = 'Required';
+    }
+    
     // Display Name Validation
     if (!values.displayName){
-        errors.displayName = 'Required';
+        errors.displayName = 'Display Name Required';
     } else {
         const nameMin = 3;
         const nameMax = 40;
@@ -77,7 +81,7 @@ export const validate = values => {
 
     // Username Validation
     if (!values.username){
-        errors.username = 'Required';
+        errors.username = 'Username Required';
     } else {
         const userMin = 6;
         const userMax = 32;
@@ -106,7 +110,7 @@ export const validate = values => {
     }
 
     if (!values.password){
-        errors.password = 'Required';
+        errors.password = 'Password Required';
     } else {
         const pwMin = 8;
         const pwMax = 32;

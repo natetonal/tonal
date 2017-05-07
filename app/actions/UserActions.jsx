@@ -30,6 +30,35 @@ export const storeUserDataToState = data => {
     };
 };
 
+export const updateUserData = data => {
+    return (dispatch, getState) => {
+        // Make sure the data we're getting passed matches the user data object keys:
+        if (typeof data === 'object'){
+            const userKeys = Object.keys(getState().user);
+            const dataKeys = Object.keys(data);
+            if (dataKeys.every(key => {
+                return userKeys.includes(key);
+            })) {
+                const uid = getState().auth.uid;
+                databaseRef.child(`users/${ uid }`).once('value')
+                .then(snapshot => {
+                    const currentUser = snapshot.val();
+                    if (currentUser){
+                        const user = {
+                            ...currentUser,
+                            ...data
+                        };
+                        databaseRef.child(`users/${ uid }`).update(user);
+                        dispatch(storeUserDataToState(user));
+                    }
+                }, error => {
+                    console.log(error);
+                });
+            }
+        }
+    };
+};
+
 export const sendVerificationEmail = user => {
     return dispatch => {
         return user.sendEmailVerification()
@@ -110,6 +139,8 @@ export const createUserWithFacebookAuth = () => {
                     authMethod: 'facebook',
                     fbToken: token,
                     email: firebaseUser.email,
+                    emailVerified: true,
+                    username: firebaseUser.email.match(/^[^@]*/g)[0],
                     displayName: firebaseUser.displayName,
                     avatar: firebaseUser.photoURL,
                 };
@@ -157,6 +188,7 @@ export const createUserWithFacebookAuth = () => {
                                 ...user,
                                 status: getState().user.status,
                                 email: response.data.email,
+                                username: response.data.email.match(/^[^@]*/g)[0],
                                 location: response.data.location.name,
                                 firstName: response.data.first_name,
                                 lastName: response.data.last_name,

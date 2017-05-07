@@ -7,6 +7,7 @@ export const Input = React.createClass({
         label: React.PropTypes.string.isRequired,
         input: React.PropTypes.object.isRequired,
         type: React.PropTypes.string.isRequired,
+        inputRef: React.PropTypes.func
     },
 
     getDefaultProps(){
@@ -15,7 +16,8 @@ export const Input = React.createClass({
             input: {},
             type: '',
             touched: false,
-            error: ''
+            error: '',
+            inputRef: this.inputRef
         };
     },
 
@@ -141,6 +143,7 @@ export const Input = React.createClass({
             return '';
         };
 
+        console.log('Input received: ', input.value);
         return (
             <span className={ `input input--hoshi ${ filled || (touched && error) ? 'input--filled' : '' }` }>
                 <div className="input-options">
@@ -150,6 +153,7 @@ export const Input = React.createClass({
                 </div>
                 <input
                     { ...input }
+                    ref={ element => this.inputRef = element }
                     onPaste={ e => onPaste(e) }
                     className="input__field input__field--hoshi"
                     type={ showPassword ? 'text' : type || 'text' }
@@ -159,15 +163,15 @@ export const Input = React.createClass({
                     htmlFor="input-4">
                     <span className="input__label-content input__label-content--hoshi">
                         <ReactCSSTransitionGroup
-                            transitionName="swipe-left"
-                            transitionEnterTimeout={ 300 }
-                            transitionLeaveTimeout={ 300 }>
+                            transitionName="smooth-fadein"
+                            transitionEnterTimeout={ 200 }
+                            transitionLeaveTimeout={ 200 }>
                             { renderLabel() }
                         </ReactCSSTransitionGroup>
                         <ReactCSSTransitionGroup
-                            transitionName="swipe-left"
-                            transitionEnterTimeout={ 300 }
-                            transitionLeaveTimeout={ 300 }>
+                            transitionName="smooth-fadein"
+                            transitionEnterTimeout={ 200 }
+                            transitionLeaveTimeout={ 200 }>
                             { renderWarning() }
                         </ReactCSSTransitionGroup>
                     </span>

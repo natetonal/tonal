@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { resetUIState } from 'actions/UIStateActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt';
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
 import ModalOverlay from 'header/ModalOverlay';
 import Header from 'header/Header';
@@ -25,12 +26,24 @@ export const TonalApp = React.createClass({
 
         const {
             uid,
-            status
+            status,
+            firstLogin,
         } = this.props;
 
+        const displayFirstTimeUserPrompt = () => {
+            if (firstLogin){
+                return <FirstTimeUserPrompt />;
+            }
+
+            return '';
+        };
+
         const mainView = () => {
-            if (uid && status === 'success'){
-                console.log('from mainView: success!');
+
+            // Authorized Log In:
+            if (uid &&
+                !firstLogin &&
+                status === 'success'){
                 return (
                     <MenuWrapper>
                         <Header />
@@ -40,8 +53,33 @@ export const TonalApp = React.createClass({
                         <Tabs />
                     </MenuWrapper>
                 );
+
+            // First Log In View With Prompt:
+            } else if (uid &&
+                firstLogin &&
+                status === 'success'){
+                return (
+                    <MenuWrapper>
+                        <ReactCSSTransitionGroup
+                            transitionName="smooth-fadein"
+                            transitionAppear
+                            transitionAppearTimeout={ 200 }
+                            transitionEnter={ false }
+                            transitionLeave={ false }>
+                            { displayFirstTimeUserPrompt() }
+                        </ReactCSSTransitionGroup>
+                        <div className="blur">
+                            <Header />
+                            <div className="tonal-content">
+                                { this.props.children }
+                            </div>
+                            <Tabs />
+                        </div>
+                    </MenuWrapper>
+                );
+
+            // Loading View:
             } else if (status === 'fetching'){
-                console.log('from mainView: fetching!');
                 return (
                     <div>
                         <HeaderLoggedOut />
@@ -59,7 +97,7 @@ export const TonalApp = React.createClass({
                 );
             }
 
-            console.log('default main view!!');
+            // Logged Out View:
             return (
                 <div>
                     <HeaderLoggedOut />
@@ -87,6 +125,7 @@ export const TonalApp = React.createClass({
 export default connect(state => {
     return {
         uid: state.auth.uid,
+        firstLogin: state.user.firstLogin,
         status: state.user.status
     };
 })(TonalApp);

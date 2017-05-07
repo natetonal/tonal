@@ -56,27 +56,6 @@ export const Signup = React.createClass({
 
         const { showForm } = this.state;
 
-        const formatUsername = value => {
-            if (value){
-                return value.toLowerCase()
-                            .replace(/[^0-9A-Za-z]/i, '');
-            }
-
-            return '';
-        };
-
-        const formatDisplayName = value => {
-            if (value){
-                console.log('current value: ', value);
-                console.log(value.match(/([0-9a-zA-Z])\1{2,}/i));
-                return value.toLowerCase()
-                            .replace(/[^0-9A-Za-z().&!? ]/i, '')
-                            .replace(/\b[0-9A-Za-z().&!? ]/g, l => l.toUpperCase());
-            }
-
-            return '';
-        };
-
         const displayForm = () => {
             if (showForm){
                 return (
@@ -90,7 +69,7 @@ export const Signup = React.createClass({
                                 component={ Input }
                                 onPaste={ this.handleStop }
                                 onDrop={ e => this.handleStop(e) } />
-                            <Field
+                            {/* <Field
                                 name="displayName"
                                 label="Full Name / Display Name"
                                 type="text"
@@ -107,7 +86,7 @@ export const Signup = React.createClass({
                                 component={ Input }
                                 format={ value => formatUsername(value) }
                                 onPaste={ this.handleStop }
-                                onDrop={ e => this.handleStop(e) } />
+                                onDrop={ e => this.handleStop(e) } /> */}
                             <Field
                                 name="password"
                                 label="Password"

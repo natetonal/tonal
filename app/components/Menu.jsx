@@ -2,12 +2,32 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
 import { startLogout } from 'actions/AuthActions';
-
+import {
+    TweenLite,
+    Power2,
+    Back
+} from 'gsap';
 import numeral from 'numeral';
 
 const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-avatar.png?alt=media&token=f7e23557-bc15-44fd-bfb5-1ddff07bc954';
 
 export const Menu = React.createClass({
+
+    componentWillUpdate(nextProps){
+        console.log('this.props.menuIsOpen? ', this.props.menuIsOpen);
+        console.log('nextProps.menuIsOpen? ', nextProps.menuIsOpen);
+        if (!this.props.menuIsOpen && nextProps.menuIsOpen){
+            TweenLite.from(this.namesRef, 0.75, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
+            TweenLite.from(this.statsRef, 0.75, {
+                ease: Back.easeOut.config(2),
+                opacity: 0,
+                height: 0
+            }, '-=0.5');
+        }
+    },
 
     handleLogout(){
         const { dispatch } = this.props;
@@ -19,6 +39,7 @@ export const Menu = React.createClass({
         const {
             avatar,
             displayName,
+            username,
             followers,
             following
         } = this.props;
@@ -60,17 +81,25 @@ export const Menu = React.createClass({
             return avatarClass;
         };
 
-        console.log('display name class: ', displayNameClassName());
         return (
             <nav className="tonal-menu menu-effect" id="menu-2">
                 <div className="avatar">
                     { av() }
                     <div className="avatar-overlay">
                         <div className="avatar-content">
-                            <div className={ displayNameClassName() }>
-                                { displayName }
+                            <div
+                                className="avatar-names"
+                                ref={ element => this.namesRef = element }>
+                                <div className={ displayNameClassName() }>
+                                    { displayName }
+                                </div>
+                                <div className="avatar-username">
+                                    { `@${ username }` }
+                                </div>
                             </div>
-                            <div className="avatar-stats">
+                            <div
+                                className="avatar-stats"
+                                ref={ element => this.statsRef = element }>
                                 <div className="avatar-followers">
                                     <div className="avatar-followers-label">
                                         Followers
@@ -143,8 +172,10 @@ export default Redux.connect(state => {
     return {
         avatar: state.user.avatar,
         displayName: state.user.displayName,
+        username: state.user.username,
         email: state.user.email,
         followers: state.user.followers,
-        following: state.user.following
+        following: state.user.following,
+        menuIsOpen: state.uiState.menuIsOpen
     };
 })(Menu);

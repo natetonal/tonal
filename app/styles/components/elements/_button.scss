@@ -60,12 +60,14 @@
     box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.3);
     transition: all 0.3s;
     text-transform: uppercase;
+    font-weight: bold;
     color: rgba($white, 0.85);
     letter-spacing: .15em;
     cursor: pointer;
     @include transition(all 0.2s);
     @include breakpoint(small only){
         padding: 15px;
+        letter-spacing: .05em;
     }
 
     .fa{

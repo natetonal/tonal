@@ -20,7 +20,7 @@
         border-radius: 10px;
         position: absolute;
         z-index: 1;
-        box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+        box-shadow: $boxshadow;
 
         @include breakpoint(medium only){
             width: 250px;
@@ -28,7 +28,7 @@
         }
 
         @include breakpoint(small only){
-            width: 240px;
+            width: 230px;
             font-size: 10px;
         }
 

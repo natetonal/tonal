@@ -4,7 +4,7 @@
     background: $light-bg;
     z-index: 1;
     border: 1px solid $light-gray;
-    box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+    box-shadow: $boxshadow;
 }
 
 .giphy-selector-container {

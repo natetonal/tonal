@@ -1,0 +1,214 @@
+$parent-height: 80vh;
+
+.ftu-prompt-overlay {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1000;
+    background: rgba(0,0,0,0.5);
+    opacity: 1;
+
+    .ftu-prompt-container {
+        opacity: 1;
+        position: absolute;
+        top: 10vh;
+        overflow-y: hidden;
+        background: $black;
+        border: 5px solid $lightblue;
+        color: $light-text;
+        border-radius: 5px;
+        width: 50vw;
+        height: $parent-height;
+        box-shadow: $boxshadow;
+
+        @include breakpoint(small only){
+            height: 85vh;
+            width: 80vw;
+            top: 7.5vh;
+        }
+
+        .ftu-prompt-content {
+            height: $parent-height;
+            padding-bottom: 100px;
+            overflow-y: auto;
+        }
+
+        .ftu-prompt-title {
+            text-align: center;
+            font-size: 2.5vh;
+            padding: 2vh 0;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .ftu-prompt-messaging {
+            padding: 2vh 5vw;
+            text-align: center;
+            font-size: 2vh;
+        }
+
+        .ftu-prompt-categories {
+            text-align: center;
+
+            .ftu-prompt-category-label{
+                font-family: $login-font;
+                padding: 0.5vh 0;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .15em;
+            }
+
+            .ftu-prompt-item{
+                padding: 0.5vh 0;
+
+                &.ftu-prompt-display-name-item,
+                &.ftu-prompt-username-item,
+                &.ftu-prompt-location-item {
+                    width: 80%;
+                    margin: 0 auto;
+
+                    .input__field--hoshi {
+                        text-align: center;
+                    }
+
+                    .input__label--hoshi {
+                        text-align: center;
+                    }
+                }
+            }
+
+            .ftu-prompt-avatar-item {
+                position: relative;
+                margin: 0 auto;
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                border: 3px solid white;
+                overflow: hidden;
+                cursor: pointer;
+                @include transition(0.3s all);
+
+                @include breakpoint (small only){
+                    width: 125px;
+                    height: 125px;
+                }
+
+                .ftu-prompt-avatar-overlay {
+                    position: absolute;
+                    height: inherit;
+                    width: inherit;
+                    top: 0;
+                    left: 0;
+                    z-index: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-family: $login-font;
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: .15em;
+                    opacity: 0;
+                    background: rgba(0,40,50,0.5);
+                    @include transition(0.3s all);
+
+                    @include breakpoint (small only){
+                        width: 125px;
+                        height: 125px;
+                    }
+
+                    .fa{
+                        padding-right: 5px;
+                    }
+                }
+
+                .ftu-prompt-avatar-image {
+                    height: 100%;
+                    width: auto;
+                    object-fit: cover;
+                    object-position: center center;
+                }
+
+                img{
+                    @include transform(scale(1.1));
+                    @include transition(0.3s all);
+                }
+
+                &:hover{
+
+                    border-color: $lightblue;
+                    @include transition(0.3s all);
+
+                    img{
+                        @include transform(scale(1.2));
+                        @include transition(0.3s all);
+                    }
+
+                    .ftu-prompt-avatar-overlay {
+                        opacity: 1;
+                        @include transition(0.3s all);
+                    }
+                }
+            }
+        }
+
+        .ftu-prompt-submit {
+            position: absolute;
+            width: 100%;
+            padding: 10px;
+            bottom: 0;
+        }
+    }
+}
+
+// Google Places Class Edits:
+
+.pac-container {
+    background: $dark-bg;
+    color: $light-text;
+    font-family: $main-font;
+    box-shadow: $boxshadow;
+
+    .pac-item {
+        color: $white;
+        cursor: pointer;
+        padding: 5px;
+        border: none;
+        font-size:13px;
+        @include transition(0.2s all ease);
+
+        &:hover {
+            background: lighten($dark-bg, 5%);
+            padding-left: 10px;
+            @include transition(0.2s all ease);
+        }
+    }
+
+    .pac-item-selected{
+        background: lighten($dark-bg, 5%);
+        padding-left: 10px;
+        @include transition(0.2s all ease);
+    }
+
+    .pac-item-query {
+        padding-right: 2px;
+        font-size: inherit;
+        color: $white;
+
+        .pac-matched {
+            color: $lightblue;
+        }
+    }
+}
+
+.pac-container::after,
+.hdpi.pac-container::after {
+    background-image: none !important;
+    content: "Powered by Google";
+    font-size: 10px;
+}

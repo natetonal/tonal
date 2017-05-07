@@ -1,3 +1,14 @@
+.swipe-in-from-bottom-appear {
+    opacity: 0.01;
+    @include transform(translateY(20vh));
+
+    &.swipe-in-from-bottom-appear-active {
+        opacity: 1;
+        @include transform(translateY(0));
+        @include transition(all 400ms ease 100ms);
+    }
+}
+
 .smooth-popin-appear {
     opacity: 0.01;
     @include transform(scale(0.9));

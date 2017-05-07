@@ -9,7 +9,7 @@
     z-index: 2;
     margin-top: 10px;
     margin-left: 10px;
-    box-shadow: 15px 3px 25px 0 rgba(0,0,0,0.3);
+    box-shadow: $boxshadow;
 }
 
 .mention-suggestions-result {

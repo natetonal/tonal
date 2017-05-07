@@ -96,11 +96,13 @@ export const verifyEmailWithCode = oobCode => {
                 const uid = currentUser.uid;
                 const email = currentUser.email;
                 const displayName = '' + email.match(/^[^@]*/g)[0];
+                const username = displayName;
                 const user = {
                     ...defaultUser,
                     uid,
                     email,
                     displayName,
+                    username,
                     updatedAt: moment().format('LLLL'),
                     createdAt: moment().format('LLLL')
                 };
