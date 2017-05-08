@@ -3,7 +3,8 @@ import { browserHistory } from 'react-router';
 import moment from 'moment';
 
 import {
-    storeUserDataToState
+    storeUserDataToState,
+    changeStatus
 } from './UserActions';
 
 export const login = uid => {
@@ -47,6 +48,7 @@ export const addErrorMessage = error => {
 
 export const startLoginForAuthorizedUser = uid => {
     return dispatch => {
+        console.log('startLoginForAuthorizedUser / starting login for authorized user with uid: ', uid);
         dispatch(login(uid));
         browserHistory.push('connect');
     };
@@ -88,9 +90,14 @@ export const startLogout = () => {
 };
 
 export const verifyEmailWithCode = oobCode => {
+    console.log('verifyEmailWithCode / called');
     return ((dispatch, getState) => {
+        dispatch(changeStatus('fetching'));
         firebase.auth().applyActionCode(oobCode).then(() => {
+            console.log('verifyEmailWithCode / oobCode applied.');
             if (firebase.auth().currentUser){
+                dispatch(changeStatus('success'));
+                console.log('verifyEmailWithCode / currentUser exists');
                 const currentUser = firebase.auth().currentUser;
                 const defaultUser = getState().user;
                 const uid = currentUser.uid;
@@ -109,9 +116,11 @@ export const verifyEmailWithCode = oobCode => {
                 databaseRef.child(`users/${ uid }`).update(user);
                 dispatch(storeUserDataToState(user));
                 dispatch(startLoginForAuthorizedUser(uid));
+            } else {
+                console.log('verifyEmailWithCode / no currentUser was found.');
             }
         }, error => {
-            console.log(error);
+            console.log('verifyEmailWithCode / error: ', error);
         });
     });
 };

@@ -3,6 +3,7 @@ import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 
 // Components
 import TonalApp from 'TonalApp';
+import Verify from 'landing/Verify';
 import Landing from 'landing/Landing';
 import Connect from 'connect/Connect';
 import Discover from 'discover/Discover';
@@ -44,7 +45,7 @@ export default (
     <Router history={ browserHistory }>
         <Route path="/" component={ TonalApp }>
             <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
-            <Route path="auth" component={ Landing } />
+            <Route path="auth" component={ Verify } />
             <Route path="connect" component={ Connect } onEnter={ requireLogin } />
             <Route path="discover" component={ Discover } onEnter={ requireLogin } />
             <Route path="mymusic" component={ MyMusic } onEnter={ requireLogin } />

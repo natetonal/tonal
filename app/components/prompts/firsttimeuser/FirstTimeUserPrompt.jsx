@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+
 import {
     Field,
     reduxForm
@@ -30,9 +31,9 @@ let FirstTimeUserPrompt = React.createClass({
 
     componentDidMount(){
 
-        // Animations
+        // Enter Animation
         const tl = new TimelineLite();
-        tl.to(this.overlayRef, 0.5, {
+        tl.from(this.overlayRef, 0.5, {
             ease: Power2.easeOut,
             opacity: 1
         });
@@ -63,6 +64,10 @@ let FirstTimeUserPrompt = React.createClass({
             });
             tl.play();
         }
+
+        if (this.props.submitSucceeded){
+            this.animateOut();
+        }
     },
 
     handleStop(event){
@@ -76,30 +81,42 @@ let FirstTimeUserPrompt = React.createClass({
             // Basic image format validation
             const validImage = new Image();
             validImage.onload = () => {
-                console.log('let\'s load that image', image);
                 this.setState({ blob: image });
             };
 
             validImage.onerror = () => {
-                console.log('bad picture');
             };
 
             validImage.src = files[0].preview;
         }
     },
 
+    animateOut(){
+        const exitTl = new TimelineLite();
+        exitTl.to(this.containerRef, 1, {
+            ease: Back.easeIn.config(1.4),
+            opacity: 0,
+            top: '50vh'
+        });
+        exitTl.to(this.overlayRef, 0.5, {
+            ease: Power2.easeOut,
+            opacity: 0
+        });
+        exitTl.play();
+        exitTl.eventCallback('onComplete', this.closeThis);
+    },
+
+    closeThis(){
+        const { dispatch } = this.props;
+        dispatch(updateUserData({ firstLogin: false }));
+    },
+
     handleFormSubmit(values){
         const { dispatch } = this.props;
-        dispatch(updateUserData({
-            ...values,
-            firstLogin: false
-        }));
-        // dispatch user change and exit this screen
-
+        dispatch(updateUserData(values));
     },
 
     handlePlaceChange(place){
-        console.log('hey, we got a place: ', place);
         const { change } = this.props;
         change('location', place);
     },
@@ -130,8 +147,6 @@ let FirstTimeUserPrompt = React.createClass({
 
         const formatDisplayName = value => {
             if (value){
-                console.log('current value: ', value);
-                console.log(value.match(/([0-9a-zA-Z])\1{2,}/i));
                 return value.toLowerCase()
                             .replace(/[^0-9A-Za-z().&!? ]/i, '')
                             .replace(/\b[0-9A-Za-z().&!? ]/g, l => l.toUpperCase());
@@ -141,8 +156,6 @@ let FirstTimeUserPrompt = React.createClass({
         };
 
         const formatLocation = value => {
-            console.log('formatLocation / current value: ', value);
-            console.log('formatLocation / ref? ', this.locationFieldRef);
             return value;
         };
 

@@ -13,6 +13,9 @@ import Tabs from './Tabs';
 
 export const TonalApp = React.createClass({
 
+    componentWillMount(){
+    },
+
     componentWillReceiveProps(nextProps){
         const { dispatch } = this.props;
 

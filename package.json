@@ -69,6 +69,7 @@
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-test-utils": "^15.3.1",
+    "react-addons-transition-group": "^15.5.2",
     "react-autosuggest": "^9.0.0",
     "react-contenteditable": "^2.0.2",
     "react-dom": "^15.3.1",

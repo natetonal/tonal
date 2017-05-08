@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Redux from 'react-redux';
 import { verifyEmailWithCode } from 'actions/AuthActions';
 import { pushToRoute } from 'actions/RouteActions';
 
@@ -12,8 +13,10 @@ export const Verify = React.createClass({
     // Load in your component here
 
     componentDidMount(){
-        const { location: { query: { mode, oobCode }}} = this.props;
-        this.handleQuery(mode, oobCode);
+        if (!this.props.status){
+            const { location: { query: { mode, oobCode }}} = this.props;
+            this.handleQuery(mode, oobCode);
+        }
     },
 
     handleQuery(mode, oobCode){
@@ -48,4 +51,8 @@ export const Verify = React.createClass({
     }
 });
 
-export default Verify;
+export default Redux.connect(state => {
+    return {
+        status: state.user.status
+    };
+})(Verify);

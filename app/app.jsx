@@ -20,23 +20,27 @@ $(document).foundation(); // eslint-disable-line
 require('style!css!sass!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged(user => {
-    
+
     // We only want the observer to initiate auth if the app isn't.
     const userStatus = store.getState().user.status;
 
-    console.log('auth state changed: ', user);
-    console.log('auth state user status?: ', userStatus);
+    console.log('onAuthStateChanged / state changed: ', user);
+    console.log('onAuthStateChanged / user status?: ', userStatus);
 
     if (!userStatus){
+
+        console.log('onAuthStateChanged / user status is false.');
         if (user) {
+            console.log('onAuthStateChanged / but there is a user.');
             const providerId = user.providerData[0].providerId;
             if (providerId === 'facebook.com' ||
             (providerId === 'password' && user.emailVerified)) {
-                console.log('onAuthStateChanged uid: ', user.uid);
+                console.log('onAuthStateChanged / uid: ', user.uid);
                 store.dispatch(fetchUserData(user.uid));
                 store.dispatch(startLoginForAuthorizedUser(user.uid));
             }
         } else {
+            console.log('no user object: logging user out.');
             // There should be a way to check if the user has ever logged in before down the road
             // (i.e. checking our own user data)
             // Dispatch an action to clear any lingering data.

@@ -31,6 +31,7 @@ export const storeUserDataToState = data => {
 };
 
 export const updateUserData = data => {
+    console.log('updateUserData called.');
     return (dispatch, getState) => {
         // Make sure the data we're getting passed matches the user data object keys:
         if (typeof data === 'object'){
