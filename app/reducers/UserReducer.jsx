@@ -19,8 +19,12 @@ const initialState = {
     avatar: dummyPhoto,
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
-    followers: 0,
-    following: 0,
+    followers: ['tonalnate'],
+    following: ['tonalnate'],
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 0,
+    recentPost: [],
     status: false
 };
 

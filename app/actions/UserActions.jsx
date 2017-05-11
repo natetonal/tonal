@@ -185,16 +185,26 @@ export const createUserWithFacebookAuth = () => {
                             console.log('response from facebook: ', response.data);
                             dispatch(changeStatus('success'));
 
+                            const email = response.data.email ? response.data.email : firebaseUser.email;
+                            const username = email.match(/^[^@]*/g)[0];
+                            const location = response.data.location ? response.data.location.name : '';
+                            const firstName = response.data.first_name ? response.data.first_name : '';
+                            const lastName = response.data.last_name ? response.data.last_name : '';
+                            const timeZone = response.data.timezone ? response.data.timezone : '';
+                            const avatar = response.data.picture ?
+                                response.data.picture.data.url :
+                                firebaseUser.photoURL;
+
                             user = {
                                 ...user,
+                                email,
+                                username,
+                                location,
+                                firstName,
+                                lastName,
+                                timeZone,
+                                avatar,
                                 status: getState().user.status,
-                                email: response.data.email,
-                                username: response.data.email.match(/^[^@]*/g)[0],
-                                location: response.data.location.name,
-                                firstName: response.data.first_name,
-                                lastName: response.data.last_name,
-                                timeZone: response.data.timezone,
-                                avatar: response.data.picture.data.url,
                                 updatedAt: moment().format('LLLL')
                             };
 

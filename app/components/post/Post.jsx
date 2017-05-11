@@ -28,6 +28,8 @@ export const Post = React.createClass({
                 timeStamp,
                 thread,
                 length,
+                user,
+                postId,
                 user: {
                     avatar,
                     displayName
@@ -88,7 +90,17 @@ export const Post = React.createClass({
                                     className="tonal-post-1-avatar-photo" />
                             </div>
                             <div className="tonal-post-info">
-                                <div className="tonal-post-display-name">{ displayName }</div>
+                                <div className="tonal-post-display-name">
+                                    <PreviewLink
+                                        key={ `postLink_${ postId }` }
+                                        type="user"
+                                        data={ user }
+                                        postId={ postId }
+                                        className="post-mention"
+                                        src={ `users/${ user.username }` }>
+                                        { displayName }
+                                    </PreviewLink>
+                                </div>
                                 <div className="tonal-post-timestamp">
                                     { timeStamp }
                                 </div>

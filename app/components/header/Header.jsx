@@ -56,7 +56,7 @@ export const Header = React.createClass({
                 return (
                     <div className="tonal-header-avatar">
                         <a
-                            onMouseDown={ !isMenuOpen && this.onClickMenu }
+                            onClick={ !isMenuOpen && this.onClickMenu }
                             href="">
                             <img
                                 alt="header avatar"
@@ -70,7 +70,7 @@ export const Header = React.createClass({
             return (
                 <div className="hi-icon-effect-1 hi-icon-effect-1b">
                     <a
-                        onMouseDown={ !isMenuOpen && this.onClickMenu }
+                        onClick={ !isMenuOpen && this.onClickMenu }
                         href=""
                         className="hi-icon hi-icon-mobile">
                         <i className="fa fa-user" aria-hidden="true" />
@@ -87,7 +87,7 @@ export const Header = React.createClass({
                         { photo() }
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-left">
                             <a
-                                onMouseDown={ this.onClickNotifs }
+                                onClick={ this.onClickNotifs }
                                 className="hi-icon hi-icon-mobile">
                                 <i
                                     className="fa fa-bell"
@@ -124,7 +124,7 @@ export const Header = React.createClass({
                     <div className="small-6 text-right columns">
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-right">
                             <a
-                                onMouseDown={ this.onClickNotifs }
+                                onClick={ this.onClickNotifs }
                                 className="hi-icon hi-icon-mobile">
                                 <i
                                     className="fa fa-bell"
@@ -135,7 +135,7 @@ export const Header = React.createClass({
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
-                                onMouseDown={ this.onClickCompose }
+                                onClick={ this.onClickCompose }
                                 className="hi-icon hi-icon-mobile">
                                 <i
                                     className="fa fa-pencil"

@@ -24,7 +24,7 @@ export const MenuWrapper = React.createClass({
                 <Menu />
                 <div
                     className="tonal-pusher"
-                    onMouseDown={ isOpen ? this.handleClick : false }>
+                    onClick={ isOpen ? this.handleClick : false }>
                     <div className="tonal-main">
                         <div className="tonal-main-inner">
                             { this.props.children }

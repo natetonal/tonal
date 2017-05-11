@@ -14,8 +14,6 @@ const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-developmen
 export const Menu = React.createClass({
 
     componentWillUpdate(nextProps){
-        console.log('this.props.menuIsOpen? ', this.props.menuIsOpen);
-        console.log('nextProps.menuIsOpen? ', nextProps.menuIsOpen);
         if (!this.props.menuIsOpen && nextProps.menuIsOpen){
             TweenLite.from(this.namesRef, 0.75, {
                 ease: Power2.easeOut,
@@ -174,8 +172,8 @@ export default Redux.connect(state => {
         displayName: state.user.displayName,
         username: state.user.username,
         email: state.user.email,
-        followers: state.user.followers,
-        following: state.user.following,
+        followers: state.user.followerCount,
+        following: state.user.followingCount,
         menuIsOpen: state.uiState.menuIsOpen
     };
 })(Menu);

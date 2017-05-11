@@ -50,14 +50,14 @@ export const UserPreview = React.createClass({
                     <div className="user-preview-avatar">
                         <img
                             src={ user.avatar }
-                            alt={ user.fullName } />
+                            alt={ user.displayName } />
                     </div>
                     <div className="user-preview-info">
                         <div className="user-preview-name">
-                            { user.fullName }
+                            { user.displayName }
                         </div>
                         <div className="user-preview-username">
-                            @{ user.displayName }
+                            @{ user.username }
                         </div>
                         <div className="user-preview-location">
                             <i className="fa fa-location-arrow" aria-hidden="true" />
@@ -71,7 +71,7 @@ export const UserPreview = React.createClass({
                             Followers
                         </div>
                         <div className="user-preview-followers-count">
-                            { formatNumber(user.followers) }
+                            { formatNumber(user.followerCount) }
                         </div>
                     </div>
                     <div className="user-preview-following">
@@ -79,7 +79,7 @@ export const UserPreview = React.createClass({
                             Following
                         </div>
                         <div className="user-preview-following-count">
-                            { formatNumber(user.following) }
+                            { formatNumber(user.followingCount) }
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ import authReducer from './AuthReducer';
 import imgUrlReducer from './ImgUrlReducer';
 import uiStateReducer from './UIStateReducer';
 import userReducer from './UserReducer';
+import feedReducer from './FeedReducer';
 import headerComposeReducer from './HeaderComposeReducer';
 import composerReducer from './ComposerReducer';
 import emojiSelectorReducer from './EmojiSelectorReducer';
@@ -18,6 +19,7 @@ export default combineReducers({
     imgUrl: imgUrlReducer,
     uiState: uiStateReducer,
     user: userReducer,
+    feed: feedReducer,
     headerCompose: headerComposeReducer,
     composer: composerReducer,
     emojiSelector: emojiSelectorReducer,

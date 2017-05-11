@@ -28,7 +28,7 @@
             right: 10px;
 
             .fa{
-                color: rgba(0,0,0,0.3);
+                color: rgba(0,0,0,0.7);
             }
         }
 
@@ -232,6 +232,16 @@
                 color: darken($lightblue, 20%);
                 @include transition(0.2s color);
             }
+        }
+    }
+
+    .post-mention{
+        color: $lightblue;
+        @include transition(0.2s all);
+
+        &:hover{
+            color: darken($lightblue, 20%);
+            @include transition(0.2s all);
         }
     }
 }

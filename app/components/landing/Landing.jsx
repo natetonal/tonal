@@ -15,7 +15,7 @@ import LoginModal from './LoginModal/LoginModal';
 export const Landing = React.createClass({
 
     componentDidMount(){
-        console.log('Landing / componentDidMount.');
+        console.log('Landing / Loading Tonal, Mon. 9:03 version.');
         if (this.props.location){
             console.log('Landing / location: ', this.props.location);
             const {

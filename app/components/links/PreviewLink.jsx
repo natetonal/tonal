@@ -1,12 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import * as Redux from 'react-redux';
-import {
-    toggleHover,
-    loadPreview,
-    clearPreview
-} from 'actions/PreviewLinkActions';
 
 import UserPreview from './UserPreview';
 
@@ -17,6 +11,12 @@ export const PreviewLink = React.createClass({
         this.timeoutMouseLeave = null;
         this.top = 0;
         this.left = 0;
+
+        this.setState({
+            preview: false,
+            previewType: false,
+            previewHovered: false
+        });
     },
 
     getCoords(elem){
@@ -32,12 +32,14 @@ export const PreviewLink = React.createClass({
 
     handleMentionPreview(data, type, event){
         event.preventDefault();
-        const { dispatch } = this.props;
         if (!this.timeoutMouseEnter) {
             this.getCoords(event.target);
             this.timeoutMouseEnter = window.setTimeout(() => {
                 this.timeoutMouseEnter = null;
-                dispatch(loadPreview(data, type));
+                this.setState({
+                    preview: data,
+                    previewType: type
+                });
             }, 1000);
         }
     },
@@ -48,42 +50,46 @@ export const PreviewLink = React.createClass({
             this.timeoutMouseEnter = null;
         } else {
             this.timeoutMouseLeave = window.setTimeout(() => {
-                const {
-                    dispatch,
-                    previewHovered
-                } = this.props;
+                const { previewHovered } = this.state;
                 this.timeoutMouseLeave = null;
                 if (!previewHovered){
                     this.clearCoords();
-                    dispatch(clearPreview());
+                    this.setState({
+                        preview: false,
+                        previewType: false
+                    });
                 }
             }, 100);
         }
     },
 
     handlePreviewMouseEnter(){
-        const { dispatch } = this.props;
-        dispatch(toggleHover());
+        this.setState({ previewHovered: true });
     },
 
     handlePreviewMouseLeave(){
-        const { dispatch } = this.props;
         this.clearCoords();
-        dispatch(toggleHover());
-        dispatch(clearPreview());
+        this.setState({
+            preview: false,
+            previewType: false,
+            previewHovered: false
+        });
     },
 
     render(){
         const {
             className,
-            key,
             src,
             data,
             type,
-            preview,
-            previewType,
+            postId,
             children
         } = this.props;
+
+        const {
+            preview,
+            previewType
+        } = this.state;
 
         const renderPreview = () => {
             switch (previewType) {
@@ -93,7 +99,7 @@ export const PreviewLink = React.createClass({
                             <UserPreview
                                 pos={ { top: this.top, left: this.left } }
                                 user={ preview }
-                                key={ preview.fullName + preview.followers }
+                                key={ `UserPreview_${ postId }` }
                                 onMouseEnter={ () => this.handlePreviewMouseEnter }
                                 onMouseLeave={ () => this.handlePreviewMouseLeave } />
                         );
@@ -108,7 +114,7 @@ export const PreviewLink = React.createClass({
             <span>
                 <Link
                     ref={ element => this.previewElement = element }
-                    key={ key }
+                    key={ `PreviewLinkInnerLink_${ postId }` }
                     className={ className }
                     onMouseEnter={ e => this.handleMentionPreview(data, type, e) }
                     onMouseOut={ () => this.handleClearMentionPreview() }
@@ -127,10 +133,4 @@ export const PreviewLink = React.createClass({
     }
 });
 
-export default Redux.connect(state => {
-    return {
-        preview: state.previewLink.preview,
-        previewType: state.previewLink.previewType,
-        previewHovered: state.previewLink.previewHovered
-    };
-})(PreviewLink);
+export default PreviewLink;

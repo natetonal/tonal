@@ -10,7 +10,7 @@ import {
     setImageUpload,
     updateSuggestionQuery
 } from 'actions/ComposerActions';
-
+import { writePost } from 'actions/PostActions';
 import Alert from 'elements/Alert';
 import { createFakePost } from 'actions/HeaderComposeActions';
 
@@ -576,6 +576,7 @@ export const Composer = React.createClass({
                 if (parsedPost.error){
                     this.handleWarning(parsedPost);
                 } else {
+                    dispatch(writePost(parsedPost));
                     dispatch(createFakePost(parsedPost));
                     onClose();
                 }

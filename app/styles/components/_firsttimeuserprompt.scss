@@ -3,8 +3,6 @@ $parent-height: 80vh;
 .ftu-prompt-overlay {
     position: fixed;
     display: flex;
-    align-items: center;
-    justify-content: center;
     top: 0;
     left: 0;
     height: 100vh;
@@ -17,6 +15,7 @@ $parent-height: 80vh;
         opacity: 1;
         position: absolute;
         top: 10vh;
+        left: 25vw;
         overflow-y: hidden;
         background: $black;
         border: 5px solid $lightblue;
@@ -30,6 +29,7 @@ $parent-height: 80vh;
             height: 85vh;
             width: 80vw;
             top: 7.5vh;
+            left: 10vw;
         }
 
         .ftu-prompt-content {
