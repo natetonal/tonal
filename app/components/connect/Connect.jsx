@@ -3,7 +3,8 @@ import * as Redux from 'react-redux';
 import firebase from 'firebase';
 import {
     fetchFeed,
-    addFeedPost
+    addFeedPost,
+    removeFeedPost
 } from 'actions/FeedActions';
 import Post from 'post/Post';
 
@@ -22,8 +23,10 @@ export const Connect = React.createClass({
             // Set up observers for it:
             const feedRef = firebase.database().ref(`/feed/${ uid }/`);
             feedRef.on('child_added', post => {
-                console.log('post added to DB. adding to state.', post.val());
                 dispatch(addFeedPost(post.key, post.val()));
+            });
+            feedRef.on('child_removed', post => {
+                dispatch(removeFeedPost(post.key));
             });
         }
     },
@@ -35,21 +38,16 @@ export const Connect = React.createClass({
             status
         } = this.props;
 
-        console.log('Connect / feed? ', feed);
         const renderFeed = () => {
-            if (status === 'fetching'){
+            if (status === 'fetching' || !status){
                 return <div>Fetching...</div>;
             } else if (status === 'error'){
                 return <div>Error.</div>;
             } else if (status === 'success'){
-                console.log('Connect / success!');
                 if (feed){
-                    console.log('Connect / there is a feed. mapping now.', feed);
-                    console.log('Object.keys(feed): ', Object.keys(feed).reverse());
                     return Object.keys(feed)
                     .reverse()
                     .map(key => {
-                        console.log('Connect / post in this map: ', feed[key]);
                         return (
                             <Post
                                 key={ key }
@@ -58,7 +56,7 @@ export const Connect = React.createClass({
                     });
                 }
 
-                return 'no feed mang.';
+                return '';
             }
 
             return 'no idea what happen, mang.';

@@ -572,7 +572,6 @@ export const Composer = React.createClass({
             });
             parsePost(postRaw, postData, user)
             .then(parsedPost => {
-                console.log('parsedPost received from submitPost: ', parsedPost);
                 if (parsedPost.error){
                     this.handleWarning(parsedPost);
                 } else {

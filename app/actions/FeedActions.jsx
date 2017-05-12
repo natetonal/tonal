@@ -22,13 +22,20 @@ export const addFeedPost = (key = false, post = false) => {
     };
 };
 
+export const removeFeedPost = key => {
+    return {
+        type: 'FEED_REMOVE_POST',
+        key
+    };
+};
+
+// export const removeFeedPost = ();
 export const fetchFeed = uid => {
     return dispatch => {
         dispatch(updateFeedStatus('fetching'));
         databaseRef.child(`feed/${ uid }`).once('value')
         .then(snapshot => {
             const feed = snapshot.val();
-            console.log('feed from our database: ', feed);
             if (feed){
                 dispatch(addFeedData(feed));
             } else {

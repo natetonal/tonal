@@ -217,7 +217,7 @@
         cursor: pointer;
 
         &:hover{
-            .fa{
+            .fa-angle-down{
                 color: $white;
                 @include transition(0.2s color);
             }

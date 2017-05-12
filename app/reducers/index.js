@@ -11,7 +11,6 @@ import composerReducer from './ComposerReducer';
 import emojiSelectorReducer from './EmojiSelectorReducer';
 import giphySelectorReducer from './GiphySelectorReducer';
 import routeReducer from './RouteReducer';
-import previewLinkReducer from './PreviewLinkReducer';
 
 export default combineReducers({
     form,
@@ -24,6 +23,5 @@ export default combineReducers({
     composer: composerReducer,
     emojiSelector: emojiSelectorReducer,
     giphySelector: giphySelectorReducer,
-    route: routeReducer,
-    previewLink: previewLinkReducer
+    route: routeReducer
 });

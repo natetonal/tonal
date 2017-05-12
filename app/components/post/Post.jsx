@@ -5,17 +5,28 @@ import * as Redux from 'react-redux';
 import PreviewLink from 'links/PreviewLink';
 import Comment from './Comment';
 import PostParser from './PostParser';
+import PostMenu from './PostMenu';
 
 
 const bigTextLength = 80;
 
 export const Post = React.createClass({
 
+    componentWillMount(){
+        this.setState({
+            showMenu: false
+        });
+    },
+
+    handlePostMenu(){
+        this.setState({
+            showMenu: !this.state.showMenu
+        });
+    },
+
     render(){
 
         const { data } = this.props;
-
-        console.log('data received from post: ', data);
 
         if (data){
 
@@ -35,6 +46,8 @@ export const Post = React.createClass({
                     displayName
                 }
             } = data;
+
+            const { showMenu } = this.state;
 
             const displayThread = () => {
 
@@ -71,6 +84,18 @@ export const Post = React.createClass({
                 return '';
             };
 
+            const displayMenu = () => {
+                if (showMenu){
+                    return (
+                        <PostMenu
+                            callback={ this.handlePostMenu }
+                            postId={ postId } />
+                    );
+                }
+
+                return '';
+            };
+
             return (
                 <ReactCSSTransitionGroup
                     transitionName="dramatic-fadein"
@@ -80,8 +105,11 @@ export const Post = React.createClass({
                     transitionLeave={ false }>
                     <div className="tonal-post">
                         <div className="tonal-post-top">
-                            <div className="tonal-post-menu">
+                            <div
+                                className="tonal-post-menu"
+                                onClick={ this.handlePostMenu }>
                                 <i className="fa fa-angle-down" aria-hidden="true" />
+                                { displayMenu() }
                             </div>
                             <div className="tonal-post-avatar">
                                 <img

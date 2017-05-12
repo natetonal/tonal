@@ -18,6 +18,16 @@ export default (state = initialState, action) => {
                 ...state,
                 data: action.data
             };
+        case 'FEED_REMOVE_POST':
+            return {
+                ...state,
+                data: Object.keys(state.data)
+                    .filter(key => key !== action.key)
+                    .reduce((obj, key) => {
+                        obj[key] = state.data[key];
+                        return obj;
+                    }, {})
+            };
         case 'FEED_UPDATE_STATUS':
             return {
                 ...state,

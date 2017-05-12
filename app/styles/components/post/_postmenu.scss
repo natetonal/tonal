@@ -1,0 +1,48 @@
+.post-menu {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    width: 250px;
+    background: rgba(0,0,0,0.8);
+    overflow-x: hidden;
+    font-size: 14px;
+    box-shadow: $boxshadow;
+
+    .post-menu-option,
+    .post-menu-divider{
+        width: 250px;
+        padding: 5px 10px;
+        @include transition(0.2s all);
+
+        .fa{
+            color: $white !important;
+            width: 20px;
+            margin-right: 5px;
+
+            &.fa-plus-square,
+            &.fa-user-plus{
+                color: $lightgreen !important;
+            }
+
+            &.fa-flag{
+                color: $orange !important;
+            }
+
+            &.fa-times{
+                color: $red !important;
+            }
+        }
+
+        &:hover{
+            background: $blue;
+            @include transition(0.2s all);
+        }
+    }
+
+    .post-menu-divider {
+        height: 1px;
+        padding: 0;
+        margin: 5px 0;
+        background: rgba(255,255,255,0.1);
+    }
+}
