@@ -2,6 +2,8 @@ import React from 'react';
 import * as Redux from 'react-redux';
 import { changeTab } from 'actions/HeaderComposeActions';
 
+import { writePost } from 'actions/PostActions';
+
 import Composer from 'composer/Composer';
 
 const headerComposeTabs = [
@@ -34,6 +36,12 @@ export const HeaderCompose = React.createClass({
         dispatch(changeTab(tab));
     },
 
+    handlePostSubmit(parsedPost){
+        // Make sure to update action & reducer to store raw & parsed post!
+        const { dispatch } = this.props;
+        dispatch(writePost(parsedPost));
+    },
+
     render(){
 
         const { tabSelected } = this.props;
@@ -58,7 +66,11 @@ export const HeaderCompose = React.createClass({
             let component = '';
             switch (tabSelected){
                 case 'post':
-                    component = <Composer onClose={ onClose } />;
+                    component = (
+                        <Composer
+                            onClose={ onClose }
+                            onSubmit={ this.handlePostSubmit } />
+                    );
                     break;
                 default:
                     component = '';

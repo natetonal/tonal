@@ -10,9 +10,7 @@ import {
     setImageUpload,
     updateSuggestionQuery
 } from 'actions/ComposerActions';
-import { writePost } from 'actions/PostActions';
 import Alert from 'elements/Alert';
-import { createFakePost } from 'actions/HeaderComposeActions';
 
 import {
     getPathFromShortname,
@@ -76,9 +74,11 @@ export const Composer = React.createClass({
             enabled: true,
             error: false,
             warning: false,
-            mentions: [],
-            history: [],
             pos: '',
+            history: [],
+            submitText: this.props.submitText || 'Share It!',
+            mentions: this.props.mentions || [],
+            initialValue: this.props.initialValue || '',
             maxLength: this.props.maxLength || 2000,
             mainClass: this.props.mainClass || 'composer',
             buttonPos: this.props.buttonPos || 'top',
@@ -88,6 +88,7 @@ export const Composer = React.createClass({
 
     // Implement a new Medium when component mounts, and focus on it.
     componentDidMount(){
+        const { initialValue } = this.state;
         this.mediumSettings = {
             element: this.composer,
             mode: Medium.partialMode,
@@ -97,6 +98,7 @@ export const Composer = React.createClass({
         };
         this.resetMedium();
         this.composer.focus();
+        this.medium.value(initialValue);
     },
 
     // Make sure focus stays on composer unless selection menu open.
@@ -326,7 +328,7 @@ export const Composer = React.createClass({
         this.setState({ focused: false });
     },
 
-    handleKeyPress({ key, target: { textContent } }){
+    handleKeyPress({ key, target: { textContent }}){
         this.clearError();
         if (key.length === 1){
             if (textContent.length === 0){
@@ -554,7 +556,11 @@ export const Composer = React.createClass({
 
     submitPost(){
         event.preventDefault();
-        const { dispatch, user, onClose } = this.props;
+        const {
+            user,
+            onClose,
+            onSubmit
+        } = this.props;
         const postRaw = this.medium.value();
         const postData = {
             mentions: this.state.mentions,
@@ -575,8 +581,7 @@ export const Composer = React.createClass({
                 if (parsedPost.error){
                     this.handleWarning(parsedPost);
                 } else {
-                    dispatch(writePost(parsedPost));
-                    dispatch(createFakePost(parsedPost));
+                    onSubmit(parsedPost);
                     onClose();
                 }
             });
@@ -585,7 +590,10 @@ export const Composer = React.createClass({
 
     render(){
 
-        const { currentMenu, query } = this.props;
+        const {
+            currentMenu,
+            query
+        } = this.props;
 
         const {
             focused,
@@ -593,6 +601,7 @@ export const Composer = React.createClass({
             error,
             warning,
             buttons,
+            submitText,
             mainClass,
             buttonPos
         } = this.state;
@@ -609,11 +618,7 @@ export const Composer = React.createClass({
             errorHighlight: `${ mainClass }-highlight-err`
         };
 
-        const composerClass = `
-            ${ mainClass }
-            ${ focused ? cls.zoomIn : '' }
-            ${ enabled ? '' : cls.disabled }
-            ${ error ? cls.errorHighlight : '' }`;
+        const composerClass = `${ mainClass } ${ focused ? cls.zoomIn : '' } ${ enabled ? '' : cls.disabled } ${ error ? cls.errorHighlight : '' }`;
 
         const err = () => {
             if (error){
@@ -753,7 +758,7 @@ export const Composer = React.createClass({
                     <Button
                         type="submit"
                         btnType="main"
-                        btnText={ enabled ? 'Share It!' : 'Submitting Post' }
+                        btnText={ enabled ? submitText : 'Submitting' }
                         isLoading={ !enabled }
                         onClick={ this.submitPost } />
                 </div>

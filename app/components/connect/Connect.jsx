@@ -25,9 +25,15 @@ export const Connect = React.createClass({
             feedRef.on('child_added', post => {
                 dispatch(addFeedPost(post.key, post.val()));
             });
+            feedRef.on('child_changed', post => {
+                console.log('child changed!');
+                dispatch(addFeedPost(post.key, post.val()));
+            });
             feedRef.on('child_removed', post => {
+                console.log('POST DELETION WITNESSED! REMOVING: ', post.key);
                 dispatch(removeFeedPost(post.key));
             });
+
         }
     },
 
@@ -35,8 +41,11 @@ export const Connect = React.createClass({
 
         const {
             feed,
-            status
+            status,
+            uid
         } = this.props;
+
+        console.log('uid? ', uid);
 
         const renderFeed = () => {
             if (status === 'fetching' || !status){
@@ -50,6 +59,7 @@ export const Connect = React.createClass({
                     .map(key => {
                         return (
                             <Post
+                                feedId={ uid }
                                 key={ key }
                                 data={ feed[key] } />
                         );

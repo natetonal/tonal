@@ -9,7 +9,7 @@ const initialState = {
     email: '',
     firstName: '',
     lastName: '',
-    userName: '',
+    username: '',
     location: '',
     displayName: '',
     authMethod: '',

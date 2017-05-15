@@ -2,11 +2,20 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as Redux from 'react-redux';
 
+import {
+    TimelineLite,
+    Power1,
+} from 'gsap';
+import {
+    deletePost,
+    updatePost
+} from 'actions/PostActions';
+
+import Composer from 'composer/Composer';
 import PreviewLink from 'links/PreviewLink';
 import Comment from './Comment';
 import PostParser from './PostParser';
 import PostMenu from './PostMenu';
-
 
 const bigTextLength = 80;
 
@@ -14,7 +23,8 @@ export const Post = React.createClass({
 
     componentWillMount(){
         this.setState({
-            showMenu: false
+            showMenu: false,
+            postEdit: false
         });
     },
 
@@ -24,9 +34,75 @@ export const Post = React.createClass({
         });
     },
 
+    handleEditPost(){
+        const tl = new TimelineLite();
+        if (!this.state.postEdit){
+            this.toggleEditor();
+            tl.from(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+        } else {
+            tl.to(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+            tl.eventCallback('onComplete', this.toggleEditor);
+        }
+        tl.play();
+    },
+
+    handleUpdatePost(updatedPost){
+        const {
+            dispatch,
+            data: {
+                postId
+            }
+        } = this.props;
+        dispatch(updatePost(updatedPost, postId));
+    },
+
+    handleDeletePost(){
+
+        console.log('hanldeDeletePost called from post.');
+
+        const tl = new TimelineLite();
+        tl.to(this.postRef, 0.25, {
+            ease: Power1.easeOut,
+            transformOrigin: 'top left',
+            height: 0,
+            opacity: 0
+        });
+        tl.play();
+        tl.eventCallback('onComplete', this.dispatchPostDelete);
+    },
+
+    toggleEditor(){
+        this.setState({
+            postEdit: !this.state.postEdit
+        });
+    },
+
+    dispatchPostDelete(){
+        const {
+            dispatch,
+            data
+        } = this.props;
+
+        const { postId } = data;
+        dispatch(deletePost(postId));
+    },
+
     render(){
 
-        const { data } = this.props;
+        const {
+            data,
+            feedId
+        } = this.props;
 
         if (data){
 
@@ -36,6 +112,9 @@ export const Post = React.createClass({
                 likes,
                 mentions,
                 post,
+                raw,
+                postEdited,
+                postEditedAt,
                 timeStamp,
                 thread,
                 length,
@@ -47,7 +126,10 @@ export const Post = React.createClass({
                 }
             } = data;
 
-            const { showMenu } = this.state;
+            const {
+                showMenu,
+                postEdit
+            } = this.state;
 
             const displayThread = () => {
 
@@ -88,12 +170,51 @@ export const Post = React.createClass({
                 if (showMenu){
                     return (
                         <PostMenu
-                            callback={ this.handlePostMenu }
+                            posterIsSelf={ user.uid === feedId }
+                            handlePostMenu={ this.handlePostMenu }
+                            handleEditPost={ this.handleEditPost }
+                            handleDeletePost={ this.handleDeletePost }
                             postId={ postId } />
                     );
                 }
 
                 return '';
+            };
+
+            const postMode = () => {
+                if (postEdit){
+                    return (
+                        <div
+                            ref={ element => this.postEditorRef = element }
+                            className="tonal-post-editor">
+                            <div
+                                className="tonal-post-editor-close"
+                                onClick={ this.handleEditPost }>
+                                <i className="fa fa-times" aria-hidden="true" />
+                            </div>
+                            <Composer
+                                initialValue={ raw }
+                                mentions={ mentions }
+                                submitText={ 'Update Your Post ' }
+                                onClose={ this.handleEditPost }
+                                onSubmit={ this.handleUpdatePost } />
+                        </div>
+                    );
+                }
+
+                return (
+                    <PostParser
+                        post={ post }
+                        className={ `tonal-post-message ${ bigTextLength < length ? '' : 'large' }` } />
+                );
+            };
+
+            const displayTimestamp = () => {
+                if (postEdited){
+                    return `Edited ${ postEditedAt }`;
+                }
+
+                return timeStamp;
             };
 
             return (
@@ -103,7 +224,9 @@ export const Post = React.createClass({
                     transitionAppearTimeout={ 500 }
                     transitionEnter={ false }
                     transitionLeave={ false }>
-                    <div className="tonal-post">
+                    <div
+                        ref={ element => this.postRef = element }
+                        className="tonal-post">
                         <div className="tonal-post-top">
                             <div
                                 className="tonal-post-menu"
@@ -130,13 +253,11 @@ export const Post = React.createClass({
                                     </PreviewLink>
                                 </div>
                                 <div className="tonal-post-timestamp">
-                                    { timeStamp }
+                                    { displayTimestamp() }
                                 </div>
                             </div>
                         </div>
-                        <PostParser
-                            post={ post }
-                            className={ `tonal-post-message ${ bigTextLength < length ? '' : 'large' }` } />
+                        { postMode() }
                         { displayImage() }
                         <div className="tonal-post-interactions">
                             <div className="tonal-post-interaction tonal-post-interaction-like">

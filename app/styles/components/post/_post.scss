@@ -56,6 +56,43 @@
         }
     }
 
+    .tonal-post-editor {
+        position: relative;
+        margin: 10px;
+        padding: 20px;
+        border: 1px solid rgba(0,0,0,0.2);
+
+        .tonal-post-editor-close {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
+            right: 5px;
+            top: 5px;
+            cursor: pointer;
+            @include transition(0.2s all);
+
+            .fa{
+                color: rgba(0,0,0,0.2) !important;
+                @include transition(0.2s all);
+            }
+
+            &:hover{
+                border: 1px solid $white;
+                @include transition(0.2s all);
+
+                .fa{
+                    color: $white !important;
+                    @include transition(0.2s all);
+                }
+            }
+        }
+    }
+
     .tonal-post-image {
         padding: 10px;
         margin-top: 10px;

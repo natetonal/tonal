@@ -6,10 +6,3 @@ export const changeTab = (tab = '') => {
         tab
     };
 };
-
-export const createFakePost = postData => {
-    return {
-        type: 'HC_CREATE_FAKE_POST',
-        postData
-    };
-};

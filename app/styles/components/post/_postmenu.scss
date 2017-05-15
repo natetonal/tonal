@@ -19,13 +19,24 @@
             width: 20px;
             margin-right: 5px;
 
-            &.fa-plus-square,
+            &.fa-plus-square{
+                color: $magenta !important;
+            }
+
+            &.fa-minus-square{
+                color: $magenta !important;
+            }
+            
             &.fa-user-plus{
                 color: $lightgreen !important;
             }
 
             &.fa-flag{
                 color: $orange !important;
+            }
+
+            &.fa-pencil-square-o{
+                color: $yellow !important;
             }
 
             &.fa-times{
@@ -37,6 +48,13 @@
             background: $blue;
             @include transition(0.2s all);
         }
+    }
+
+    .post-menu-description {
+        padding-left: 25px;
+        font-size: 11px;
+        line-height: 1.1;
+        color: #ddd;
     }
 
     .post-menu-divider {

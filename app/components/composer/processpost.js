@@ -156,9 +156,12 @@ export const parsePost = (html, data, userData) => {
                     hashtags,
                     likes: 0,
                     thread: false,
+                    postEdited: false,
+                    postEditedAt: false,
                     timeStamp: moment().calendar(),
                     user: userData,
-                    post: safePost
+                    post: safePost,
+                    raw: html
                 };
 
                 return postData;
@@ -173,8 +176,11 @@ export const parsePost = (html, data, userData) => {
         hashtags,
         likes: 0,
         thread: false,
+        postEdited: false,
+        postEditedAt: false,
         timeStamp: moment().calendar(),
         user: userData,
+        raw: html,
         post
     };
 };
