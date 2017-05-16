@@ -1,5 +1,6 @@
 .post-menu {
     position: absolute;
+    z-index: 20;
     top: 0;
     right: 30px;
     width: 250px;
@@ -26,7 +27,7 @@
             &.fa-minus-square{
                 color: $magenta !important;
             }
-            
+
             &.fa-user-plus{
                 color: $lightgreen !important;
             }

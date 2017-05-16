@@ -31,24 +31,28 @@ export const storeUserDataToState = data => {
 };
 
 export const updateUserData = data => {
-    console.log('updateUserData called.');
+    console.log('updateUserData called with data', data);
     return (dispatch, getState) => {
         // Make sure the data we're getting passed matches the user data object keys:
         if (typeof data === 'object'){
             const userKeys = Object.keys(getState().user);
             const dataKeys = Object.keys(data);
+            console.log('updateUserData data is an object');
             if (dataKeys.every(key => {
                 return userKeys.includes(key);
             })) {
+                console.log('updateUserData has this key, update user object');
                 const uid = getState().auth.uid;
                 databaseRef.child(`users/${ uid }`).once('value')
                 .then(snapshot => {
                     const currentUser = snapshot.val();
+                    console.log('updateUserData this user is in the db');
                     if (currentUser){
                         const user = {
                             ...currentUser,
                             ...data
                         };
+                        console.log('updated obj going to db: ', user);
                         databaseRef.child(`users/${ uid }`).update(user);
                         dispatch(storeUserDataToState(user));
                     }

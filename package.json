@@ -46,6 +46,8 @@
     "expect": "^1.14.0",
     "express": "^4.13.4",
     "firebase": "^3.7.4",
+    "firebase-admin": "^4.2.1",
+    "firebase-functions": "^0.5.7",
     "foundation-sites": "^6.2.0",
     "gsap": "^1.19.1",
     "htmlparser2": "^3.9.2",
