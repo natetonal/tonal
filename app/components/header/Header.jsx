@@ -1,17 +1,48 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import firebase from 'firebase';
 import { Link } from 'react-router';
 import {
     toggleMenu,
     toggleCompose,
     toggleNotifs
 } from 'actions/UIStateActions';
+import {
+    fetchNotifs,
+    addNotif,
+    removeNotif
+} from 'actions/NotificationActions';
 
 import Search from 'Search';
-import HeaderNotificationsList from './HeaderNotificationsList';
+import NotificationsList from 'notifications/NotificationsList';
 import HeaderCompose from './HeaderCompose';
 
 export const Header = React.createClass({
+
+    componentWillMount(){
+        const {
+            dispatch,
+            uid
+        } = this.props;
+        if (uid){
+            // Fetch notifications:
+            dispatch(fetchNotifs(uid));
+
+            // Set up observers for it:
+            const notifsRef = firebase.database().ref(`/notifications/${ uid }/`);
+            notifsRef.on('child_added', notif => {
+                dispatch(addNotif(notif.key, notif.val()));
+            });
+            notifsRef.on('child_changed', notif => {
+                console.log('child changed!');
+                dispatch(addNotif(notif.key, notif.val()));
+            });
+            notifsRef.on('child_removed', notif => {
+                console.log('NOTIFS DELETION WITNESSED! REMOVING: ', notif.key);
+                dispatch(removeNotif(notif.key));
+            });
+        }
+    },
 
     onClickMenu(event){
         event.preventDefault();
@@ -48,8 +79,18 @@ export const Header = React.createClass({
             isMenuOpen,
             isNotifsOpen,
             isComposeOpen,
-            avatar
+            avatar,
+            notifs,
+            notifsStatus
         } = this.props;
+
+        const renderNotifs = () => {
+            return (
+                <NotificationsList
+                    data={ notifs }
+                    status={ notifsStatus } />
+            );
+        };
 
         const photo = () => {
             if (avatar){
@@ -93,8 +134,8 @@ export const Header = React.createClass({
                                     className="fa fa-bell"
                                     aria-hidden="true" />
                             </a>
-                            <span className="alert badge" />
-                            { isNotifsOpen && <HeaderNotificationsList /> }
+                            { notifs && <span className="alert badge" /> }
+                            { isNotifsOpen && renderNotifs() }
                         </div>
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
@@ -130,8 +171,8 @@ export const Header = React.createClass({
                                     className="fa fa-bell"
                                     aria-hidden="true" />
                             </a>
-                            <span className="alert badge" />
-                            { isNotifsOpen && <HeaderNotificationsList /> }
+                            { notifs && <span className="alert badge" /> }
+                            { isNotifsOpen && renderNotifs() }
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
@@ -156,6 +197,9 @@ export default Redux.connect(state => {
         isMenuOpen: state.uiState.menuIsOpen,
         isNotifsOpen: state.uiState.notifsIsOpen,
         isComposeOpen: state.uiState.composeIsOpen,
-        avatar: state.user.avatar
+        uid: state.auth.uid,
+        avatar: state.user.avatar,
+        notifs: state.notifs.data,
+        notifsStatus: state.notifs.status
     };
 })(Header);

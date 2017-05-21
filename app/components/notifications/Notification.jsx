@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router';
 
-export const HeaderNotification = React.createClass({
+export const Notification = React.createClass({
 
     componentWillMount(){
         this.setState({
@@ -34,12 +35,18 @@ export const HeaderNotification = React.createClass({
     render(){
 
         const {
+            unfollowUser,
+            blockUser,
+            deleteNotif,
+            notifId,
             data: {
                 type,
-                received,
+                uid,
+                username,
                 displayName,
                 avatar,
-                timeStamp
+                timeStamp,
+                acknowledged
             }
         } = this.props;
 
@@ -48,8 +55,31 @@ export const HeaderNotification = React.createClass({
             showNotifMenu
         } = this.state;
 
+        console.log('data? ', this.props.data);
+        console.log('uid? ', uid);
+        const renderNotifMessage = () => {
+            switch (type){
+                case 'follower-add':
+                    return (
+                        <div className="header-notification-message">
+                            <p>
+                                <Link
+                                    ref={ element => this.previewElement = element }
+                                    className="header-notification-message-link"
+                                    to={ `users/${ username }` }>
+                                    { displayName }
+                                </Link>
+                                { ' started following you.' }
+                            </p>
+                        </div>
+                    );
+                default:
+                    return '';
+            }
+        };
+
         return (
-            <div className={ `header-notification${ received ? ' received' : '' }` }>
+            <div className={ `header-notification${ acknowledged ? ' received' : '' }` }>
                 <div className="header-notification-img">
                     <img
                         src={ avatar }
@@ -69,7 +99,7 @@ export const HeaderNotification = React.createClass({
                                 className="header-notification-menu">
                                 <div
                                     className="header-notification-menu-option"
-                                    onClick={ this.handleUnfollow }>
+                                    onClick={ e => unfollowUser(uid, e) }>
                                     <i
                                         className="fa fa-ban"
                                         aria-hidden="true" />
@@ -77,18 +107,20 @@ export const HeaderNotification = React.createClass({
                                 </div>
                                 <div
                                     className="header-notification-menu-option"
-                                    onClick={ this.handleBlock }>
+                                    onClick={ e => blockUser(uid, e) }>
                                     <i className="fa fa-user-times" aria-hidden="true" />
                                     Block <strong>{ displayName }</strong>
+                                </div>
+                                <div
+                                    className="header-notification-menu-option"
+                                    onClick={ e => deleteNotif(notifId, e) }>
+                                    <i className="fa fa-times" aria-hidden="true" />
+                                    Delete Notification
                                 </div>
                             </div>
                         )}
                     </div>
-                    <div className="header-notification-message">
-                        <p>
-                            <span className="header-notification-message-link">{ displayName }</span> commented on commented on your commented on your commented on your commented on your commented on your <span className="header-notification-message-link">post.</span>
-                        </p>
-                    </div>
+                    { renderNotifMessage() }
                     <div className="header-notification-timestamp">
                         { timeStamp }
                     </div>
@@ -98,4 +130,4 @@ export const HeaderNotification = React.createClass({
     }
 });
 
-export default HeaderNotification;
+export default Notification;

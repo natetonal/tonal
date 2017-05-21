@@ -24,6 +24,20 @@ $header-notifications-list-lip-height: 20px;
         transform: none;
     }
 
+    .header-notifications-none {
+        display: block;
+        background: rgba(255,255,255,.1);
+        border: 1px solid rgba(255,255,255,.05);
+        border-radius: 10px;
+        padding: 50px 10px;
+        margin: 10px 20px;
+        text-align: center;
+
+        .fa{
+            padding-right: 10px;
+        }
+    }
+
     .header-notification{
         display: block;
         height: 60px;
