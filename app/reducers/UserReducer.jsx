@@ -19,13 +19,17 @@ const initialState = {
     avatar: dummyPhoto,
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
-    followers: ['tonalnate'],
-    following: ['tonalnate'],
+    followers: ['tonalnate, mecorbin'],
+    following: ['tonalnate, mecorbin'],
     followerCount: 0,
     followingCount: 0,
     postCount: 0,
     recentPost: [],
-    status: false
+    status: false,
+    settings: {
+        displayNotifs: true,
+        blockedUsers: false
+    }
 };
 
 export default (state = initialState, action) => {

@@ -1,0 +1,116 @@
+.small-menu {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    right: 0px;
+    width: 250px;
+    background: rgba(0,0,0,0.8);
+    color: $white;
+    overflow-x: hidden;
+    font-size: 14px;
+    box-shadow: $boxshadow;
+    @include transform(none);
+
+    .small-menu-option,
+    .small-menu-divider{
+        width: 250px;
+        padding: 8px 10px;
+        @include transition(0.2s all);
+
+        .fa{
+            color: $white !important;
+            width: 20px;
+            margin-right: 5px;
+
+            &.yellow{
+                color: $yellow !important;
+            }
+
+            &.magenta{
+                color: $magenta !important;
+            }
+
+            &.lightgreen{
+                color: $lightgreen !important;
+            }
+
+            &.orange{
+                color: $orange !important;
+            }
+
+            &.lightgray{
+                color: $lightgray1 !important;
+            }
+
+            &.purple{
+                color: $purple !important;
+            }
+
+            &.blue{
+                color: $blue !important;
+            }
+        }
+    }
+
+    .small-menu-option{
+        
+        &:hover{
+            background: $blue;
+            @include transition(0.2s all);
+
+            &.yellow{
+                background: $yellow !important;
+                @include transition(0.2s all);
+            }
+
+            &.magenta{
+                background: $magenta !important;
+                @include transition(0.2s all);
+            }
+
+            &.lightgreen{
+                background: $lightgreen !important;
+                @include transition(0.2s all);
+            }
+
+            &.orange{
+                background: $orange !important;
+                @include transition(0.2s all);
+            }
+
+            &.lightgray{
+                background: $lightgray1 !important;
+                @include transition(0.2s all);
+            }
+
+            &.purple{
+                background: $purple !important;
+                @include transition(0.2s all);
+            }
+
+            &.blue{
+                background: $blue !important;
+                @include transition(0.2s all);
+            }
+
+            &.red{
+                background: $red !important;
+                @include transition(0.2s all);
+            }
+        }
+    }
+
+    .small-menu-description {
+        padding-left: 25px;
+        font-size: 11px;
+        line-height: 1.1;
+        color: #ddd;
+    }
+
+    .small-menu-divider {
+        height: 1px;
+        padding: 0;
+        margin: 5px 0;
+        background: rgba(255,255,255,0.1);
+    }
+}

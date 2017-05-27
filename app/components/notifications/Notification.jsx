@@ -1,35 +1,55 @@
 import React from 'react';
 import { Link } from 'react-router';
+import moment from 'moment';
+import {
+    TimelineLite,
+    Power1
+} from 'gsap';
+
+import SmallMenu from 'elements/SmallMenu';
 
 export const Notification = React.createClass({
 
     componentWillMount(){
         this.setState({
             showNotifMenuIcon: false,
-            showNotifMenu: false
+            showNotifMenu: false,
         });
     },
 
-    toggleNotifMenuIcon(event){
-        event.preventDefault();
-        this.setState({
-            showNotifMenuIcon: !this.state.showNotifMenuIcon
-        });
+    componentDidMount(){
+        const { acknowledged } = this.props.data;
+        if (!acknowledged){
+            const tl = new TimelineLite();
+            tl.from(this.notifRef, 0.5, {
+                ease: Power1.easeOut,
+                height: 0,
+                opacity: 0
+            });
+            tl.play();
+        }
     },
 
-    toggleNotifMenu(event){
-        event.preventDefault();
+    toggleNotifMenu(){
         this.setState({
             showNotifMenu: !this.state.showNotifMenu
         });
     },
 
-    handleUnfollow(event){
-        event.preventDefault();
-    },
+    handleDelete(){
+        const {
+            notifId,
+            deleteNotif
+        } = this.props;
 
-    handleBlock(event){
-        event.preventDefault();
+        const tl = new TimelineLite();
+        tl.to(this.notifRef, 0.2, {
+            ease: Power1.easeOut,
+            height: 0,
+            opacity: 0
+        });
+        tl.play();
+        tl.eventCallback('onComplete', deleteNotif, [notifId]);
     },
 
     render(){
@@ -37,8 +57,6 @@ export const Notification = React.createClass({
         const {
             unfollowUser,
             blockUser,
-            deleteNotif,
-            notifId,
             data: {
                 type,
                 uid,
@@ -50,13 +68,8 @@ export const Notification = React.createClass({
             }
         } = this.props;
 
-        const {
-            showNotifMenuIcon,
-            showNotifMenu
-        } = this.state;
+        const { showNotifMenu } = this.state;
 
-        console.log('data? ', this.props.data);
-        console.log('uid? ', uid);
         const renderNotifMessage = () => {
             switch (type){
                 case 'follower-add':
@@ -78,51 +91,64 @@ export const Notification = React.createClass({
             }
         };
 
+        const renderMenu = () => {
+            if (showNotifMenu){
+
+                const settings = [
+                    {
+                        icon: 'ban',
+                        iconColor: 'magenta',
+                        title: `Unfollow ${ displayName }`,
+                        callback: unfollowUser,
+                        params: [uid]
+                    },
+                    {
+                        icon: 'user-times',
+                        iconColor: 'yellow',
+                        title: `Block ${ displayName }`,
+                        callback: blockUser,
+                        params: [uid]
+                    },
+                    {
+                        divider: true
+                    },
+                    {
+                        icon: 'times',
+                        highlightColor: 'red',
+                        title: 'Delete Notification',
+                        callback: this.handleDelete,
+                    }
+                ];
+
+                return (
+                    <SmallMenu
+                        options={ settings }
+                        onClose={ this.toggleNotifMenu } />
+                );
+            }
+
+            return '';
+        };
+
         return (
-            <div className={ `header-notification${ acknowledged ? ' received' : '' }` }>
+            <div
+                ref={ element => this.notifRef = element }
+                className={ `header-notification${ acknowledged ? ' received' : '' }` }>
                 <div className="header-notification-img">
                     <img
                         src={ avatar }
                         alt={ displayName } />
                 </div>
-                <div
-                    onMouseEnter={ this.toggleNotifMenuIcon }
-                    onMouseLeave={ this.toggleNotifMenuIcon }
-                    className="header-notification-content">
+                <div className="header-notification-content">
                     <div
                         onClick={ this.toggleNotifMenu }
                         className="header-notification-settings">
-                        { showNotifMenuIcon && <i className="fa fa-angle-down" aria-hidden="true" /> }
-                        { showNotifMenuIcon && showNotifMenu && (
-                            <div
-                                onMouseLeave={ this.toggleNotifMenu }
-                                className="header-notification-menu">
-                                <div
-                                    className="header-notification-menu-option"
-                                    onClick={ e => unfollowUser(uid, e) }>
-                                    <i
-                                        className="fa fa-ban"
-                                        aria-hidden="true" />
-                                        Unfollow <strong>{ displayName }</strong>
-                                </div>
-                                <div
-                                    className="header-notification-menu-option"
-                                    onClick={ e => blockUser(uid, e) }>
-                                    <i className="fa fa-user-times" aria-hidden="true" />
-                                    Block <strong>{ displayName }</strong>
-                                </div>
-                                <div
-                                    className="header-notification-menu-option"
-                                    onClick={ e => deleteNotif(notifId, e) }>
-                                    <i className="fa fa-times" aria-hidden="true" />
-                                    Delete Notification
-                                </div>
-                            </div>
-                        )}
+                        { renderMenu() }
+                        <i className="fa fa-angle-down" aria-hidden="true" />
                     </div>
                     { renderNotifMessage() }
                     <div className="header-notification-timestamp">
-                        { timeStamp }
+                        { moment(timeStamp, 'LLLL').fromNow() }
                     </div>
                 </div>
             </div>

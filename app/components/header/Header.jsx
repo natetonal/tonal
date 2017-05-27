@@ -3,17 +3,25 @@ import * as Redux from 'react-redux';
 import firebase from 'firebase';
 import { Link } from 'react-router';
 import {
+    TimelineLite,
+    Power2,
+    Back,
+} from 'gsap';
+
+import {
     toggleMenu,
     toggleCompose,
     toggleNotifs
 } from 'actions/UIStateActions';
 import {
     fetchNotifs,
-    addNotif,
-    removeNotif
+    addNotifToList,
+    removeNotifFromList,
+    acknowledgeNotifs
 } from 'actions/NotificationActions';
 
 import Search from 'Search';
+import ClickScreen from 'elements/ClickScreen';
 import NotificationsList from 'notifications/NotificationsList';
 import HeaderCompose from './HeaderCompose';
 
@@ -24,6 +32,12 @@ export const Header = React.createClass({
             dispatch,
             uid
         } = this.props;
+
+        this.setState({
+            showBadge: false,
+            newNotifsCount: 0
+        });
+
         if (uid){
             // Fetch notifications:
             dispatch(fetchNotifs(uid));
@@ -31,16 +45,46 @@ export const Header = React.createClass({
             // Set up observers for it:
             const notifsRef = firebase.database().ref(`/notifications/${ uid }/`);
             notifsRef.on('child_added', notif => {
-                dispatch(addNotif(notif.key, notif.val()));
+                dispatch(addNotifToList(notif.key, notif.val()));
             });
             notifsRef.on('child_changed', notif => {
                 console.log('child changed!');
-                dispatch(addNotif(notif.key, notif.val()));
+                dispatch(addNotifToList(notif.key, notif.val()));
             });
             notifsRef.on('child_removed', notif => {
                 console.log('NOTIFS DELETION WITNESSED! REMOVING: ', notif.key);
-                dispatch(removeNotif(notif.key));
+                dispatch(removeNotifFromList(notif.key));
             });
+        }
+    },
+
+    componentWillReceiveProps(nextProps){
+
+        let newNotifsCount = 0;
+        Object.keys(nextProps.notifs).forEach(key => {
+            if (!nextProps.notifs[key].acknowledged){
+                newNotifsCount++;
+            }
+        });
+
+        // Check if there are any unacknowledged notifications and determine if badge should be displayed:
+        this.setState({
+            showBadge: newNotifsCount > 0,
+            newNotifsCount
+        });
+    },
+
+    componentDidUpdate(prevProps, prevState){
+        // If notifs were added:
+        if (!prevState.showBadge &&
+            this.state.showBadge){
+            const tl = new TimelineLite();
+            tl.from(this.badgeRef, 0.25, {
+                ease: Back.easeOut.config(1.7),
+                scale: 0,
+                opacity: 0
+            });
+            tl.play();
         }
     },
 
@@ -54,11 +98,28 @@ export const Header = React.createClass({
         event.preventDefault();
         const {
             dispatch,
-            isComposeOpen
+            isComposeOpen,
+            isNotifsOpen
         } = this.props;
+
+        const { showBadge } = this.state;
+
+        if (isNotifsOpen &&
+            showBadge){
+            const tl = new TimelineLite();
+            tl.to(this.badgeRef, 0.25, {
+                ease: Back.easeIn.config(1.7),
+                scale: 0,
+                opacity: 0
+            });
+            tl.play();
+            tl.eventCallback('onComplete', this.acknowledgeNotifs);
+        }
+
         if (isComposeOpen){
             dispatch(toggleCompose());
         }
+
         dispatch(toggleNotifs());
     },
 
@@ -73,6 +134,14 @@ export const Header = React.createClass({
         dispatch(toggleCompose());
     },
 
+    acknowledgeNotifs(){
+        const {
+            dispatch,
+            notifs
+        } = this.props;
+        dispatch(acknowledgeNotifs(notifs));
+    },
+
     render(){
 
         const {
@@ -84,12 +153,39 @@ export const Header = React.createClass({
             notifsStatus
         } = this.props;
 
+        const {
+            showBadge,
+            newNotifsCount
+        } = this.state;
+
         const renderNotifs = () => {
-            return (
-                <NotificationsList
-                    data={ notifs }
-                    status={ notifsStatus } />
-            );
+            if (isNotifsOpen){
+
+                return (
+                    <div>
+                        <ClickScreen onClick={ this.onClickNotifs } />
+                        <NotificationsList
+                            data={ notifs }
+                            status={ notifsStatus }
+                            notifsCount={ newNotifsCount }
+                            onMouseLeave={ this.onClickNotifs } />
+                    </div>
+                );
+            }
+
+            return '';
+        };
+
+        const renderBadge = () => {
+            if (showBadge){
+                return (
+                    <span
+                        ref={ element => this.badgeRef = element }
+                        className="alert badge" />
+                );
+            }
+
+            return '';
         };
 
         const photo = () => {
@@ -134,8 +230,8 @@ export const Header = React.createClass({
                                     className="fa fa-bell"
                                     aria-hidden="true" />
                             </a>
-                            { notifs && <span className="alert badge" /> }
-                            { isNotifsOpen && renderNotifs() }
+                            { renderBadge() }
+                            { renderNotifs() }
                         </div>
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
@@ -171,8 +267,8 @@ export const Header = React.createClass({
                                     className="fa fa-bell"
                                     aria-hidden="true" />
                             </a>
-                            { notifs && <span className="alert badge" /> }
-                            { isNotifsOpen && renderNotifs() }
+                            { renderBadge() }
+                            { renderNotifs() }
                         </div>
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a

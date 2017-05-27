@@ -5,7 +5,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type){
-        case 'NOTIFS_ADD_NOTIF':
+        case 'NOTIFS_ADD_NOTIF_TO_LIST':
             return {
                 ...state,
                 data: {
@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
                 ...state,
                 data: action.data
             };
-        case 'NOTIFS_REMOVE_NOTIF':
+        case 'NOTIFS_REMOVE_NOTIF_FROM_LIST':
             return {
                 ...state,
                 data: Object.keys(state.data)

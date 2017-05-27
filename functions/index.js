@@ -31,6 +31,7 @@ exports.sendFollowerNotification = functions.database.ref('/followers/{followedU
         displayName,
         avatar,
         timeStamp,
-        acknowledged: false
+        acknowledged: false,
+        clicked: false
     });
 });

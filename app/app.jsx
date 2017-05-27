@@ -7,7 +7,6 @@ import {
     startLoginForAuthorizedUser,
     startLogout
 } from 'actions/AuthActions';
-import { pushToRoute } from 'actions/RouteActions';
 import configure from './store/configureStore';
 import Root from './containers/Root';
 
