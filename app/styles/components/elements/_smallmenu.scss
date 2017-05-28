@@ -21,6 +21,7 @@
             color: $white !important;
             width: 20px;
             margin-right: 5px;
+            padding-top: 0;
 
             &.yellow{
                 color: $yellow !important;
@@ -53,7 +54,7 @@
     }
 
     .small-menu-option{
-        
+
         &:hover{
             background: $blue;
             @include transition(0.2s all);

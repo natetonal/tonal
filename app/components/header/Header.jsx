@@ -76,12 +76,22 @@ export const Header = React.createClass({
 
     componentDidUpdate(prevProps, prevState){
         // If notifs were added:
+
         if (!prevState.showBadge &&
             this.state.showBadge){
             const tl = new TimelineLite();
             tl.from(this.badgeRef, 0.25, {
                 ease: Back.easeOut.config(1.7),
                 scale: 0,
+                opacity: 0
+            });
+            tl.play();
+        }
+
+        if (prevProps.settings.displayNotifs !== this.props.settings.displayNotifs){
+            const tl = new TimelineLite();
+            tl.from([this.notifsIconRef, this.notifsIconMobileRef], 0.5, {
+                ease: Power2.easeOut,
                 opacity: 0
             });
             tl.play();
@@ -150,7 +160,10 @@ export const Header = React.createClass({
             isComposeOpen,
             avatar,
             notifs,
-            notifsStatus
+            notifsStatus,
+            settings: {
+                displayNotifs
+            }
         } = this.props;
 
         const {
@@ -227,7 +240,8 @@ export const Header = React.createClass({
                                 onClick={ this.onClickNotifs }
                                 className="hi-icon hi-icon-mobile">
                                 <i
-                                    className="fa fa-bell"
+                                    ref={ element => this.notifsIconMobileRef = element }
+                                    className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
                                     aria-hidden="true" />
                             </a>
                             { renderBadge() }
@@ -264,7 +278,8 @@ export const Header = React.createClass({
                                 onClick={ this.onClickNotifs }
                                 className="hi-icon hi-icon-mobile">
                                 <i
-                                    className="fa fa-bell"
+                                    ref={ element => this.notifsIconRef = element }
+                                    className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
                                     aria-hidden="true" />
                             </a>
                             { renderBadge() }
@@ -296,6 +311,7 @@ export default Redux.connect(state => {
         uid: state.auth.uid,
         avatar: state.user.avatar,
         notifs: state.notifs.data,
-        notifsStatus: state.notifs.status
+        notifsStatus: state.notifs.status,
+        settings: state.user.settings
     };
 })(Header);

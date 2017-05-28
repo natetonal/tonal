@@ -36,6 +36,10 @@ $header-notifications-list-lip-height: 10px;
             background: $alert-default;
         }
 
+        &.off {
+            background: $alert-error;
+        }
+
         .header-notifications-topbar-text {
             display: inline-block;
             padding: 10px;

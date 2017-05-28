@@ -19,16 +19,22 @@ const initialState = {
     avatar: dummyPhoto,
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
-    followers: ['tonalnate, mecorbin'],
-    following: ['tonalnate, mecorbin'],
-    followerCount: 0,
-    followingCount: 0,
+    followerCount: 2,
+    followingCount: 2,
     postCount: 0,
     recentPost: [],
     status: false,
     settings: {
         displayNotifs: true,
-        blockedUsers: false
+        blockedUsers: false,
+    },
+    followers: {
+        MMxvsVGFgHY55OQKzpXKG5RpDck2: true,
+        '4IaW549RW4Y07iWomkWFNvcjrH42': true
+    },
+    following: {
+        MMxvsVGFgHY55OQKzpXKG5RpDck2: true,
+        '4IaW549RW4Y07iWomkWFNvcjrH42': true
     }
 };
 

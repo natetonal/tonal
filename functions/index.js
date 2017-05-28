@@ -22,16 +22,20 @@ exports.sendFollowerNotification = functions.database.ref('/followers/{followedU
     } = event.data.val();
 
     const notifId = admin.database().ref(`/notifications/${ followedUid }/`).push().key;
-
-    return admin.database().ref(`/notifications/${ followedUid }/${ notifId }`)
-    .update({
-        type,
-        uid,
-        username,
-        displayName,
-        avatar,
-        timeStamp,
-        acknowledged: false,
-        clicked: false
-    });
+    const followedSettings = admin.database().ref(`users/${ followerUid }/settings`).once('value');
+    console.log(`followedSettings for user ${ username }: ${ followedSettings.displayNotifs } `);
+    
+    if (followedSettings.displayNotifs){
+        return admin.database().ref(`/notifications/${ followedUid }/${ notifId }`)
+        .update({
+            type,
+            uid,
+            username,
+            displayName,
+            avatar,
+            timeStamp,
+            acknowledged: false,
+            clicked: false
+        });
+    }
 });

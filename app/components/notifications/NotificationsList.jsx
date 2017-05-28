@@ -9,6 +9,10 @@ import {
 import SmallMenu from 'elements/SmallMenu';
 import { toggleNotifs } from 'actions/UIStateActions';
 import { deleteNotif } from 'actions/NotificationActions';
+import {
+    updateBlockedUser,
+    toggleSettingDisplayNotifs
+} from 'actions/UserActions';
 import Notification from './Notification';
 
 export const NotificationsList = React.createClass({
@@ -55,6 +59,16 @@ export const NotificationsList = React.createClass({
             });
             tl.play();
         }
+
+        if (prevProps.settings.displayNotifs !== this.props.settings.displayNotifs){
+            const tl = new TimelineLite();
+            const topbarFromClass = this.props.settings.displayNotifs ? '+=off' : '-=off';
+            tl.from(this.topbarRef, 0.5, {
+                ease: Power2.easeOut,
+                className: topbarFromClass
+            });
+            tl.play();
+        }
     },
 
     toggleNotifSettingsMenu(){
@@ -77,8 +91,10 @@ export const NotificationsList = React.createClass({
         dispatch(deleteNotif(notifId));
     },
 
-    muteNotifs(){
-        console.log('muting notifs');
+    toggleMuteNotifs(){
+        const { dispatch } = this.props;
+        dispatch(toggleSettingDisplayNotifs());
+        console.log('toggling mute notifs');
     },
 
     clearNotifs(){
@@ -90,7 +106,10 @@ export const NotificationsList = React.createClass({
         const {
             data,
             status,
-            notifsCount
+            notifsCount,
+            settings: {
+                displayNotifs
+            }
         } = this.props;
 
         const { showNotifSettingsMenu } = this.state;
@@ -141,13 +160,17 @@ export const NotificationsList = React.createClass({
 
                 const renderMenu = () => {
 
+                    const topIcon = displayNotifs ? 'bell-slash' : 'bell';
+                    const topColor = displayNotifs ? 'yellow' : 'lightgreen';
+                    const topTitle = displayNotifs ? 'Mute Notifications' : 'Unmute Notifications';
+
                     if (showNotifSettingsMenu){
                         const settings = [
                             {
-                                icon: 'bell-slash',
-                                iconColor: 'yellow',
-                                title: 'Mute Notifications',
-                                callback: this.muteNotifs
+                                icon: topIcon,
+                                iconColor: topColor,
+                                title: topTitle,
+                                callback: this.toggleMuteNotifs
                             },
                             {
                                 divider: true
@@ -168,12 +191,28 @@ export const NotificationsList = React.createClass({
                     }
                 };
 
+                const notifsTopbarText = () => {
+                    if (displayNotifs){
+                        return `You have ${ renderCount() } new notification${ notifsCount === 1 ? '' : 's' }`;
+                    }
+
+                    return 'You are not currently receiving notifications.';
+                };
+
+                const notifsTopbarClass = () => {
+                    if (displayNotifs){
+                        return `header-notifications-topbar ${ notifsCount === 0 ? 'read' : '' }`;
+                    }
+
+                    return 'header-notifications-topbar off';
+                };
+
                 return (
                     <div
                         ref={ element => this.topbarRef = element }
-                        className={ `header-notifications-topbar ${ notifsCount === 0 ? 'read' : '' }` }>
+                        className={ notifsTopbarClass() }>
                         <div className="header-notifications-topbar-text">
-                            You have { renderCount() } new notification{ notifsCount === 1 ? '' : 's' }.
+                            { notifsTopbarText() }
                         </div>
                         <div
                             onClick={ this.toggleNotifSettingsMenu }
@@ -206,6 +245,7 @@ export const NotificationsList = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        isNotifsOpen: state.uiState.notifsIsOpen
+        isNotifsOpen: state.uiState.notifsIsOpen,
+        settings: state.user.settings
     };
 })(NotificationsList);
