@@ -5,6 +5,9 @@ import {
 } from 'gsap';
 import Notification from './Notification';
 
+// Notification types (keep in sync with cloud functions!)
+const NOTIF_ADD_FOLLOWER = 'follower-add';
+
 export const NotificationsList = React.createClass({
 
     componentDidMount(){
@@ -26,7 +29,8 @@ export const NotificationsList = React.createClass({
             blocked,
             followUser,
             blockUser,
-            deleteNotif
+            deleteNotif,
+            clickNotif
         } = this.props;
 
         const renderNotifs = () => {
@@ -55,17 +59,29 @@ export const NotificationsList = React.createClass({
                         const isFollowing = following ? Object.keys(following).includes(key) : false;
                         const isBlocked = blocked ? Object.keys(blocked).includes(key) : false;
 
+                        // Render notif based off of type:
                         if (!isBlocked){
-                            return (
-                                <Notification
-                                    key={ `notif_${ key }` }
-                                    notifId={ key }
-                                    following={ isFollowing }
-                                    followUser={ followUser }
-                                    blockUser={ blockUser }
-                                    deleteNotif={ deleteNotif }
-                                    data={ notifs[key] } />
-                            );
+
+                            const notifType = notifs[key].type;
+                            console.log('notifType? ', notifType);
+                            switch (notifType){
+                                case NOTIF_ADD_FOLLOWER:
+                                    return (
+                                        <Notification
+                                            key={ `notif_${ key }` }
+                                            route={ `users/${ notifs[key].username }` }
+                                            notifId={ key }
+                                            following={ isFollowing }
+                                            followUser={ followUser }
+                                            blockUser={ blockUser }
+                                            deleteNotif={ deleteNotif }
+                                            clickNotif={ clickNotif }
+                                            data={ notifs[key] } />
+                                    );
+                                default:
+                                    return '';
+                            }
+
                         }
 
                         return '';

@@ -31,7 +31,11 @@ export const Notification = React.createClass({
         }
     },
 
-    toggleNotifMenu(){
+    toggleNotifMenu(event){
+        if (event){
+            event.stopPropagation();
+        }
+
         this.setState({
             showNotifMenu: !this.state.showNotifMenu
         });
@@ -59,6 +63,8 @@ export const Notification = React.createClass({
             following,
             followUser,
             blockUser,
+            clickNotif,
+            route,
             data: {
                 type,
                 uid,
@@ -79,7 +85,6 @@ export const Notification = React.createClass({
                         <div className="header-notification-message">
                             <p>
                                 <Link
-                                    ref={ element => this.previewElement = element }
                                     className="header-notification-message-link"
                                     to={ `users/${ username }` }>
                                     { displayName }
@@ -100,7 +105,7 @@ export const Notification = React.createClass({
                     {
                         icon: 'ban',
                         iconColor: 'magenta',
-                        title: `Unfollow ${ displayName }`,
+                        title: `Follow ${ displayName }`,
                         callback: followUser,
                         params: [uid]
                     },
@@ -137,6 +142,7 @@ export const Notification = React.createClass({
 
         return (
             <div
+                onClick={ () => clickNotif(route) }
                 ref={ element => this.notifRef = element }
                 className={ `header-notification${ acknowledged ? ' received' : '' }` }>
                 <div className="header-notification-img">
@@ -146,7 +152,7 @@ export const Notification = React.createClass({
                 </div>
                 <div className="header-notification-content">
                     <div
-                        onClick={ this.toggleNotifMenu }
+                        onClick={ e => this.toggleNotifMenu(e) }
                         className="header-notification-settings">
                         { renderMenu() }
                         <i className="fa fa-angle-down" aria-hidden="true" />

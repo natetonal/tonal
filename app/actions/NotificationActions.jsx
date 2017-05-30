@@ -76,6 +76,27 @@ export const acknowledgeNotifs = notifs => {
     };
 };
 
+export const clearAllNotifs = () => {
+    return (dispatch, getState) => {
+        const uid = getState().auth.uid;
+        databaseRef.child(`notifications/${ uid }`).once('value')
+        .then(snapshot => {
+            const dbNotifs = snapshot.val();
+
+            if (dbNotifs){
+                const updatedNotifs = {};
+
+                Object.keys(dbNotifs).forEach(key => {
+                    updatedNotifs[key] = null;
+                });
+
+                console.log('from clearAllNotifs: updatedNotifs: ', updatedNotifs);
+                databaseRef.child(`notifications/${ uid }`).update(updatedNotifs);
+            }
+        });
+    };
+};
+
 export const fetchNotifs = uid => {
     return dispatch => {
         dispatch(updateNotifsStatus('fetching'));

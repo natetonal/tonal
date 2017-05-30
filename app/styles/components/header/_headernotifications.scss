@@ -223,16 +223,20 @@ $header-notifications-list-lip-height: 10px;
 
         .header-notification-settings {
             float: right;
-            padding-left: 10px;
+            padding: 0 0 10px 10px;
             padding-top: 0;
+            cursor: pointer;
             @include transition(all 0.1s);
 
             .fa-angle-down{
                 font-size: 14px;
                 color: darken($white, 30%);
                 text-shadow: none;
+                pointer-events: none;
+            }
 
-                &:hover{
+            &:hover{
+                .fa-angle-down{
                     color: $white;
                     @include transition(all 0.1s);
                 }

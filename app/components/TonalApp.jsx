@@ -10,6 +10,7 @@ import HeaderLoggedOut from 'header/HeaderLoggedOut';
 import ModalOverlay from 'header/ModalOverlay';
 import Header from 'header/Header';
 import MenuWrapper from './MenuWrapper';
+import Observer from './Observer';
 import Tabs from './Tabs';
 
 
@@ -80,6 +81,7 @@ export const TonalApp = React.createClass({
                 status === 'success'){
                 return (
                     <MenuWrapper>
+                        <Observer />
                         <Header />
                         <div className="tonal-content">
                             {/* TEMPORARY!!!! */}
@@ -97,6 +99,7 @@ export const TonalApp = React.createClass({
                 status === 'success'){
                 return (
                     <MenuWrapper>
+                        <Observer />
                         <ReactCSSTransitionGroup
                             transitionName="smooth-fadein"
                             transitionAppear

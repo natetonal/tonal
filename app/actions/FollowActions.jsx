@@ -10,25 +10,32 @@ export const addFollower = (follower, followed) => {
             followerRef.once('value')
             .then(snapshot => {
                 const currentValue = snapshot.val();
+                const updates = {};
 
                 if (!currentValue){
-                    const {
-                        uid,
-                        username,
-                        displayName,
-                        avatar
-                    } = user;
-
-                    return databaseRef.child(`followers/${ followed }/${ follower }`).update({
-                        uid,
-                        username,
-                        displayName,
-                        avatar,
+                    const followerData = {
+                        uid: user.uid,
+                        username: user.username,
+                        displayName: user.displayName,
+                        avatar: user.avatar,
                         timeStamp: moment().format('LLLL')
-                    });
+                    };
+
+                    // I click follow - I am a "follower".
+                    // The user who I'm following is "followed"
+                    // I need to add that user to my "followed" object.
+                    // They need to add me to their "followers" object.
+
+                    updates[`followers/${ followed }/${ follower }`] = followerData;
+                    updates[`users/${ follower }/following/${ followed }`] = true;
+                    updates[`users/${ followed }/followers/${ follower }`] = true;
+                } else {
+                    updates[`followers/${ followed }/${ follower }`] = null;
+                    updates[`users/${ follower }/following/${ followed }`] = null;
+                    updates[`users/${ followed }/followers/${ follower }`] = null;
                 }
 
-                return databaseRef.child(`followers/${ followed }/${ follower }`).remove();
+                return databaseRef.update(updates);
 
             });
         }

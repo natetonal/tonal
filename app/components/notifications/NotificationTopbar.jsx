@@ -16,18 +16,19 @@ export const NotificationTopbar = React.createClass({
     },
 
     componentDidMount(){
+        // Animate the topbar when component first loads.
         const tl = new TimelineLite();
-        if (this.props.areThereNotifs){
-            tl.from(this.topbarRef, 0.4, {
-                ease: Power2.easeOut,
-                y: -20,
-                opacity: 0
-            }, '-=0.2');
-        }
+        tl.from(this.topbarRef, 0.4, {
+            ease: Power2.easeOut,
+            y: -20,
+            opacity: 0
+        });
         tl.play();
     },
 
     componentDidUpdate(prevProps){
+
+        // Change the color if there are now new notifications.
         if (prevProps.newNotifsCount === 0 &&
             this.props.newNotifsCount > 0){
             const tl = new TimelineLite();
@@ -39,8 +40,10 @@ export const NotificationTopbar = React.createClass({
             tl.play();
         }
 
+        // Change the color if all notifications are now acknowledged.
         if (prevProps.newNotifsCount > 0 &&
-            this.props.newNotifsCount === 0){
+            this.props.newNotifsCount === 0 &&
+            this.props.areThereNotifs){
             const tl = new TimelineLite();
             tl.delay(1);
             tl.from(this.topbarRef, 1, {
@@ -50,6 +53,7 @@ export const NotificationTopbar = React.createClass({
             tl.play();
         }
 
+        // Change the color if the user muted/unmuted notifications.
         if (prevProps.displayNotifs !== this.props.displayNotifs){
             const tl = new TimelineLite();
             const topbarFromClass = this.props.displayNotifs ? '+=off' : '-=off';
@@ -77,96 +81,91 @@ export const NotificationTopbar = React.createClass({
         const {
             displayNotifs,
             newNotifsCount,
-            areThereNotifs,
             muteNotifs,
             clearNotifs
         } = this.props;
 
         const { showNotifSettingsMenu } = this.state;
 
-        if (areThereNotifs){
+        const renderMenu = () => {
 
-            const renderMenu = () => {
+            const topIcon = displayNotifs ? 'bell-slash' : 'bell';
+            const topColor = displayNotifs ? 'yellow' : 'lightgreen';
+            const topTitle = displayNotifs ? 'Mute Notifications' : 'Unmute Notifications';
 
-                const topIcon = displayNotifs ? 'bell-slash' : 'bell';
-                const topColor = displayNotifs ? 'yellow' : 'lightgreen';
-                const topTitle = displayNotifs ? 'Mute Notifications' : 'Unmute Notifications';
+            if (showNotifSettingsMenu){
+                const settings = [
+                    {
+                        icon: topIcon,
+                        iconColor: topColor,
+                        title: topTitle,
+                        callback: muteNotifs
+                    },
+                    {
+                        divider: true
+                    },
+                    {
+                        icon: 'times',
+                        highlightColor: 'red',
+                        title: 'Clear Notifications',
+                        callback: clearNotifs
+                    }
+                ];
 
-                if (showNotifSettingsMenu){
-                    const settings = [
-                        {
-                            icon: topIcon,
-                            iconColor: topColor,
-                            title: topTitle,
-                            callback: muteNotifs
-                        },
-                        {
-                            divider: true
-                        },
-                        {
-                            icon: 'times',
-                            highlightColor: 'red',
-                            title: 'Clear Notifications',
-                            callback: clearNotifs
-                        }
-                    ];
+                return (
+                    <SmallMenu
+                        options={ settings }
+                        onClose={ this.toggleNotifSettingsMenu } />
+                );
+            }
+        };
 
-                    return (
-                        <SmallMenu
-                            options={ settings }
-                            onClose={ this.toggleNotifSettingsMenu } />
-                    );
-                }
-            };
+        const notifsTopbarText = () => {
 
-            const notifsTopbarText = () => {
+            if (displayNotifs){
 
-                if (displayNotifs){
+                const renderCount = () => {
+                    if (newNotifsCount === 0){
+                        return 'no';
+                    }
+                    return <span>{ newNotifsCount }</span>;
+                };
 
-                    const renderCount = () => {
-                        if (newNotifsCount === 0){
-                            return 'no';
-                        }
-                        return <span>{ newNotifsCount }</span>;
-                    };
-
-                    return (
-                        <div>
-                            You have { renderCount() } new notification{ newNotifsCount === 1 ? '.' : 's.' }
-                        </div>
-                    );
-                }
-
-                return 'You are not currently receiving notifications.';
-            };
-
-            const notifsTopbarClass = () => {
-                if (displayNotifs){
-                    return `header-notifications-topbar ${ newNotifsCount === 0 ? 'read' : '' }`;
-                }
-
-                return 'header-notifications-topbar off';
-            };
-
-            return (
-                <div
-                    ref={ element => this.topbarRef = element }
-                    className={ notifsTopbarClass() }>
-                    <div className="header-notifications-topbar-text">
-                        { notifsTopbarText() }
+                return (
+                    <div>
+                        You have { renderCount() } new notification{ newNotifsCount === 1 ? '.' : 's.' }
                     </div>
-                    <div
-                        onClick={ this.toggleNotifSettingsMenu }
-                        className="header-notifications-topbar-menu">
-                        <i className="fa fa-cog" aria-hidden="true" />
-                        { renderMenu() }
-                    </div>
+                );
+            }
+
+            return 'You are not currently receiving notifications.';
+        };
+
+        const notifsTopbarClass = () => {
+            if (displayNotifs){
+                return `header-notifications-topbar ${ newNotifsCount === 0 ? 'read' : '' }`;
+            }
+
+            return 'header-notifications-topbar off';
+        };
+
+        return (
+            <div
+                ref={ element => this.topbarRef = element }
+                className={ notifsTopbarClass() }>
+                <div className="header-notifications-topbar-text">
+                    { notifsTopbarText() }
                 </div>
-            );
-        }
-
-        return <div />;
+                <div
+                    onClick={ this.toggleNotifSettingsMenu }
+                    className="header-notifications-topbar-menu">
+                    <i className="fa fa-cog" aria-hidden="true" />
+                    { renderMenu() }
+                </div>
+            </div>
+        );
     }
+
 
 });
 

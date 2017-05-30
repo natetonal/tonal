@@ -94,6 +94,40 @@ exports.updateNotifications = functions.database.ref('/notifications/{uid}/{noti
         // Update this user's notifications.
         return notifsRef.update(updates);
     });
+});
 
+// Count user's followers when changed.
+exports.countFollowers = functions.database.ref('/users/{uid}/followers/{followerId}').onWrite(event => {
+    const followersRef = event.data.ref.parent;
+    const countRef = followersRef.parent.child('followerCount');
 
+    // Return the promise from countRef.transaction() so our function
+    // waits for this async event to complete before it exits.
+    return countRef.transaction(current => {
+        if (event.data.exists() && !event.data.previous.exists()) {
+            return (current || 0) + 1;
+        } else if (!event.data.exists() && event.data.previous.exists()) {
+            return (current || 0) - 1;
+        }
+    }).then(() => {
+        console.log('Follower count updated.');
+    });
+});
+
+// Count what the current user is following when changed.
+exports.countFollowing = functions.database.ref('/users/{uid}/following/{followingId}').onWrite(event => {
+    const followingRef = event.data.ref.parent;
+    const countRef = followingRef.parent.child('followingCount');
+
+    // Return the promise from countRef.transaction() so our function
+    // waits for this async event to complete before it exits.
+    return countRef.transaction(current => {
+        if (event.data.exists() && !event.data.previous.exists()) {
+            return (current || 0) + 1;
+        } else if (!event.data.exists() && event.data.previous.exists()) {
+            return (current || 0) - 1;
+        }
+    }).then(() => {
+        console.log('Following count updated.');
+    });
 });

@@ -13,11 +13,12 @@ import {
 import {
     fetchNotifs,
     deleteNotif,
-    addNotifToList,
     countNewNotifs,
-    removeNotifFromList,
-    acknowledgeNotifs
+    acknowledgeNotifs,
+    clearAllNotifs
 } from 'actions/NotificationActions';
+import { pushToRoute } from 'actions/RouteActions';
+import { addFollower } from 'actions/FollowActions';
 import { toggleNotifs } from 'actions/UIStateActions';
 import ClickScreen from 'elements/ClickScreen';
 import { NotificationTopbar } from './NotificationTopbar';
@@ -36,18 +37,6 @@ export const NotificationCenter = React.createClass({
         if (uid){
             // Fetch notifications:
             dispatch(fetchNotifs(uid));
-
-            // Set up observers for syncing notifs in database with state:
-            const notifsRef = firebase.database().ref(`/notifications/${ uid }/`);
-            notifsRef.on('child_added', notif => {
-                dispatch(addNotifToList(notif.key, notif.val()));
-            });
-            notifsRef.on('child_changed', notif => {
-                dispatch(addNotifToList(notif.key, notif.val()));
-            });
-            notifsRef.on('child_removed', notif => {
-                dispatch(removeNotifFromList(notif.key));
-            });
         }
 
         this.setState({
@@ -115,6 +104,10 @@ export const NotificationCenter = React.createClass({
         }
     },
 
+    componentWillUnmount() {
+        this.acknowledgeNotifs();
+    },
+
     onClickNotifs(event){
         event.preventDefault();
 
@@ -146,16 +139,26 @@ export const NotificationCenter = React.createClass({
     },
 
     handleClearNotifs(){
-        console.log('clear notifs');
+        const { dispatch } = this.props;
+        dispatch(clearAllNotifs());
     },
 
-    handleFollowUser(uid){
-        console.log('follow: ', uid);
+    handleFollowUser(followedUid){
+        const {
+            dispatch,
+            uid
+        } = this.props;
+        dispatch(addFollower(uid, followedUid));
     },
 
     handleBlockUser(uid){
         const { dispatch } = this.props;
         dispatch(updateBlockedUser(uid));
+    },
+
+    handleClickNotif(route){
+        const { dispatch } = this.props;
+        dispatch(pushToRoute(route));
     },
 
     handleDeleteNotif(notifId){
@@ -251,6 +254,7 @@ export const NotificationCenter = React.createClass({
                                 areThereNotifs={ areThereNotifs }
                                 following={ following }
                                 blocked={ blocked }
+                                clickNotif={ this.handleClickNotif }
                                 deleteNotif={ this.handleDeleteNotif }
                                 blockUser={ this.handleBlockUser }
                                 followUser={ this.handleFollowUser } />
