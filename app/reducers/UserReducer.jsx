@@ -26,7 +26,7 @@ const initialState = {
     status: false,
     settings: {
         displayNotifs: true,
-        blockedUsers: false,
+        blockedUsers: false
     },
     followers: {
         MMxvsVGFgHY55OQKzpXKG5RpDck2: true,

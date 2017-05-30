@@ -59,27 +59,24 @@ export const toggleSettingDisplayNotifs = () => {
 
 export const updateBlockedUser = uid => {
     return dispatch => {
-        databaseRef.child(`users/${ uid }`).once('value')
+        const settingsRef = databaseRef.child(`users/${ uid }/settings`);
+        settingsRef.once('value')
         .then(snapshot => {
-            const currentUser = snapshot.val();
-            const currentSettings = currentUser.settings;
+            const currentSettings = snapshot.val();
             const blockedUsers = currentSettings.blockedUsers;
             if (Object.keys(blockedUsers).includes(uid)){
                 blockedUsers[uid] = null;
             } else {
                 blockedUsers[uid] = true;
             }
-
-            const updatedUser = {
-                ...currentUser,
-                settings: {
-                    ...currentSettings,
-                    blockedUsers
-                }
+            
+            const updatedSettings = {
+                ...currentSettings,
+                blockedUsers
             };
 
-            databaseRef.child(`users/${ uid }`).update(updatedUser);
-            dispatch(storeUserDataToState(updatedUser));
+            settingsRef.update(updatedSettings);
+            dispatch(storeUserDataToState({ settings: updatedSettings }));
         }, error => {
             console.log(error);
         });

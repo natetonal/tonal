@@ -14,6 +14,13 @@ export const addNotifData = (data = false) => {
     };
 };
 
+export const countNewNotifs = (newNotifsCount = 0) => {
+    return {
+        type: 'NOTIFS_COUNT_NEW_NOTIFS',
+        newNotifsCount
+    };
+};
+
 export const addNotifToList = (key = false, post = false) => {
     return {
         type: 'NOTIFS_ADD_NOTIF_TO_LIST',
@@ -47,21 +54,24 @@ export const acknowledgeNotifs = notifs => {
         databaseRef.child(`notifications/${ uid }`).once('value')
         .then(snapshot => {
             const dbNotifs = snapshot.val();
-            const updatedNotifs = {};
 
-            Object.keys(dbNotifs).forEach(key => {
-                if (notifs[key] && dbNotifs[key]){
-                    updatedNotifs[key] = {
-                        ...dbNotifs[key],
-                        acknowledged: true
-                    };
-                } else {
-                    updatedNotifs[key] = dbNotifs[key];
-                }
-            });
+            if (dbNotifs){
+                const updatedNotifs = {};
 
-            console.log('from acknowledgeNotifs: updatedNotifs: ', updatedNotifs);
-            databaseRef.child(`notifications/${ uid }`).update(updatedNotifs);
+                Object.keys(dbNotifs).forEach(key => {
+                    if (notifs[key] && dbNotifs[key]){
+                        updatedNotifs[key] = {
+                            ...dbNotifs[key],
+                            acknowledged: true
+                        };
+                    } else {
+                        updatedNotifs[key] = dbNotifs[key];
+                    }
+                });
+
+                console.log('from acknowledgeNotifs: updatedNotifs: ', updatedNotifs);
+                databaseRef.child(`notifications/${ uid }`).update(updatedNotifs);
+            }
         });
     };
 };
@@ -73,7 +83,6 @@ export const fetchNotifs = uid => {
         .then(snapshot => {
             const notifs = snapshot.val();
             if (notifs){
-                console.log('notifs received from db: ', notifs);
                 dispatch(addNotifData(notifs));
             } else {
                 dispatch(addNotifData());

@@ -1,136 +1,21 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import firebase from 'firebase';
 import { Link } from 'react-router';
-import {
-    TimelineLite,
-    Power2,
-    Back,
-} from 'gsap';
-
 import {
     toggleMenu,
     toggleCompose,
     toggleNotifs
 } from 'actions/UIStateActions';
-import {
-    fetchNotifs,
-    addNotifToList,
-    removeNotifFromList,
-    acknowledgeNotifs
-} from 'actions/NotificationActions';
-
 import Search from 'Search';
-import ClickScreen from 'elements/ClickScreen';
-import NotificationsList from 'notifications/NotificationsList';
+import NotificationCenter from 'notifications/NotificationCenter';
 import HeaderCompose from './HeaderCompose';
 
 export const Header = React.createClass({
-
-    componentWillMount(){
-        const {
-            dispatch,
-            uid
-        } = this.props;
-
-        this.setState({
-            showBadge: false,
-            newNotifsCount: 0
-        });
-
-        if (uid){
-            // Fetch notifications:
-            dispatch(fetchNotifs(uid));
-
-            // Set up observers for it:
-            const notifsRef = firebase.database().ref(`/notifications/${ uid }/`);
-            notifsRef.on('child_added', notif => {
-                dispatch(addNotifToList(notif.key, notif.val()));
-            });
-            notifsRef.on('child_changed', notif => {
-                console.log('child changed!');
-                dispatch(addNotifToList(notif.key, notif.val()));
-            });
-            notifsRef.on('child_removed', notif => {
-                console.log('NOTIFS DELETION WITNESSED! REMOVING: ', notif.key);
-                dispatch(removeNotifFromList(notif.key));
-            });
-        }
-    },
-
-    componentWillReceiveProps(nextProps){
-
-        let newNotifsCount = 0;
-        Object.keys(nextProps.notifs).forEach(key => {
-            if (!nextProps.notifs[key].acknowledged){
-                newNotifsCount++;
-            }
-        });
-
-        // Check if there are any unacknowledged notifications and determine if badge should be displayed:
-        this.setState({
-            showBadge: newNotifsCount > 0,
-            newNotifsCount
-        });
-    },
-
-    componentDidUpdate(prevProps, prevState){
-        // If notifs were added:
-
-        if (!prevState.showBadge &&
-            this.state.showBadge){
-            const tl = new TimelineLite();
-            tl.from(this.badgeRef, 0.25, {
-                ease: Back.easeOut.config(1.7),
-                scale: 0,
-                opacity: 0
-            });
-            tl.play();
-        }
-
-        if (prevProps.settings.displayNotifs !== this.props.settings.displayNotifs){
-            const tl = new TimelineLite();
-            tl.from([this.notifsIconRef, this.notifsIconMobileRef], 0.5, {
-                ease: Power2.easeOut,
-                opacity: 0
-            });
-            tl.play();
-        }
-    },
 
     onClickMenu(event){
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(toggleMenu());
-    },
-
-    onClickNotifs(event){
-        event.preventDefault();
-        const {
-            dispatch,
-            isComposeOpen,
-            isNotifsOpen
-        } = this.props;
-
-        const { showBadge } = this.state;
-
-        if (isNotifsOpen &&
-            showBadge){
-            const tl = new TimelineLite();
-            tl.to(this.badgeRef, 0.25, {
-                ease: Back.easeIn.config(1.7),
-                scale: 0,
-                opacity: 0
-            });
-            tl.play();
-            tl.eventCallback('onComplete', this.acknowledgeNotifs);
-        }
-
-        if (isComposeOpen){
-            dispatch(toggleCompose());
-        }
-
-        dispatch(toggleNotifs());
     },
 
     onClickCompose() {
@@ -144,62 +29,13 @@ export const Header = React.createClass({
         dispatch(toggleCompose());
     },
 
-    acknowledgeNotifs(){
-        const {
-            dispatch,
-            notifs
-        } = this.props;
-        dispatch(acknowledgeNotifs(notifs));
-    },
-
     render(){
 
         const {
             isMenuOpen,
-            isNotifsOpen,
             isComposeOpen,
-            avatar,
-            notifs,
-            notifsStatus,
-            settings: {
-                displayNotifs
-            }
+            avatar
         } = this.props;
-
-        const {
-            showBadge,
-            newNotifsCount
-        } = this.state;
-
-        const renderNotifs = () => {
-            if (isNotifsOpen){
-
-                return (
-                    <div>
-                        <ClickScreen onClick={ this.onClickNotifs } />
-                        <NotificationsList
-                            data={ notifs }
-                            status={ notifsStatus }
-                            notifsCount={ newNotifsCount }
-                            onMouseLeave={ this.onClickNotifs } />
-                    </div>
-                );
-            }
-
-            return '';
-        };
-
-        const renderBadge = () => {
-            if (showBadge){
-                return (
-                    <span
-                        ref={ element => this.badgeRef = element }
-                        className="alert badge" />
-                );
-            }
-
-            return '';
-        };
 
         const photo = () => {
             if (avatar){
@@ -235,18 +71,7 @@ export const Header = React.createClass({
                 <div className="row">
                     <div className="small-5 medium-1 columns">
                         { photo() }
-                        <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-left">
-                            <a
-                                onClick={ this.onClickNotifs }
-                                className="hi-icon hi-icon-mobile">
-                                <i
-                                    ref={ element => this.notifsIconMobileRef = element }
-                                    className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
-                                    aria-hidden="true" />
-                            </a>
-                            { renderBadge() }
-                            { renderNotifs() }
-                        </div>
+                        <NotificationCenter direction="left" />
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
                         <nav className="links">
@@ -273,18 +98,7 @@ export const Header = React.createClass({
                         </nav>
                     </div>
                     <div className="small-6 text-right columns">
-                        <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-right">
-                            <a
-                                onClick={ this.onClickNotifs }
-                                className="hi-icon hi-icon-mobile">
-                                <i
-                                    ref={ element => this.notifsIconRef = element }
-                                    className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
-                                    aria-hidden="true" />
-                            </a>
-                            { renderBadge() }
-                            { renderNotifs() }
-                        </div>
+                        <NotificationCenter direction="right" />
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
                                 onClick={ this.onClickCompose }
@@ -306,12 +120,10 @@ export const Header = React.createClass({
 export default Redux.connect(state => {
     return {
         isMenuOpen: state.uiState.menuIsOpen,
-        isNotifsOpen: state.uiState.notifsIsOpen,
         isComposeOpen: state.uiState.composeIsOpen,
         uid: state.auth.uid,
         avatar: state.user.avatar,
-        notifs: state.notifs.data,
-        notifsStatus: state.notifs.status,
-        settings: state.user.settings
+        displayNotifs: state.user.settings.displayNotifs,
+        newNotifsCount: state.notifs.newNotifsCount
     };
 })(Header);

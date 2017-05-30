@@ -6,6 +6,7 @@ import {
     Power1
 } from 'gsap';
 
+import ClickScreen from 'elements/ClickScreen';
 import SmallMenu from 'elements/SmallMenu';
 
 export const Notification = React.createClass({
@@ -55,7 +56,8 @@ export const Notification = React.createClass({
     render(){
 
         const {
-            unfollowUser,
+            following,
+            followUser,
             blockUser,
             data: {
                 type,
@@ -99,7 +101,7 @@ export const Notification = React.createClass({
                         icon: 'ban',
                         iconColor: 'magenta',
                         title: `Unfollow ${ displayName }`,
-                        callback: unfollowUser,
+                        callback: followUser,
                         params: [uid]
                     },
                     {
@@ -121,9 +123,12 @@ export const Notification = React.createClass({
                 ];
 
                 return (
-                    <SmallMenu
-                        options={ settings }
-                        onClose={ this.toggleNotifMenu } />
+                    <div>
+                        <ClickScreen onClick={ this.toggleNotifMenu } />
+                        <SmallMenu
+                            options={ settings }
+                            onClose={ this.toggleNotifMenu } />
+                    </div>
                 );
             }
 

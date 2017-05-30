@@ -1,10 +1,16 @@
 const initialState = {
     status: false,
+    newNotifsCount: 0,
     data: false
 };
 
 export default (state = initialState, action) => {
     switch (action.type){
+        case 'NOTIFS_COUNT_NEW_NOTIFS':
+            return {
+                ...state,
+                newNotifsCount: action.newNotifsCount
+            };
         case 'NOTIFS_ADD_NOTIF_TO_LIST':
             return {
                 ...state,
