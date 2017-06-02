@@ -179,6 +179,7 @@ $header-notifications-list-lip-height: 10px;
         }
 
         .header-notification-content {
+            position: relative;
             height: inherit;
             margin-left: $header-notification-img-length;
             padding: 5px 10px 5px 10px;
@@ -222,9 +223,10 @@ $header-notifications-list-lip-height: 10px;
         }
 
         .header-notification-settings {
-            float: right;
-            padding: 0 0 10px 10px;
-            padding-top: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 15px 15px;
             cursor: pointer;
             @include transition(all 0.1s);
 
@@ -232,6 +234,7 @@ $header-notifications-list-lip-height: 10px;
                 font-size: 14px;
                 color: darken($white, 30%);
                 text-shadow: none;
+                cursor: pointer;
                 pointer-events: none;
             }
 

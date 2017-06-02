@@ -62,9 +62,9 @@ export const SmallMenu = React.createClass({
 
         if (params){
             tl.eventCallback('onComplete', callback, params);
+        } else {
+            tl.eventCallback('onComplete', callback);
         }
-
-        tl.eventCallback('onComplete', callback);
     },
 
     render(){
@@ -117,7 +117,7 @@ export const SmallMenu = React.createClass({
                 return (
                     <div
                         key={ `postmenu_item_${ index }` }
-                        onClick={ e => this.handleCallback(callback, e) }
+                        onClick={ e => this.handleCallback(callback, e, params) }
                         className={ `small-menu-option ${ highlightColor }` }>
                         <div>
                             { ic }{ ` ${ title }` }

@@ -25,8 +25,9 @@ export const NotificationsList = React.createClass({
             notifs,
             notifsStatus,
             areThereNotifs,
-            following,
-            blocked,
+            isFollowing,
+            isBlocked,
+            isSelf,
             followUser,
             blockUser,
             deleteNotif,
@@ -56,14 +57,12 @@ export const NotificationsList = React.createClass({
                     .reverse()
                     .map(key => {
 
-                        const isFollowing = following ? Object.keys(following).includes(key) : false;
-                        const isBlocked = blocked ? Object.keys(blocked).includes(key) : false;
-
+                        const following = isFollowing(notifs[key].uid);
+                        const blocked = isBlocked(notifs[key].uid);
+                        const displayFollowOption = !isSelf(notifs[key].uid);
                         // Render notif based off of type:
-                        if (!isBlocked){
-
+                        if (!blocked){
                             const notifType = notifs[key].type;
-                            console.log('notifType? ', notifType);
                             switch (notifType){
                                 case NOTIF_ADD_FOLLOWER:
                                     return (
@@ -71,11 +70,13 @@ export const NotificationsList = React.createClass({
                                             key={ `notif_${ key }` }
                                             route={ `users/${ notifs[key].username }` }
                                             notifId={ key }
-                                            following={ isFollowing }
+                                            following={ following }
+                                            blocked={ blocked }
                                             followUser={ followUser }
                                             blockUser={ blockUser }
                                             deleteNotif={ deleteNotif }
                                             clickNotif={ clickNotif }
+                                            displayFollowOption={ displayFollowOption }
                                             data={ notifs[key] } />
                                     );
                                 default:

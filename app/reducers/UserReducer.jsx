@@ -22,12 +22,10 @@ const initialState = {
     followerCount: 2,
     followingCount: 2,
     postCount: 0,
+    quality: 10,
     recentPost: [],
     status: false,
-    settings: {
-        displayNotifs: true,
-        blockedUsers: false
-    },
+    blocked: {},
     followers: {
         MMxvsVGFgHY55OQKzpXKG5RpDck2: true,
         '4IaW549RW4Y07iWomkWFNvcjrH42': true
@@ -35,6 +33,9 @@ const initialState = {
     following: {
         MMxvsVGFgHY55OQKzpXKG5RpDck2: true,
         '4IaW549RW4Y07iWomkWFNvcjrH42': true
+    },
+    settings: {
+        displayNotifs: true
     }
 };
 

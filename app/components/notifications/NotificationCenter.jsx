@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import firebase from 'firebase';
 import {
     TimelineLite,
     Power2,
@@ -13,7 +12,6 @@ import {
 import {
     fetchNotifs,
     deleteNotif,
-    countNewNotifs,
     acknowledgeNotifs,
     clearAllNotifs
 } from 'actions/NotificationActions';
@@ -30,7 +28,7 @@ export const NotificationCenter = React.createClass({
 
         const {
             dispatch,
-            notifs,
+            newNotifsCount,
             uid
         } = this.props;
 
@@ -40,26 +38,11 @@ export const NotificationCenter = React.createClass({
         }
 
         this.setState({
-            showBadge: false,
+            showBadge: newNotifsCount > 0
         });
-
-        this.countNewNotifs(notifs);
     },
 
     componentWillReceiveProps(nextProps){
-
-        // If the menu was just opened, count unacknowledged notifs.
-        if (!this.props.isNotifsOpen &&
-            nextProps.isNotifsOpen){
-            this.countNewNotifs(nextProps.notifs);
-        }
-
-        // If the number of notifs changed, recount unacknowledged notifs.
-        if (this.props.notifs){
-            if (Object.keys(this.props.notifs).length !== Object.keys(nextProps.notifs).length){
-                this.countNewNotifs(nextProps.notifs);
-            }
-        }
 
         // Show badge if the unacknowledged notif count changed.
         if (this.props.newNotifsCount !== nextProps.newNotifsCount){
@@ -148,12 +131,14 @@ export const NotificationCenter = React.createClass({
             dispatch,
             uid
         } = this.props;
-        dispatch(addFollower(uid, followedUid));
+        if (!this.isBlocked(followedUid)){
+            dispatch(addFollower(uid, followedUid));
+        }
     },
 
-    handleBlockUser(uid){
+    handleBlockUser(blockedUid){
         const { dispatch } = this.props;
-        dispatch(updateBlockedUser(uid));
+        dispatch(updateBlockedUser(blockedUid));
     },
 
     handleClickNotif(route){
@@ -178,26 +163,26 @@ export const NotificationCenter = React.createClass({
         this.acknowledgeNotifs();
     },
 
+    isSelf(testUid){
+        return testUid === this.props.uid;
+    },
+
+    isBlocked(testUid){
+        const blocked = this.props.blocked || {};
+        return Object.keys(blocked).includes(testUid);
+    },
+
+    isFollowing(testUid){
+        const following = this.props.following || {};
+        return Object.keys(following).includes(testUid);
+    },
+
     acknowledgeNotifs(){
         const {
             dispatch,
             notifs
         } = this.props;
         dispatch(acknowledgeNotifs(notifs));
-    },
-
-    countNewNotifs(notifs){
-        let newNotifsCount = 0;
-        if (notifs){
-            Object.keys(notifs).forEach(key => {
-                if (!notifs[key].acknowledged){
-                    newNotifsCount++;
-                }
-            });
-        }
-
-        const { dispatch } = this.props;
-        dispatch(countNewNotifs(newNotifsCount));
     },
 
     areThereNotifs(){
@@ -252,8 +237,10 @@ export const NotificationCenter = React.createClass({
                                 notifsStatus={ notifsStatus }
                                 displayNotifs={ displayNotifs }
                                 areThereNotifs={ areThereNotifs }
-                                following={ following }
-                                blocked={ blocked }
+                                isFollowing={ this.isFollowing }
+                                isBlocked={ this.isBlocked }
+                                isSelf={ this.isSelf }
+                                isBlocked={ this.isBlocked }
                                 clickNotif={ this.handleClickNotif }
                                 deleteNotif={ this.handleDeleteNotif }
                                 blockUser={ this.handleBlockUser }
@@ -291,6 +278,7 @@ export default Redux.connect(state => {
         isNotifsOpen: state.uiState.notifsIsOpen,
         newNotifsCount: state.notifs.newNotifsCount,
         following: state.user.following,
+        followers: state.user.followers,
         blocked: state.user.blocked,
         displayNotifs: state.user.settings.displayNotifs
     };

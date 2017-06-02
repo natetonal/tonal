@@ -5,7 +5,7 @@ import {
     addNotifToList,
     removeNotifFromList
 } from 'actions/NotificationActions';
-import { updateUserData } from 'actions/UserActions';
+import { syncUserData } from 'actions/UserActions';
 
 // The observer handles all database changes globally and keeps state up-to-date.
 export const Observer = React.createClass({
@@ -31,16 +31,28 @@ export const Observer = React.createClass({
             dispatch(removeNotifFromList(notif.key));
         });
 
-        // Observer for user's follower count:
-        const followerCountRef = firebase.database().ref(`users/${ uid }/followerCount`);
-        followerCountRef.on('child_changed', count => {
-            dispatch(updateUserData({ followerCount: count.val() }));
+        // Observer for user's followers:
+        const followerCountRef = firebase.database().ref(`users/${ uid }/followers`);
+        followerCountRef.on('child_added', () => {
+            dispatch(syncUserData(['followers', 'followerCount']));
+        });
+        followerCountRef.on('child_changed', () => {
+            dispatch(syncUserData(['followers', 'followerCount']));
+        });
+        followerCountRef.on('child_removed', () => {
+            dispatch(syncUserData(['followers', 'followerCount']));
         });
 
-        // Observer for user's following count:
-        const followingCountRef = firebase.database().ref(`users/${ uid }/followingCount`);
-        followingCountRef.on('child_changed', count => {
-            dispatch(updateUserData({ followingCount: count.val() }));
+        // Observer for user's followings:
+        const followingCountRef = firebase.database().ref(`users/${ uid }/following`);
+        followingCountRef.on('child_added', () => {
+            dispatch(syncUserData(['following', 'followingCount']));
+        });
+        followingCountRef.on('child_changed', () => {
+            dispatch(syncUserData(['following', 'followingCount']));
+        });
+        followingCountRef.on('child_removed', () => {
+            dispatch(syncUserData(['following', 'followingCount']));
         });
     },
 

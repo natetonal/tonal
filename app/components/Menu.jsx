@@ -5,6 +5,7 @@ import { startLogout } from 'actions/AuthActions';
 import {
     TweenLite,
     Power2,
+    Power0,
     Back
 } from 'gsap';
 import numeral from 'numeral';
@@ -24,6 +25,54 @@ export const Menu = React.createClass({
                 opacity: 0,
                 height: 0
             }, '-=0.5');
+        }
+
+        // If user gained a follower
+        if (this.props.followers < nextProps.followers){
+            TweenLite.from(this.followerCountRef, 1, {
+                ease: Power2.easeOut,
+                y: 10
+            });
+            TweenLite.from(this.followerCountRef, 1, {
+                ease: Power2.easeIn,
+                color: '#3ef669'
+            });
+        }
+
+        // If user lost a follower
+        if (this.props.followers > nextProps.followers){
+            TweenLite.from(this.followerCountRef, 1, {
+                ease: Power2.easeOut,
+                y: 10
+            });
+            TweenLite.from(this.followerCountRef, 1, {
+                ease: Power2.easeIn,
+                color: '#e30713'
+            });
+        }
+
+        // If user started following
+        if (this.props.following < nextProps.following){
+            TweenLite.from(this.followingCountRef, 1, {
+                ease: Power2.easeOut,
+                y: 10
+            });
+            TweenLite.from(this.followingCountRef, 1, {
+                ease: Power2.easeIn,
+                color: '#3ef669'
+            });
+        }
+
+        // If user stopped following
+        if (this.props.following > nextProps.following){
+            TweenLite.from(this.followingCountRef, 1, {
+                ease: Power2.easeOut,
+                y: 10
+            });
+            TweenLite.from(this.followingCountRef, 1, {
+                ease: Power2.easeIn,
+                color: '#e30713'
+            });
         }
     },
 
@@ -102,7 +151,9 @@ export const Menu = React.createClass({
                                     <div className="avatar-followers-label">
                                         Followers
                                     </div>
-                                    <div className="avatar-followers-count">
+                                    <div
+                                        ref={ element => this.followerCountRef = element }
+                                        className="avatar-followers-count">
                                         { formatNumber(followers) }
                                     </div>
                                 </div>
@@ -110,7 +161,9 @@ export const Menu = React.createClass({
                                     <div className="avatar-following-label">
                                         Following
                                     </div>
-                                    <div className="avatar-following-count">
+                                    <div
+                                        ref={ element => this.followingCountRef = element }
+                                        className="avatar-following-count">
                                         { formatNumber(following) }
                                     </div>
                                 </div>

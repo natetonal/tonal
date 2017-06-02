@@ -1,5 +1,26 @@
 import { databaseRef } from 'app/firebase';
 
+export const countNewNotifs = () => {
+    return (dispatch, getState) => {
+        const notifs = getState().notifs.data;
+        const blocked = getState().user.blocked || {};
+        let newNotifsCount = 0;
+        if (notifs){
+            Object.keys(notifs).forEach(key => {
+                if (!notifs[key].acknowledged &&
+                    !Object.keys(blocked).includes(notifs[key].uid)){
+                    newNotifsCount++;
+                }
+            });
+        }
+
+        dispatch({
+            type: 'NOTIFS_COUNT_NEW_NOTIFS',
+            newNotifsCount
+        });
+    };
+};
+
 export const updateNotifsStatus = status => {
     return {
         type: 'NOTIFS_UPDATE_STATUS',
@@ -8,31 +29,33 @@ export const updateNotifsStatus = status => {
 };
 
 export const addNotifData = (data = false) => {
-    return {
-        type: 'NOTIFS_ADD_DATA',
-        data
-    };
-};
-
-export const countNewNotifs = (newNotifsCount = 0) => {
-    return {
-        type: 'NOTIFS_COUNT_NEW_NOTIFS',
-        newNotifsCount
+    return dispatch => {
+        dispatch({
+            type: 'NOTIFS_ADD_DATA',
+            data
+        });
+        dispatch(countNewNotifs());
     };
 };
 
 export const addNotifToList = (key = false, post = false) => {
-    return {
-        type: 'NOTIFS_ADD_NOTIF_TO_LIST',
-        key,
-        post
+    return dispatch => {
+        dispatch({
+            type: 'NOTIFS_ADD_NOTIF_TO_LIST',
+            key,
+            post
+        });
+        dispatch(countNewNotifs());
     };
 };
 
 export const removeNotifFromList = key => {
-    return {
-        type: 'NOTIFS_REMOVE_NOTIF_FROM_LIST',
-        key
+    return dispatch => {
+        dispatch({
+            type: 'NOTIFS_REMOVE_NOTIF_FROM_LIST',
+            key
+        });
+        dispatch(countNewNotifs());
     };
 };
 

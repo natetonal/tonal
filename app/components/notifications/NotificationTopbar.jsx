@@ -53,6 +53,17 @@ export const NotificationTopbar = React.createClass({
             tl.play();
         }
 
+        // Put a small fade-in if number of new notifs changes while menu is open:
+        if (prevProps.newNotifsCount !== this.props.newNotifsCount &&
+            this.notifCountRef){
+            const tl = new TimelineLite();
+            tl.from(this.notifCountRef, 0.5, {
+                ease: Power0.easeNone,
+                opacity: 0
+            });
+            tl.play();
+        }
+
         // Change the color if the user muted/unmuted notifications.
         if (prevProps.displayNotifs !== this.props.displayNotifs){
             const tl = new TimelineLite();
@@ -128,7 +139,7 @@ export const NotificationTopbar = React.createClass({
                     if (newNotifsCount === 0){
                         return 'no';
                     }
-                    return <span>{ newNotifsCount }</span>;
+                    return <span ref={ element => this.notifCountRef = element }>{ newNotifsCount }</span>;
                 };
 
                 return (

@@ -15,6 +15,7 @@ export const Notification = React.createClass({
         this.setState({
             showNotifMenuIcon: false,
             showNotifMenu: false,
+            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow(),
         });
     },
 
@@ -29,6 +30,29 @@ export const Notification = React.createClass({
             });
             tl.play();
         }
+
+        this.interval = setInterval(this.updateTimestamp, 1000);
+    },
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevState.timeStamp !== this.state.timeStamp){
+            const tl = new TimelineLite();
+            tl.from(this.timeStampRef, 0.5, {
+                ease: Power1.easeOut,
+                opacity: 0
+            });
+            tl.play();
+        }
+    },
+
+    componentWillUnmount(){
+        clearInterval(this.interval);
+    },
+
+    updateTimestamp(){
+        this.setState({
+            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
+        });
     },
 
     toggleNotifMenu(event){
@@ -61,9 +85,11 @@ export const Notification = React.createClass({
 
         const {
             following,
+            blocked,
             followUser,
             blockUser,
             clickNotif,
+            displayFollowOption,
             route,
             data: {
                 type,
@@ -71,12 +97,14 @@ export const Notification = React.createClass({
                 username,
                 displayName,
                 avatar,
-                timeStamp,
                 acknowledged
             }
         } = this.props;
 
-        const { showNotifMenu } = this.state;
+        const {
+            showNotifMenu,
+            timeStamp
+        } = this.state;
 
         const renderNotifMessage = () => {
             switch (type){
@@ -101,11 +129,11 @@ export const Notification = React.createClass({
         const renderMenu = () => {
             if (showNotifMenu){
 
-                const settings = [
+                let settings = [
                     {
-                        icon: 'ban',
-                        iconColor: 'magenta',
-                        title: `Follow ${ displayName }`,
+                        icon: following ? 'ban' : 'user-plus',
+                        iconColor: following ? 'magenta' : 'lightgreen',
+                        title: `${ following ? 'Unf' : 'F' }ollow ${ displayName }`,
                         callback: followUser,
                         params: [uid]
                     },
@@ -126,6 +154,10 @@ export const Notification = React.createClass({
                         callback: this.handleDelete,
                     }
                 ];
+
+                if (!displayFollowOption){
+                    settings = [settings.pop()];
+                }
 
                 return (
                     <div>
@@ -158,8 +190,10 @@ export const Notification = React.createClass({
                         <i className="fa fa-angle-down" aria-hidden="true" />
                     </div>
                     { renderNotifMessage() }
-                    <div className="header-notification-timestamp">
-                        { moment(timeStamp, 'LLLL').fromNow() }
+                    <div
+                        ref={ element => this.timeStampRef = element }
+                        className="header-notification-timestamp">
+                        { timeStamp }
                     </div>
                 </div>
             </div>

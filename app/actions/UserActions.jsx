@@ -57,26 +57,33 @@ export const toggleSettingDisplayNotifs = () => {
     };
 };
 
-export const updateBlockedUser = uid => {
-    return dispatch => {
-        const settingsRef = databaseRef.child(`users/${ uid }/settings`);
-        settingsRef.once('value')
+// If user is blocked, update user's blocked object and sever all following/followed connections.
+// Otherwise, remove from user's blocked object. Users will have to refollow if desired.
+export const updateBlockedUser = blockedUid => {
+    return (dispatch, getState) => {
+        const uid = getState().auth.uid;
+        const userRef = databaseRef.child(`users/${ uid }/blocked`);
+        userRef.once('value')
         .then(snapshot => {
-            const currentSettings = snapshot.val();
-            const blockedUsers = currentSettings.blockedUsers;
-            if (Object.keys(blockedUsers).includes(uid)){
-                blockedUsers[uid] = null;
-            } else {
-                blockedUsers[uid] = true;
-            }
-            
-            const updatedSettings = {
-                ...currentSettings,
-                blockedUsers
-            };
+            const updates = {};
+            const blocked = snapshot.val() || {};
 
-            settingsRef.update(updatedSettings);
-            dispatch(storeUserDataToState({ settings: updatedSettings }));
+            console.log('blocked object???', blocked);
+            if (Object.keys(blocked).includes(blockedUid)){
+                updates[`users/${ uid }/blocked/${ blockedUid }`] = null;
+                blocked[blockedUid] = null;
+
+            } else {
+                updates[`users/${ uid }/blocked/${ blockedUid }`] = moment().format('LLLL');
+                updates[`followers/${ uid }/${ blockedUid }`] = null;
+                updates[`following/${ uid }/${ blockedUid }`] = null;
+                updates[`followers/${ blockedUid }/${ uid }`] = null;
+                updates[`following/${ blockedUid }/${ uid }`] = null;
+                blocked[blockedUid] = moment().format('LLLL');
+            }
+
+            databaseRef.update(updates);
+            dispatch(storeUserDataToState({ blocked }));
         }, error => {
             console.log(error);
         });
@@ -150,13 +157,11 @@ export const createUserWithEmailAndPassword = (email, password) => {
 };
 
 export const fetchUserData = uid => {
-    console.log('fetchUserData called with uid: ', uid);
     return dispatch => {
         dispatch(changeStatus('fetching'));
         databaseRef.child(`users/${ uid }`).once('value')
         .then(snapshot => {
             const currentUser = snapshot.val();
-            console.log('snapshot.val from fetchUserData: ', currentUser);
             if (currentUser){
                 const user = {
                     ...currentUser,
@@ -168,6 +173,38 @@ export const fetchUserData = uid => {
                 console.log('Ain\'t no user with them there credentials in yon database. back to the pile!');
                 dispatch(changeStatus());
                 dispatch(logoutAndPushToRootRoute());
+            }
+        }, error => {
+            console.log(error);
+            dispatch(changeStatus('error'));
+        });
+    };
+};
+
+// Sync specific parts of user object with database.
+export const syncUserData = (keys = false) => {
+    return (dispatch, getState) => {
+        console.log('syncUserData called with keys: ', keys);
+        const uid = getState().auth.uid;
+
+        if (!keys){
+            dispatch(fetchUserData(uid));
+        }
+
+        databaseRef.child(`users/${ uid }`).once('value')
+        .then(snapshot => {
+            const dbUser = snapshot.val();
+            const updatedUser = getState().user;
+
+            if (dbUser){
+                keys.forEach(key => {
+                    if (Object.keys(updatedUser).includes(key) &&
+                        Object.keys(dbUser).includes(key)){
+                        updatedUser[key] = dbUser[key];
+                    }
+                });
+                updatedUser.updatedAt = moment().format('LLLL');
+                dispatch(storeUserDataToState(updatedUser));
             }
         }, error => {
             console.log(error);

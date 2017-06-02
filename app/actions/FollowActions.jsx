@@ -1,4 +1,5 @@
 import { databaseRef } from 'app/firebase';
+import { updateUserData } from 'actions/UserActions';
 import moment from 'moment';
 
 export const addFollower = (follower, followed) => {
@@ -13,26 +14,19 @@ export const addFollower = (follower, followed) => {
                 const updates = {};
 
                 if (!currentValue){
-                    const followerData = {
-                        uid: user.uid,
-                        username: user.username,
-                        displayName: user.displayName,
-                        avatar: user.avatar,
-                        timeStamp: moment().format('LLLL')
-                    };
+                    console.log('not currently following user. adding to db.');
 
                     // I click follow - I am a "follower".
                     // The user who I'm following is "followed"
                     // I need to add that user to my "followed" object.
                     // They need to add me to their "followers" object.
 
-                    updates[`followers/${ followed }/${ follower }`] = followerData;
-                    updates[`users/${ follower }/following/${ followed }`] = true;
-                    updates[`users/${ followed }/followers/${ follower }`] = true;
+                    updates[`followers/${ followed }/${ follower }`] = moment().format('LLLL');
+                    updates[`following/${ follower }/${ followed }`] = moment().format('LLLL');
                 } else {
+                    console.log('currently following user. deleting from db.');
                     updates[`followers/${ followed }/${ follower }`] = null;
-                    updates[`users/${ follower }/following/${ followed }`] = null;
-                    updates[`users/${ followed }/followers/${ follower }`] = null;
+                    updates[`following/${ follower }/${ followed }`] = null;
                 }
 
                 return databaseRef.update(updates);

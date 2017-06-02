@@ -48,7 +48,6 @@ export const addErrorMessage = error => {
 
 export const startLoginForAuthorizedUser = uid => {
     return dispatch => {
-        console.log('startLoginForAuthorizedUser / starting login for authorized user with uid: ', uid);
         dispatch(login(uid));
         browserHistory.push('connect');
     };
