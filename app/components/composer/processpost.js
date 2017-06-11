@@ -158,7 +158,7 @@ export const parsePost = (html, data, userData) => {
                     thread: false,
                     postEdited: false,
                     postEditedAt: false,
-                    timeStamp: moment().calendar(),
+                    timeStamp: moment().format('LLLL'),
                     user: userData,
                     post: safePost,
                     raw: html
@@ -178,7 +178,7 @@ export const parsePost = (html, data, userData) => {
         thread: false,
         postEdited: false,
         postEditedAt: false,
-        timeStamp: moment().calendar(),
+        timeStamp: moment().format('LLLL'),
         user: userData,
         raw: html,
         post

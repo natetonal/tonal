@@ -29,11 +29,8 @@ export const TonalApp = React.createClass({
     },
 
     addFollower(){
-        const {
-            dispatch,
-            uid
-        } = this.props;
-        dispatch(addFollower(uid, 'MMxvsVGFgHY55OQKzpXKG5RpDck2'));
+        const { dispatch } = this.props;
+        dispatch(addFollower('MMxvsVGFgHY55OQKzpXKG5RpDck2', 'natetonal', 'Nate Kimball'));
     },
 
     render(){

@@ -1,21 +1,18 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as Redux from 'react-redux';
-
+import moment from 'moment';
 import {
+    TweenLite,
     TimelineLite,
     Power1,
 } from 'gsap';
-import {
-    deletePost,
-    updatePost
-} from 'actions/PostActions';
 
 import Composer from 'composer/Composer';
 import PreviewLink from 'links/PreviewLink';
+import SmallMenu from 'elements/SmallMenu';
 import Comment from './Comment';
 import PostParser from './PostParser';
-import PostMenu from './PostMenu';
 
 const bigTextLength = 80;
 
@@ -24,7 +21,57 @@ export const Post = React.createClass({
     componentWillMount(){
         this.setState({
             showMenu: false,
-            postEdit: false
+            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
+        });
+    },
+
+    componentDidMount(){
+        this.interval = setInterval(this.updateTimestamp, 1000);
+    },
+
+    componentWillReceiveProps(nextProps){
+
+        // If the user opens the editor:
+        if (this.props.editing === this.props.postId &&
+            !nextProps.editing){
+            TweenLite.from(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+        }
+
+        // If the user has finished editing the post:
+        if (nextProps.editing === nextProps.postId &&
+            !this.props.editing){
+            TweenLite.to(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+        }
+    },
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevState.timeStamp !== this.state.timeStamp){
+            const tl = new TimelineLite();
+            tl.from(this.timeStampRef, 0.5, {
+                ease: Power1.easeOut,
+                opacity: 0
+            });
+            tl.play();
+        }
+    },
+
+    componentWillUnmount(){
+        clearInterval(this.interval);
+    },
+
+    updateTimestamp(){
+        this.setState({
+            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
         });
     },
 
@@ -34,41 +81,12 @@ export const Post = React.createClass({
         });
     },
 
-    handleEditPost(){
-        const tl = new TimelineLite();
-        if (!this.state.postEdit){
-            this.toggleEditor();
-            tl.from(this.postEditorRef, 0.25, {
-                ease: Power1.easeOut,
-                transformOrigin: 'top left',
-                height: 0,
-                opacity: 0
-            });
-        } else {
-            tl.to(this.postEditorRef, 0.25, {
-                ease: Power1.easeOut,
-                transformOrigin: 'top left',
-                height: 0,
-                opacity: 0
-            });
-            tl.eventCallback('onComplete', this.toggleEditor);
-        }
-        tl.play();
-    },
-
-    handleUpdatePost(updatedPost){
-        const {
-            dispatch,
-            data: {
-                postId
-            }
-        } = this.props;
-        dispatch(updatePost(updatedPost, postId));
-    },
-
     handleDeletePost(){
 
-        console.log('hanldeDeletePost called from post.');
+        const {
+            deletePost,
+            postId
+        } = this.props;
 
         const tl = new TimelineLite();
         tl.to(this.postRef, 0.25, {
@@ -78,30 +96,34 @@ export const Post = React.createClass({
             opacity: 0
         });
         tl.play();
-        tl.eventCallback('onComplete', this.dispatchPostDelete);
-    },
-
-    toggleEditor(){
-        this.setState({
-            postEdit: !this.state.postEdit
-        });
-    },
-
-    dispatchPostDelete(){
-        const {
-            dispatch,
-            data
-        } = this.props;
-
-        const { postId } = data;
-        dispatch(deletePost(postId));
+        tl.eventCallback('onComplete', deletePost, [postId]);
     },
 
     render(){
 
+        // Post object should be refactored.
+        // Author: uid.
+        // Unsubscribed:(uid: true)
+        // Flagged: 0
+
         const {
+            feedId,
+            postId,
             data,
-            feedId
+            editing,
+            following,
+            blocked,
+            blockedBy,
+            posterIsSelf,
+            isFollowing,
+            isBlocked,
+            isBlockedBy,
+            isSelf,
+            deletePost,
+            updatePost,
+            blockUser,
+            followUser,
+            togglePostEditor
         } = this.props;
 
         if (data){
@@ -115,21 +137,105 @@ export const Post = React.createClass({
                 raw,
                 postEdited,
                 postEditedAt,
-                timeStamp,
                 thread,
                 length,
-                user,
-                postId,
-                user: {
-                    avatar,
-                    displayName
-                }
+                user
             } = data;
 
             const {
+                uid,
+                avatar,
+                displayName,
+                username
+            } = user;
+
+            const {
                 showMenu,
-                postEdit
+                timeStamp
             } = this.state;
+
+            const displayMenu = () => {
+
+                if (showMenu){
+
+                    const settings = [{
+                        icon: 'eye-slash',
+                        iconColor: 'lightyellow',
+                        title: 'Unsubscribe from post',
+                        description: 'Hide this post and stop receiving notifications.',
+                        callback: () => console.log('UNSUBSCRIBED')
+                    }];
+
+                    if (!posterIsSelf){
+                        settings.push(
+                            {
+                                icon: 'sign-out',
+                                iconColor: 'purple',
+                                title: `Unsubscribe from ${ displayName }'s posts`,
+                                description: 'Hide all posts from this user and stop receiving notifications.',
+                                callback: () => console.log('UNSUBSCRIBED FROM ALL POSTS')
+                            },
+                            {
+                                icon: following ? 'ban' : 'user-plus',
+                                iconColor: following ? 'magenta' : 'lightgreen',
+                                title: `${ following ? 'Unf' : 'F' }ollow ${ displayName }`,
+                                callback: followUser,
+                                params: [uid, username, displayName]
+                            },
+                            {
+                                icon: 'user-times',
+                                iconColor: 'yellow',
+                                title: `Block ${ displayName }`,
+                                callback: blockUser,
+                                params: [uid]
+                            }
+                        );
+                    }
+
+                    settings.push(
+                        {
+                            divider: true
+                        },
+                        {
+                            icon: 'flag',
+                            iconColor: 'lightorange',
+                            title: 'Flag This Post',
+                            description: 'Report TOS Violations to the administrators.',
+                            callback: () => console.log('FLAGGED!')
+                        }
+                    );
+
+                    if (posterIsSelf){
+                        settings.push(
+                            {
+                                icon: 'pencil-square-o',
+                                iconColor: 'lightgreen',
+                                title: 'Edit Your Post',
+                                callback: togglePostEditor,
+                                params: [postId]
+                            },
+                            {
+                                icon: 'times',
+                                highlightColor: 'red',
+                                title: 'Delete Your Post',
+                                callback: deletePost,
+                                params: [postId]
+                            }
+                        );
+                    }
+
+                    return (
+                        <div>
+                            <SmallMenu
+                                width="large"
+                                options={ settings }
+                                onClose={ this.handlePostMenu } />
+                        </div>
+                    );
+                }
+
+                return '';
+            };
 
             const displayThread = () => {
 
@@ -145,8 +251,8 @@ export const Post = React.createClass({
                     });
                 }
                 return (
-                    <div>
-                        NO COMMENTS
+                    <div className="tonal-post-reply">
+                        Post interactions are not currently enabled.
                     </div>
                 );
             };
@@ -166,23 +272,8 @@ export const Post = React.createClass({
                 return '';
             };
 
-            const displayMenu = () => {
-                if (showMenu){
-                    return (
-                        <PostMenu
-                            posterIsSelf={ user.uid === feedId }
-                            handlePostMenu={ this.handlePostMenu }
-                            handleEditPost={ this.handleEditPost }
-                            handleDeletePost={ this.handleDeletePost }
-                            postId={ postId } />
-                    );
-                }
-
-                return '';
-            };
-
             const postMode = () => {
-                if (postEdit){
+                if (editing){
                     return (
                         <div
                             ref={ element => this.postEditorRef = element }
@@ -252,7 +343,9 @@ export const Post = React.createClass({
                                         { displayName }
                                     </PreviewLink>
                                 </div>
-                                <div className="tonal-post-timestamp">
+                                <div
+                                    ref={ element => this.timeStampRef = element }
+                                    className="tonal-post-timestamp">
                                     { displayTimestamp() }
                                 </div>
                             </div>

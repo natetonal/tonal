@@ -22,10 +22,10 @@ const initialState = {
     followerCount: 2,
     followingCount: 2,
     postCount: 0,
-    quality: 10,
-    recentPost: [],
     status: false,
+    recentPost: {},
     blocked: {},
+    blockedBy: {},
     followers: {
         MMxvsVGFgHY55OQKzpXKG5RpDck2: true,
         '4IaW549RW4Y07iWomkWFNvcjrH42': true

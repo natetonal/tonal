@@ -2,7 +2,6 @@ import {
     databaseRef
 } from 'app/firebase';
 import moment from 'moment';
-import { updateUserData } from 'actions/UserActions';
 
 export const writePost = data => {
     return (dispatch, getState) => {
@@ -13,17 +12,9 @@ export const writePost = data => {
         data.postId = postId;
         updates[`/posts/${ postId }`] = data;
         updates[`/user-posts/${ uid }/${ postId }`] = data;
+        updates[`/users/${ uid }/recentPost`] = data;
         updates[`/feed/${ uid }/${ postId }`] = data;
         databaseRef.update(updates);
-
-        databaseRef.child(`user-activity/${ uid }/${ postId }`).update({
-            type: 'post-add',
-            timeStamp: moment().format('LLLL')
-        });
-
-        dispatch(updateUserData({
-            postCount: getState().user.postCount + 1
-        }));
     };
 };
 
@@ -37,13 +28,9 @@ export const updatePost = (data, postId) => {
         data.postEditedAt = moment().calendar();
         updates[`/posts/${ postId }`] = data;
         updates[`/user-posts/${ uid }/${ postId }`] = data;
+        updates[`/users/${ uid }/recentPost`] = data;
         updates[`/feed/${ uid }/${ postId }`] = data;
         databaseRef.update(updates);
-
-        databaseRef.child(`user-activity/${ uid }/${ postId }`).update({
-            type: 'post-update',
-            timeStamp: moment().format('LLLL')
-        });
     };
 };
 
@@ -59,10 +46,6 @@ export const deletePost = postId => {
             updates[`/feed/${ uid }/${ postId }`] = data;
             updates[`user-activity/${ uid }/${ postId }`] = data;
             databaseRef.update(updates);
-
-            dispatch(updateUserData({
-                postCount: getState().user.postCount - 1
-            }));
         }
     };
 };

@@ -1,6 +1,7 @@
 const initialState = {
     status: false,
-    data: false
+    data: false,
+    editing: false
 };
 
 export default (state = initialState, action) => {
@@ -27,6 +28,11 @@ export default (state = initialState, action) => {
                         obj[key] = state.data[key];
                         return obj;
                     }, {})
+            };
+        case 'FEED_EDIT_POST':
+            return {
+                ...state,
+                editing: action.postId
             };
         case 'FEED_UPDATE_STATUS':
             return {

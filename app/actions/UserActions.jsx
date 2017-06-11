@@ -63,18 +63,19 @@ export const updateBlockedUser = blockedUid => {
     return (dispatch, getState) => {
         const uid = getState().auth.uid;
         const userRef = databaseRef.child(`users/${ uid }/blocked`);
-        userRef.once('value')
+        return userRef.once('value')
         .then(snapshot => {
             const updates = {};
             const blocked = snapshot.val() || {};
 
-            console.log('blocked object???', blocked);
             if (Object.keys(blocked).includes(blockedUid)){
                 updates[`users/${ uid }/blocked/${ blockedUid }`] = null;
+                updates[`users/${ blockedUid }/blockedBy/${ uid }`] = null;
                 blocked[blockedUid] = null;
 
             } else {
                 updates[`users/${ uid }/blocked/${ blockedUid }`] = moment().format('LLLL');
+                updates[`users/${ blockedUid }/blockedBy/${ uid }`] = moment().format('LLLL');
                 updates[`followers/${ uid }/${ blockedUid }`] = null;
                 updates[`following/${ uid }/${ blockedUid }`] = null;
                 updates[`followers/${ blockedUid }/${ uid }`] = null;
@@ -84,6 +85,7 @@ export const updateBlockedUser = blockedUid => {
 
             databaseRef.update(updates);
             dispatch(storeUserDataToState({ blocked }));
+
         }, error => {
             console.log(error);
         });
@@ -191,7 +193,7 @@ export const syncUserData = (keys = false) => {
             dispatch(fetchUserData(uid));
         }
 
-        databaseRef.child(`users/${ uid }`).once('value')
+        return databaseRef.child(`users/${ uid }`).once('value')
         .then(snapshot => {
             const dbUser = snapshot.val();
             const updatedUser = getState().user;

@@ -4,16 +4,20 @@ export const countNewNotifs = () => {
     return (dispatch, getState) => {
         const notifs = getState().notifs.data;
         const blocked = getState().user.blocked || {};
+        const blockedBy = getState().user.blockedBy || {};
+        console.log(`countNewNotifs called. blockedBy? ${ blockedBy }`);
         let newNotifsCount = 0;
         if (notifs){
             Object.keys(notifs).forEach(key => {
                 if (!notifs[key].acknowledged &&
-                    !Object.keys(blocked).includes(notifs[key].uid)){
+                    !Object.keys(blocked).includes(notifs[key].uid) &&
+                    !Object.keys(blockedBy).includes(notifs[key].uid)){
                     newNotifsCount++;
                 }
             });
         }
 
+        console.log('countNewNotifs newNotifsCount? ', newNotifsCount);
         dispatch({
             type: 'NOTIFS_COUNT_NEW_NOTIFS',
             newNotifsCount

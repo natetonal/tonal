@@ -71,6 +71,7 @@ export const SmallMenu = React.createClass({
 
         const {
             onClose,
+            width,
             options
         } = this.props;
 
@@ -93,8 +94,22 @@ export const SmallMenu = React.createClass({
                 const callback = item.callback || false;
                 const params = item.params || false;
                 const validation = item.validation || false;
-                const ic = icon ? <i className={ `fa fa-${ icon } ${ iconColor }` } aria-hidden="true" /> : '';
-                const dsc = description ? <div className="small-menu-description">{ description }</div> : false;
+                const renderIcon = () => {
+                    if (icon){
+                        if (icon === 'broken-heart'){
+                            return (
+                                <span className="fa-stack">
+                                    <i className={ `fa fa-heart fa-stack-1x ${ iconColor }` } />
+                                    <i className="fa fa-bolt fa-stack-1x fa-inverse" />
+                                </span>
+                            );
+                        }
+
+                        return <i className={ `fa fa-${ icon } ${ iconColor }` } aria-hidden="true" />;
+                    }
+
+                    return '';
+                };
 
                 if (validation){
                     if (validation.value === validation.truth){
@@ -103,10 +118,11 @@ export const SmallMenu = React.createClass({
                                 key={ `postmenu_item_${ index }` }
                                 onClick={ e => this.handleCallback(callback, e, params) }
                                 className={ `small-menu-option ${ highlightColor }` }>
-                                <div>
-                                    { ic }{ ` ${ title }` }
+                                { icon && (<div className="small-menu-icon">{ renderIcon(icon) }</div>) }
+                                <div className="small-menu-text">
+                                    { title && <div className="small-menu-title">{ title }</div> }
+                                    { description && <div className="small-menu-description">{ description }</div> }
                                 </div>
-                                { dsc }
                             </div>
                         );
                     }
@@ -119,10 +135,11 @@ export const SmallMenu = React.createClass({
                         key={ `postmenu_item_${ index }` }
                         onClick={ e => this.handleCallback(callback, e, params) }
                         className={ `small-menu-option ${ highlightColor }` }>
-                        <div>
-                            { ic }{ ` ${ title }` }
+                        { icon && (<div className="small-menu-icon">{ renderIcon(icon) }</div>) }
+                        <div className="small-menu-text">
+                            { title && <div className="small-menu-title">{ title }</div> }
+                            { description && <div className="small-menu-description">{ description }</div> }
                         </div>
-                        { dsc }
                     </div>
                 );
             });
@@ -132,7 +149,7 @@ export const SmallMenu = React.createClass({
             <div
                 ref={ element => this.postmenu = element }
                 onMouseLeave={ e => this.handleCallback(onClose, e) }
-                className="small-menu">
+                className={ `small-menu ${ width || '' }` }>
                 { renderMenu() }
             </div>
         );

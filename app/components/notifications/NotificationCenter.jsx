@@ -13,10 +13,14 @@ import {
     fetchNotifs,
     deleteNotif,
     acknowledgeNotifs,
-    clearAllNotifs
+    clearAllNotifs,
+    countNewNotifs
 } from 'actions/NotificationActions';
+import {
+    addFollower,
+    addFavorite
+} from 'actions/FollowActions';
 import { pushToRoute } from 'actions/RouteActions';
-import { addFollower } from 'actions/FollowActions';
 import { toggleNotifs } from 'actions/UIStateActions';
 import ClickScreen from 'elements/ClickScreen';
 import { NotificationTopbar } from './NotificationTopbar';
@@ -126,19 +130,28 @@ export const NotificationCenter = React.createClass({
         dispatch(clearAllNotifs());
     },
 
-    handleFollowUser(followedUid){
-        const {
-            dispatch,
-            uid
-        } = this.props;
-        if (!this.isBlocked(followedUid)){
-            dispatch(addFollower(uid, followedUid));
+    handleFollowUser(followedUid, username, displayName){
+        const { dispatch } = this.props;
+        if (!this.isBlocked(followedUid) && !this.isBlockedBy(followedUid)){
+            dispatch(addFollower(followedUid, username, displayName));
+        }
+    },
+
+    handleFavoriteUser(favoritedUid, username, displayName){
+        const { dispatch } = this.props;
+        if (!this.isBlocked(favoritedUid) &&
+            !this.isBlockedBy(favoritedUid) &&
+            this.isFollowing(favoritedUid)){
+            dispatch(addFavorite(favoritedUid, username, displayName));
         }
     },
 
     handleBlockUser(blockedUid){
         const { dispatch } = this.props;
-        dispatch(updateBlockedUser(blockedUid));
+        dispatch(updateBlockedUser(blockedUid))
+        .then(() => {
+            dispatch(countNewNotifs());
+        });
     },
 
     handleClickNotif(route){
@@ -167,14 +180,9 @@ export const NotificationCenter = React.createClass({
         return testUid === this.props.uid;
     },
 
-    isBlocked(testUid){
-        const blocked = this.props.blocked || {};
-        return Object.keys(blocked).includes(testUid);
-    },
-
-    isFollowing(testUid){
-        const following = this.props.following || {};
-        return Object.keys(following).includes(testUid);
+    checkFriendship(testUid, testGroup){
+        const group = this.props[testGroup] || {};
+        return Object.keys(group).includes(testUid);
     },
 
     acknowledgeNotifs(){
@@ -196,10 +204,12 @@ export const NotificationCenter = React.createClass({
             notifsStatus,
             newNotifsCount,
             isNotifsOpen,
-            following,
-            blocked,
             displayNotifs,
-            direction
+            direction,
+            following,
+            favorites,
+            blocked,
+            blockedBy
         } = this.props;
 
         const { showBadge } = this.state;
@@ -237,14 +247,17 @@ export const NotificationCenter = React.createClass({
                                 notifsStatus={ notifsStatus }
                                 displayNotifs={ displayNotifs }
                                 areThereNotifs={ areThereNotifs }
-                                isFollowing={ this.isFollowing }
-                                isBlocked={ this.isBlocked }
+                                following={ following }
+                                favorites={ favorites }
+                                blocked={ blocked }
+                                blockedBy={ blockedBy }
                                 isSelf={ this.isSelf }
-                                isBlocked={ this.isBlocked }
+                                checkFriendship={ this.checkFriendship }
                                 clickNotif={ this.handleClickNotif }
                                 deleteNotif={ this.handleDeleteNotif }
                                 blockUser={ this.handleBlockUser }
-                                followUser={ this.handleFollowUser } />
+                                followUser={ this.handleFollowUser }
+                                favoriteUser={ this.handleFavoriteUser } />
                             <div className="header-notifications-lip" />
                         </div>
                     </div>
@@ -278,8 +291,9 @@ export default Redux.connect(state => {
         isNotifsOpen: state.uiState.notifsIsOpen,
         newNotifsCount: state.notifs.newNotifsCount,
         following: state.user.following,
-        followers: state.user.followers,
+        favorites: state.user.favorites,
         blocked: state.user.blocked,
+        blockedBy: state.user.blockedBy,
         displayNotifs: state.user.settings.displayNotifs
     };
 })(NotificationCenter);

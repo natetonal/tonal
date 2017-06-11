@@ -29,6 +29,20 @@ export const removeFeedPost = key => {
     };
 };
 
+export const toggleEditPost = (postId = false) => {
+    return (dispatch, getState) => {
+        const currentlyEditing = getState().feed.editing;
+        if (currentlyEditing === postId){
+            postId = false;
+        }
+
+        return {
+            type: 'FEED_EDIT_POST',
+            postId
+        };
+    };
+};
+
 // export const removeFeedPost = ();
 export const fetchFeed = uid => {
     return dispatch => {

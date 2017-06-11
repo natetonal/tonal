@@ -11,9 +11,17 @@
     box-shadow: $boxshadow;
     @include transform(none);
 
+    &.medium{
+        width: 300px;
+    }
+
+    &.large{
+        width: 350px;
+    }
+
     .small-menu-option,
     .small-menu-divider{
-        width: 250px;
+        width: inherit;
         padding: 8px 10px;
         @include transition(0.2s all);
 
@@ -47,8 +55,28 @@
                 color: $purple !important;
             }
 
+            &.pink{
+                color: $pink !important;
+            }
+
             &.blue{
                 color: $blue !important;
+            }
+
+            &.lightblue{
+                color: $lightblue !important;
+            }
+
+            &.lightorange{
+                color: $alert-admin !important;
+            }
+
+            &.lightyellow{
+                color: $alert-warning !important;
+            }
+
+            &.lightred{
+                color: $alert-error !important;
             }
         }
     }
@@ -101,10 +129,43 @@
         }
     }
 
-    .small-menu-description {
-        padding-left: 25px;
-        font-size: 11px;
+    .small-menu-icon {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        float: left;
+
+        .fa-stack{
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            line-height: inherit;
+
+            .fa-stack-1x {
+                position: absolute;
+                text-align: left;
+            }
+
+            .fa-bolt {
+                color: rgba(0,0,0,0.9) !important;
+                left: 25%;
+                font-size: 70%;
+            }
+        }
+    }
+
+    .small-menu-text {
+        overflow: auto;
         line-height: 1.1;
+    }
+
+    .small-menu-description {
+        padding-top: 5px;
+        font-size: 11px;
         color: #ddd;
     }
 

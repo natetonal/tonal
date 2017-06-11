@@ -5,9 +5,6 @@ import {
 } from 'gsap';
 import Notification from './Notification';
 
-// Notification types (keep in sync with cloud functions!)
-const NOTIF_ADD_FOLLOWER = 'follower-add';
-
 export const NotificationsList = React.createClass({
 
     componentDidMount(){
@@ -25,10 +22,14 @@ export const NotificationsList = React.createClass({
             notifs,
             notifsStatus,
             areThereNotifs,
-            isFollowing,
-            isBlocked,
+            following,
+            favorites,
+            blocked,
+            blockedBy,
             isSelf,
+            checkFriendship,
             followUser,
+            favoriteUser,
             blockUser,
             deleteNotif,
             clickNotif
@@ -57,32 +58,70 @@ export const NotificationsList = React.createClass({
                     .reverse()
                     .map(key => {
 
-                        const following = isFollowing(notifs[key].uid);
-                        const blocked = isBlocked(notifs[key].uid);
-                        const displayFollowOption = !isSelf(notifs[key].uid);
+                        const senders = notifs[key].senders || false;
+                        const targets = notifs[key].targets || false;
+
+                        const notifProps = {
+                            key: `notif_${ key }`,
+                            data: notifs[key],
+                            notifId: key,
+                            senders,
+                            targets,
+                            following,
+                            favorites,
+                            blocked,
+                            blockedBy,
+                            isSelf,
+                            checkFriendship,
+                            followUser,
+                            favoriteUser,
+                            blockUser,
+                            deleteNotif,
+                            clickNotif
+                        };
+
                         // Render notif based off of type:
-                        if (!blocked){
-                            const notifType = notifs[key].type;
-                            switch (notifType){
-                                case NOTIF_ADD_FOLLOWER:
+                        const notifType = notifs[key].type;
+                        switch (notifType){
+                            case 'follower-add':
+                                // Add follower notifs must have one target.
+                                if (targets && Object.keys(targets).length === 1){
                                     return (
                                         <Notification
-                                            key={ `notif_${ key }` }
                                             route={ `users/${ notifs[key].username }` }
-                                            notifId={ key }
-                                            following={ following }
-                                            blocked={ blocked }
-                                            followUser={ followUser }
-                                            blockUser={ blockUser }
-                                            deleteNotif={ deleteNotif }
-                                            clickNotif={ clickNotif }
-                                            displayFollowOption={ displayFollowOption }
-                                            data={ notifs[key] } />
+                                            message="started following"
+                                            icon="user-plus"
+                                            { ...notifProps } />
                                     );
-                                default:
-                                    return '';
-                            }
-
+                                }
+                                break;
+                            case 'favorite-add':
+                                // Add follower notifs must have one target.
+                                if (targets && Object.keys(targets).length === 1){
+                                    return (
+                                        <Notification
+                                            route={ `users/${ notifs[key].username }` }
+                                            message="favorited"
+                                            icon="heart"
+                                            { ...notifProps } />
+                                    );
+                                }
+                                break;
+                            case 'new-post':
+                                // Only display new post notif if every sender is favorited by user.
+                                if (senders &&
+                                    Object.keys(senders).every(senderKey => checkFriendship(senders[senderKey].uid, 'favorites'))){
+                                    return (
+                                        <Notification
+                                            route={ `posts/${ notifs[key].postId }` }
+                                            message="just posted"
+                                            icon="pencil"
+                                            { ...notifProps } />
+                                    );
+                                }
+                                break;
+                            default:
+                                return '';
                         }
 
                         return '';

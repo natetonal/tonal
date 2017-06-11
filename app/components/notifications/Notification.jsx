@@ -84,15 +84,23 @@ export const Notification = React.createClass({
     render(){
 
         const {
+            message,
+            targets,
+            senders,
+            icon,
             following,
+            favorites,
             blocked,
+            blockedBy,
+            checkFriendship,
+            isSelf,
             followUser,
+            favoriteUser,
             blockUser,
             clickNotif,
             displayFollowOption,
             route,
             data: {
-                type,
                 uid,
                 username,
                 displayName,
@@ -107,62 +115,141 @@ export const Notification = React.createClass({
         } = this.state;
 
         const renderNotifMessage = () => {
-            switch (type){
-                case 'follower-add':
+
+            // Counts the objects and renders text appropriately.
+
+
+            const formatText = (obj, capitalize = false) => {
+                const count = obj ? Object.keys(obj).length : -1;
+                const keys = Object.keys(obj);
+
+                const cap = str => {
+                    return str.charAt(0).toUpperCase() + str.slice(1);
+                };
+
+                const wrapInLink = (objDisp, objUser, objUid, capIt) => {
+                    let dispName = isSelf(objUid) ? 'you' : objDisp;
+                    dispName = capIt ? cap(dispName) : dispName;
+
                     return (
-                        <div className="header-notification-message">
-                            <p>
-                                <Link
-                                    className="header-notification-message-link"
-                                    to={ `users/${ username }` }>
-                                    { displayName }
-                                </Link>
-                                { ' started following you.' }
-                            </p>
-                        </div>
+                        <Link
+                            className="header-notification-message-link"
+                            to={ `users/${ objUser }` }>
+                            { dispName }
+                        </Link>
                     );
-                default:
-                    return '';
-            }
+                };
+
+                if (count === 1){
+                    const user1 = obj[keys[0]];
+                    return (
+                        <span>
+                            { wrapInLink(user1.displayName, user1.username, user1.uid, capitalize) }
+                        </span>
+                    );
+                } else if (count === 2){
+                    const user1 = obj[keys[0]];
+                    const user2 = obj[keys[1]];
+                    return (
+                        <span>
+                            { wrapInLink(user1.displayName, user1.username, user1.uid, capitalize) }
+                            { ' and ' }
+                            { wrapInLink(user2.displayName, user2.username, user2.uid) }
+                        </span>
+                    );
+                } else if (count === 3){
+                    const user1 = obj[keys[0]];
+                    const user2 = obj[keys[1]];
+                    const user3 = obj[keys[2]];
+                    return (
+                        <span>
+                            { wrapInLink(user1.displayName, user1.username, user1.uid, capitalize) }
+                            { ', ' }
+                            { wrapInLink(user2.displayName, user2.username, user2.uid) }
+                            { ', and ' }
+                            { wrapInLink(user3.displayName, user3.username, user3.uid) }
+                        </span>
+                    );
+                } else if (count > 3){
+                    const user1 = obj[keys[0]];
+                    return (
+                        <span>
+                            { wrapInLink(user1.displayName, user1.username, user1.uid, capitalize) }
+                            { ` and ${ count - 1 } others` };
+                        </span>
+                    );
+                }
+
+                return;
+            };
+
+            return (
+                <div className="header-notification-message">
+                    <p>
+                        <Link
+                            className="header-notification-message-link"
+                            to={ `users/${ username }` }>
+                            { displayName }
+                        </Link>
+                        { formatText(senders, true) } { message } { formatText(targets) }.
+                    </p>
+                </div>
+            );
         };
 
         const renderMenu = () => {
             if (showNotifMenu){
 
-                let settings = [
-                    {
-                        icon: following ? 'ban' : 'user-plus',
-                        iconColor: following ? 'magenta' : 'lightgreen',
-                        title: `${ following ? 'Unf' : 'F' }ollow ${ displayName }`,
-                        callback: followUser,
-                        params: [uid]
-                    },
-                    {
-                        icon: 'user-times',
-                        iconColor: 'yellow',
-                        title: `Block ${ displayName }`,
-                        callback: blockUser,
-                        params: [uid]
-                    },
-                    {
-                        divider: true
-                    },
-                    {
-                        icon: 'times',
-                        highlightColor: 'red',
-                        title: 'Delete Notification',
-                        callback: this.handleDelete,
-                    }
-                ];
+                const settings = [];
 
-                if (!displayFollowOption){
-                    settings = [settings.pop()];
+                if (senders && Object.keys(senders).length === 1){
+                    const sender = senders[Object.keys(senders)[0]];
+                    const following = isFollowing(sender.uid);
+                    const favorited = isFavorited(sender.uid);
+
+                    if (following){
+                        settings.push({
+                            icon: favorited ? 'broken-heart' : 'heart',
+                            iconColor: 'pink',
+                            title: favorited ? `Remove ${ sender.displayName } from your favorites` : `Add ${ sender.displayName } to your favorites`,
+                            callback: favoriteUser,
+                            params: [sender.uid, sender.username, sender.displayName]
+                        });
+                    }
+
+                    settings.push(
+                        {
+                            icon: following ? 'ban' : 'user-plus',
+                            iconColor: following ? 'magenta' : 'lightgreen',
+                            title: `${ following ? 'Unf' : 'F' }ollow ${ sender.displayName }`,
+                            callback: followUser,
+                            params: [sender.uid, sender.username, sender.displayName]
+                        },
+                        {
+                            divider: true
+                        },
+                        {
+                            icon: 'user-times',
+                            iconColor: 'yellow',
+                            title: `Block ${ sender.displayName }`,
+                            callback: blockUser,
+                            params: [sender.uid]
+                        }
+                    );
                 }
+
+                settings.push({
+                    icon: 'times',
+                    highlightColor: 'red',
+                    title: 'Delete Notification',
+                    callback: this.handleDelete,
+                });
 
                 return (
                     <div>
                         <ClickScreen onClick={ this.toggleNotifMenu } />
                         <SmallMenu
+                            width="medium"
                             options={ settings }
                             onClose={ this.toggleNotifMenu } />
                     </div>
@@ -193,6 +280,7 @@ export const Notification = React.createClass({
                     <div
                         ref={ element => this.timeStampRef = element }
                         className="header-notification-timestamp">
+                        <i className={ `fa fa-${ icon }` } />
                         { timeStamp }
                     </div>
                 </div>
