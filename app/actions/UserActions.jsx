@@ -80,6 +80,10 @@ export const updateBlockedUser = blockedUid => {
                 updates[`following/${ uid }/${ blockedUid }`] = null;
                 updates[`followers/${ blockedUid }/${ uid }`] = null;
                 updates[`following/${ blockedUid }/${ uid }`] = null;
+                updates[`favorites/${ uid }/${ blockedUid }`] = null;
+                updates[`favorites/${ uid }/${ blockedUid }`] = null;
+                updates[`favorited/${ blockedUid }/${ uid }`] = null;
+                updates[`favorited/${ blockedUid }/${ uid }`] = null;
                 blocked[blockedUid] = moment().format('LLLL');
             }
 
@@ -196,17 +200,12 @@ export const syncUserData = (keys = false) => {
         return databaseRef.child(`users/${ uid }`).once('value')
         .then(snapshot => {
             const dbUser = snapshot.val();
-            const updatedUser = getState().user;
+            const updates = {};
 
             if (dbUser){
-                keys.forEach(key => {
-                    if (Object.keys(updatedUser).includes(key) &&
-                        Object.keys(dbUser).includes(key)){
-                        updatedUser[key] = dbUser[key];
-                    }
-                });
-                updatedUser.updatedAt = moment().format('LLLL');
-                dispatch(storeUserDataToState(updatedUser));
+                keys.forEach(key => { updates[key] = dbUser[key]; });
+                updates.updatedAt = moment().format('LLLL');
+                dispatch(storeUserDataToState(updates));
             }
         }, error => {
             console.log(error);

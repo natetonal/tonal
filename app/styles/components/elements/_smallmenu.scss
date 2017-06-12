@@ -9,7 +9,6 @@
     overflow-x: hidden;
     font-size: 14px;
     box-shadow: $boxshadow;
-    @include transform(none);
 
     &.medium{
         width: 300px;
@@ -23,60 +22,59 @@
     .small-menu-divider{
         width: inherit;
         padding: 8px 10px;
-        @include transition(0.2s all);
 
         .fa{
-            color: $white !important;
+            color: $white;
             width: 20px;
             margin-right: 5px;
             padding-top: 0;
 
             &.yellow{
-                color: $yellow !important;
+                color: $yellow;
             }
 
             &.magenta{
-                color: $magenta !important;
+                color: $magenta;
             }
 
             &.lightgreen{
-                color: $lightgreen !important;
+                color: $lightgreen;
             }
 
             &.orange{
-                color: $orange !important;
+                color: $orange;
             }
 
             &.lightgray{
-                color: $lightgray1 !important;
+                color: $lightgray1;
             }
 
             &.purple{
-                color: $purple !important;
+                color: $purple;
             }
 
             &.pink{
-                color: $pink !important;
+                color: $pink;
             }
 
             &.blue{
-                color: $blue !important;
+                color: $blue;
             }
 
             &.lightblue{
-                color: $lightblue !important;
+                color: $lightblue;
             }
 
             &.lightorange{
-                color: $alert-admin !important;
+                color: $alert-admin;
             }
 
             &.lightyellow{
-                color: $alert-warning !important;
+                color: $alert-warning;
             }
 
             &.lightred{
-                color: $alert-error !important;
+                color: $alert-error;
             }
         }
     }
@@ -85,46 +83,46 @@
 
         &:hover{
             background: $blue;
-            @include transition(0.2s all);
+            @include transition(0.2s background);
 
             &.yellow{
-                background: $yellow !important;
-                @include transition(0.2s all);
+                background: $yellow;
+                @include transition(0.2s background);
             }
 
             &.magenta{
-                background: $magenta !important;
-                @include transition(0.2s all);
+                background: $magenta;
+                @include transition(0.2s background);
             }
 
             &.lightgreen{
-                background: $lightgreen !important;
-                @include transition(0.2s all);
+                background: $lightgreen;
+                @include transition(0.2s background);
             }
 
             &.orange{
-                background: $orange !important;
-                @include transition(0.2s all);
+                background: $orange;
+                @include transition(0.2s background);
             }
 
             &.lightgray{
-                background: $lightgray1 !important;
-                @include transition(0.2s all);
+                background: $lightgray1;
+                @include transition(0.2s background);
             }
 
             &.purple{
-                background: $purple !important;
-                @include transition(0.2s all);
+                background: $purple;
+                @include transition(0.2s background);
             }
 
             &.blue{
-                background: $blue !important;
-                @include transition(0.2s all);
+                background: $blue;
+                @include transition(0.2s background);
             }
 
             &.red{
-                background: $red !important;
-                @include transition(0.2s all);
+                background: $red;
+                @include transition(0.2s background);
             }
         }
     }
@@ -151,7 +149,7 @@
             }
 
             .fa-bolt {
-                color: rgba(0,0,0,0.9) !important;
+                color: rgba(0,0,0,0.9);
                 left: 25%;
                 font-size: 70%;
             }

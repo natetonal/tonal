@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { startLogout } from 'actions/AuthActions';
 import {
     TweenLite,
+    TimelineLite,
     Power2,
     Power0,
     Back
@@ -27,53 +28,21 @@ export const Menu = React.createClass({
             }, '-=0.5');
         }
 
-        // If user gained a follower
-        if (this.props.followers < nextProps.followers){
-            TweenLite.from(this.followerCountRef, 1, {
-                ease: Power2.easeOut,
-                y: 10
-            });
-            TweenLite.from(this.followerCountRef, 1, {
-                ease: Power2.easeIn,
-                color: '#3ef669'
-            });
-        }
-
-        // If user lost a follower
-        if (this.props.followers > nextProps.followers){
-            TweenLite.from(this.followerCountRef, 1, {
-                ease: Power2.easeOut,
-                y: 10
-            });
-            TweenLite.from(this.followerCountRef, 1, {
-                ease: Power2.easeIn,
-                color: '#e30713'
-            });
-        }
-
-        // If user started following
-        if (this.props.following < nextProps.following){
-            TweenLite.from(this.followingCountRef, 1, {
-                ease: Power2.easeOut,
-                y: 10
-            });
-            TweenLite.from(this.followingCountRef, 1, {
-                ease: Power2.easeIn,
-                color: '#3ef669'
-            });
-        }
-
-        // If user stopped following
-        if (this.props.following > nextProps.following){
-            TweenLite.from(this.followingCountRef, 1, {
-                ease: Power2.easeOut,
-                y: 10
-            });
-            TweenLite.from(this.followingCountRef, 1, {
-                ease: Power2.easeIn,
-                color: '#e30713'
-            });
-        }
+        // For each counter, animate change:
+        ['followers', 'following', 'favorites', 'favorited'].forEach(group => {
+            if (this.props[group] !== nextProps[group]){
+                const counterTL = new TimelineLite();
+                counterTL.from(this[`${ group }CountRef`], 1, {
+                    ease: Power2.easeOut,
+                    y: 10
+                });
+                counterTL.from(this[`${ group }CountRef`], 1, {
+                    ease: Power2.easeIn,
+                    color: this.props[group] < nextProps[group] ? '#3ef669' : '#e30713'
+                });
+                counterTL.play();
+            }
+        });
     },
 
     handleLogout(){
@@ -88,10 +57,14 @@ export const Menu = React.createClass({
             displayName,
             username,
             followers,
-            following
+            following,
+            favorites,
+            favorited
         } = this.props;
 
         const formatNumber = num => {
+            if (!num) { return 0; }
+
             if (num.toString().length > 5){
                 return numeral(num).format('0a');
             }
@@ -147,24 +120,44 @@ export const Menu = React.createClass({
                             <div
                                 className="avatar-stats"
                                 ref={ element => this.statsRef = element }>
-                                <div className="avatar-followers">
-                                    <div className="avatar-followers-label">
+                                <div className="avatar-friendship">
+                                    <div className="avatar-friendship-label">
                                         Followers
                                     </div>
                                     <div
-                                        ref={ element => this.followerCountRef = element }
-                                        className="avatar-followers-count">
+                                        ref={ element => this.followersCountRef = element }
+                                        className="avatar-friendship-count">
                                         { formatNumber(followers) }
                                     </div>
                                 </div>
-                                <div className="avatar-following">
-                                    <div className="avatar-following-label">
+                                <div className="avatar-friendship">
+                                    <div className="avatar-friendship-label">
                                         Following
                                     </div>
                                     <div
                                         ref={ element => this.followingCountRef = element }
-                                        className="avatar-following-count">
+                                        className="avatar-friendship-count">
                                         { formatNumber(following) }
+                                    </div>
+                                </div>
+                                <div className="avatar-friendship">
+                                    <div className="avatar-friendship-label">
+                                        Favorited By
+                                    </div>
+                                    <div
+                                        ref={ element => this.favoritedCountRef = element }
+                                        className="avatar-friendship-count">
+                                        { formatNumber(favorited) }
+                                    </div>
+                                </div>
+                                <div className="avatar-friendship">
+                                    <div className="avatar-friendship-label">
+                                        Favorites
+                                    </div>
+                                    <div
+                                        ref={ element => this.favoritesCountRef = element }
+                                        className="avatar-friendship-count">
+                                        { formatNumber(favorites) }
                                     </div>
                                 </div>
                             </div>
@@ -225,8 +218,10 @@ export default Redux.connect(state => {
         displayName: state.user.displayName,
         username: state.user.username,
         email: state.user.email,
-        followers: state.user.followerCount,
+        followers: state.user.followersCount,
         following: state.user.followingCount,
+        favorites: state.user.favoritesCount,
+        favorited: state.user.favoritedCount,
         menuIsOpen: state.uiState.menuIsOpen
     };
 })(Menu);

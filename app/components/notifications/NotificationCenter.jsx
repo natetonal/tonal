@@ -132,16 +132,16 @@ export const NotificationCenter = React.createClass({
 
     handleFollowUser(followedUid, username, displayName){
         const { dispatch } = this.props;
-        if (!this.isBlocked(followedUid) && !this.isBlockedBy(followedUid)){
+        if (['blocked', 'blockedBy'].every(group => !this.checkFriendship(followedUid, group))){
             dispatch(addFollower(followedUid, username, displayName));
         }
     },
 
     handleFavoriteUser(favoritedUid, username, displayName){
         const { dispatch } = this.props;
-        if (!this.isBlocked(favoritedUid) &&
-            !this.isBlockedBy(favoritedUid) &&
-            this.isFollowing(favoritedUid)){
+        if (!this.checkFriendship(favoritedUid, 'blocked') &&
+            !this.checkFriendship(favoritedUid, 'blockedBy') &&
+            this.checkFriendship(favoritedUid, 'following')){
             dispatch(addFavorite(favoritedUid, username, displayName));
         }
     },
@@ -209,7 +209,9 @@ export const NotificationCenter = React.createClass({
             following,
             favorites,
             blocked,
-            blockedBy
+            blockedBy,
+            followingCount,
+            favoritesCount
         } = this.props;
 
         const { showBadge } = this.state;
@@ -247,6 +249,8 @@ export const NotificationCenter = React.createClass({
                                 notifsStatus={ notifsStatus }
                                 displayNotifs={ displayNotifs }
                                 areThereNotifs={ areThereNotifs }
+                                followingCount={ followingCount }
+                                favoritesCount={ favoritesCount }
                                 following={ following }
                                 favorites={ favorites }
                                 blocked={ blocked }
@@ -258,7 +262,6 @@ export const NotificationCenter = React.createClass({
                                 blockUser={ this.handleBlockUser }
                                 followUser={ this.handleFollowUser }
                                 favoriteUser={ this.handleFavoriteUser } />
-                            <div className="header-notifications-lip" />
                         </div>
                     </div>
                 );
@@ -294,6 +297,8 @@ export default Redux.connect(state => {
         favorites: state.user.favorites,
         blocked: state.user.blocked,
         blockedBy: state.user.blockedBy,
+        followingCount: state.user.followingCount,
+        favoritesCount: state.user.favoritesCount,
         displayNotifs: state.user.settings.displayNotifs
     };
 })(NotificationCenter);

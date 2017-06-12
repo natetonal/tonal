@@ -43,7 +43,7 @@ export const SmallMenu = React.createClass({
 
     componentDidMount(){
         const tl = new TimelineLite();
-        tl.from(this.postmenu, 0.25, {
+        tl.from(this.smallMenu, 0.25, {
             ease: Back.easeOut.config(1.4),
             transformOrigin: 'right top',
             scale: 0
@@ -54,7 +54,7 @@ export const SmallMenu = React.createClass({
     handleCallback(callback, event, params){
         event.preventDefault();
         const tl = new TimelineLite();
-        tl.to(this.postmenu, 0.1, {
+        tl.to(this.smallMenu, 0.1, {
             ease: Power1.easeIn,
             opacity: 0
         });
@@ -147,7 +147,7 @@ export const SmallMenu = React.createClass({
 
         return (
             <div
-                ref={ element => this.postmenu = element }
+                ref={ element => this.smallMenu = element }
                 onMouseLeave={ e => this.handleCallback(onClose, e) }
                 className={ `small-menu ${ width || '' }` }>
                 { renderMenu() }

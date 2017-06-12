@@ -12,15 +12,21 @@ import SmallMenu from 'elements/SmallMenu';
 export const Notification = React.createClass({
 
     componentWillMount(){
+        const oneSender = (this.props.senders && Object.keys(this.props.senders).length === 1);
+        const sender = oneSender ? this.props.senders[Object.keys(this.props.senders)[0]] : false;
+
         this.setState({
             showNotifMenuIcon: false,
             showNotifMenu: false,
-            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow(),
+            timeStamp: this.processTimestamp(),
+            oneSender: sender,
+            isFollowing: false,
+            isFavorited: false
         });
     },
 
     componentDidMount(){
-        const { acknowledged } = this.props.data;
+        const { acknowledged } = this.props.notif;
         if (!acknowledged){
             const tl = new TimelineLite();
             tl.from(this.notifRef, 0.5, {
@@ -32,6 +38,20 @@ export const Notification = React.createClass({
         }
 
         this.interval = setInterval(this.updateTimestamp, 1000);
+
+        if (this.state.oneSender){
+            this.updateFriendshipsForSingleSender();
+        }
+    },
+
+    componentWillReceiveProps(nextProps){
+        console.log(`favorites prev: ${ this.props.favoritesCount } next: ${ nextProps.favoritesCount }`);
+        console.log(`following prev: ${ this.props.followingCount } next: ${ nextProps.followingCount }`);
+        if (this.state.oneSender &&
+            (this.props.followingCount !== nextProps.followingCount ||
+            this.props.favoritesCount !== nextProps.favoritesCount)){
+            this.updateFriendshipsForSingleSender();
+        }
     },
 
     componentDidUpdate(prevProps, prevState){
@@ -43,15 +63,39 @@ export const Notification = React.createClass({
             });
             tl.play();
         }
+
+        if (this.state.oneSender !== prevState.oneSender){
+            this.updateFriendshipsForSingleSender(this.state.oneSender);
+        }
     },
 
     componentWillUnmount(){
         clearInterval(this.interval);
     },
 
+    processTimestamp(){
+        const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(this.props.notif.timeStamp, 'LLLL'));
+        if (sameOrBefore){
+            return moment(this.props.notif.timeStamp, 'LLLL').fromNow();
+        }
+
+        return this.props.notif.timeStamp;
+    },
+
     updateTimestamp(){
         this.setState({
-            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
+            timeStamp: this.processTimestamp()
+        });
+    },
+
+    updateFriendshipsForSingleSender(){
+        const sender = this.state.oneSender || false;
+        console.log('sender received by updateFriendshipsForSingleSender: ', sender);
+        const isFollowing = sender ? this.props.checkFriendship(sender.uid, 'following') : false;
+        const isFavorited = sender ? this.props.checkFriendship(sender.uid, 'favorites') : false;
+        this.setState({
+            isFollowing,
+            isFavorited
         });
     },
 
@@ -98,12 +142,8 @@ export const Notification = React.createClass({
             favoriteUser,
             blockUser,
             clickNotif,
-            displayFollowOption,
             route,
-            data: {
-                uid,
-                username,
-                displayName,
+            notif: {
                 avatar,
                 acknowledged
             }
@@ -111,14 +151,15 @@ export const Notification = React.createClass({
 
         const {
             showNotifMenu,
-            timeStamp
+            timeStamp,
+            oneSender,
+            isFollowing,
+            isFavorited
         } = this.state;
 
         const renderNotifMessage = () => {
 
             // Counts the objects and renders text appropriately.
-
-
             const formatText = (obj, capitalize = false) => {
                 const count = obj ? Object.keys(obj).length : -1;
                 const keys = Object.keys(obj);
@@ -128,8 +169,9 @@ export const Notification = React.createClass({
                 };
 
                 const wrapInLink = (objDisp, objUser, objUid, capIt) => {
-                    let dispName = isSelf(objUid) ? 'you' : objDisp;
-                    dispName = capIt ? cap(dispName) : dispName;
+                    if (isSelf(objUid)){ return 'you'; }
+
+                    const dispName = capIt ? cap(objDisp) : objDisp;
 
                     return (
                         <Link
@@ -186,11 +228,6 @@ export const Notification = React.createClass({
             return (
                 <div className="header-notification-message">
                     <p>
-                        <Link
-                            className="header-notification-message-link"
-                            to={ `users/${ username }` }>
-                            { displayName }
-                        </Link>
                         { formatText(senders, true) } { message } { formatText(targets) }.
                     </p>
                 </div>
@@ -202,16 +239,14 @@ export const Notification = React.createClass({
 
                 const settings = [];
 
-                if (senders && Object.keys(senders).length === 1){
-                    const sender = senders[Object.keys(senders)[0]];
-                    const following = isFollowing(sender.uid);
-                    const favorited = isFavorited(sender.uid);
+                if (oneSender){
+                    const sender = oneSender;
 
-                    if (following){
+                    if (isFollowing){
                         settings.push({
-                            icon: favorited ? 'broken-heart' : 'heart',
+                            icon: isFavorited ? 'broken-heart' : 'heart',
                             iconColor: 'pink',
-                            title: favorited ? `Remove ${ sender.displayName } from your favorites` : `Add ${ sender.displayName } to your favorites`,
+                            title: isFavorited ? `Remove ${ sender.displayName } from your favorites` : `Add ${ sender.displayName } to your favorites`,
                             callback: favoriteUser,
                             params: [sender.uid, sender.username, sender.displayName]
                         });
@@ -219,9 +254,9 @@ export const Notification = React.createClass({
 
                     settings.push(
                         {
-                            icon: following ? 'ban' : 'user-plus',
-                            iconColor: following ? 'magenta' : 'lightgreen',
-                            title: `${ following ? 'Unf' : 'F' }ollow ${ sender.displayName }`,
+                            icon: isFollowing ? 'ban' : 'user-plus',
+                            iconColor: isFollowing ? 'magenta' : 'lightgreen',
+                            title: `${ isFollowing ? 'Unf' : 'F' }ollow ${ sender.displayName }`,
                             callback: followUser,
                             params: [sender.uid, sender.username, sender.displayName]
                         },
@@ -267,13 +302,13 @@ export const Notification = React.createClass({
                 <div className="header-notification-img">
                     <img
                         src={ avatar }
-                        alt={ displayName } />
+                        alt={ 'User Avatar' } />
                 </div>
                 <div className="header-notification-content">
+                    { renderMenu() }
                     <div
                         onClick={ e => this.toggleNotifMenu(e) }
                         className="header-notification-settings">
-                        { renderMenu() }
                         <i className="fa fa-angle-down" aria-hidden="true" />
                     </div>
                     { renderNotifMessage() }

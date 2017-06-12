@@ -41,15 +41,15 @@ export const Observer = React.createClass({
         });
 
         // Observer for user's followers:
-        const followerCountRef = firebase.database().ref(`users/${ uid }/followers`);
-        followerCountRef.on('child_added', () => {
-            dispatch(syncUserData(['followers', 'followerCount']));
+        const followersCountRef = firebase.database().ref(`users/${ uid }/followers`);
+        followersCountRef.on('child_added', () => {
+            dispatch(syncUserData(['followers', 'followersCount']));
         });
-        followerCountRef.on('child_changed', () => {
-            dispatch(syncUserData(['followers', 'followerCount']));
+        followersCountRef.on('child_changed', () => {
+            dispatch(syncUserData(['followers', 'followersCount']));
         });
-        followerCountRef.on('child_removed', () => {
-            dispatch(syncUserData(['followers', 'followerCount']));
+        followersCountRef.on('child_removed', () => {
+            dispatch(syncUserData(['followers', 'followersCount']));
         });
 
         // Observer for user's followings:

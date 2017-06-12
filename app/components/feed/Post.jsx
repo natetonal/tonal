@@ -21,7 +21,7 @@ export const Post = React.createClass({
     componentWillMount(){
         this.setState({
             showMenu: false,
-            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
+            timeStamp: this.processTimestamp()
         });
     },
 
@@ -69,9 +69,18 @@ export const Post = React.createClass({
         clearInterval(this.interval);
     },
 
+    processTimestamp(){
+        const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(this.props.data.timeStamp, 'LLLL'));
+        if (sameOrBefore){
+            return moment(this.props.data.timeStamp, 'LLLL').fromNow();
+        }
+
+        return this.props.data.timeStamp;
+    },
+
     updateTimestamp(){
         this.setState({
-            timeStamp: moment(this.props.data.timeStamp, 'LLLL').fromNow()
+            timeStamp: this.processTimestamp()
         });
     },
 

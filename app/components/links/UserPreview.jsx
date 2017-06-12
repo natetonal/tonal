@@ -71,7 +71,7 @@ export const UserPreview = React.createClass({
                             Followers
                         </div>
                         <div className="user-preview-followers-count">
-                            { formatNumber(user.followerCount) }
+                            { formatNumber(user.followersCount) }
                         </div>
                     </div>
                     <div className="user-preview-following">

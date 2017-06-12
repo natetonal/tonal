@@ -19,7 +19,7 @@ const initialState = {
     avatar: dummyPhoto,
     updatedAt: moment().format('LLLL'),
     createdAt: moment().format('LLLL'),
-    followerCount: 2,
+    followersCount: 2,
     followingCount: 2,
     postCount: 0,
     status: false,
