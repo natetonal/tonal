@@ -72,13 +72,16 @@ $header-logo-height-mobile: 35px;
 $header-logo-width-mobile: 45px;
 $header-link-fontsize: 16px;
 $header-icon-div-size: 40px;
-$header-notification-height: 300px;
-$header-notification-img-length: 60px;
+$notification-height: 300px;
+$notification-img-length: 60px;
 
 // Composer
 $composer-font-size: 20px;
 $composer-error: #f5928b;
 $composer-error-bg: #f5dfdd;
+
+// Notifications
+$notifications-list-width: 500px;
 
 // Search Bar
 $search-bg: $darkgray1;

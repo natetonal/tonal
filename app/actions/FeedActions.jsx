@@ -36,10 +36,10 @@ export const toggleEditPost = (postId = false) => {
             postId = false;
         }
 
-        return {
+        dispatch({
             type: 'FEED_EDIT_POST',
             postId
-        };
+        });
     };
 };
 

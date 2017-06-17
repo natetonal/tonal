@@ -40,7 +40,7 @@ export const NotificationsList = React.createClass({
         const renderNotifs = () => {
             if (notifsStatus === 'fetching' || !notifsStatus){
                 return (
-                    <div className="header-notifications-fetching">
+                    <div className="notifications-fetching">
                         <i className="fa fa-spinner fa-pulse fa-3x fa-fw" />
                         <span className="sr-only">Loading Notifications</span>
                         Fetching your notifications
@@ -48,7 +48,7 @@ export const NotificationsList = React.createClass({
                 );
             } else if (notifsStatus === 'error'){
                 return (
-                    <div className="header-notifications-error">
+                    <div className="notifications-error">
                         <i className="fa fa-exclamation-triangle fa-3x" aria-hidden="true" />
                         <span className="sr-only">Error Loading Notifications</span>
                         There seems to have been an error getting your notifications. Please try again later.
@@ -133,7 +133,7 @@ export const NotificationsList = React.createClass({
                 }
 
                 return (
-                    <div className="header-notifications-none">
+                    <div className="notifications-none">
                         <i className="fa fa-meh-o" aria-hidden="true" /> You have no notifications.
                     </div>
                 );
@@ -145,7 +145,7 @@ export const NotificationsList = React.createClass({
         return (
             <div
                 ref={ element => this.notifsListRef = element }
-                className="header-notifications-list">
+                className="notifications-list">
                 { renderNotifs() }
             </div>
         );

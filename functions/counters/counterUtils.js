@@ -1,4 +1,4 @@
-exports.countChildren = (groupName, event, admin) => {
+exports.countChildren = (groupName, event, admin, updateUserGroup = true) => {
     const userId = event.params.userId;
     const targetId = event.params.targetId;
     const status = event.data.val();
@@ -21,7 +21,9 @@ exports.countChildren = (groupName, event, admin) => {
         });
 
         // Update database.
-        updates[groupName] = children;
+        if (updateUserGroup){
+            updates[groupName] = children;
+        }
         updates[`${ groupName }Count`] = count;
         return admin.database().ref(`users/${ userId }`).update(updates);
     });

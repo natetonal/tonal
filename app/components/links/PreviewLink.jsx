@@ -1,6 +1,9 @@
 import React from 'react';
+import * as Redux from 'react-redux';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import fetchPreviewData from 'actions/LinkActions';
 
 import UserPreview from './UserPreview';
 
@@ -30,17 +33,37 @@ export const PreviewLink = React.createClass({
         this.left = 0;
     },
 
-    handleMentionPreview(data, type, event){
+    fetchData(){
+        const {
+            dispatch,
+            previewId
+        } = this.props;
+
+        return dispatch(fetchPreviewData(previewId))
+        .then(response => {
+            if (response){
+                return response;
+            }
+
+            return false;
+        });
+    },
+
+    handleMentionPreview(previewType, event){
         event.preventDefault();
+        event.persist();
         if (!this.timeoutMouseEnter) {
             this.getCoords(event.target);
             this.timeoutMouseEnter = window.setTimeout(() => {
-                this.timeoutMouseEnter = null;
-                this.setState({
-                    preview: data,
-                    previewType: type
+                this.fetchData().then(preview => {
+                    this.timeoutMouseEnter = null;
+                    this.setState({
+                        preview,
+                        previewType
+                    });
                 });
-            }, 1000);
+            }, 500);
+
         }
     },
 
@@ -80,9 +103,11 @@ export const PreviewLink = React.createClass({
         const {
             className,
             src,
-            data,
             type,
             postId,
+            previewId,
+            relationship,
+            followUser,
             children
         } = this.props;
 
@@ -94,17 +119,16 @@ export const PreviewLink = React.createClass({
         const renderPreview = () => {
             switch (previewType) {
                 case 'user':
-                    if (data.displayName === preview.displayName){
-                        return (
-                            <UserPreview
-                                pos={ { top: this.top, left: this.left } }
-                                user={ preview }
-                                key={ `UserPreview_${ postId }` }
-                                onMouseEnter={ () => this.handlePreviewMouseEnter }
-                                onMouseLeave={ () => this.handlePreviewMouseLeave } />
-                        );
-                    }
-                    break;
+                    return (
+                        <UserPreview
+                            pos={ { top: this.top, left: this.left } }
+                            user={ preview }
+                            relationship={ relationship }
+                            followUser={ followUser }
+                            key={ `UserPreview_${ previewId }` }
+                            onMouseEnter={ () => this.handlePreviewMouseEnter }
+                            onMouseLeave={ () => this.handlePreviewMouseLeave } />
+                    );
                 default:
                     return '';
             }
@@ -116,7 +140,7 @@ export const PreviewLink = React.createClass({
                     ref={ element => this.previewElement = element }
                     key={ `PreviewLinkInnerLink_${ postId }` }
                     className={ className }
-                    onMouseEnter={ e => this.handleMentionPreview(data, type, e) }
+                    onMouseEnter={ e => this.handleMentionPreview(type, e) }
                     onMouseOut={ () => this.handleClearMentionPreview() }
                     onClick={ () => this.handleClearMentionPreview() }
                     to={ src }>
@@ -133,4 +157,4 @@ export const PreviewLink = React.createClass({
     }
 });
 
-export default PreviewLink;
+export default Redux.connect()(PreviewLink);

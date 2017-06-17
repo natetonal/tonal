@@ -70,8 +70,8 @@ export const MentionSuggestions = React.createClass({
         const suggestions = [];
         const re = new RegExp(query, 'gi');
         DummyData.forEach(user => {
-            const { fullName, displayName } = user;
-            if (fullName.match(re) || displayName.match(re)){
+            const { displayName, username } = user;
+            if (displayName.match(re) || username.match(re)){
                 suggestions.push(user);
             }
         });
@@ -117,21 +117,21 @@ export const MentionSuggestions = React.createClass({
         const renderSuggestions = () => {
             const re = new RegExp(query, 'gi');
             return suggestions.map((user, index) => {
-                const { fullName, avatar, displayName } = user;
+                const { displayName, avatar, username } = user;
 
                 return (
                     <div
-                        key={ fullName + index }
+                        key={ displayName + index }
                         className="mention-suggestions-result"
                         onClick={ e => this.handleClick(user, query, e) }>
                         <div className="mention-suggestions-avatar">
                             <img
                                 src={ avatar || avatarIMG }
-                                alt={ displayName } />
+                                alt={ username } />
                         </div>
                         <div className="mention-suggestions-info">
-                            { renderSyntaxHighlighting(fullName, re, 'mention-suggestions-name') }
-                            { renderSyntaxHighlighting(displayName, re, 'mention-suggestions-username') }
+                            { renderSyntaxHighlighting(displayName, re, 'mention-suggestions-name') }
+                            { renderSyntaxHighlighting(username, re, 'mention-suggestions-username') }
                         </div>
                     </div>
                 );

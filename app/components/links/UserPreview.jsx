@@ -8,11 +8,32 @@ export const UserPreview = React.createClass({
         const {
             user,
             pos,
+            relationship,
+            followUser,
             onMouseEnter,
             onMouseLeave
         } = this.props;
 
+        if (!user){
+            return (
+                <div
+                    ref={ element => this.previewElement = element }
+                    className="user-preview"
+                    style={ pos }
+                    onMouseEnter={ onMouseEnter() }
+                    onMouseLeave={ onMouseLeave() }>
+                    <div className="user-preview-does-not-exist">
+                        <i className="fa fa-meh-o" aria-hidden="true" />
+                        This user does not exist.
+                    </div>
+                </div>
+            );
+        }
+
         const formatNumber = num => {
+
+            if (!num){ return 0; }
+
             if (num.toString().length > 5){
                 return numeral(num).format('0a');
             }
@@ -20,20 +41,24 @@ export const UserPreview = React.createClass({
             return numeral(num).format('0,0');
         };
 
-        const renderFollowStatus = () => {
-            if (user.currentlyFollowed){
+        const renderRelationshipStatus = () => {
+            if (relationship === 'favorites'){
+                return <div className="user-preview-follow-action"><i className="fa fa-heart" aria-hidden="true" /> Favorites</div>;
+            }
+
+            if (relationship === 'following'){
+                return <div className="user-preview-follow-action"><i className="fa fa-check-circle" aria-hidden="true" /> Favorites</div>;
+            }
+
+            if (relationship === 'none'){
                 return (
-                    <span>
-                        <i className="fa fa-check" aria-hidden="true" /> Following
-                    </span>
+                    <div className="user-preview-follow-action" onClick={ () => followUser(user.uid, user.username, user.displayName) }>
+                        <i className="fa fa-user-plus" aria-hidden="true" /> Follow
+                    </div>
                 );
             }
 
-            return (
-                <span>
-                    <i className="fa fa-user-plus" aria-hidden="true" /> Follow
-                </span>
-            );
+            return '';
         };
 
         return (
@@ -43,9 +68,7 @@ export const UserPreview = React.createClass({
                 style={ pos }
                 onMouseEnter={ onMouseEnter() }
                 onMouseLeave={ onMouseLeave() }>
-                <div className="user-preview-follow-action">
-                    { renderFollowStatus() }
-                </div>
+                { renderRelationshipStatus() }
                 <div className="user-preview-top">
                     <div className="user-preview-avatar">
                         <img
@@ -66,20 +89,36 @@ export const UserPreview = React.createClass({
                     </div>
                 </div>
                 <div className="user-preview-bottom">
-                    <div className="user-preview-followers">
-                        <div className="user-preview-followers-label">
+                    <div className="user-preview-friendship">
+                        <div className="user-preview-friendship-label">
                             Followers
                         </div>
-                        <div className="user-preview-followers-count">
+                        <div className="user-preview-friendship-count">
                             { formatNumber(user.followersCount) }
                         </div>
                     </div>
-                    <div className="user-preview-following">
-                        <div className="user-preview-following-label">
+                    <div className="user-preview-friendship">
+                        <div className="user-preview-friendship-label">
                             Following
                         </div>
-                        <div className="user-preview-following-count">
+                        <div className="user-preview-friendship-count">
                             { formatNumber(user.followingCount) }
+                        </div>
+                    </div>
+                    <div className="user-preview-friendship">
+                        <div className="user-preview-friendship-label">
+                            Favorited By
+                        </div>
+                        <div className="user-preview-friendship-count">
+                            { formatNumber(user.favoritedCount) }
+                        </div>
+                    </div>
+                    <div className="user-preview-friendship">
+                        <div className="user-preview-friendship-label">
+                            Favorites
+                        </div>
+                        <div className="user-preview-friendship-count">
+                            { formatNumber(user.favoritesCount) }
                         </div>
                     </div>
                 </div>

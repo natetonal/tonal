@@ -7,8 +7,8 @@ import { startEmailLogin } from 'actions/AuthActions';
 import { createUserWithFacebookAuth } from 'actions/UserActions';
 import { switchLoginModalUI } from 'actions/UIStateActions';
 
-import Input from './../../elements/Input';
-import Button from './../../elements/Button';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 import validate from './validatelogin';
 
 export const Login = React.createClass({

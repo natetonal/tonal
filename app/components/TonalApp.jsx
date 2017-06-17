@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { resetUIState } from 'actions/UIStateActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { addFollower } from 'actions/FollowActions';
+import { addFollower } from 'actions/FriendshipActions';
 import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt';
 
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
@@ -96,7 +96,6 @@ export const TonalApp = React.createClass({
                 status === 'success'){
                 return (
                     <MenuWrapper>
-                        <Observer />
                         <ReactCSSTransitionGroup
                             transitionName="smooth-fadein"
                             transitionAppear

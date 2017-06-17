@@ -113,14 +113,15 @@ export const Observer = React.createClass({
         const feedRef = firebase.database().ref(`feed/${ uid }/`);
         feedRef.on('child_added', post => {
             dispatch(addFeedPost(post.key, post.val()));
+            dispatch(syncUserData(['postCount']));
         });
         feedRef.on('child_changed', post => {
-            console.log('child changed!');
             dispatch(addFeedPost(post.key, post.val()));
+            dispatch(syncUserData(['postCount']));
         });
         feedRef.on('child_removed', post => {
-            console.log('POST DELETION WITNESSED! REMOVING: ', post.key);
             dispatch(removeFeedPost(post.key));
+            dispatch(syncUserData(['postCount']));
         });
 
 

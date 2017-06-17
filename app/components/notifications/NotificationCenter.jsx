@@ -19,7 +19,7 @@ import {
 import {
     addFollower,
     addFavorite
-} from 'actions/FollowActions';
+} from 'actions/FriendshipActions';
 import { pushToRoute } from 'actions/RouteActions';
 import { toggleNotifs } from 'actions/UIStateActions';
 import ClickScreen from 'elements/ClickScreen';
@@ -237,7 +237,7 @@ export const NotificationCenter = React.createClass({
                         <ClickScreen onClick={ this.onClickNotifs } />
                         <div
                             ref={ element => this.notifsContainerRef = element }
-                            className="header-notifications-list-container">
+                            className="notifications-list-container">
                             <NotificationTopbar
                                 newNotifsCount={ newNotifsCount }
                                 displayNotifs={ displayNotifs }

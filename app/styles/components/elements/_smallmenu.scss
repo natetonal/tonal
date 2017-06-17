@@ -33,6 +33,10 @@
                 color: $yellow;
             }
 
+            &.white{
+                color: $white;
+            }
+            
             &.magenta{
                 color: $magenta;
             }
@@ -157,7 +161,6 @@
     }
 
     .small-menu-text {
-        overflow: auto;
         line-height: 1.1;
     }
 

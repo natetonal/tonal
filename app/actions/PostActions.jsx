@@ -5,11 +5,12 @@ import moment from 'moment';
 
 export const writePost = data => {
     return (dispatch, getState) => {
-        const uid = getState().user.uid;
+        const uid = getState().auth.uid;
         const postId = databaseRef.child('posts').push().key;
         const updates = {};
 
         data.postId = postId;
+        data.timeStamp = moment().format('LLLL');
         updates[`/posts/${ postId }`] = data;
         updates[`/user-posts/${ uid }/${ postId }`] = data;
         updates[`/users/${ uid }/recentPost`] = data;
@@ -19,13 +20,13 @@ export const writePost = data => {
 };
 
 export const updatePost = (data, postId) => {
-    return (dispatch, getState) => {
-        const uid = getState().user.uid;
+    return () => {
+        const uid = data.author.uid;
         const updates = {};
 
         data.postId = postId;
         data.postEdited = true;
-        data.postEditedAt = moment().calendar();
+        data.postEditedAt = moment().format('LLLL');
         updates[`/posts/${ postId }`] = data;
         updates[`/user-posts/${ uid }/${ postId }`] = data;
         updates[`/users/${ uid }/recentPost`] = data;
@@ -37,7 +38,7 @@ export const updatePost = (data, postId) => {
 export const deletePost = postId => {
     return (dispatch, getState) => {
         if (postId){
-            const uid = getState().user.uid;
+            const uid = getState().auth.uid;
             const updates = {};
             const data = null;
 
@@ -47,5 +48,24 @@ export const deletePost = postId => {
             updates[`user-activity/${ uid }/${ postId }`] = data;
             databaseRef.update(updates);
         }
+    };
+};
+
+export const updatePostAuthorData = (data, postId) => {
+    return dispatch => {
+        const author = data.author;
+        if (!author){ return; }
+
+        databaseRef.child(`users/${ author.uid }`).once('value')
+        .then(snapshot => {
+            const newAuthor = snapshot.val();
+            if (!newAuthor ||
+                Object.keys(author).every(key => author[key] === newAuthor[key])){ return; }
+
+            data.author.displayName = newAuthor.displayName;
+            data.author.avatar = newAuthor.avatar;
+
+            dispatch(updatePost(data, postId));
+        });
     };
 };

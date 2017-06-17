@@ -7,6 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type){
         case 'FEED_ADD_POST':
+        case 'FEED_UPDATE_POST':
             return {
                 ...state,
                 data: {
@@ -30,6 +31,7 @@ export default (state = initialState, action) => {
                     }, {})
             };
         case 'FEED_EDIT_POST':
+            console.log('aciton.postId from reducer: ', action.postId);
             return {
                 ...state,
                 editing: action.postId

@@ -23,3 +23,8 @@ exports.countFavorited = (functions, admin) => {
     return functions.database.ref('/favorited/{userId}/{targetId}')
         .onWrite(event => counterUtils.countChildren('favorited', event, admin));
 };
+
+exports.countUserPosts = (functions, admin) => {
+    return functions.database.ref('/user-posts/{userId}/{postId}')
+        .onWrite(event => counterUtils.countChildren('post', event, admin, false));
+};

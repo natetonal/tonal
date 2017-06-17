@@ -7,12 +7,13 @@ import {
     createUserWithEmailAndPassword
 } from 'actions/UserActions';
 
+import Input from 'elements/Input';
+import Button from 'elements/Button';
+
 import {
     validate,
     warn
 } from './validatesignup';
-import Input from './../../elements/Input';
-import Button from './../../elements/Button';
 
 export const Signup = React.createClass({
 

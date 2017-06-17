@@ -154,22 +154,22 @@ export const NotificationTopbar = React.createClass({
 
         const notifsTopbarClass = () => {
             if (displayNotifs){
-                return `header-notifications-topbar ${ newNotifsCount === 0 ? 'read' : '' }`;
+                return `notifications-topbar ${ newNotifsCount === 0 ? 'read' : '' }`;
             }
 
-            return 'header-notifications-topbar off';
+            return 'notifications-topbar off';
         };
 
         return (
             <div
                 ref={ element => this.topbarRef = element }
                 className={ notifsTopbarClass() }>
-                <div className="header-notifications-topbar-text">
+                <div className="notifications-topbar-text">
                     { notifsTopbarText() }
                 </div>
                 <div
                     onClick={ this.toggleNotifSettingsMenu }
-                    className="header-notifications-topbar-menu">
+                    className="notifications-topbar-menu">
                     <i className="fa fa-cog" aria-hidden="true" />
                     { renderMenu() }
                 </div>

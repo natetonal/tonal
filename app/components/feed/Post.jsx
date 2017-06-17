@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import * as Redux from 'react-redux';
 import moment from 'moment';
 import {
     TweenLite,
@@ -23,6 +22,14 @@ export const Post = React.createClass({
             showMenu: false,
             timeStamp: this.processTimestamp()
         });
+
+        const {
+            checkAuthor,
+            data,
+            postId
+        } = this.props;
+
+        checkAuthor(data, postId);
     },
 
     componentDidMount(){
@@ -30,21 +37,9 @@ export const Post = React.createClass({
     },
 
     componentWillReceiveProps(nextProps){
-
-        // If the user opens the editor:
-        if (this.props.editing === this.props.postId &&
-            !nextProps.editing){
-            TweenLite.from(this.postEditorRef, 0.25, {
-                ease: Power1.easeOut,
-                transformOrigin: 'top left',
-                height: 0,
-                opacity: 0
-            });
-        }
-
         // If the user has finished editing the post:
-        if (nextProps.editing === nextProps.postId &&
-            !this.props.editing){
+        if (nextProps.editing !== nextProps.postId &&
+            this.props.editing === this.props.postId){
             TweenLite.to(this.postEditorRef, 0.25, {
                 ease: Power1.easeOut,
                 transformOrigin: 'top left',
@@ -55,6 +50,17 @@ export const Post = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState){
+        // If the user opens the editor:
+        if (prevProps.editing !== this.props.postId &&
+            this.props.editing === this.props.postId){
+            TweenLite.from(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+        }
+
         if (prevState.timeStamp !== this.state.timeStamp){
             const tl = new TimelineLite();
             tl.from(this.timeStampRef, 0.5, {
@@ -70,12 +76,13 @@ export const Post = React.createClass({
     },
 
     processTimestamp(){
-        const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(this.props.data.timeStamp, 'LLLL'));
+        const timeStamp = this.props.data.postEditedAt || this.props.data.timeStamp;
+        const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(timeStamp, 'LLLL'));
         if (sameOrBefore){
-            return moment(this.props.data.timeStamp, 'LLLL').fromNow();
+            return moment(timeStamp, 'LLLL').fromNow();
         }
 
-        return this.props.data.timeStamp;
+        return timeStamp;
     },
 
     updateTimestamp(){
@@ -108,6 +115,44 @@ export const Post = React.createClass({
         tl.eventCallback('onComplete', deletePost, [postId]);
     },
 
+    handleUpdatePost(updatedPost){
+
+        const {
+            updatePost,
+            postId
+        } = this.props;
+
+        const tl = new TimelineLite();
+        tl.to(this.postEditorRef, 0.25, {
+            ease: Power1.easeOut,
+            transformOrigin: 'top left',
+            height: 0,
+            opacity: 0
+        });
+        tl.play();
+        tl.eventCallback('onComplete', updatePost, [updatedPost, postId]);
+    },
+
+    handleTogglePostEditor(){
+        const {
+            togglePostEditor,
+            postId,
+            editing
+        } = this.props;
+
+        const tl = new TimelineLite();
+        if (editing === postId){
+            tl.to(this.postEditorRef, 0.25, {
+                ease: Power1.easeOut,
+                transformOrigin: 'top left',
+                height: 0,
+                opacity: 0
+            });
+        }
+        tl.play();
+        tl.eventCallback('onComplete', togglePostEditor, [postId]);
+    },
+
     render(){
 
         // Post object should be refactored.
@@ -120,13 +165,13 @@ export const Post = React.createClass({
             postId,
             data,
             editing,
+            favorites,
             following,
             blocked,
             blockedBy,
             posterIsSelf,
-            isFollowing,
-            isBlocked,
-            isBlockedBy,
+            checkFriendship,
+            evaluateRelationship,
             isSelf,
             deletePost,
             updatePost,
@@ -148,7 +193,7 @@ export const Post = React.createClass({
                 postEditedAt,
                 thread,
                 length,
-                user
+                author
             } = data;
 
             const {
@@ -156,7 +201,7 @@ export const Post = React.createClass({
                 avatar,
                 displayName,
                 username
-            } = user;
+            } = author;
 
             const {
                 showMenu,
@@ -170,8 +215,8 @@ export const Post = React.createClass({
                     const settings = [{
                         icon: 'eye-slash',
                         iconColor: 'lightyellow',
-                        title: 'Unsubscribe from post',
-                        description: 'Hide this post and stop receiving notifications.',
+                        title: 'Hide this post',
+                        description: 'This post will no longer show up in your feed.',
                         callback: () => console.log('UNSUBSCRIBED')
                     }];
 
@@ -197,25 +242,25 @@ export const Post = React.createClass({
                                 title: `Block ${ displayName }`,
                                 callback: blockUser,
                                 params: [uid]
+                            },
+                            {
+                                divider: true
+                            },
+                            {
+                                icon: 'flag',
+                                iconColor: 'lightorange',
+                                title: 'Flag This Post',
+                                description: 'Report TOS Violations to the administrators.',
+                                callback: () => console.log('FLAGGED!')
                             }
                         );
                     }
 
-                    settings.push(
-                        {
-                            divider: true
-                        },
-                        {
-                            icon: 'flag',
-                            iconColor: 'lightorange',
-                            title: 'Flag This Post',
-                            description: 'Report TOS Violations to the administrators.',
-                            callback: () => console.log('FLAGGED!')
-                        }
-                    );
-
                     if (posterIsSelf){
                         settings.push(
+                            {
+                                divider: true
+                            },
                             {
                                 icon: 'pencil-square-o',
                                 iconColor: 'lightgreen',
@@ -225,6 +270,7 @@ export const Post = React.createClass({
                             },
                             {
                                 icon: 'times',
+                                iconColor: 'lightred',
                                 highlightColor: 'red',
                                 title: 'Delete Your Post',
                                 callback: deletePost,
@@ -282,21 +328,21 @@ export const Post = React.createClass({
             };
 
             const postMode = () => {
-                if (editing){
+                if (editing === postId){
                     return (
                         <div
                             ref={ element => this.postEditorRef = element }
                             className="tonal-post-editor">
                             <div
                                 className="tonal-post-editor-close"
-                                onClick={ this.handleEditPost }>
+                                onClick={ this.handleTogglePostEditor }>
                                 <i className="fa fa-times" aria-hidden="true" />
                             </div>
                             <Composer
                                 initialValue={ raw }
                                 mentions={ mentions }
                                 submitText={ 'Update Your Post ' }
-                                onClose={ this.handleEditPost }
+                                onClose={ this.handleTogglePostEditor }
                                 onSubmit={ this.handleUpdatePost } />
                         </div>
                     );
@@ -311,11 +357,12 @@ export const Post = React.createClass({
 
             const displayTimestamp = () => {
                 if (postEdited){
-                    return `Edited ${ postEditedAt }`;
+                    return `Edited ${ timeStamp }`;
                 }
 
                 return timeStamp;
             };
+
 
             return (
                 <ReactCSSTransitionGroup
@@ -334,21 +381,27 @@ export const Post = React.createClass({
                                 <i className="fa fa-angle-down" aria-hidden="true" />
                                 { displayMenu() }
                             </div>
-                            <div className="tonal-post-avatar">
+                            <div
+                                ref={ element => this.avatarRef = element }
+                                className="tonal-post-avatar">
                                 <img
                                     src={ avatar }
                                     alt={ displayName }
                                     className="tonal-post-1-avatar-photo" />
                             </div>
                             <div className="tonal-post-info">
-                                <div className="tonal-post-display-name">
+                                <div
+                                    ref={ element => this.displayNameRef = element }
+                                    className="tonal-post-display-name">
                                     <PreviewLink
                                         key={ `postLink_${ postId }` }
                                         type="user"
-                                        data={ user }
+                                        previewId={ author.uid }
                                         postId={ postId }
+                                        relationship={ evaluateRelationship(author.uid) }
+                                        followUser={ followUser }
                                         className="post-mention"
-                                        src={ `users/${ user.username }` }>
+                                        src={ `users/${ author.username }` }>
                                         { displayName }
                                     </PreviewLink>
                                 </div>
@@ -390,4 +443,4 @@ export const Post = React.createClass({
     }
 });
 
-export default Redux.connect()(Post);
+export default Post;

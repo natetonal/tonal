@@ -3,14 +3,15 @@ import * as Redux from 'react-redux';
 
 import { updateBlockedUser } from 'actions/UserActions';
 import { countNewNotifs } from 'actions/NotificationActions';
-import { addFollower } from 'actions/FollowActions';
+import { addFollower } from 'actions/FriendshipActions';
 import {
     fetchFeed,
     toggleEditPost
 } from 'actions/FeedActions';
 import {
     deletePost,
-    updatePost
+    updatePost,
+    updatePostAuthorData
 } from 'actions/PostActions';
 
 import Post from './Post';
@@ -55,33 +56,33 @@ export const Feed = React.createClass({
         dispatch(deletePost(notifId));
     },
 
-    togglePostEditor(postId){
+    togglePostEditor(postId = false){
+        console.log('togglePostEditor called with id: ', postId);
         const { dispatch } = this.props;
         dispatch(toggleEditPost(postId));
-    },
-
-    isEditing(testPostId){
-        const { editing } = this.props;
-        return editing === testPostId;
     },
 
     isSelf(testUid){
         return testUid === this.props.uid;
     },
 
-    isBlocked(testUid){
-        const blocked = this.props.blocked || {};
-        return Object.keys(blocked).includes(testUid);
+    checkFriendship(testUid, testGroup){
+        const group = this.props[testGroup] || {};
+        return Object.keys(group).includes(testUid);
     },
 
-    isFollowing(testUid){
-        const following = this.props.following || {};
-        return Object.keys(following).includes(testUid);
+    checkAuthor(data, postId){
+        const { dispatch } = this.props;
+        dispatch(updatePostAuthorData(data, postId));
     },
 
-    isBlockedBy(testUid){
-        const blockedBy = this.props.blockedBy || {};
-        return Object.keys(blockedBy).includes(testUid);
+    evaluateRelationship(testUid){
+
+        if (this.isSelf(testUid)){ return 'self'; }
+
+        return ['blocked', 'blockedBy', 'favorites', 'following'].find(group => {
+            return this.checkFriendship(testUid, group);
+        }) || 'none';
     },
 
     render(){
@@ -89,7 +90,12 @@ export const Feed = React.createClass({
         const {
             feed,
             status,
-            uid
+            uid,
+            editing,
+            favorites,
+            following,
+            blocked,
+            blockedBy
         } = this.props;
 
         const renderFeed = () => {
@@ -103,15 +109,14 @@ export const Feed = React.createClass({
                     .reverse()
                     .map(key => {
 
-                        const following = this.isFollowing(feed[key].user.uid);
-                        const blocked = this.isBlocked(feed[key].user.uid);
-                        const blockedBy = this.isBlockedBy(feed[key].user.uid);
-                        const posterIsSelf = this.isSelf(feed[key].user.uid);
-                        const editing = this.isEditing(key);
+                        const isFollowing = this.checkFriendship(feed[key].author.uid, 'following');
+                        const isBlocked = this.checkFriendship(feed[key].author.uid, 'blocked');
+                        const isBlockedBy = this.checkFriendship(feed[key].author.uid, 'blockedBy');
+                        const posterIsSelf = this.isSelf(feed[key].author.uid);
 
-                        if (!blocked &&
-                            !blockedBy &&
-                            (following || posterIsSelf)){
+                        if (!isBlocked &&
+                            !isBlockedBy &&
+                            (isFollowing || posterIsSelf)){
                             // Need to add post type
                             // Need to simplify post object.
                             // Need to add text snippet.
@@ -124,13 +129,14 @@ export const Feed = React.createClass({
                                     postId={ key }
                                     data={ feed[key] }
                                     editing={ editing }
+                                    favorites={ favorites }
                                     following={ following }
                                     blocked={ blocked }
                                     blockedBy={ blockedBy }
                                     posterIsSelf={ posterIsSelf }
-                                    isFollowing={ this.isFollowing }
-                                    isBlocked={ this.isBlocked }
-                                    isBlockedBy={ this.isBlockedBy }
+                                    checkAuthor={ this.checkAuthor }
+                                    checkFriendship={ this.checkFriendship }
+                                    evaluateRelationship={ this.evaluateRelationship }
                                     isSelf={ this.isSelf }
                                     updatePost={ this.handleUpdatePost }
                                     deletePost={ this.handleDeletePost }
@@ -165,6 +171,8 @@ export default Redux.connect(state => {
         status: state.feed.status,
         editing: state.feed.editing,
         uid: state.auth.uid,
+        favorites: state.user.favorites,
+        favorited: state.user.favorited,
         followers: state.user.followers,
         following: state.user.following,
         blocked: state.user.blocked,

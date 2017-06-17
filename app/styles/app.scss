@@ -18,25 +18,25 @@
 @import "base/reactcsstransitions";
 
 // Components
-@import "components/header/header";
-@import "components/header/headernotifications";
-@import "components/header/headercompose";
-@import "components/header/headercomposeeditor";
-@import "components/composer/composer";
-@import "components/composer/medium";
-@import "components/composer/emojiselector";
-@import "components/composer/stickerselector";
-@import "components/composer/mentionsuggestions";
 @import "components/settings";
 @import "components/content";
 @import "components/tabs";
 @import "components/search";
 @import "components/firsttimeuserprompt";
-@import "components/post/post";
-@import "components/post/postmenu";
-@import "components/post/userpreview";
+@import "components/composer/composer";
+@import "components/composer/medium";
+@import "components/composer/emojiselector";
+@import "components/composer/stickerselector";
+@import "components/composer/mentionsuggestions";
+@import "components/header/header";
+@import "components/header/headercompose";
+@import "components/header/headercomposeeditor";
 @import "components/landing/loginmodal";
 @import "components/landing/landing";
+@import "components/notifications/notifications";
+@import "components/post/post";
+@import "components/post/postmenu";
+@import "components/links/userpreview";
 @import "components/connect/connect";
 
 // Elements

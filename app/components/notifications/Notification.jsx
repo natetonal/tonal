@@ -175,7 +175,7 @@ export const Notification = React.createClass({
 
                     return (
                         <Link
-                            className="header-notification-message-link"
+                            className="notification-message-link"
                             to={ `users/${ objUser }` }>
                             { dispName }
                         </Link>
@@ -226,7 +226,7 @@ export const Notification = React.createClass({
             };
 
             return (
-                <div className="header-notification-message">
+                <div className="notification-message">
                     <p>
                         { formatText(senders, true) } { message } { formatText(targets) }.
                     </p>
@@ -298,23 +298,23 @@ export const Notification = React.createClass({
             <div
                 onClick={ () => clickNotif(route) }
                 ref={ element => this.notifRef = element }
-                className={ `header-notification${ acknowledged ? ' received' : '' }` }>
-                <div className="header-notification-img">
+                className={ `notification${ acknowledged ? ' received' : '' }` }>
+                <div className="notification-img">
                     <img
                         src={ avatar }
                         alt={ 'User Avatar' } />
                 </div>
-                <div className="header-notification-content">
-                    { renderMenu() }
+                <div className="notification-content">
                     <div
                         onClick={ e => this.toggleNotifMenu(e) }
-                        className="header-notification-settings">
+                        className="notification-settings">
+                        { renderMenu() }
                         <i className="fa fa-angle-down" aria-hidden="true" />
                     </div>
                     { renderNotifMessage() }
                     <div
                         ref={ element => this.timeStampRef = element }
-                        className="header-notification-timestamp">
+                        className="notification-timestamp">
                         <i className={ `fa fa-${ icon }` } />
                         { timeStamp }
                     </div>

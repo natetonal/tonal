@@ -190,7 +190,6 @@ export const fetchUserData = uid => {
 // Sync specific parts of user object with database.
 export const syncUserData = (keys = false) => {
     return (dispatch, getState) => {
-        console.log('syncUserData called with keys: ', keys);
         const uid = getState().auth.uid;
 
         if (!keys){

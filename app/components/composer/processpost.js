@@ -116,13 +116,13 @@ export const parsePost = (html, data, userData) => {
                         break;
                     case 'mention':
                         data.mentions.some(mention => {
-                            if (mention.fullName === text){
+                            if (mention.displayName === text){
                                 updatedPost = {
                                     ...updatedPost,
                                     mention
                                 };
                             }
-                            return mention.fullName === text;
+                            return mention.displayName === text;
                         });
                         break;
                     case 'hashtag':
@@ -158,10 +158,15 @@ export const parsePost = (html, data, userData) => {
                     thread: false,
                     postEdited: false,
                     postEditedAt: false,
-                    timeStamp: moment().format('LLLL'),
-                    user: userData,
                     post: safePost,
-                    raw: html
+                    raw: html,
+                    newestData: true,
+                    author: {
+                        avatar: userData.avatar,
+                        username: userData.username,
+                        displayName: userData.displayName,
+                        uid: userData.uid,
+                    }
                 };
 
                 return postData;
@@ -178,9 +183,14 @@ export const parsePost = (html, data, userData) => {
         thread: false,
         postEdited: false,
         postEditedAt: false,
-        timeStamp: moment().format('LLLL'),
-        user: userData,
         raw: html,
-        post
+        newestData: true,
+        post,
+        author: {
+            avatar: userData.avatar,
+            username: userData.username,
+            displayName: userData.displayName,
+            uid: userData.uid,
+        }
     };
 };

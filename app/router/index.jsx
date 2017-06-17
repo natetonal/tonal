@@ -3,14 +3,13 @@ import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 
 // Components
 import TonalApp from 'TonalApp';
-import Verify from 'landing/Verify';
-import Landing from 'landing/Landing';
-import Connect from 'connect/Connect';
-import Discover from 'discover/Discover';
-import MyMusic from 'mymusic/MyMusic';
-import TonalStore from 'tonalstore/TonalStore';
-import NotFound from 'notfound/NotFound';
-import firebase from 'app/firebase';
+import Verify from 'pages/Verify';
+import Landing from 'pages/Landing';
+import Connect from 'pages/Connect';
+import Discover from 'pages/Discover';
+import MyMusic from 'pages/MyMusic';
+import TonalStore from 'pages/TonalStore';
+import NotFound from 'pages/NotFound';
 
 // React-Router middleware (next allows async actions)
 // const requireLogin = (nextState, replace, next) => {

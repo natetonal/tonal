@@ -7,6 +7,20 @@
     overflow: hidden;
     box-shadow: $boxshadow;
 
+    .user-preview-does-not-exist{
+        background: rgba(0,0,0,0.85);
+        font-size: 14px;
+        text-align: center;
+        padding: 20px;
+
+        .fa{
+            display: block;
+            font-size: 48px;
+            padding-bottom: 10px;
+            color: $blue;
+        }
+    }
+
     .user-preview-follow-action {
         position: absolute;
         background: rgba(100,100,100,.75);
@@ -17,10 +31,15 @@
         height: 30px;
         top: 70px;
         left: 0;
-        font-size: 16px;
+        font-size: 14px;
 
         .fa{
             color: white;
+            padding-right: 5px;
+        }
+
+        .fa-heart{
+            color: $pink;
         }
 
         .fa-check{
@@ -80,31 +99,33 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
         font-family: $login-font;
 
-        .user-preview-followers,
-        .user-preview-following {
-            padding: 5px 0;
-            width: 50%;
-            text-align: center;
-        }
-
-        .user-preview-followers-label,
-        .user-preview-following-label {
-            padding: 5px 0;
-            font-size: 14px;
+        .user-preview-friendship{
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: $orange;
-        }
-
-        .user-preview-followers-count,
-        .user-preview-following-count {
-            font-size: 28px;
-        }
-
-        .user-preview-followers{
+            line-height: 1.3;
+            padding: 5px 0;
+            width: 25%;
+            text-align: center;
             border-right: 1px solid rgba(0,0,0,0.75);
+
+            .user-preview-friendship-label{
+                padding: 5px 0;
+                text-transform: uppercase;
+                color: $white;
+            }
+
+            .user-preview-friendship-count{
+                font-weight: 700;
+                font-size: 18px;
+            }
+        }
+
+        .user-preview-friendship:last-child{
+            border-right: none;
         }
     }
 }

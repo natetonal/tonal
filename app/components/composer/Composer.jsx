@@ -202,7 +202,7 @@ export const Composer = React.createClass({
         const updatedMentions = [];
         if (mentions){
             mentions.forEach(mention => {
-                if (textContent.match(mention.fullName)){
+                if (textContent.match(mention.displayName)){
                     updatedMentions.push(mention);
                 }
             });
@@ -219,13 +219,13 @@ export const Composer = React.createClass({
             mentions.push(user);
             this.setState({ mentions });
             const innerHTML = this.medium.value();
-            const updatedHTML = innerHTML.replace(word, `${ user.fullName }&nbsp;`);
+            const updatedHTML = innerHTML.replace(word, `${ user.displayName }&nbsp;`);
             const decoratedHTML = this.decorateEntities(updatedHTML);
             const pos = select(this.composer).end;
             this.medium.value(decoratedHTML);
             this.updateHistory(decoratedHTML);
             this.checkMax(decoratedHTML);
-            select(this.composer, { start: pos + user.fullName.length });
+            select(this.composer, { start: pos + user.displayName.length });
         }
         this.clearMenus();
     },
@@ -426,8 +426,8 @@ export const Composer = React.createClass({
 
         const { className, tag, editable } = entity;
         mentions.forEach(user => {
-            const newStr = `<${ tag } class="${ className }" ${ editable ? '' : 'contenteditable="false"' }>${ user.fullName }</${ tag }>`;
-            text = text.replace(new RegExp(user.fullName), newStr);
+            const newStr = `<${ tag } class="${ className }" ${ editable ? '' : 'contenteditable="false"' }>${ user.displayName }</${ tag }>`;
+            text = text.replace(new RegExp(user.displayName), newStr);
         });
 
         return text;

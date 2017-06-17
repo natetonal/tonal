@@ -36,7 +36,7 @@ exports.sendFavoritedNotification = (functions, admin) => {
         if (!event.data.val() ||
             !event.data.val().timeStamp ||
             !event.data.val().target) {
-            return;
+            return notifUtils.deleteNotifsForGroup(admin, userId, favoritedId, notifConsts.NEW_POST);
         }
 
         return notifUtils.sendNotif({

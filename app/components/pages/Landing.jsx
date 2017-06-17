@@ -10,7 +10,7 @@ import {
     verifyPasswordResetCode
 } from 'actions/AuthActions';
 
-import LoginModal from './LoginModal/LoginModal';
+import LoginModal from 'login/LoginModal';
 
 export const Landing = React.createClass({
 

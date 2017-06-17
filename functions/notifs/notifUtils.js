@@ -252,6 +252,24 @@ exports.updateNotifications = functions => {
     });
 };
 
+// Delete all of user's notifs for a specific group.
+exports.deleteNotifsForGroup = (admin, senderId, targetId, type) => {
+    const senderNotifsRef = admin.database().ref(`notifications/${ senderId }`);
+    console.log('deleteNotifsForGroup called with ', type, senderId, targetId);
+    return senderNotifsRef.once('value')
+    .then(senderNotifSnapshot => {
+        const senderNotifs = senderNotifSnapshot.val() || {};
+        Object.keys(senderNotifs).forEach(key => {
+            if (senderNotifs[key].type === type &&
+                senderNotifs[key].senders[targetId]){
+                senderNotifs[key] = null;
+            }
+        });
+
+        return senderNotifsRef.update(senderNotifs);
+    });
+};
+
 // Delete all current notifications for both users if one user blocks another.
 exports.deleteBlockedNotifs = (functions, admin) => {
     return functions.database.ref('/users/{userUid}/blocked/{blockedUid}').onWrite(event => {
