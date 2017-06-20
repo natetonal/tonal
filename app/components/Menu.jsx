@@ -6,7 +6,6 @@ import {
     TweenLite,
     TimelineLite,
     Power2,
-    Power0,
     Back
 } from 'gsap';
 import numeral from 'numeral';
@@ -16,7 +15,8 @@ const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-developmen
 export const Menu = React.createClass({
 
     componentWillUpdate(nextProps){
-        if (!this.props.menuIsOpen && nextProps.menuIsOpen){
+        if (this.props.headerMenu !== nextProps.headerMenu &&
+            nextProps.headerMenu === 'settings'){
             TweenLite.from(this.namesRef, 0.75, {
                 ease: Power2.easeOut,
                 opacity: 0
@@ -29,7 +29,7 @@ export const Menu = React.createClass({
         }
 
         // For each counter, animate change:
-        ['followers', 'following', 'favorites', 'favorited'].forEach(group => {
+        ['followers', 'following'].forEach(group => {
             if (this.props[group] !== nextProps[group]){
                 const counterTL = new TimelineLite();
                 counterTL.from(this[`${ group }CountRef`], 1, {
@@ -140,26 +140,6 @@ export const Menu = React.createClass({
                                         { formatNumber(following) }
                                     </div>
                                 </div>
-                                <div className="avatar-friendship">
-                                    <div className="avatar-friendship-label">
-                                        Favorited By
-                                    </div>
-                                    <div
-                                        ref={ element => this.favoritedCountRef = element }
-                                        className="avatar-friendship-count">
-                                        { formatNumber(favorited) }
-                                    </div>
-                                </div>
-                                <div className="avatar-friendship">
-                                    <div className="avatar-friendship-label">
-                                        Favorites
-                                    </div>
-                                    <div
-                                        ref={ element => this.favoritesCountRef = element }
-                                        className="avatar-friendship-count">
-                                        { formatNumber(favorites) }
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -222,6 +202,6 @@ export default Redux.connect(state => {
         following: state.user.followingCount,
         favorites: state.user.favoritesCount,
         favorited: state.user.favoritedCount,
-        menuIsOpen: state.uiState.menuIsOpen
+        headerMenu: state.uiState.headerMenu
     };
 })(Menu);

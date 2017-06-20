@@ -214,7 +214,7 @@ export const Post = React.createClass({
 
                     const settings = [{
                         icon: 'eye-slash',
-                        iconColor: 'lightyellow',
+                        iconColor: 'midgray',
                         title: 'Hide this post',
                         description: 'This post will no longer show up in your feed.',
                         callback: () => console.log('UNSUBSCRIBED')
@@ -224,35 +224,37 @@ export const Post = React.createClass({
                         settings.push(
                             {
                                 icon: 'sign-out',
-                                iconColor: 'purple',
+                                iconColor: 'midgray',
                                 title: `Unsubscribe from ${ displayName }'s posts`,
                                 description: 'Hide all posts from this user and stop receiving notifications.',
                                 callback: () => console.log('UNSUBSCRIBED FROM ALL POSTS')
                             },
                             {
-                                icon: following ? 'ban' : 'user-plus',
-                                iconColor: following ? 'magenta' : 'lightgreen',
+                                icon: following ? 'user-times' : 'user-plus',
+                                iconColor: following ? 'midgray' : 'white',
                                 title: `${ following ? 'Unf' : 'F' }ollow ${ displayName }`,
                                 callback: followUser,
                                 params: [uid, username, displayName]
-                            },
-                            {
-                                icon: 'user-times',
-                                iconColor: 'yellow',
-                                title: `Block ${ displayName }`,
-                                callback: blockUser,
-                                params: [uid]
                             },
                             {
                                 divider: true
                             },
                             {
                                 icon: 'flag',
-                                iconColor: 'lightorange',
+                                iconColor: 'white',
+                                highlightColor: 'darkorange',
                                 title: 'Flag This Post',
                                 description: 'Report TOS Violations to the administrators.',
                                 callback: () => console.log('FLAGGED!')
-                            }
+                            },
+                            {
+                                icon: 'ban',
+                                iconColor: 'midgray',
+                                highlightColor: 'red',
+                                title: `Block ${ displayName }`,
+                                callback: blockUser,
+                                params: [uid]
+                            },
                         );
                     }
 
@@ -263,14 +265,14 @@ export const Post = React.createClass({
                             },
                             {
                                 icon: 'pencil-square-o',
-                                iconColor: 'lightgreen',
+                                iconColor: 'white',
                                 title: 'Edit Your Post',
                                 callback: togglePostEditor,
                                 params: [postId]
                             },
                             {
                                 icon: 'times',
-                                iconColor: 'lightred',
+                                iconColor: 'midgray',
                                 highlightColor: 'red',
                                 title: 'Delete Your Post',
                                 callback: deletePost,

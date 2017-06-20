@@ -101,7 +101,7 @@ export const NotificationTopbar = React.createClass({
         const renderMenu = () => {
 
             const topIcon = displayNotifs ? 'bell-slash' : 'bell';
-            const topColor = displayNotifs ? 'yellow' : 'lightgreen';
+            const topColor = displayNotifs ? 'lightred' : 'lightgreen';
             const topTitle = displayNotifs ? 'Mute Notifications' : 'Unmute Notifications';
 
             if (showNotifSettingsMenu){

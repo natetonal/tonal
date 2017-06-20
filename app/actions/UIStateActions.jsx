@@ -10,6 +10,13 @@ export const toggleSearch = () => {
     };
 };
 
+export const switchHeaderMenu = (menu = false) => {
+    return {
+        type: 'UI_TOGGLE_HEADER_MENU',
+        menu
+    };
+};
+
 export const toggleNotifs = () => {
     return {
         type: 'UI_TOGGLE_NOTIFS'

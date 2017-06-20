@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { resetUIState } from 'actions/UIStateActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { addFollower } from 'actions/FriendshipActions';
 import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt';
 
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
@@ -28,11 +27,6 @@ export const TonalApp = React.createClass({
         }
     },
 
-    addFollower(){
-        const { dispatch } = this.props;
-        dispatch(addFollower('MMxvsVGFgHY55OQKzpXKG5RpDck2', 'natetonal', 'Nate Kimball'));
-    },
-
     render(){
 
         const {
@@ -40,27 +34,6 @@ export const TonalApp = React.createClass({
             status,
             firstLogin,
         } = this.props;
-
-        // TEMPORARY!!!!!
-        const followNate = () => {
-            return (
-                <div
-                    style={{
-                        position: 'fixed',
-                        bottom: 0,
-                        right: 0,
-                        zIndex: 100000000,
-                        background: 'rgba(0,200,0,.9)',
-                        padding: '100px',
-                        fontSize: '24px',
-                        cursor: 'pointer'
-                    }}
-                    className="follow-nate"
-                    onClick={ this.addFollower }>
-                    <i className="fa fa-plus-square" aria-hidden="true" /> Follow Nate!
-                </div>
-            );
-        };
 
         const displayFirstTimeUserPrompt = () => {
             if (firstLogin){
@@ -81,9 +54,6 @@ export const TonalApp = React.createClass({
                         <Observer />
                         <Header />
                         <div className="tonal-content">
-                            {/* TEMPORARY!!!! */}
-                            { followNate() }
-                            {/* TEMPORARY!!!! */}
                             { this.props.children }
                         </div>
                         <Tabs />

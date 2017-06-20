@@ -101,7 +101,6 @@
             // color: $header-link-hover;
             content: attr(data-hover);
             @include gradient(top, $header-link-hover1 0, $header-link-hover2 50%);
-            @include transition(all 0.3s);
 
             background-position: 0 100%;
             background-size: 200% 200%;
@@ -114,6 +113,8 @@
             max-width: 100%;
             background-position: 0 0;
             color: transparent;
+            @include transition(all 0.3s);
+
         }
     }
 

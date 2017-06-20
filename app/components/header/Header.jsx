@@ -1,48 +1,39 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
-import {
-    toggleMenu,
-    toggleCompose,
-    toggleNotifs
-} from 'actions/UIStateActions';
+import { switchHeaderMenu } from 'actions/UIStateActions';
 import Search from 'Search';
 import NotificationCenter from 'notifications/NotificationCenter';
 import HeaderCompose from './HeaderCompose';
 
 export const Header = React.createClass({
 
-    onClickMenu(event){
-        event.preventDefault();
-        const { dispatch } = this.props;
-        dispatch(toggleMenu());
-    },
-
-    onClickCompose() {
+    onClickHeaderMenu(menu, event) {
+        if (event){ event.preventDefault(); }
         const {
             dispatch,
-            isNotifsOpen
+            headerMenu
         } = this.props;
-        if (isNotifsOpen) {
-            dispatch(toggleNotifs());
+        if (headerMenu === menu) {
+            dispatch(switchHeaderMenu());
+        } else {
+            dispatch(switchHeaderMenu(menu));
         }
-        dispatch(toggleCompose());
     },
 
     render(){
 
         const {
-            isMenuOpen,
-            isComposeOpen,
+            headerMenu,
             avatar
         } = this.props;
 
-        const photo = () => {
+        const renderAvatar = () => {
             if (avatar){
                 return (
                     <div className="tonal-header-avatar">
                         <a
-                            onClick={ !isMenuOpen && this.onClickMenu }
+                            onClick={ e => this.onClickHeaderMenu('settings', e) }
                             href="">
                             <img
                                 alt="header avatar"
@@ -56,7 +47,7 @@ export const Header = React.createClass({
             return (
                 <div className="hi-icon-effect-1 hi-icon-effect-1b">
                     <a
-                        onClick={ !isMenuOpen && this.onClickMenu }
+                        onClick={ e => this.onClickHeaderMenu('notifs', e) }
                         href=""
                         className="hi-icon hi-icon-mobile">
                         <i className="fa fa-user" aria-hidden="true" />
@@ -65,12 +56,18 @@ export const Header = React.createClass({
             );
         };
 
+        const renderComposer = () => {
+            if (headerMenu === 'compose'){
+                return <HeaderCompose onClose={ e => this.onClickHeaderMenu('compose', e) } />;
+            }
+        };
+
         return (
             <div className="tonal-header">
                 <div className="logo float-center" />
                 <div className="row">
                     <div className="small-5 medium-1 columns">
-                        { photo() }
+                        { renderAvatar() }
                         <NotificationCenter direction="left" />
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
@@ -101,13 +98,13 @@ export const Header = React.createClass({
                         <NotificationCenter direction="right" />
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
-                                onClick={ this.onClickCompose }
+                                onClick={ e => this.onClickHeaderMenu('compose', e) }
                                 className="hi-icon hi-icon-mobile">
                                 <i
                                     className="fa fa-pencil"
                                     aria-hidden="true" />
                             </a>
-                            { isComposeOpen && <HeaderCompose onClose={ this.onClickCompose } /> }
+                            { renderComposer() }
                         </div>
                         <Search />
                     </div>
@@ -119,8 +116,7 @@ export const Header = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        isMenuOpen: state.uiState.menuIsOpen,
-        isComposeOpen: state.uiState.composeIsOpen,
+        headerMenu: state.uiState.headerMenu,
         uid: state.auth.uid,
         avatar: state.user.avatar,
         displayNotifs: state.user.settings.displayNotifs,

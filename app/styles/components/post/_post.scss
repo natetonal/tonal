@@ -1,9 +1,11 @@
 .tonal-post {
-    background: #818181;
+    // background: #818181;
+    background: rgba(224, 226, 241, 0.2);
     margin: 20px 0;
     border-top: 1px solid $lightblue;
     border-bottom: 1px solid $lightblue;
-    @include boxshadow(2px 2px 4px rgba(0,0,0,0.2));
+    // @include boxshadow(2px 2px 4px rgba(0,0,0,0.2));
+    @include boxshadow(5px 6px 13px 1px rgba(0, 0, 0, 0.23));
 
     .fa{
         color: rgba(0,0,0,0.3);

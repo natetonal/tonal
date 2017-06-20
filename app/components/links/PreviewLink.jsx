@@ -1,9 +1,10 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import firebase from 'firebase';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import fetchPreviewData from 'actions/LinkActions';
+import { fetchPreviewData } from 'actions/LinkActions';
 
 import UserPreview from './UserPreview';
 
@@ -28,6 +29,8 @@ export const PreviewLink = React.createClass({
         this.left = rect.left;
     },
 
+    countsArr: ['followers', 'following'],
+
     clearCoords(){
         this.top = 0;
         this.left = 0;
@@ -47,6 +50,21 @@ export const PreviewLink = React.createClass({
 
             return false;
         });
+    },
+
+    observePreviewDataWhileHovered(){
+        const { previewId } = this.props;
+        const { previewHovered } = this.state;
+        if (previewHovered){
+            this.countsArr.forEach(group => {
+                const thisRef = firebase.database().ref(`users/${ previewId }/${ group }`);
+                ['child_added', 'child_changed', 'child_removed'].forEach(event => {
+                    thisRef.on(event, () => {
+                        fetchPreviewData
+                    })
+                })
+            })
+        }
     },
 
     handleMentionPreview(previewType, event){
@@ -75,6 +93,7 @@ export const PreviewLink = React.createClass({
             this.timeoutMouseLeave = window.setTimeout(() => {
                 const { previewHovered } = this.state;
                 this.timeoutMouseLeave = null;
+                this.interval = setInterval(this.updatePreviewDataWhileHovered, 1000);
                 if (!previewHovered){
                     this.clearCoords();
                     this.setState({
@@ -125,6 +144,7 @@ export const PreviewLink = React.createClass({
                             user={ preview }
                             relationship={ relationship }
                             followUser={ followUser }
+                            countsArr={ this.countsArr }
                             key={ `UserPreview_${ previewId }` }
                             onMouseEnter={ () => this.handlePreviewMouseEnter }
                             onMouseLeave={ () => this.handlePreviewMouseLeave } />

@@ -1,4 +1,5 @@
 const initialState = {
+    headerMenu: false,
     menuIsOpen: false,
     searchIsOpen: false,
     notifsIsOpen: false,
@@ -13,6 +14,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 menuIsOpen: !state.menuIsOpen
+            };
+        case 'UI_TOGGLE_HEADER_MENU':
+            return {
+                ...state,
+                headerMenu: action.menu
             };
         case 'UI_TOGGLE_SEARCH':
             return {

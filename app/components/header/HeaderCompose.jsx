@@ -1,9 +1,15 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import {
+    TweenLite,
+    TimelineLite,
+    Power2
+} from 'gsap';
 import { changeTab } from 'actions/HeaderComposeActions';
-
+import { switchHeaderMenu } from 'actions/UIStateActions';
 import { writePost } from 'actions/PostActions';
 
+import ClickScreen from 'elements/ClickScreen';
 import Composer from 'composer/Composer';
 
 const headerComposeTabs = [
@@ -31,6 +37,41 @@ const headerComposeTabs = [
 
 export const HeaderCompose = React.createClass({
 
+    componentDidMount(){
+        TweenLite.from(this.composeRef, 0.4, {
+            ease: Power2.easeOut,
+            opacity: 0
+        });
+    },
+
+    componentDidUpdate(prevProps){
+        // If compose just opened:
+        if (!prevProps.headerMenu !== this.props.headerMenu &&
+            this.isComposeOpen()){
+            TimelineLite.from(this.composeRef, 0.4, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
+        }
+    },
+
+    // Finish this, similar to notifscenter.
+    onCloseCompose(event){
+        event.preventDefault();
+
+        const { onClose } = this.props;
+        // If compose is open, animate it out.
+        if (this.isComposeOpen()){
+            const tl = new TimelineLite();
+            tl.to(this.composeRef, 0.2, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
+            tl.play();
+            tl.eventCallback('onComplete', onClose);
+        }
+    },
+
     handleTabClick(tab){
         const { dispatch } = this.props;
         dispatch(changeTab(tab));
@@ -40,6 +81,10 @@ export const HeaderCompose = React.createClass({
         // Make sure to update action & reducer to store raw & parsed post!
         const { dispatch } = this.props;
         dispatch(writePost(parsedPost));
+    },
+
+    isComposeOpen(){
+        return this.props.headerMenu === 'compose';
     },
 
     render(){
@@ -62,14 +107,16 @@ export const HeaderCompose = React.createClass({
         };
 
         const renderComponent = () => {
-            const { onClose } = this.props;
             let component = '';
             switch (tabSelected){
                 case 'post':
                     component = (
-                        <Composer
-                            onClose={ onClose }
-                            onSubmit={ this.handlePostSubmit } />
+                        <div>
+                            <ClickScreen onClick={ this.onCloseCompose } />
+                            <Composer
+                                onClose={ this.onCloseCompose }
+                                onSubmit={ this.handlePostSubmit } />
+                        </div>
                     );
                     break;
                 default:
@@ -80,7 +127,9 @@ export const HeaderCompose = React.createClass({
         };
 
         return (
-            <div className="header-compose">
+            <div
+                ref={ element => this.composeRef = element }
+                className="header-compose">
                 <div className="header-compose-tab-set">
                     { renderTabs() }
                 </div>
@@ -96,6 +145,7 @@ export const HeaderCompose = React.createClass({
 
 export default Redux.connect(state => {
     return {
+        headerMenu: state.uiState.headerMenu,
         tabSelected: state.headerCompose.currentTab
     };
 })(HeaderCompose);

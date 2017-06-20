@@ -21,7 +21,7 @@ import {
     addFavorite
 } from 'actions/FriendshipActions';
 import { pushToRoute } from 'actions/RouteActions';
-import { toggleNotifs } from 'actions/UIStateActions';
+import { switchHeaderMenu } from 'actions/UIStateActions';
 import ClickScreen from 'elements/ClickScreen';
 import { NotificationTopbar } from './NotificationTopbar';
 import { NotificationsList } from './NotificationsList';
@@ -59,7 +59,8 @@ export const NotificationCenter = React.createClass({
     componentDidUpdate(prevProps, prevState){
 
         // If the menu just opened:
-        if (!prevProps.isNotifsOpen && this.props.isNotifsOpen){
+        if (!prevProps.headerMenu !== this.props.headerMenu &&
+            this.isNotifsOpen()){
             const tl = new TimelineLite();
             tl.from(this.notifsContainerRef, 0.4, {
                 ease: Power2.easeOut,
@@ -98,14 +99,11 @@ export const NotificationCenter = React.createClass({
     onClickNotifs(event){
         event.preventDefault();
 
-        const {
-            dispatch,
-            isNotifsOpen
-        } = this.props;
+        const { dispatch } = this.props;
         const { showBadge } = this.state;
 
         // If the menu is open, animate it out, close it, and acknowledge notifs. Otherwise, open it.
-        if (isNotifsOpen){
+        if (this.isNotifsOpen()){
             const tl = new TimelineLite();
             tl.to(this.notifsContainerRef, 0.2, {
                 ease: Power2.easeOut,
@@ -121,7 +119,7 @@ export const NotificationCenter = React.createClass({
             tl.play();
             tl.eventCallback('onComplete', this.closeNotifsMenu);
         } else {
-            dispatch(toggleNotifs());
+            dispatch(switchHeaderMenu('notifs'));
         }
     },
 
@@ -172,12 +170,16 @@ export const NotificationCenter = React.createClass({
 
     closeNotifsMenu(){
         const { dispatch } = this.props;
-        dispatch(toggleNotifs());
+        dispatch(switchHeaderMenu());
         this.acknowledgeNotifs();
     },
 
     isSelf(testUid){
         return testUid === this.props.uid;
+    },
+
+    isNotifsOpen(){
+        return this.props.headerMenu === 'notifs';
     },
 
     checkFriendship(testUid, testGroup){
@@ -203,7 +205,6 @@ export const NotificationCenter = React.createClass({
             notifs,
             notifsStatus,
             newNotifsCount,
-            isNotifsOpen,
             displayNotifs,
             direction,
             following,
@@ -231,7 +232,7 @@ export const NotificationCenter = React.createClass({
         };
 
         const renderNotifs = () => {
-            if (isNotifsOpen){
+            if (this.isNotifsOpen()){
                 return (
                     <div>
                         <ClickScreen onClick={ this.onClickNotifs } />
@@ -291,7 +292,7 @@ export default Redux.connect(state => {
         uid: state.auth.uid,
         notifs: state.notifs.data,
         notifsStatus: state.notifs.status,
-        isNotifsOpen: state.uiState.notifsIsOpen,
+        headerMenu: state.uiState.headerMenu,
         newNotifsCount: state.notifs.newNotifsCount,
         following: state.user.following,
         favorites: state.user.favorites,

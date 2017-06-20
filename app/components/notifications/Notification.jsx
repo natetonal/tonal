@@ -245,7 +245,7 @@ export const Notification = React.createClass({
                     if (isFollowing){
                         settings.push({
                             icon: isFavorited ? 'broken-heart' : 'heart',
-                            iconColor: 'pink',
+                            iconColor: isFavorited ? 'midgray' : 'white',
                             title: isFavorited ? `Remove ${ sender.displayName } from your favorites` : `Add ${ sender.displayName } to your favorites`,
                             callback: favoriteUser,
                             params: [sender.uid, sender.username, sender.displayName]
@@ -254,8 +254,8 @@ export const Notification = React.createClass({
 
                     settings.push(
                         {
-                            icon: isFollowing ? 'ban' : 'user-plus',
-                            iconColor: isFollowing ? 'magenta' : 'lightgreen',
+                            icon: isFollowing ? 'user-times' : 'user-plus',
+                            iconColor: isFollowing ? 'midgray' : 'white',
                             title: `${ isFollowing ? 'Unf' : 'F' }ollow ${ sender.displayName }`,
                             callback: followUser,
                             params: [sender.uid, sender.username, sender.displayName]
@@ -264,8 +264,9 @@ export const Notification = React.createClass({
                             divider: true
                         },
                         {
-                            icon: 'user-times',
-                            iconColor: 'yellow',
+                            icon: 'ban',
+                            iconColor: 'midgray',
+                            highlightColor: 'red',
                             title: `Block ${ sender.displayName }`,
                             callback: blockUser,
                             params: [sender.uid]
@@ -275,6 +276,7 @@ export const Notification = React.createClass({
 
                 settings.push({
                     icon: 'times',
+                    iconColor: 'midgray',
                     highlightColor: 'red',
                     title: 'Delete Notification',
                     callback: this.handleDelete,

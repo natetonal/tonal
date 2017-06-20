@@ -24,7 +24,8 @@ body,
 
 .tonal-main {
 	overflow-y: scroll;
-	@include gradient(top, $content-bg1, $content-bg2);
+	@include gradient(2deg, $content-bg3, $content-bg4);
+	// @include gradient(top, $content-bg1, $content-bg2);
 }
 
 .tonal-main,

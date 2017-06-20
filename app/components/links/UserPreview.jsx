@@ -1,7 +1,23 @@
 import React from 'react';
 import numeral from 'numeral';
+import {
+    TweenMax,
+    Back
+} from 'gsap';
 
 export const UserPreview = React.createClass({
+
+    componentDidMount(){
+        const { countsArr } = this.props;
+        if (countsArr.every(name => this[`${ name }Ref`])){
+            const refs = countsArr.map(name => this[`${ name }Ref`]);
+            TweenMax.staggerFrom(refs, 0.5, {
+                ease: Back.easeOut.config(1.5),
+                opacity: 0,
+                y: 50
+            }, 0.05);
+        }
+    },
 
     render(){
 
@@ -10,9 +26,12 @@ export const UserPreview = React.createClass({
             pos,
             relationship,
             followUser,
+            countsArr,
             onMouseEnter,
             onMouseLeave
         } = this.props;
+
+        console.log(`Relationship with user ${ user.displayName }: ${ relationship }`);
 
         if (!user){
             return (
@@ -47,7 +66,7 @@ export const UserPreview = React.createClass({
             }
 
             if (relationship === 'following'){
-                return <div className="user-preview-follow-action"><i className="fa fa-check-circle" aria-hidden="true" /> Favorites</div>;
+                return <div className="user-preview-follow-action"><i className="fa fa-check-circle" aria-hidden="true" /> Following</div>;
             }
 
             if (relationship === 'none'){
@@ -59,6 +78,24 @@ export const UserPreview = React.createClass({
             }
 
             return '';
+        };
+
+        const renderCountLabels = () => {
+            return countsArr.map(name => {
+                return (
+                    <div
+                        key={ `userPreviewLabel_${ name }` }
+                        ref={ element => this[`${ name }Ref`] = element }
+                        className="user-preview-friendship">
+                        <div className="user-preview-friendship-label">
+                            { name }
+                        </div>
+                        <div className="user-preview-friendship-count">
+                            { formatNumber(user[`${ name }Count`]) }
+                        </div>
+                    </div>
+                );
+            });
         };
 
         return (
@@ -89,38 +126,7 @@ export const UserPreview = React.createClass({
                     </div>
                 </div>
                 <div className="user-preview-bottom">
-                    <div className="user-preview-friendship">
-                        <div className="user-preview-friendship-label">
-                            Followers
-                        </div>
-                        <div className="user-preview-friendship-count">
-                            { formatNumber(user.followersCount) }
-                        </div>
-                    </div>
-                    <div className="user-preview-friendship">
-                        <div className="user-preview-friendship-label">
-                            Following
-                        </div>
-                        <div className="user-preview-friendship-count">
-                            { formatNumber(user.followingCount) }
-                        </div>
-                    </div>
-                    <div className="user-preview-friendship">
-                        <div className="user-preview-friendship-label">
-                            Favorited By
-                        </div>
-                        <div className="user-preview-friendship-count">
-                            { formatNumber(user.favoritedCount) }
-                        </div>
-                    </div>
-                    <div className="user-preview-friendship">
-                        <div className="user-preview-friendship-label">
-                            Favorites
-                        </div>
-                        <div className="user-preview-friendship-count">
-                            { formatNumber(user.favoritesCount) }
-                        </div>
-                    </div>
+                    { renderCountLabels() }
                 </div>
             </div>
         );

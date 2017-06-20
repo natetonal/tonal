@@ -1,30 +1,42 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import { toggleMenu } from 'actions/UIStateActions';
+import { switchHeaderMenu } from 'actions/UIStateActions';
 // import Hammer from 'react-hammerjs'; - add this back in later for swiping.
 
 import Menu from './Menu';
 
 export const MenuWrapper = React.createClass({
 
-    handleClick(event){
+    handleClick(menu, event){
         event.preventDefault();
-        const { dispatch } = this.props;
-        dispatch(toggleMenu());
+        const {
+            dispatch,
+            headerMenu
+        } = this.props;
+        if (event.target === this.wrapperRef){
+            if (headerMenu === menu){
+                dispatch(switchHeaderMenu());
+            } else {
+                dispatch(switchHeaderMenu(menu));
+            }
+        }
+    },
+
+    isOpen(){
+        return this.props.headerMenu === 'settings';
     },
 
     render(){
 
-        const { isOpen } = this.props;
-
         return (
             <div
                 id="tonal-container"
-                className={ `tonal-container menu-effect ${ isOpen ? 'tonal-menu-open' : '' }` }>
+                className={ `tonal-container menu-effect ${ this.isOpen() ? 'tonal-menu-open' : '' }` }>
                 <Menu />
                 <div
+                    ref={ element => this.wrapperRef = element }
                     className="tonal-pusher"
-                    onClick={ isOpen ? this.handleClick : false }>
+                    onClick={ e => this.handleClick('settings', e) }>
                     <div className="tonal-main">
                         <div className="tonal-main-inner">
                             { this.props.children }
@@ -38,6 +50,6 @@ export const MenuWrapper = React.createClass({
 
 export default Redux.connect(state => {
     return {
-        isOpen: state.uiState.menuIsOpen
+        headerMenu: state.uiState.headerMenu
     };
 })(MenuWrapper);
