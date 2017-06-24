@@ -10,7 +10,7 @@
     color: $header-text;
     height: $header-height;
     width: 100%;
-    @include boxshadow(0 4px 6px 0 $modal-bg);
+    @include boxshadow($headershadow);
 
     .header-action{
         position: absolute;
@@ -259,7 +259,7 @@
         .tonal-header-avatar-image {
             height: 50px;
             width: 50px;
-            margin-top: 8px;
+            margin-top: 5px;
             border-radius: 50%;
             opacity: 0.8;
 
@@ -271,7 +271,7 @@
 
         @include breakpoint(small down) {
             .tonal-header-avatar-image {
-                margin-top: 0;
+                margin-top: -5px;
             }
         }
     }

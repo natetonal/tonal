@@ -25,6 +25,7 @@ exports.countFollowing = counters.countFollowing(functions, admin);
 exports.countFavorites = counters.countFavorites(functions, admin);
 exports.countFavorited = counters.countFavorited(functions, admin);
 exports.countUserPosts = counters.countUserPosts(functions, admin);
+exports.countPostLikes = counters.countPostLikes(functions, admin);
 
 // Feed Functions
 exports.updateUserFeeds = feeds.updateUserFeeds(functions, admin);

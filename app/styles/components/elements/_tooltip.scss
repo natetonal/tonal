@@ -102,6 +102,18 @@
                 border-color: transparent transparent rgba(0,0,0,0.8) transparent;
             }
         }
+
+        &.text-left{
+            text-align: left;
+        }
+
+        &.text-center{
+            text-align: center;
+        }
+
+        &.text-right{
+            text-align: right;
+        }
     }
 
     &:hover{

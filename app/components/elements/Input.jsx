@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import Tooltip from './Tooltip';
+
 export const Input = React.createClass({
 
     propTypes: {
@@ -65,14 +67,9 @@ export const Input = React.createClass({
         const renderTooltip = () => {
             if (tooltip){
                 return (
-                    <div className="tonal-tooltip">
-                        <i
-                            className="input-option fa fa-question-circle"
-                            aria-hidden="true" />
-                        <span className="tooltiptext tooltip-left">
-                            { tooltip }
-                        </span>
-                    </div>
+                    <Tooltip text={ tooltip }>
+                        <i className="fa fa-question-circle" aria-hidden="true" />
+                    </Tooltip>
                 );
             }
 

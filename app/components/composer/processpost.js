@@ -147,40 +147,15 @@ export const parsePost = (html, data, userData) => {
     parsedPost.write(html);
     parsedPost.end();
 
-    if (links){
-        return checkIfLinksAreSafe(links, post)
-        .then(safePost => {
-            if (!safePost.error){
-                postData = {
-                    ...postData,
-                    hashtags,
-                    likes: 0,
-                    thread: false,
-                    postEdited: false,
-                    postEditedAt: false,
-                    post: safePost,
-                    raw: html,
-                    newestData: true,
-                    author: {
-                        avatar: userData.avatar,
-                        username: userData.username,
-                        displayName: userData.displayName,
-                        uid: userData.uid,
-                    }
-                };
-
-                return postData;
-            }
-
-            return safePost;
-        });
-    }
-
-    return {
+    postData = {
         ...postData,
         hashtags,
-        likes: 0,
+        likes: false,
+        likesCount: 0,
+        shares: false,
+        sharesCount: 0,
         thread: false,
+        threadCount: 0,
         postEdited: false,
         postEditedAt: false,
         raw: html,
@@ -193,4 +168,22 @@ export const parsePost = (html, data, userData) => {
             uid: userData.uid,
         }
     };
+
+    if (links){
+        return checkIfLinksAreSafe(links, post)
+        .then(safePost => {
+            if (!safePost.error){
+                postData = {
+                    ...postData,
+                    post: safePost,
+                };
+
+                return postData;
+            }
+
+            return safePost;
+        });
+    }
+
+    return postData;
 };

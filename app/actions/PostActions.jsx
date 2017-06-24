@@ -51,6 +51,27 @@ export const deletePost = postId => {
     };
 };
 
+export const likePost = (postId, likeId, liked) => {
+    return (dispatch, getState) => {
+        if (postId){
+            const uid = getState().auth.uid;
+            const updates = {};
+            let data = moment().format('LLLL');
+
+            if (!liked){
+                data = null;
+            }
+
+            console.log('likePost: liked data: ', liked);
+            updates[`posts/${ postId }/likes/${ likeId }`] = data;
+            updates[`feed/${ uid }/${ postId }/likes/${ likeId }`] = data;
+            updates[`user-activity/${ uid }/${ postId }/likes/${ likeId }`] = data;
+            databaseRef.update(updates);
+
+        }
+    };
+};
+
 export const updatePostAuthorData = (data, postId) => {
     return dispatch => {
         const author = data.author;

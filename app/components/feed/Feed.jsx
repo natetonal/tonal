@@ -9,6 +9,7 @@ import {
     toggleEditPost
 } from 'actions/FeedActions';
 import {
+    likePost,
     deletePost,
     updatePost,
     updatePostAuthorData
@@ -50,6 +51,18 @@ export const Feed = React.createClass({
         dispatch(updatePost(updatedPost, postId));
     },
 
+    handleLikePost(postId){
+        const {
+            dispatch,
+            uid
+        } = this.props;
+
+        console.log('handleLikePost called with ', postId);
+        const liked = !this.likesPost(postId, uid);
+        console.log('handleLikePost valued of liked ', liked);
+        dispatch(likePost(postId, uid, liked));
+    },
+
     handleDeletePost(notifId){
         const { dispatch } = this.props;
         console.log('delete this notif: ', notifId);
@@ -64,6 +77,10 @@ export const Feed = React.createClass({
 
     isSelf(testUid){
         return testUid === this.props.uid;
+    },
+
+    likesPost(postId){
+        return Object.keys(this.props.feed[postId].likes).includes(this.props.uid);
     },
 
     checkFriendship(testUid, testGroup){
@@ -138,8 +155,10 @@ export const Feed = React.createClass({
                                     checkFriendship={ this.checkFriendship }
                                     evaluateRelationship={ this.evaluateRelationship }
                                     isSelf={ this.isSelf }
+                                    likesPost={ this.likesPost }
                                     updatePost={ this.handleUpdatePost }
                                     deletePost={ this.handleDeletePost }
+                                    likePost={ this.handleLikePost }
                                     blockUser={ this.handleBlockUser }
                                     followUser={ this.handleFollowUser }
                                     togglePostEditor={ this.togglePostEditor } />

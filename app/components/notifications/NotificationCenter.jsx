@@ -234,8 +234,7 @@ export const NotificationCenter = React.createClass({
         const renderNotifs = () => {
             if (this.isNotifsOpen()){
                 return (
-                    <div>
-                        <ClickScreen onClick={ this.onClickNotifs } />
+                    <ClickScreen onClick={ this.onClickNotifs }>
                         <div
                             ref={ element => this.notifsContainerRef = element }
                             className="notifications-list-container">
@@ -264,7 +263,7 @@ export const NotificationCenter = React.createClass({
                                 followUser={ this.handleFollowUser }
                                 favoriteUser={ this.handleFavoriteUser } />
                         </div>
-                    </div>
+                    </ClickScreen>
                 );
             }
         };

@@ -15,7 +15,7 @@ export const UserPreview = React.createClass({
                 ease: Back.easeOut.config(1.5),
                 opacity: 0,
                 y: 50
-            }, 0.05);
+            }, 0.15);
         }
     },
 
@@ -30,8 +30,6 @@ export const UserPreview = React.createClass({
             onMouseEnter,
             onMouseLeave
         } = this.props;
-
-        console.log(`Relationship with user ${ user.displayName }: ${ relationship }`);
 
         if (!user){
             return (

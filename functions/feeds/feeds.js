@@ -1,4 +1,7 @@
 // Update all follower & following feeds with user's post change (add, delete, edit).
+
+// A. This should follow posts/{postId}
+// B. This should fan out the data, not the action function.
 exports.updateUserFeeds = (functions, admin) => {
     return functions.database.ref('/user-posts/{userId}/{postId}').onWrite(event => {
         const userId = event.params.userId;

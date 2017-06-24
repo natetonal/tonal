@@ -10,6 +10,8 @@ import {
 import Composer from 'composer/Composer';
 import PreviewLink from 'links/PreviewLink';
 import SmallMenu from 'elements/SmallMenu';
+import ClickScreen from 'elements/ClickScreen';
+import Tooltip from 'elements/Tooltip';
 import Comment from './Comment';
 import PostParser from './PostParser';
 
@@ -20,6 +22,8 @@ export const Post = React.createClass({
     componentWillMount(){
         this.setState({
             showMenu: false,
+            showTooltip: false,
+            showLiked: this.props.likesPost(this.props.postId),
             timeStamp: this.processTimestamp()
         });
 
@@ -95,6 +99,21 @@ export const Post = React.createClass({
         this.setState({
             showMenu: !this.state.showMenu
         });
+    },
+
+    handleLikePost(){
+        const {
+            likesPost,
+            likePost,
+            postId
+        } = this.props;
+
+        this.setState({
+            showLiked: !this.state.showLiked
+        });
+
+        // Animate here.
+        likePost(postId);
     },
 
     handleDeletePost(){
@@ -175,6 +194,7 @@ export const Post = React.createClass({
             isSelf,
             deletePost,
             updatePost,
+            likePost,
             blockUser,
             followUser,
             togglePostEditor
@@ -185,12 +205,12 @@ export const Post = React.createClass({
             const {
                 file,
                 image,
-                likes,
                 mentions,
                 post,
                 raw,
+                likes,
+                likesCount,
                 postEdited,
-                postEditedAt,
                 thread,
                 length,
                 author
@@ -205,10 +225,12 @@ export const Post = React.createClass({
 
             const {
                 showMenu,
+                showTooltip,
+                showLiked,
                 timeStamp
             } = this.state;
 
-            const displayMenu = () => {
+            const renderMenu = () => {
 
                 if (showMenu){
 
@@ -221,14 +243,18 @@ export const Post = React.createClass({
                     }];
 
                     if (!posterIsSelf){
+
+                        if (following){
+                            settings.push({
+                                icon: favorites ? 'broken-heart' : 'heart',
+                                iconColor: favorites ? 'midgray' : 'white',
+                                title: favorites ? `Remove ${ displayName } from your favorites` : `Add ${ displayName } to your favorites`,
+                                callback: favorites,
+                                params: [uid, username, displayName]
+                            });
+                        }
+
                         settings.push(
-                            {
-                                icon: 'sign-out',
-                                iconColor: 'midgray',
-                                title: `Unsubscribe from ${ displayName }'s posts`,
-                                description: 'Hide all posts from this user and stop receiving notifications.',
-                                callback: () => console.log('UNSUBSCRIBED FROM ALL POSTS')
-                            },
                             {
                                 icon: following ? 'user-times' : 'user-plus',
                                 iconColor: following ? 'midgray' : 'white',
@@ -237,12 +263,19 @@ export const Post = React.createClass({
                                 params: [uid, username, displayName]
                             },
                             {
+                                icon: 'sign-out',
+                                iconColor: 'midgray',
+                                title: `Unsubscribe from ${ displayName }'s posts`,
+                                description: 'Hide all posts from this user and stop receiving notifications.',
+                                callback: () => console.log('UNSUBSCRIBED FROM ALL POSTS')
+                            },
+                            {
                                 divider: true
                             },
                             {
                                 icon: 'flag',
                                 iconColor: 'white',
-                                highlightColor: 'darkorange',
+                                highlightColor: 'orange',
                                 title: 'Flag This Post',
                                 description: 'Report TOS Violations to the administrators.',
                                 callback: () => console.log('FLAGGED!')
@@ -283,10 +316,12 @@ export const Post = React.createClass({
 
                     return (
                         <div>
-                            <SmallMenu
-                                width="large"
-                                options={ settings }
-                                onClose={ this.handlePostMenu } />
+                            <ClickScreen onClick={ this.handlePostMenu }>
+                                <SmallMenu
+                                    width="large"
+                                    options={ settings }
+                                    onClose={ this.handlePostMenu } />
+                            </ClickScreen>
                         </div>
                     );
                 }
@@ -294,15 +329,15 @@ export const Post = React.createClass({
                 return '';
             };
 
-            const displayThread = () => {
+            const renderThread = () => {
 
                 if (thread){
                     return Object.keys(thread).map((key) => {
-                        const data = thread[key];
+                        const d = thread[key];
                         return (
                             <Comment
                                 key={ `comment_${ key }` }
-                                data={ data }
+                                data={ d }
                                 number={ postNum } />
                         );
                     });
@@ -314,7 +349,7 @@ export const Post = React.createClass({
                 );
             };
 
-            const displayImage = () => {
+            const renderImage = () => {
                 if (image){
                     return (
                         <div className={ `tonal-post-image ${ file ? 'fullwidth' : '' }` }>
@@ -357,7 +392,7 @@ export const Post = React.createClass({
                 );
             };
 
-            const displayTimestamp = () => {
+            const renderTimestamp = () => {
                 if (postEdited){
                     return `Edited ${ timeStamp }`;
                 }
@@ -365,6 +400,25 @@ export const Post = React.createClass({
                 return timeStamp;
             };
 
+            const renderTooltip = (text, icon, handler, btnState = '') => {
+                return (
+                    <div
+                        onMouseEnter={ () => this.setState({ showTooltip: text }) }
+                        onMouseLeave={ () => this.setState({ showTooltip: false }) }
+                        onClick={ handler }
+                        className={ `tonal-post-interaction tonal-post-interaction-${ text.toLowerCase() } ${ btnState }` }>
+                        <Tooltip
+                            text={ showTooltip === text ? text : false }
+                            direction="top"
+                            align="center"
+                            delay={ 1000 }>
+                            <i
+                                className={ `fa fa-${ icon }` }
+                                aria-hidden="true" />
+                        </Tooltip>
+                    </div>
+                );
+            };
 
             return (
                 <ReactCSSTransitionGroup
@@ -381,7 +435,7 @@ export const Post = React.createClass({
                                 className="tonal-post-menu"
                                 onClick={ this.handlePostMenu }>
                                 <i className="fa fa-angle-down" aria-hidden="true" />
-                                { displayMenu() }
+                                { renderMenu() }
                             </div>
                             <div
                                 ref={ element => this.avatarRef = element }
@@ -410,31 +464,22 @@ export const Post = React.createClass({
                                 <div
                                     ref={ element => this.timeStampRef = element }
                                     className="tonal-post-timestamp">
-                                    { displayTimestamp() }
+                                    { renderTimestamp() }
                                 </div>
                             </div>
                         </div>
                         { postMode() }
-                        { displayImage() }
+                        { renderImage() }
                         <div className="tonal-post-interactions">
-                            <div className="tonal-post-interaction tonal-post-interaction-like">
-                                <i className="fa fa-bolt" aria-hidden="true" />
-                                Like
-                            </div>
-                            <div className="tonal-post-interaction tonal-post-interaction-reply">
-                                <i className="fa fa-comment" aria-hidden="true" />
-                                Reply
-                            </div>
-                            <div className="tonal-post-interaction tonal-post-interaction-share">
-                                <i className="fa fa-share" aria-hidden="true" />
-                                Share
-                            </div>
+                            { renderTooltip('Like', 'bolt', this.handleLikePost, (showLiked ? 'liked' : '')) }
+                            { renderTooltip('Reply', 'comment', () => console.log('COMMENTING')) }
+                            { renderTooltip('Share', 'share', () => console.log('SHARED')) }
                             <div className="tonal-post-interaction tonal-post-interaction-likes">
-                                { likes } Likes
+                                { likesCount } Likes
                             </div>
                         </div>
                         <div className="tonal-post-thread">
-                            { displayThread() }
+                            { renderThread() }
                         </div>
                     </div>
                 </ReactCSSTransitionGroup>

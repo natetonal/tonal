@@ -111,12 +111,11 @@ export const HeaderCompose = React.createClass({
             switch (tabSelected){
                 case 'post':
                     component = (
-                        <div>
-                            <ClickScreen onClick={ this.onCloseCompose } />
+                        <ClickScreen onClick={ this.onCloseCompose }>
                             <Composer
                                 onClose={ this.onCloseCompose }
                                 onSubmit={ this.handlePostSubmit } />
-                        </div>
+                        </ClickScreen>
                     );
                     break;
                 default:

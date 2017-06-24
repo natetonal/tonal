@@ -98,6 +98,11 @@
                 @include transition(0.2s background);
             }
 
+            &.lightyellow{
+                background: $alert-warning;
+                @include transition(0.2s background);
+            }
+
             &.magenta{
                 background: $magenta;
                 @include transition(0.2s background);

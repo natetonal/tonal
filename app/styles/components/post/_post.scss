@@ -1,6 +1,7 @@
 .tonal-post {
     // background: #818181;
-    background: rgba(224, 226, 241, 0.2);
+    background: rgba(224, 226, 241, 0.28);
+    // background: rgba(224, 226, 241, 0.2);
     margin: 20px 0;
     border-top: 1px solid $lightblue;
     border-bottom: 1px solid $lightblue;
@@ -167,6 +168,12 @@
 
             .fa{
                 padding-right: 10px;
+            }
+
+            &.liked{
+                .fa{
+                    color: $lightblue;
+                }
             }
         }
 
