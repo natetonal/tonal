@@ -51,7 +51,7 @@ export const deletePost = postId => {
     };
 };
 
-export const likePost = (postId, likeId, liked) => {
+export const likePost = (authorId, postId, likeId, liked) => {
     return (dispatch, getState) => {
         if (postId){
             const uid = getState().auth.uid;
@@ -65,7 +65,7 @@ export const likePost = (postId, likeId, liked) => {
             console.log('likePost: liked data: ', liked);
             updates[`posts/${ postId }/likes/${ likeId }`] = data;
             updates[`feed/${ uid }/${ postId }/likes/${ likeId }`] = data;
-            updates[`user-activity/${ uid }/${ postId }/likes/${ likeId }`] = data;
+            updates[`user-posts/${ authorId }/${ postId }/likes/${ likeId }`] = data;
             databaseRef.update(updates);
 
         }

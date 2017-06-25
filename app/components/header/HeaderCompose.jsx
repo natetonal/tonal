@@ -56,8 +56,7 @@ export const HeaderCompose = React.createClass({
     },
 
     // Finish this, similar to notifscenter.
-    onCloseCompose(event){
-        event.preventDefault();
+    onCloseCompose(){
 
         const { onClose } = this.props;
         // If compose is open, animate it out.

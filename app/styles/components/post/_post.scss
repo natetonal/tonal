@@ -293,3 +293,16 @@
         }
     }
 }
+
+.feed-nofeed {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 50px 20px;
+    background: rgba(0,0,0,0.3);
+    font-size: 18px;
+    letter-spacing: 1.1px;
+    line-height: 2.5;
+    font-weight: 300;
+    border-radius: 4px;
+}

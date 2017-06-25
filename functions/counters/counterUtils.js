@@ -49,7 +49,6 @@ exports.countLikes = (event, admin) => {
         updates[`posts/${ postId }/likesCount`] = count;
         updates[`user-posts/${ userId }/${ postId }/likesCount`] = count;
         updates[`feed/${ userId }/${ postId }/likesCount`] = count;
-        updates[`user-activity/${ userId }/${ postId }/likesCount`] = count;
         return admin.database().ref().update(updates);
 
     }).then(() => {

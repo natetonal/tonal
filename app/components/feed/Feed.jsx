@@ -51,7 +51,7 @@ export const Feed = React.createClass({
         dispatch(updatePost(updatedPost, postId));
     },
 
-    handleLikePost(postId){
+    handleLikePost(authorId, postId){
         const {
             dispatch,
             uid
@@ -60,7 +60,7 @@ export const Feed = React.createClass({
         console.log('handleLikePost called with ', postId);
         const liked = !this.likesPost(postId, uid);
         console.log('handleLikePost valued of liked ', liked);
-        dispatch(likePost(postId, uid, liked));
+        dispatch(likePost(authorId, postId, uid, liked));
     },
 
     handleDeletePost(notifId){
@@ -169,7 +169,13 @@ export const Feed = React.createClass({
                     });
                 }
 
-                return '';
+                return (
+                    <div className="feed-nofeed">
+                        Nothing to show here. <br />
+                        This should never, ever be visible once Tonal is live. <br />
+                        Ever.
+                    </div>
+                );
             }
 
             return 'no idea what happen, mang.';

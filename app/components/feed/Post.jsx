@@ -103,7 +103,6 @@ export const Post = React.createClass({
 
     handleLikePost(){
         const {
-            likesPost,
             likePost,
             postId
         } = this.props;
@@ -113,7 +112,7 @@ export const Post = React.createClass({
         });
 
         // Animate here.
-        likePost(postId);
+        likePost(this.props.data.author.uid, postId);
     },
 
     handleDeletePost(){
