@@ -159,18 +159,25 @@
         border-top: 1px solid rgba(0,0,0,0.1);
         border-bottom: 1px solid rgba(0,0,0,0.1);
         padding: 5px 0;
-        font-size: 14px;
+        font-size: 18px;
         color: rgba(255,255,255,0.8);
 
         .tonal-post-interaction {
+            position: relative;
             display: inline-block;
             padding: 0 20px;
+            color: darken($white, 10%);
+            @include transition(0.2s all);
 
             .fa{
                 padding-right: 10px;
+                pointer-events: none;
             }
 
-            &.liked{
+            span{
+                pointer-events: none;
+            }
+            &.active{
                 .fa{
                     color: $lightblue;
                 }
@@ -179,7 +186,10 @@
 
         .tonal-post-interaction-likes {
             float: right;
-            color: $lightgray1;
+
+            span{
+                opacity: 1;
+            }
         }
     }
 
@@ -245,9 +255,7 @@
         }
     }
 
-    .tonal-post-interaction-like,
-    .tonal-post-interaction-reply,
-    .tonal-post-interaction-share {
+    .tonal-post-interaction {
         cursor: pointer;
 
         &:hover{

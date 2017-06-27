@@ -31,5 +31,5 @@ exports.countUserPosts = (functions, admin) => {
 
 exports.countPostLikes = (functions, admin) => {
     return functions.database.ref('/user-posts/{userId}/{postId}/likes/{targetId}')
-        .onWrite(event => counterUtils.countLikes(event, admin));
+        .onWrite(event => counterUtils.countLikes('likes', event, admin));
 };

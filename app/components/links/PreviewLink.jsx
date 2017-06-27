@@ -1,12 +1,12 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import firebase from 'firebase';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { fetchPreviewData } from 'actions/LinkActions';
 
 import UserPreview from './UserPreview';
+import UserList from './UserList';
 
 export const PreviewLink = React.createClass({
 
@@ -16,9 +16,20 @@ export const PreviewLink = React.createClass({
         this.top = 0;
         this.left = 0;
 
+        this.key = (length = 10) => {
+            let text = '';
+            const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for (let i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        };
+
         this.setState({
-            preview: false,
+            key: this.key(),
+            previewData: false,
             previewType: false,
+            previewReady: false,
             previewHovered: false
         });
     },
@@ -30,18 +41,18 @@ export const PreviewLink = React.createClass({
     },
 
     countsArr: ['followers', 'following'],
+    singleDataType: ['user'],
+    multipleDataType: ['user-list'],
 
     clearCoords(){
         this.top = 0;
         this.left = 0;
     },
 
-    fetchData(){
-        const {
-            dispatch,
-            previewId
-        } = this.props;
+    fetchData(previewId = this.props.previewId){
+        if (!previewId){ return false; }
 
+        const { dispatch } = this.props;
         return dispatch(fetchPreviewData(previewId))
         .then(response => {
             if (response){
@@ -52,34 +63,38 @@ export const PreviewLink = React.createClass({
         });
     },
 
-    observePreviewDataWhileHovered(){
-        const { previewId } = this.props;
-        const { previewHovered } = this.state;
-        if (previewHovered){
-            this.countsArr.forEach(group => {
-                const thisRef = firebase.database().ref(`users/${ previewId }/${ group }`);
-                ['child_added', 'child_changed', 'child_removed'].forEach(event => {
-                    thisRef.on(event, () => {
-                        fetchPreviewData
-                    })
-                })
-            })
-        }
-    },
-
     handleMentionPreview(previewType, event){
         event.preventDefault();
         event.persist();
         if (!this.timeoutMouseEnter) {
             this.getCoords(event.target);
             this.timeoutMouseEnter = window.setTimeout(() => {
-                this.fetchData().then(preview => {
-                    this.timeoutMouseEnter = null;
-                    this.setState({
-                        preview,
-                        previewType
+                window.clearTimeout(this.timeoutMouseEnter);
+                this.timeoutMouseEnter = null;
+                if (this.multipleDataType.includes(previewType)){
+                    const { previewIds } = this.props;
+                    Promise.all(Object.keys(previewIds || {}).map(id => this.fetchData(id)))
+                    .then(previewData => {
+                        if (previewData && this.componentRef){
+                            this.setState({
+                                previewReady: true,
+                                previewData,
+                                previewType
+                            });
+                        }
                     });
-                });
+                } else if (this.singleDataType.includes(previewType)){
+                    this.fetchData()
+                    .then(previewData => {
+                        if (previewData && this.componentRef){
+                            this.setState({
+                                previewReady: true,
+                                previewData,
+                                previewType
+                            });
+                        }
+                    });
+                }
             }, 500);
 
         }
@@ -92,12 +107,13 @@ export const PreviewLink = React.createClass({
         } else {
             this.timeoutMouseLeave = window.setTimeout(() => {
                 const { previewHovered } = this.state;
+                window.clearTimeout(this.timeoutMouseLeave);
                 this.timeoutMouseLeave = null;
-                this.interval = setInterval(this.updatePreviewDataWhileHovered, 1000);
-                if (!previewHovered){
+                if (!previewHovered && this.componentRef){
                     this.clearCoords();
                     this.setState({
-                        preview: false,
+                        previewReady: false,
+                        previewData: false,
                         previewType: false
                     });
                 }
@@ -112,8 +128,9 @@ export const PreviewLink = React.createClass({
     handlePreviewMouseLeave(){
         this.clearCoords();
         this.setState({
-            preview: false,
             previewType: false,
+            previewData: false,
+            previewReady: false,
             previewHovered: false
         });
     },
@@ -123,47 +140,58 @@ export const PreviewLink = React.createClass({
             className,
             src,
             type,
-            postId,
-            previewId,
             relationship,
             followUser,
             children
         } = this.props;
 
         const {
-            preview,
-            previewType
+            key,
+            previewType,
+            previewData,
+            previewReady
         } = this.state;
 
         const renderPreview = () => {
-            switch (previewType) {
-                case 'user':
-                    return (
-                        <UserPreview
-                            pos={ { top: this.top, left: this.left } }
-                            user={ preview }
-                            relationship={ relationship }
-                            followUser={ followUser }
-                            countsArr={ this.countsArr }
-                            key={ `UserPreview_${ previewId }` }
-                            onMouseEnter={ () => this.handlePreviewMouseEnter }
-                            onMouseLeave={ () => this.handlePreviewMouseLeave } />
-                    );
-                default:
-                    return '';
+            if (previewReady){
+                switch (previewType) {
+                    case 'user':
+                        return (
+                            <UserPreview
+                                pos={ { top: this.top, left: this.left } }
+                                key={ `UserPreview_${ key }` }
+                                user={ previewData }
+                                relationship={ relationship }
+                                followUser={ followUser }
+                                countsArr={ this.countsArr }
+                                onMouseEnter={ () => this.handlePreviewMouseEnter }
+                                onMouseLeave={ () => this.handlePreviewMouseLeave } />
+                        );
+                    case 'user-list':
+                        return (
+                            <UserList
+                                users={ previewData }
+                                key={ `UserListPreview_${ key }` }
+                                onMouseEnter={ () => this.handlePreviewMouseEnter }
+                                onMouseLeave={ () => this.handlePreviewMouseLeave } />
+                        );
+                    default:
+                        return '';
+                }
             }
+
         };
 
         return (
-            <span>
+            <span ref={ element => this.componentRef = element }>
                 <Link
                     ref={ element => this.previewElement = element }
-                    key={ `PreviewLinkInnerLink_${ postId }` }
+                    key={ `PreviewLinkInnerLink_${ key }` }
                     className={ className }
                     onMouseEnter={ e => this.handleMentionPreview(type, e) }
                     onMouseOut={ () => this.handleClearMentionPreview() }
                     onClick={ () => this.handleClearMentionPreview() }
-                    to={ src }>
+                    to={ src || null }>
                     { children }
                 </Link>
                 <ReactCSSTransitionGroup

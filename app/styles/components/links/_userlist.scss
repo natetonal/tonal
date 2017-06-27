@@ -1,0 +1,32 @@
+.user-list {
+    position: absolute;
+    z-index: 1;
+    background: rgba(0,0,0,.9);
+    max-width: 300px;
+    max-height: 300px;
+    overflow-y: scroll;
+
+    .user-list-item {
+        position: relative;
+        display: block;
+        padding-right: 10px;
+
+        .user-list-avatar {
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+        }
+
+        .user-list-display-name {
+            display: inline-block;
+            padding-left: 10px;
+            color: $white;
+            font-size: 14px;
+        }
+
+        &:hover{
+            background: $blue;
+            @include transition(0.2s all);
+        }
+    }
+}

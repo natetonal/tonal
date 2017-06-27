@@ -80,7 +80,8 @@ export const Feed = React.createClass({
     },
 
     likesPost(postId){
-        return Object.keys(this.props.feed[postId].likes).includes(this.props.uid);
+        const postLikes = this.props.feed[postId].likes || {};
+        return Object.keys(postLikes).includes(this.props.uid);
     },
 
     checkFriendship(testUid, testGroup){
@@ -173,7 +174,8 @@ export const Feed = React.createClass({
                     <div className="feed-nofeed">
                         Nothing to show here. <br />
                         This should never, ever be visible once Tonal is live. <br />
-                        Ever.
+                        Ever. <br /><br />
+                        - Love, Nate
                     </div>
                 );
             }

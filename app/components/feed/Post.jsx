@@ -12,8 +12,10 @@ import PreviewLink from 'links/PreviewLink';
 import SmallMenu from 'elements/SmallMenu';
 import ClickScreen from 'elements/ClickScreen';
 import Tooltip from 'elements/Tooltip';
+
 import Comment from './Comment';
 import PostParser from './PostParser';
+import PostInteractionBar from './PostInteractionBar';
 
 const bigTextLength = 80;
 
@@ -23,8 +25,13 @@ export const Post = React.createClass({
         this.setState({
             showMenu: false,
             showTooltip: false,
-            showLiked: this.props.likesPost(this.props.postId),
-            timeStamp: this.processTimestamp()
+            userLikesThisPost: this.props.likesPost(this.props.postId),
+            userRepliedToPost: false,
+            userSharedThisPost: false,
+            timeStamp: this.processTimestamp(),
+            likesCount: this.props.data.likesCount || 0,
+            sharesCount: this.props.data.sharesCount || 0,
+            theadCount: this.props.data.threadCount || 0
         });
 
         const {
@@ -51,6 +58,10 @@ export const Post = React.createClass({
                 opacity: 0
             });
         }
+
+        if (nextProps.data.likesCount !== this.state.likesCount){
+            this.setState({ likesCount: nextProps.data.likesCount });
+        }
     },
 
     componentDidUpdate(prevProps, prevState){
@@ -66,12 +77,10 @@ export const Post = React.createClass({
         }
 
         if (prevState.timeStamp !== this.state.timeStamp){
-            const tl = new TimelineLite();
-            tl.from(this.timeStampRef, 0.5, {
+            TweenLite.from(this.timeStampRef, 0.5, {
                 ease: Power1.easeOut,
                 opacity: 0
             });
-            tl.play();
         }
     },
 
@@ -107,8 +116,12 @@ export const Post = React.createClass({
             postId
         } = this.props;
 
+        const userLikesThisPost = !this.state.userLikesThisPost;
+        const likesCount = userLikesThisPost ? this.state.likesCount + 1 : this.state.likesCount - 1;
+
         this.setState({
-            showLiked: !this.state.showLiked
+            likesCount,
+            userLikesThisPost
         });
 
         // Animate here.
@@ -208,7 +221,7 @@ export const Post = React.createClass({
                 post,
                 raw,
                 likes,
-                likesCount,
+                shares,
                 postEdited,
                 thread,
                 length,
@@ -225,9 +238,41 @@ export const Post = React.createClass({
             const {
                 showMenu,
                 showTooltip,
-                showLiked,
-                timeStamp
+                userLikesThisPost,
+                userRepliedToPost,
+                userSharedThisPost,
+                timeStamp,
+                likesCount,
+                sharesCount,
+                threadCount
             } = this.state;
+
+            const intBtns = [
+                {
+                    text: 'Likes',
+                    data: likes,
+                    icon: 'bolt',
+                    handler: this.handleLikePost,
+                    btnState: (userLikesThisPost ? 'active' : ''),
+                    count: likesCount
+                },
+                {
+                    text: 'Replies',
+                    data: thread,
+                    icon: 'comment',
+                    handler: () => console.log('Commenting'),
+                    btnState: (userRepliedToPost ? 'active' : ''),
+                    count: threadCount
+                },
+                {
+                    text: 'Shares',
+                    data: shares,
+                    icon: 'share',
+                    handler: () => console.log('Sharing'),
+                    btnState: (userSharedThisPost ? 'active' : ''),
+                    count: sharesCount
+                }
+            ];
 
             const renderMenu = () => {
 
@@ -399,26 +444,6 @@ export const Post = React.createClass({
                 return timeStamp;
             };
 
-            const renderTooltip = (text, icon, handler, btnState = '') => {
-                return (
-                    <div
-                        onMouseEnter={ () => this.setState({ showTooltip: text }) }
-                        onMouseLeave={ () => this.setState({ showTooltip: false }) }
-                        onClick={ handler }
-                        className={ `tonal-post-interaction tonal-post-interaction-${ text.toLowerCase() } ${ btnState }` }>
-                        <Tooltip
-                            text={ showTooltip === text ? text : false }
-                            direction="top"
-                            align="center"
-                            delay={ 1000 }>
-                            <i
-                                className={ `fa fa-${ icon }` }
-                                aria-hidden="true" />
-                        </Tooltip>
-                    </div>
-                );
-            };
-
             return (
                 <ReactCSSTransitionGroup
                     transitionName="dramatic-fadein"
@@ -439,10 +464,20 @@ export const Post = React.createClass({
                             <div
                                 ref={ element => this.avatarRef = element }
                                 className="tonal-post-avatar">
-                                <img
-                                    src={ avatar }
-                                    alt={ displayName }
-                                    className="tonal-post-1-avatar-photo" />
+                                <PreviewLink
+                                    key={ `postLink_${ postId }` }
+                                    type="user"
+                                    previewId={ author.uid }
+                                    postId={ postId }
+                                    relationship={ evaluateRelationship(author.uid) }
+                                    followUser={ followUser }
+                                    className="post-mention"
+                                    src={ `users/${ author.username }` }>
+                                    <img
+                                        src={ author.avatar }
+                                        alt={ author.displayName }
+                                        className="tonal-post-1-avatar-photo" />
+                                </PreviewLink>
                             </div>
                             <div className="tonal-post-info">
                                 <div
@@ -469,14 +504,7 @@ export const Post = React.createClass({
                         </div>
                         { postMode() }
                         { renderImage() }
-                        <div className="tonal-post-interactions">
-                            { renderTooltip('Like', 'bolt', this.handleLikePost, (showLiked ? 'liked' : '')) }
-                            { renderTooltip('Reply', 'comment', () => console.log('COMMENTING')) }
-                            { renderTooltip('Share', 'share', () => console.log('SHARED')) }
-                            <div className="tonal-post-interaction tonal-post-interaction-likes">
-                                { likesCount } Likes
-                            </div>
-                        </div>
+                        <PostInteractionBar buttons={ intBtns } />
                         <div className="tonal-post-thread">
                             { renderThread() }
                         </div>

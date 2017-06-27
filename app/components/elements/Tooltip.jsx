@@ -51,7 +51,7 @@ export const Tooltip = React.createClass({
             );
         }
 
-        return children;
+        return <div>{ children }</div>;
     }
 
 });

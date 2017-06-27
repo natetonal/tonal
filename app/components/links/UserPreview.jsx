@@ -22,8 +22,8 @@ export const UserPreview = React.createClass({
     render(){
 
         const {
-            user,
             pos,
+            user,
             relationship,
             followUser,
             countsArr,
