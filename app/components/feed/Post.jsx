@@ -11,7 +11,6 @@ import Composer from 'composer/Composer';
 import PreviewLink from 'links/PreviewLink';
 import SmallMenu from 'elements/SmallMenu';
 import ClickScreen from 'elements/ClickScreen';
-import Tooltip from 'elements/Tooltip';
 
 import Comment from './Comment';
 import PostParser from './PostParser';
@@ -24,16 +23,16 @@ export const Post = React.createClass({
     componentWillMount(){
         this.setState({
             showMenu: false,
-            showTooltip: false,
             userLikesThisPost: this.props.likesPost(this.props.postId),
             userRepliedToPost: false,
             userSharedThisPost: false,
             timeStamp: this.processTimestamp(),
             likesCount: this.props.data.likesCount || 0,
             sharesCount: this.props.data.sharesCount || 0,
-            theadCount: this.props.data.threadCount || 0
+            threadCount: this.props.data.threadCount || 0
         });
 
+        console.log('componentWillMount: likesCount - ', this.props.data.likesCount);
         const {
             checkAuthor,
             data,
@@ -60,6 +59,7 @@ export const Post = React.createClass({
         }
 
         if (nextProps.data.likesCount !== this.state.likesCount){
+            console.log('nextProps will update likesCount to ', nextProps.data.likesCount);
             this.setState({ likesCount: nextProps.data.likesCount });
         }
     },
@@ -237,7 +237,6 @@ export const Post = React.createClass({
 
             const {
                 showMenu,
-                showTooltip,
                 userLikesThisPost,
                 userRepliedToPost,
                 userSharedThisPost,
@@ -254,7 +253,8 @@ export const Post = React.createClass({
                     icon: 'bolt',
                     handler: this.handleLikePost,
                     btnState: (userLikesThisPost ? 'active' : ''),
-                    count: likesCount
+                    count: likesCount,
+                    intro: 'Be the first one to show this post some love. Or maybe - be the first to "jolt" this post? (Filler copy - open to suggestion here.)'
                 },
                 {
                     text: 'Replies',
@@ -262,7 +262,8 @@ export const Post = React.createClass({
                     icon: 'comment',
                     handler: () => console.log('Commenting'),
                     btnState: (userRepliedToPost ? 'active' : ''),
-                    count: threadCount
+                    count: threadCount,
+                    intro: 'Be the first to reply to this post. (Filler copy - open to suggestion here.)'
                 },
                 {
                     text: 'Shares',
@@ -270,7 +271,8 @@ export const Post = React.createClass({
                     icon: 'share',
                     handler: () => console.log('Sharing'),
                     btnState: (userSharedThisPost ? 'active' : ''),
-                    count: sharesCount
+                    count: sharesCount,
+                    intro: 'Love it? Share it! (Filler copy - open to suggestion here.)'
                 }
             ];
 

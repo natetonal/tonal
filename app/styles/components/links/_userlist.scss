@@ -4,12 +4,15 @@
     background: rgba(0,0,0,.9);
     max-width: 300px;
     max-height: 300px;
+    line-height: 1;
     overflow-y: scroll;
 
     .user-list-item {
         position: relative;
         display: block;
-        padding-right: 10px;
+        padding: 0 10px 0 0;
+        height: 30px;
+        line-height: 1;
 
         .user-list-avatar {
             display: inline-block;
@@ -19,7 +22,8 @@
 
         .user-list-display-name {
             display: inline-block;
-            padding-left: 10px;
+            height: 30px;
+            padding: 0 0 0 10px;
             color: $white;
             font-size: 14px;
         }

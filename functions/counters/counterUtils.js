@@ -30,18 +30,21 @@ exports.countChildren = (groupName, event, admin, updateUserGroup = true) => {
     });
 };
 
-exports.countLikes = (event, admin) => {
+exports.countLikes = (group, event, admin) => {
     const userId = event.params.userId;
     const postId = event.params.postId;
+    const targetId = event.params.targetId;
+    const status = event.data.val();
     const parentRef = event.data.ref.parent;
-    const updates = {};
 
     // Return the promise from countRef.transaction() so our function
     // waits for this async event to complete before it exits.
     return parentRef.once('value')
     .then(snap => {
 
+        const updates = {};
         const children = snap.val() || {};
+        children[targetId] = status;
 
         let count = 0;
         Object.keys(children).forEach(key => {
@@ -50,9 +53,9 @@ exports.countLikes = (event, admin) => {
             }
         });
 
-        updates[`posts/${ postId }/likesCount`] = count;
-        updates[`user-posts/${ userId }/${ postId }/likesCount`] = count;
-        updates[`feed/${ userId }/${ postId }/likesCount`] = count;
+        updates[`posts/${ postId }/${ group }Count`] = count;
+        updates[`user-posts/${ userId }/${ postId }/${ group }Count`] = count;
+        updates[`feed/${ userId }/${ postId }/${ group }Count`] = count;
         return admin.database().ref().update(updates);
 
     }).then(() => {

@@ -5,6 +5,7 @@ import {
 } from 'gsap';
 
 import PreviewLink from 'links/PreviewLink';
+import Tooltip from 'elements/Tooltip';
 
 export const PostInteractionBar = React.createClass({
 
@@ -43,11 +44,30 @@ export const PostInteractionBar = React.createClass({
         const { buttons } = this.props;
 
         const renderInteractions = () => {
-            return buttons.map(({ text, title, data, icon, handler, btnState, count }) => {
-                console.log(`data coming in for ${ text } button: ${ JSON.stringify(data) }`);
+            return buttons.map(({ text, intro, title, data, icon, handler, btnState, count }) => {
+                if (count < 1){
+                    return (
+                        <Tooltip
+                            key={ `PostInteractionTooltip_${ this.key() }` }
+                            direction="top"
+                            text={ intro || 'filler text' }>
+                            <div
+                                onClick={ handler }
+                                className={ `tonal-post-interaction ${ btnState || '' }` }>
+                                <i
+                                    className={ `fa fa-${ icon }` }
+                                    aria-hidden="true" />
+                                <span ref={ element => this[`countRef${ text }_${ this.key }`] = element }>
+                                    { count || 0 }
+                                </span>
+                            </div>
+                        </Tooltip>
+                    );
+                }
+
                 return (
                     <PreviewLink
-                        key={ `PostInteraction${ this.key() }` }
+                        key={ `PostInteraction_${ this.key() }` }
                         type="user-list"
                         title={ title || false }
                         previewIds={ data }
