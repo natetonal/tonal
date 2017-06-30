@@ -1,15 +1,16 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import onClickOutside from 'react-onclickoutside';
+
 import {
     TweenLite,
     TimelineLite,
     Power2
 } from 'gsap';
 import { changeTab } from 'actions/HeaderComposeActions';
-import { switchHeaderMenu } from 'actions/UIStateActions';
 import { writePost } from 'actions/PostActions';
 
-import ClickScreen from 'elements/ClickScreen';
+// import ClickScreen from 'elements/ClickScreen';
 import Composer from 'composer/Composer';
 
 const headerComposeTabs = [
@@ -35,7 +36,7 @@ const headerComposeTabs = [
     }
 ];
 
-export const HeaderCompose = React.createClass({
+export const HeaderCompose = onClickOutside(React.createClass({
 
     componentDidMount(){
         TweenLite.from(this.composeRef, 0.4, {
@@ -58,17 +59,24 @@ export const HeaderCompose = React.createClass({
     // Finish this, similar to notifscenter.
     onCloseCompose(){
 
-        const { onClose } = this.props;
+        console.log('onCloseCompose called.');
+        const { onToggle } = this.props;
         // If compose is open, animate it out.
         if (this.isComposeOpen()){
+            console.log('Received cue to close compose menu.');
             const tl = new TimelineLite();
             tl.to(this.composeRef, 0.2, {
                 ease: Power2.easeOut,
                 opacity: 0
             });
             tl.play();
-            tl.eventCallback('onComplete', onClose);
+            tl.eventCallback('onComplete', () => this.isComposeOpen() && onToggle);
         }
+    },
+
+    handleClickOutside(){
+        console.log('handleClickOutside called.');
+        this.onCloseCompose();
     },
 
     handleTabClick(tab){
@@ -110,11 +118,11 @@ export const HeaderCompose = React.createClass({
             switch (tabSelected){
                 case 'post':
                     component = (
-                        <ClickScreen onClick={ this.onCloseCompose }>
-                            <Composer
-                                onClose={ this.onCloseCompose }
-                                onSubmit={ this.handlePostSubmit } />
-                        </ClickScreen>
+                        // <ClickScreen handleClick={ this.onCloseCompose }>
+                        <Composer
+                            onClose={ this.onCloseCompose }
+                            onSubmit={ this.handlePostSubmit } />
+                        // </ClickScreen>
                     );
                     break;
                 default:
@@ -139,7 +147,7 @@ export const HeaderCompose = React.createClass({
             </div>
         );
     }
-});
+}));
 
 export default Redux.connect(state => {
     return {

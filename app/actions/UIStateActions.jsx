@@ -47,3 +47,10 @@ export const resetUIState = () => {
         type: 'RESET_UI_STATE'
     };
 };
+
+export const changeScreenSize = size => {
+    return {
+        type: 'UI_CHANGE_SCREEN_SIZE',
+        size
+    };
+};

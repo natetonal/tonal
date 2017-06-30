@@ -156,9 +156,10 @@ export const PreviewLink = React.createClass({
             if (previewReady){
                 switch (previewType) {
                     case 'user':
+                    case 'mention':
                         return (
                             <UserPreview
-                                pos={ { top: this.top, left: this.left } }
+                                pos={ previewType === 'mention' ? { top: this.top, left: this.left } : {} }
                                 key={ `UserPreview_${ key }` }
                                 user={ previewData }
                                 relationship={ relationship }

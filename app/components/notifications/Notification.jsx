@@ -283,7 +283,7 @@ export const Notification = React.createClass({
                 });
 
                 return (
-                    <ClickScreen onClick={ this.toggleNotifMenu }>
+                    <ClickScreen handleClick={ this.toggleNotifMenu }>
                         <SmallMenu
                             width="medium"
                             options={ settings }

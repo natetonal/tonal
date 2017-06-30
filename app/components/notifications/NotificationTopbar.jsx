@@ -81,7 +81,8 @@ export const NotificationTopbar = React.createClass({
         toggleMuteNotifs();
     },
 
-    toggleNotifSettingsMenu(){
+    toggleNotifSettingsMenu(e){
+        if (e){ e.preventDefault(); }
         this.setState({
             showNotifSettingsMenu: !this.state.showNotifSettingsMenu
         });

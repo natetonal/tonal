@@ -192,59 +192,7 @@
             }
         }
     }
-
-    .tonal-post-thread {
-        padding: 0 20px 10px 20px;
-
-        .tonal-post-reply {
-            padding: 10px 0;
-
-            .tonal-post-reply-avatar {
-                padding-top: 10px;
-                display: inline-block;
-                height: 40px;
-                width: 40px;
-                float: left;
-            }
-
-            .tonal-post-reply-display-name {
-                padding-left: 10px;
-                display: inline-block;
-                font-weight: 600;
-                font-size: 14px;
-                color: $lightblue;
-            }
-
-            .tonal-post-reply-message {
-                margin-top: px;
-                text-indent: 10px;
-                font-size: 14px;
-            }
-
-            .tonal-post-reply-info {
-                display: block;
-                font-size: 14px;
-                padding-left: 40px;
-
-                .fa{
-                    padding-right: 5px;
-                }
-
-                .tonal-post-reply-likes {
-                    display: inline-block;
-                    text-indent: 5px;
-                }
-
-                .tonal-post-reply-timestamp {
-                    display: inline-block;
-                    margin-left: 10px;
-                    font-size: 12px;
-                    color: rgba(255,255,255,.5);
-                }
-            }
-        }
-    }
-
+    
     .tonal-post-display-name,
     .tonal-post-reply-display-name {
         cursor: pointer;

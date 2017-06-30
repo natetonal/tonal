@@ -3,6 +3,8 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
 import { fetchUserData } from 'actions/UserActions';
+import { changeScreenSize } from 'actions/UIStateActions';
+
 import {
     startLoginForAuthorizedUser,
     startLogout

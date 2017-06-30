@@ -95,7 +95,7 @@ export const PostParser = React.createClass({
                                 return (
                                     <PreviewLink
                                         key={ key }
-                                        type="user"
+                                        type="mention"
                                         previewId={ chunk.mention.uid }
                                         className="post-mention"
                                         src={ `users/${ chunk.mention.displayName }` }>

@@ -1,4 +1,5 @@
 const initialState = {
+    screenSize: false,
     headerMenu: false,
     menuIsOpen: false,
     searchIsOpen: false,
@@ -10,6 +11,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type){
+        case 'UI_CHANGE_SCREEN_SIZE':
+            return {
+                ...state,
+                screenSize: action.size
+            };
         case 'UI_TOGGLE_MENU':
             return {
                 ...state,

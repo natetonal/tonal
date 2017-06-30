@@ -1,5 +1,7 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import VisibilitySensor from 'react-visibility-sensor';
+
 import {
     TimelineLite,
     Power2,
@@ -21,14 +23,16 @@ import {
     addFavorite
 } from 'actions/FriendshipActions';
 import { pushToRoute } from 'actions/RouteActions';
-import { switchHeaderMenu } from 'actions/UIStateActions';
-import ClickScreen from 'elements/ClickScreen';
-import { NotificationTopbar } from './NotificationTopbar';
-import { NotificationsList } from './NotificationsList';
+import { NotificationsMenu } from './NotificationsMenu';
+
+// import { NotificationTopbar } from './NotificationTopbar';
+// import { NotificationsList } from './NotificationsList';
 
 export const NotificationCenter = React.createClass({
 
     componentWillMount(){
+
+        console.log('NotificationCenter: mounting.');
 
         const {
             dispatch,
@@ -57,17 +61,17 @@ export const NotificationCenter = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState){
-
-        // If the menu just opened:
-        if (!prevProps.headerMenu !== this.props.headerMenu &&
-            this.isNotifsOpen()){
-            const tl = new TimelineLite();
-            tl.from(this.notifsContainerRef, 0.4, {
-                ease: Power2.easeOut,
-                opacity: 0
-            });
-            tl.play();
-        }
+        //
+        // // If the menu just opened:
+        // if (!prevProps.headerMenu !== this.props.headerMenu &&
+        //     this.isNotifsOpen()){
+        //     const tl = new TimelineLite();
+        //     tl.from(this.notifsContainerRef, 0.4, {
+        //         ease: Power2.easeOut,
+        //         opacity: 0
+        //     });
+        //     tl.play();
+        // }
 
         // If notifs were added:
         if (!prevState.showBadge &&
@@ -81,25 +85,27 @@ export const NotificationCenter = React.createClass({
             tl.play();
         }
 
-        // If the user toggled the mute notifications option:
-        if (prevProps.displayNotifs !== this.props.displayNotifs){
-            const tl = new TimelineLite();
-            tl.from([this.notifsIconRef, this.notifsIconMobileRef], 0.5, {
-                ease: Power2.easeOut,
-                opacity: 0
-            });
-            tl.play();
-        }
+        // // If the user toggled the mute notifications option:
+        // if (prevProps.displayNotifs !== this.props.displayNotifs){
+        //     const tl = new TimelineLite();
+        //     tl.from([this.notifsIconRef, this.notifsIconMobileRef], 0.5, {
+        //         ease: Power2.easeOut,
+        //         opacity: 0
+        //     });
+        //     tl.play();
+        // }
     },
 
     componentWillUnmount() {
         this.acknowledgeNotifs();
+        console.log('NotificationCenter: unmounting.');
     },
 
     onClickNotifs(event){
-        event.preventDefault();
+        console.log('onClickNotifs called. notifsOpen?', this.isNotifsOpen());
+        if (event){ event.preventDefault(); }
 
-        const { dispatch } = this.props;
+        const { onToggle } = this.props;
         const { showBadge } = this.state;
 
         // If the menu is open, animate it out, close it, and acknowledge notifs. Otherwise, open it.
@@ -119,7 +125,7 @@ export const NotificationCenter = React.createClass({
             tl.play();
             tl.eventCallback('onComplete', this.closeNotifsMenu);
         } else {
-            dispatch(switchHeaderMenu('notifs'));
+            onToggle('notifs');
         }
     },
 
@@ -169,9 +175,12 @@ export const NotificationCenter = React.createClass({
     },
 
     closeNotifsMenu(){
-        const { dispatch } = this.props;
-        dispatch(switchHeaderMenu());
-        this.acknowledgeNotifs();
+        console.log('closeNotifsMenu called.');
+        if (this.isNotifsOpen()){
+            const { onToggle } = this.props;
+            this.acknowledgeNotifs();
+            onToggle();
+        }
     },
 
     isSelf(testUid){
@@ -202,21 +211,13 @@ export const NotificationCenter = React.createClass({
     render(){
 
         const {
-            notifs,
-            notifsStatus,
-            newNotifsCount,
             displayNotifs,
-            direction,
-            following,
-            favorites,
-            blocked,
-            blockedBy,
-            followingCount,
-            favoritesCount
+            direction
         } = this.props;
 
         const { showBadge } = this.state;
 
+        const isNotifsOpen = this.isNotifsOpen();
         const areThereNotifs = this.areThereNotifs();
 
         const renderBadge = () => {
@@ -232,39 +233,54 @@ export const NotificationCenter = React.createClass({
         };
 
         const renderNotifs = () => {
-            if (this.isNotifsOpen()){
+            if (isNotifsOpen){
                 return (
-                    <ClickScreen onClick={ this.onClickNotifs }>
-                        <div
-                            ref={ element => this.notifsContainerRef = element }
-                            className="notifications-list-container">
-                            <NotificationTopbar
-                                newNotifsCount={ newNotifsCount }
-                                displayNotifs={ displayNotifs }
-                                areThereNotifs={ areThereNotifs }
-                                clearNotifs={ this.handleClearNotifs }
-                                muteNotifs={ this.toggleMuteNotifs } />
-                            <NotificationsList
-                                notifs={ notifs }
-                                notifsStatus={ notifsStatus }
-                                displayNotifs={ displayNotifs }
-                                areThereNotifs={ areThereNotifs }
-                                followingCount={ followingCount }
-                                favoritesCount={ favoritesCount }
-                                following={ following }
-                                favorites={ favorites }
-                                blocked={ blocked }
-                                blockedBy={ blockedBy }
-                                isSelf={ this.isSelf }
-                                checkFriendship={ this.checkFriendship }
-                                clickNotif={ this.handleClickNotif }
-                                deleteNotif={ this.handleDeleteNotif }
-                                blockUser={ this.handleBlockUser }
-                                followUser={ this.handleFollowUser }
-                                favoriteUser={ this.handleFavoriteUser } />
-                        </div>
-                    </ClickScreen>
+                    <NotificationsMenu
+                        { ...this.props }
+                        ref={ element => this.notifsContainerRef = element }
+                        areThereNotifs={ areThereNotifs }
+                        onClickNotifs={ this.onClickNotifs }
+                        isNotifsOpen={ this.isNotifsOpen }
+                        clearNotifs={ this.handleClearNotifs }
+                        muteNotifs={ this.toggleMuteNotifs }
+                        isSelf={ this.isSelf }
+                        checkFriendship={ this.checkFriendship }
+                        clickNotif={ this.handleClickNotif }
+                        deleteNotif={ this.handleDeleteNotif }
+                        blockUser={ this.handleBlockUser }
+                        followUser={ this.handleFollowUser }
+                        favoriteUser={ this.handleFavoriteUser } />
                 );
+                // return (
+                //     <div
+                //         ref={ element => this.notifsContainerRef = element }
+                //         className="notifications-list-container">
+                //         <NotificationTopbar
+                //             newNotifsCount={ newNotifsCount }
+                //             displayNotifs={ displayNotifs }
+                //             areThereNotifs={ areThereNotifs }
+                //             clearNotifs={ this.handleClearNotifs }
+                //             muteNotifs={ this.toggleMuteNotifs } />
+                //         <NotificationsList
+                //             notifs={ notifs }
+                //             notifsStatus={ notifsStatus }
+                //             displayNotifs={ displayNotifs }
+                //             areThereNotifs={ areThereNotifs }
+                //             followingCount={ followingCount }
+                //             favoritesCount={ favoritesCount }
+                //             following={ following }
+                //             favorites={ favorites }
+                //             blocked={ blocked }
+                //             blockedBy={ blockedBy }
+                //             isSelf={ this.isSelf }
+                //             checkFriendship={ this.checkFriendship }
+                //             clickNotif={ this.handleClickNotif }
+                //             deleteNotif={ this.handleDeleteNotif }
+                //             blockUser={ this.handleBlockUser }
+                //             followUser={ this.handleFollowUser }
+                //             favoriteUser={ this.handleFavoriteUser } />
+                //     </div>
+                // );
             }
         };
 

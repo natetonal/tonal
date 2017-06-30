@@ -3,7 +3,7 @@ import React from 'react';
 export const ClickScreen = React.createClass({
 
     propTypes: {
-        onClick: React.PropTypes.func.isRequired
+        handleClick: React.PropTypes.func.isRequired
     },
 
     componentWillMount(){
@@ -15,8 +15,15 @@ export const ClickScreen = React.createClass({
     },
 
     handleClickOutside(e){
-        if (this.clickScreenRef !== e.target && !this.clickScreenRef.contains(e.target)) {
-            this.props.onClick(e);
+
+        const domNode = this.domNode;
+        if ((!domNode ||
+            !domNode.contains(e.target)) &&
+            typeof this.props.handleClick === 'function') {
+            console.log('Closing.');
+            this.props.handleClick(e);
+        } else {
+            console.log('Ignoring this click.');
         }
     },
 
@@ -24,7 +31,7 @@ export const ClickScreen = React.createClass({
 
         return (
             <div
-                ref={ element => this.clickScreenRef = element }
+                ref={ element => this.domNode = element }
                 className="click-screen">
                 { this.props.children }
             </div>

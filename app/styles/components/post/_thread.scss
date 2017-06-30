@@ -1,0 +1,88 @@
+.tonal-thread {
+    background: rgba(255,255,255,0.1);
+
+    .tonal-thread-user-reply {
+
+        .tonal-thread-user-reply-container{
+            padding: 30px;
+        }
+        
+        .tonal-user-reply-close {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
+            right: 5px;
+            top: 5px;
+            cursor: pointer;
+            @include transition(0.2s all);
+
+            .fa{
+                color: rgba(0,0,0,0.2) !important;
+                @include transition(0.2s all);
+            }
+
+            &:hover{
+                border: 1px solid $white;
+                @include transition(0.2s all);
+
+                .fa{
+                    color: $white !important;
+                    @include transition(0.2s all);
+                }
+            }
+        }
+    }
+
+    .tonal-reply {
+        padding: 10px 0;
+
+        .tonal-reply-avatar {
+            padding-top: 10px;
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            float: left;
+        }
+
+        .tonal-reply-display-name {
+            padding-left: 10px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 14px;
+            color: $lightblue;
+        }
+
+        .tonal-reply-message {
+            margin-top: px;
+            text-indent: 10px;
+            font-size: 14px;
+        }
+
+        .tonal-reply-info {
+            display: block;
+            font-size: 14px;
+            padding-left: 40px;
+
+            .fa{
+                padding-right: 5px;
+            }
+
+            .tonal-reply-likes {
+                display: inline-block;
+                text-indent: 5px;
+            }
+
+            .tonal-reply-timestamp {
+                display: inline-block;
+                margin-left: 10px;
+                font-size: 12px;
+                color: rgba(255,255,255,.5);
+            }
+        }
+    }
+}

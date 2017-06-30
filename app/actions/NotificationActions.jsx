@@ -5,7 +5,6 @@ export const countNewNotifs = () => {
         const notifs = getState().notifs.data;
         const blocked = getState().user.blocked || {};
         const blockedBy = getState().user.blockedBy || {};
-        console.log(`countNewNotifs called. blockedBy? ${ blockedBy }`);
         let newNotifsCount = 0;
         if (notifs){
             Object.keys(notifs).forEach(key => {
@@ -17,7 +16,6 @@ export const countNewNotifs = () => {
             });
         }
 
-        console.log('countNewNotifs newNotifsCount? ', newNotifsCount);
         dispatch({
             type: 'NOTIFS_COUNT_NEW_NOTIFS',
             newNotifsCount
@@ -96,7 +94,6 @@ export const acknowledgeNotifs = notifs => {
                     }
                 });
 
-                console.log('from acknowledgeNotifs: updatedNotifs: ', updatedNotifs);
                 databaseRef.child(`notifications/${ uid }`).update(updatedNotifs);
             }
         });
@@ -117,7 +114,6 @@ export const clearAllNotifs = () => {
                     updatedNotifs[key] = null;
                 });
 
-                console.log('from clearAllNotifs: updatedNotifs: ', updatedNotifs);
                 databaseRef.child(`notifications/${ uid }`).update(updatedNotifs);
             }
         });

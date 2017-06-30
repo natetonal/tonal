@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
+import VisibilitySensor from 'react-visibility-sensor';
 import { switchHeaderMenu } from 'actions/UIStateActions';
 import Search from 'Search';
 import NotificationCenter from 'notifications/NotificationCenter';
@@ -8,22 +9,24 @@ import HeaderCompose from './HeaderCompose';
 
 export const Header = React.createClass({
 
-    onClickHeaderMenu(menu, event) {
+    onClickHeaderMenu(menu = false, event) {
         if (event){ event.preventDefault(); }
         const {
             dispatch,
             headerMenu
         } = this.props;
-        if (headerMenu === menu) {
-            dispatch(switchHeaderMenu());
-        } else {
-            dispatch(switchHeaderMenu(menu));
-        }
+
+        console.log('onClickHeaderMenu: headerMenu: ', headerMenu);
+        console.log('onClickHeaderMenu: menu?: ', menu);
+
+        console.log('opening/closing menu: ', menu);
+        dispatch(switchHeaderMenu(menu));
     },
 
     render(){
 
         const {
+            screenSize,
             headerMenu,
             avatar
         } = this.props;
@@ -33,7 +36,7 @@ export const Header = React.createClass({
                 return (
                     <div className="tonal-header-avatar">
                         <a
-                            onClick={ e => this.onClickHeaderMenu('settings', e) }
+                            onClick={ e => headerMenu !== 'settings' && this.onClickHeaderMenu('settings', e) }
                             href="">
                             <img
                                 alt="header avatar"
@@ -47,7 +50,7 @@ export const Header = React.createClass({
             return (
                 <div className="hi-icon-effect-1 hi-icon-effect-1b">
                     <a
-                        onClick={ e => this.onClickHeaderMenu('notifs', e) }
+                        onClick={ e => headerMenu !== 'settings' && this.onClickHeaderMenu('settings', e) }
                         href=""
                         className="hi-icon hi-icon-mobile">
                         <i className="fa fa-user" aria-hidden="true" />
@@ -58,8 +61,20 @@ export const Header = React.createClass({
 
         const renderComposer = () => {
             if (headerMenu === 'compose'){
-                return <HeaderCompose onClose={ e => this.onClickHeaderMenu('compose', e) } />;
+                return <HeaderCompose onToggle={ this.onClickHeaderMenu } />;
             }
+        };
+
+        const renderNotifCenter = (size, direction) => {
+            if (size.includes(screenSize)){
+                return (
+                    <NotificationCenter
+                        onToggle={ this.onClickHeaderMenu }
+                        direction={ direction } />
+                );
+            }
+
+            return '';
         };
 
         return (
@@ -68,7 +83,7 @@ export const Header = React.createClass({
                 <div className="row">
                     <div className="small-5 medium-1 columns">
                         { renderAvatar() }
-                        <NotificationCenter direction="left" />
+                        { renderNotifCenter(['small'], 'left') }
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
                         <nav className="links">
@@ -95,10 +110,10 @@ export const Header = React.createClass({
                         </nav>
                     </div>
                     <div className="small-6 text-right columns">
-                        <NotificationCenter direction="right" />
+                        { renderNotifCenter(['medium', 'large'], 'right') }
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
-                                onClick={ e => this.onClickHeaderMenu('compose', e) }
+                                onClick={ e => headerMenu !== 'compose' && this.onClickHeaderMenu('compose', e) }
                                 className="hi-icon hi-icon-mobile">
                                 <i
                                     className="fa fa-pencil"
@@ -106,7 +121,7 @@ export const Header = React.createClass({
                             </a>
                             { renderComposer() }
                         </div>
-                        <Search />
+                        <Search onToggle={ this.onClickHeaderMenu } />
                     </div>
                 </div>
             </div>
@@ -117,6 +132,7 @@ export const Header = React.createClass({
 export default Redux.connect(state => {
     return {
         headerMenu: state.uiState.headerMenu,
+        screenSize: state.uiState.screenSize,
         uid: state.auth.uid,
         avatar: state.user.avatar,
         displayNotifs: state.user.settings.displayNotifs,

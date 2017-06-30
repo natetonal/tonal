@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
+import $ from 'jquery';
+
 import {
     addNotifToList,
     removeNotifFromList,
@@ -10,6 +12,7 @@ import {
     addFeedPost,
     removeFeedPost
 } from 'actions/FeedActions';
+import { changeScreenSize } from 'actions/UIStateActions';
 import { syncUserData } from 'actions/UserActions';
 
 // The observer handles all database changes globally and keeps state up-to-date.
@@ -23,6 +26,12 @@ export const Observer = React.createClass({
             dispatch,
             uid
         } = this.props;
+
+        // Observe changes in size to the viewport relative to our media query breakpoints.
+        Foundation.MediaQuery._init();
+        $(window).on('changed.zf.mediaquery', (event, newSize) => {
+            dispatch(changeScreenSize(newSize));
+        });
 
         // Observers for notifications:
         const notifsRef = firebase.database().ref(`/notifications/${ uid }/`);
@@ -125,6 +134,10 @@ export const Observer = React.createClass({
         });
 
 
+    },
+
+    componentDidMount(){
+        this.props.dispatch(changeScreenSize(Foundation.MediaQuery.current));
     },
 
     render(){

@@ -12,6 +12,7 @@ import PreviewLink from 'links/PreviewLink';
 import SmallMenu from 'elements/SmallMenu';
 import ClickScreen from 'elements/ClickScreen';
 
+import Thread from './Thread';
 import Comment from './Comment';
 import PostParser from './PostParser';
 import PostInteractionBar from './PostInteractionBar';
@@ -23,6 +24,7 @@ export const Post = React.createClass({
     componentWillMount(){
         this.setState({
             showMenu: false,
+            showReply: false,
             userLikesThisPost: this.props.likesPost(this.props.postId),
             userRepliedToPost: false,
             userSharedThisPost: false,
@@ -32,7 +34,6 @@ export const Post = React.createClass({
             threadCount: this.props.data.threadCount || 0
         });
 
-        console.log('componentWillMount: likesCount - ', this.props.data.likesCount);
         const {
             checkAuthor,
             data,
@@ -58,8 +59,10 @@ export const Post = React.createClass({
             });
         }
 
-        if (nextProps.data.likesCount !== this.state.likesCount){
+        if (nextProps.data.likesCount !== this.props.data.likesCount){
             console.log('nextProps will update likesCount to ', nextProps.data.likesCount);
+            console.log('current likesCount in props: ', this.props.data.likesCount);
+            console.log('current likesCount in state: ', this.state.likesCount);
             this.setState({ likesCount: nextProps.data.likesCount });
         }
     },
@@ -184,6 +187,12 @@ export const Post = React.createClass({
         tl.eventCallback('onComplete', togglePostEditor, [postId]);
     },
 
+    handleToggleReply(){
+        this.setState({
+            showReply: !this.state.showReply
+        });
+    },
+
     render(){
 
         // Post object should be refactored.
@@ -237,6 +246,7 @@ export const Post = React.createClass({
 
             const {
                 showMenu,
+                showReply,
                 userLikesThisPost,
                 userRepliedToPost,
                 userSharedThisPost,
@@ -260,7 +270,7 @@ export const Post = React.createClass({
                     text: 'Replies',
                     data: thread,
                     icon: 'comment',
-                    handler: () => console.log('Commenting'),
+                    handler: this.handleToggleReply,
                     btnState: (userRepliedToPost ? 'active' : ''),
                     count: threadCount,
                     intro: 'Be the first to reply to this post. (Filler copy - open to suggestion here.)'
@@ -362,7 +372,7 @@ export const Post = React.createClass({
 
                     return (
                         <div>
-                            <ClickScreen onClick={ this.handlePostMenu }>
+                            <ClickScreen handleClick={ this.handlePostMenu }>
                                 <SmallMenu
                                     width="large"
                                     options={ settings }
@@ -373,26 +383,6 @@ export const Post = React.createClass({
                 }
 
                 return '';
-            };
-
-            const renderThread = () => {
-
-                if (thread){
-                    return Object.keys(thread).map((key) => {
-                        const d = thread[key];
-                        return (
-                            <Comment
-                                key={ `comment_${ key }` }
-                                data={ d }
-                                number={ postNum } />
-                        );
-                    });
-                }
-                return (
-                    <div className="tonal-post-reply">
-                        Post interactions are not currently enabled.
-                    </div>
-                );
             };
 
             const renderImage = () => {
@@ -507,9 +497,10 @@ export const Post = React.createClass({
                         { postMode() }
                         { renderImage() }
                         <PostInteractionBar buttons={ intBtns } />
-                        <div className="tonal-post-thread">
-                            { renderThread() }
-                        </div>
+                        <Thread
+                            toggleReply={ this.handleToggleReply }
+                            showReply={ showReply }
+                            data={ thread } />
                     </div>
                 </ReactCSSTransitionGroup>
             );

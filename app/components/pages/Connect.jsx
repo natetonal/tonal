@@ -7,7 +7,7 @@ export const Connect = React.createClass({
 
         return (
             <div className="connect-container">
-                <Feed />
+                <Feed type="main" />
             </div>
         );
     }

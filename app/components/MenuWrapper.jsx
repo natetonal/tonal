@@ -28,6 +28,7 @@ export const MenuWrapper = React.createClass({
 
     render(){
 
+
         return (
             <div
                 id="tonal-container"

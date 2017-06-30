@@ -1,5 +1,6 @@
 .user-preview {
-    position: fixed;
+    position: absolute;
+    margin-top: 10px;
     z-index: 10;
     width: 400px;
     color: $white;

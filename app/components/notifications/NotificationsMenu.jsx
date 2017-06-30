@@ -1,0 +1,104 @@
+import React from 'react';
+import onClickOutside from 'react-onclickoutside';
+import {
+    TimelineLite,
+    Power2
+} from 'gsap';
+
+import { NotificationTopbar } from './NotificationTopbar';
+import { NotificationsList } from './NotificationsList';
+
+export const NotificationsMenu = onClickOutside(React.createClass({
+
+    componentWillMount(){
+        console.log('NotificationsMenu: mounting.');
+    },
+
+    componentDidUpdate(prevProps){
+
+        // If the menu just opened:
+        if (!prevProps.headerMenu !== this.props.headerMenu &&
+            this.props.isNotifsOpen()){
+            const tl = new TimelineLite();
+            tl.from(this.notifsContainerRef, 0.4, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
+            tl.play();
+        }
+
+        // If the user toggled the mute notifications option:
+        if (prevProps.displayNotifs !== this.props.displayNotifs){
+            const tl = new TimelineLite();
+            tl.from([this.notifsIconRef, this.notifsIconMobileRef], 0.5, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
+            tl.play();
+        }
+    },
+
+    handleClickOutside(){
+        this.props.onClickNotifs();
+    },
+
+    render(){
+
+        const {
+            notifs,
+            notifsStatus,
+            followingCount,
+            favoritesCount,
+            following,
+            favorites,
+            blocked,
+            blockedBy,
+            isSelf,
+            checkFriendship,
+            handleClickNotif,
+            handleDeleteNotif,
+            handleBlockUser,
+            handleFollowUser,
+            handleFavoriteUser,
+            newNotifsCount,
+            displayNotifs,
+            areThereNotifs,
+            handleClearNotifs,
+            toggleMuteNotifs
+        } = this.props;
+
+        return (
+            <div
+                ref={ element => this.notifsContainerRef = element }
+                className="notifications-list-container">
+                <NotificationTopbar
+                    newNotifsCount={ newNotifsCount }
+                    displayNotifs={ displayNotifs }
+                    areThereNotifs={ areThereNotifs }
+                    clearNotifs={ handleClearNotifs }
+                    muteNotifs={ toggleMuteNotifs } />
+                <NotificationsList
+                    notifs={ notifs }
+                    notifsStatus={ notifsStatus }
+                    displayNotifs={ displayNotifs }
+                    areThereNotifs={ areThereNotifs }
+                    followingCount={ followingCount }
+                    favoritesCount={ favoritesCount }
+                    following={ following }
+                    favorites={ favorites }
+                    blocked={ blocked }
+                    blockedBy={ blockedBy }
+                    isSelf={ isSelf }
+                    checkFriendship={ checkFriendship }
+                    clickNotif={ handleClickNotif }
+                    deleteNotif={ handleDeleteNotif }
+                    blockUser={ handleBlockUser }
+                    followUser={ handleFollowUser }
+                    favoriteUser={ handleFavoriteUser } />
+            </div>
+        );
+    }
+
+}));
+
+export default NotificationsMenu;
