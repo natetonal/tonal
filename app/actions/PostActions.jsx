@@ -3,7 +3,17 @@ import {
 } from 'app/firebase';
 import moment from 'moment';
 
-export const writePost = data => {
+const dbPoint = (feedType, feedId, postId) => {
+    switch (feedType){
+        case 'thread':
+            return `/threads/${ feedId }/${ postId }`;
+        default:
+            return `/posts/${ postId }`;
+    }
+};
+
+// When someone writes a post, the postType, feedType, & feedId should determine location.
+export const writePost = (feedId, feedType, data) => {
     return (dispatch, getState) => {
         const uid = getState().auth.uid;
         const postId = databaseRef.child('posts').push().key;
@@ -12,14 +22,14 @@ export const writePost = data => {
         data.postId = postId;
         data.timeStamp = moment().format('LLLL');
         updates[`/posts/${ postId }`] = data;
-        updates[`/user-posts/${ uid }/${ postId }`] = data;
-        updates[`/users/${ uid }/recentPost`] = data;
+        updates[`/user-posts/${ uid }/${ postId }`] = true;
+        updates[`/users/${ uid }/recentPost`] = postId;
         updates[`/feed/${ uid }/${ postId }`] = data;
         databaseRef.update(updates);
     };
 };
 
-export const updatePost = (data, postId) => {
+export const updatePost = (feedId, data, postId) => {
     return () => {
         const uid = data.author.uid;
         const updates = {};

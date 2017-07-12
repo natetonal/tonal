@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Redux from 'react-redux';
-import VisibilitySensor from 'react-visibility-sensor';
 
 import {
     TimelineLite,
@@ -31,8 +30,6 @@ import { NotificationsMenu } from './NotificationsMenu';
 export const NotificationCenter = React.createClass({
 
     componentWillMount(){
-
-        console.log('NotificationCenter: mounting.');
 
         const {
             dispatch,
@@ -98,11 +95,9 @@ export const NotificationCenter = React.createClass({
 
     componentWillUnmount() {
         this.acknowledgeNotifs();
-        console.log('NotificationCenter: unmounting.');
     },
 
     onClickNotifs(event){
-        console.log('onClickNotifs called. notifsOpen?', this.isNotifsOpen());
         if (event){ event.preventDefault(); }
 
         const { onToggle } = this.props;
@@ -175,7 +170,6 @@ export const NotificationCenter = React.createClass({
     },
 
     closeNotifsMenu(){
-        console.log('closeNotifsMenu called.');
         if (this.isNotifsOpen()){
             const { onToggle } = this.props;
             this.acknowledgeNotifs();

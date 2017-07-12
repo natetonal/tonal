@@ -28,5 +28,5 @@ exports.countUserPosts = counters.countUserPosts(functions, admin);
 exports.countPostLikes = counters.countPostLikes(functions, admin);
 
 // Feed Functions
-exports.updateUserFeeds = feeds.updateUserFeeds(functions, admin);
+exports.fanoutPostData = feeds.fanoutPostData(functions, admin);
 exports.deleteBlockedPostsFromFeed = feeds.deleteBlockedPostsFromFeed(functions, admin);

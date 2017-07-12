@@ -18,6 +18,7 @@
             display: inline-block;
             height: 30px;
             width: 30px;
+            opacity: 0.9;
         }
 
         .user-list-display-name {
@@ -31,6 +32,11 @@
         &:hover{
             background: $blue;
             @include transition(0.2s all);
+
+            .user-list-avatar{
+                opacity: 1;
+                @include transition(0.2s all);
+            }
         }
     }
 }

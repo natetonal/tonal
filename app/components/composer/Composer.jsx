@@ -558,6 +558,7 @@ export const Composer = React.createClass({
         event.preventDefault();
         const {
             user,
+            type,
             onClose,
             onSubmit
         } = this.props;
@@ -576,7 +577,7 @@ export const Composer = React.createClass({
                 enabled: !this.state.enabled,
                 error
             });
-            parsePost(postRaw, postData, user)
+            parsePost(postRaw, postData, user, type)
             .then(parsedPost => {
                 if (parsedPost.error){
                     this.handleWarning(parsedPost);

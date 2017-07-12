@@ -8,10 +8,7 @@ import {
     removeNotifFromList,
     countNewNotifs
 } from 'actions/NotificationActions';
-import {
-    addFeedPost,
-    removeFeedPost
-} from 'actions/FeedActions';
+
 import { changeScreenSize } from 'actions/UIStateActions';
 import { syncUserData } from 'actions/UserActions';
 
@@ -30,6 +27,7 @@ export const Observer = React.createClass({
         // Observe changes in size to the viewport relative to our media query breakpoints.
         Foundation.MediaQuery._init();
         $(window).on('changed.zf.mediaquery', (event, newSize) => {
+            if (newSize !== 'small'){ newSize = 'large'; }
             dispatch(changeScreenSize(newSize));
         });
 
@@ -117,27 +115,11 @@ export const Observer = React.createClass({
                 dispatch(countNewNotifs());
             });
         });
-
-        // Observers for feed:
-        const feedRef = firebase.database().ref(`feed/${ uid }/`);
-        feedRef.on('child_added', post => {
-            dispatch(addFeedPost(post.key, post.val()));
-            dispatch(syncUserData(['postCount']));
-        });
-        feedRef.on('child_changed', post => {
-            dispatch(addFeedPost(post.key, post.val()));
-            dispatch(syncUserData(['postCount']));
-        });
-        feedRef.on('child_removed', post => {
-            dispatch(removeFeedPost(post.key));
-            dispatch(syncUserData(['postCount']));
-        });
-
-
     },
 
     componentDidMount(){
-        this.props.dispatch(changeScreenSize(Foundation.MediaQuery.current));
+        const size = Foundation.MediaQuery.current === 'small' ? 'small' : 'large';
+        this.props.dispatch(changeScreenSize(size));
     },
 
     render(){

@@ -55,11 +55,11 @@ export const NotificationsMenu = onClickOutside(React.createClass({
             blockedBy,
             isSelf,
             checkFriendship,
-            handleClickNotif,
-            handleDeleteNotif,
-            handleBlockUser,
-            handleFollowUser,
-            handleFavoriteUser,
+            clickNotif,
+            deleteNotif,
+            blockUser,
+            followUser,
+            favoriteUser,
             newNotifsCount,
             displayNotifs,
             areThereNotifs,
@@ -90,11 +90,11 @@ export const NotificationsMenu = onClickOutside(React.createClass({
                     blockedBy={ blockedBy }
                     isSelf={ isSelf }
                     checkFriendship={ checkFriendship }
-                    clickNotif={ handleClickNotif }
-                    deleteNotif={ handleDeleteNotif }
-                    blockUser={ handleBlockUser }
-                    followUser={ handleFollowUser }
-                    favoriteUser={ handleFavoriteUser } />
+                    clickNotif={ clickNotif }
+                    deleteNotif={ deleteNotif }
+                    blockUser={ blockUser }
+                    followUser={ followUser }
+                    favoriteUser={ favoriteUser } />
             </div>
         );
     }

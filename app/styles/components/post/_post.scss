@@ -39,6 +39,15 @@
             display: inline-flex;
             height: $post-avatar-size;
             width: $post-avatar-size;
+            overflow: hidden;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            @include transition(0.3s all cubic-bezier(0.165, 0.840, 0.440, 1.000));
+
+            &:hover{
+                border: 2px solid $lightblue;
+                @include transition(0.3s all cubic-bezier(0.165, 0.840, 0.440, 1.000));
+            }
         }
 
         .tonal-post-info {
@@ -192,7 +201,7 @@
             }
         }
     }
-    
+
     .tonal-post-display-name,
     .tonal-post-reply-display-name {
         cursor: pointer;
@@ -211,7 +220,7 @@
             color: rgba(255,255,255,1);
 
             .fa{
-                color: darken($lightblue, 20%);
+                color: $lightgray1;
                 @include transition(0.2s color);
             }
         }

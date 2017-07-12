@@ -5,7 +5,7 @@ import authReducer from './AuthReducer';
 import imgUrlReducer from './ImgUrlReducer';
 import uiStateReducer from './UIStateReducer';
 import userReducer from './UserReducer';
-import feedReducer from './FeedReducer';
+import feedsReducer from './FeedsReducer';
 import notifsReducer from './NotificationReducer';
 import followReducer from './FollowReducer';
 import headerComposeReducer from './HeaderComposeReducer';
@@ -20,7 +20,7 @@ export default combineReducers({
     imgUrl: imgUrlReducer,
     uiState: uiStateReducer,
     user: userReducer,
-    feed: feedReducer,
+    feeds: feedsReducer,
     notifs: notifsReducer,
     follow: followReducer,
     headerCompose: headerComposeReducer,

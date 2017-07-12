@@ -41,6 +41,12 @@ export const Post = React.createClass({
         } = this.props;
 
         checkAuthor(data, postId);
+
+        // feedRef.on('child_changed', post => {
+        //     dispatch(addFeedPost(this.fId, post.key, post.val()));
+        //     console.log('from feed: child changed: ', post.val());
+        //     dispatch(syncUserData(['postCount']));
+        // });
     },
 
     componentDidMount(){
@@ -58,13 +64,6 @@ export const Post = React.createClass({
                 opacity: 0
             });
         }
-
-        if (nextProps.data.likesCount !== this.props.data.likesCount){
-            console.log('nextProps will update likesCount to ', nextProps.data.likesCount);
-            console.log('current likesCount in props: ', this.props.data.likesCount);
-            console.log('current likesCount in state: ', this.state.likesCount);
-            this.setState({ likesCount: nextProps.data.likesCount });
-        }
     },
 
     componentDidUpdate(prevProps, prevState){
@@ -79,11 +78,18 @@ export const Post = React.createClass({
             });
         }
 
+        // If the timestamp changed value
         if (prevState.timeStamp !== this.state.timeStamp){
             TweenLite.from(this.timeStampRef, 0.5, {
                 ease: Power1.easeOut,
                 opacity: 0
             });
+        }
+
+        if (prevProps.data.likesCount !== this.props.data.likesCount &&
+            this.props.data.likesCount !== this.state.likesCount){
+            console.log('from post: count changed from props. setting state to ', this.props.data.likesCount);
+            this.setState({ likesCount: this.props.data.likesCount });
         }
     },
 
@@ -203,19 +209,14 @@ export const Post = React.createClass({
         const {
             feedId,
             postId,
+            type,
             data,
             editing,
             favorites,
             following,
-            blocked,
-            blockedBy,
             posterIsSelf,
-            checkFriendship,
             evaluateRelationship,
-            isSelf,
             deletePost,
-            updatePost,
-            likePost,
             blockUser,
             followUser,
             togglePostEditor
@@ -225,6 +226,7 @@ export const Post = React.createClass({
 
             const {
                 file,
+                type,
                 image,
                 mentions,
                 post,
@@ -259,30 +261,33 @@ export const Post = React.createClass({
             const intBtns = [
                 {
                     text: 'Likes',
+                    type: 'like',
                     data: likes,
                     icon: 'bolt',
                     handler: this.handleLikePost,
                     btnState: (userLikesThisPost ? 'active' : ''),
                     count: likesCount,
-                    intro: 'Be the first one to show this post some love. Or maybe - be the first to "jolt" this post? (Filler copy - open to suggestion here.)'
+                    intro: 'Like'
                 },
                 {
                     text: 'Replies',
+                    type: 'reply',
                     data: thread,
                     icon: 'comment',
                     handler: this.handleToggleReply,
                     btnState: (userRepliedToPost ? 'active' : ''),
                     count: threadCount,
-                    intro: 'Be the first to reply to this post. (Filler copy - open to suggestion here.)'
+                    intro: 'Comment'
                 },
                 {
                     text: 'Shares',
+                    type: 'share',
                     data: shares,
                     icon: 'share',
                     handler: () => console.log('Sharing'),
                     btnState: (userSharedThisPost ? 'active' : ''),
                     count: sharesCount,
-                    intro: 'Love it? Share it! (Filler copy - open to suggestion here.)'
+                    intro: 'Share'
                 }
             ];
 
@@ -414,6 +419,7 @@ export const Post = React.createClass({
                             <Composer
                                 initialValue={ raw }
                                 mentions={ mentions }
+                                type={ type }
                                 submitText={ 'Update Your Post ' }
                                 onClose={ this.handleTogglePostEditor }
                                 onSubmit={ this.handleUpdatePost } />

@@ -11,15 +11,8 @@ export const Header = React.createClass({
 
     onClickHeaderMenu(menu = false, event) {
         if (event){ event.preventDefault(); }
-        const {
-            dispatch,
-            headerMenu
-        } = this.props;
 
-        console.log('onClickHeaderMenu: headerMenu: ', headerMenu);
-        console.log('onClickHeaderMenu: menu?: ', menu);
-
-        console.log('opening/closing menu: ', menu);
+        const { dispatch } = this.props;
         dispatch(switchHeaderMenu(menu));
     },
 
@@ -66,7 +59,7 @@ export const Header = React.createClass({
         };
 
         const renderNotifCenter = (size, direction) => {
-            if (size.includes(screenSize)){
+            if (size === screenSize){
                 return (
                     <NotificationCenter
                         onToggle={ this.onClickHeaderMenu }
@@ -83,7 +76,7 @@ export const Header = React.createClass({
                 <div className="row">
                     <div className="small-5 medium-1 columns">
                         { renderAvatar() }
-                        { renderNotifCenter(['small'], 'left') }
+                        { renderNotifCenter('small', 'left') }
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
                         <nav className="links">
@@ -110,7 +103,7 @@ export const Header = React.createClass({
                         </nav>
                     </div>
                     <div className="small-6 text-right columns">
-                        { renderNotifCenter(['medium', 'large'], 'right') }
+                        { renderNotifCenter('large', 'right') }
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
                                 onClick={ e => headerMenu !== 'compose' && this.onClickHeaderMenu('compose', e) }

@@ -31,10 +31,9 @@ exports.countChildren = (groupName, event, admin, updateUserGroup = true) => {
 };
 
 exports.countLikes = (group, event, admin) => {
-    const userId = event.params.userId;
     const postId = event.params.postId;
     const targetId = event.params.targetId;
-    const status = event.data.val();
+    const status = event.data.val() || null;
     const parentRef = event.data.ref.parent;
 
     // Return the promise from countRef.transaction() so our function
@@ -54,8 +53,6 @@ exports.countLikes = (group, event, admin) => {
         });
 
         updates[`posts/${ postId }/${ group }Count`] = count;
-        updates[`user-posts/${ userId }/${ postId }/${ group }Count`] = count;
-        updates[`feed/${ userId }/${ postId }/${ group }Count`] = count;
         return admin.database().ref().update(updates);
 
     }).then(() => {

@@ -1,13 +1,20 @@
 import React from 'react';
 import * as Redux from 'react-redux';
+import firebase from 'firebase';
 
-import { updateBlockedUser } from 'actions/UserActions';
+import {
+    syncUserData,
+    updateBlockedUser
+} from 'actions/UserActions';
 import { countNewNotifs } from 'actions/NotificationActions';
 import { addFollower } from 'actions/FriendshipActions';
 import {
     fetchFeed,
+    addFeedPost,
+    updateFeedPost,
+    removeFeedPost,
     toggleEditPost
-} from 'actions/FeedActions';
+} from 'actions/FeedsActions';
 import {
     likePost,
     deletePost,
@@ -20,14 +27,36 @@ import Post from './Post';
 export const Feed = React.createClass({
 
     componentWillMount(){
+
+        console.log('Mounting feed.');
         const {
             dispatch,
+            feedId,
+            type,
             uid
         } = this.props;
 
-        if (uid){
+        if ((feedId || uid) && type){
+
+            this.fId = feedId || uid;
             // Fetch the feed:
-            dispatch(fetchFeed(uid));
+            dispatch(fetchFeed(this.fId, type));
+
+            // Mount observers:
+            const feedRef = firebase.database().ref(`${ type }/${ this.fId }/`);
+            feedRef.on('child_added', post => {
+                dispatch(addFeedPost(this.fId, post.key, post.val()));
+                console.log('from feed: child added: ', post.val());
+                dispatch(syncUserData(['postCount']));
+            });
+            feedRef.on('child_changed', post => {
+                dispatch(updateFeedPost(this.fId, post.key, post.val()));
+                console.log('from feed: child changed: ', post.val());
+            });
+            feedRef.on('child_removed', post => {
+                dispatch(removeFeedPost(this.fId, post.key));
+                dispatch(syncUserData(['postCount']));
+            });
         }
     },
 
@@ -107,6 +136,7 @@ export const Feed = React.createClass({
 
         const {
             feed,
+            type,
             status,
             uid,
             editing,
@@ -127,6 +157,7 @@ export const Feed = React.createClass({
                     .reverse()
                     .map(key => {
 
+                        const status = feed[key].status;
                         const isFollowing = this.checkFriendship(feed[key].author.uid, 'following');
                         const isBlocked = this.checkFriendship(feed[key].author.uid, 'blocked');
                         const isBlockedBy = this.checkFriendship(feed[key].author.uid, 'blockedBy');
@@ -145,6 +176,7 @@ export const Feed = React.createClass({
                                     key={ `post_${ key }` }
                                     feedId={ uid }
                                     postId={ key }
+                                    status={ status }
                                     data={ feed[key] }
                                     editing={ editing }
                                     favorites={ favorites }
@@ -192,11 +224,15 @@ export const Feed = React.createClass({
 
 });
 
-export default Redux.connect(state => {
+export default Redux.connect((state, ownProps) => {
+    const feedId = ownProps.feedId || state.auth.uid;
+    const feed = ((state.feeds && state.feeds.feeds[feedId]) ? state.feeds.feeds[feedId].data : false);
+    const status = ((state.feeds && state.feeds.feeds[feedId]) ? state.feeds.feeds[feedId].status : false);
+
     return {
-        feed: state.feed.data,
-        status: state.feed.status,
-        editing: state.feed.editing,
+        feed,
+        status,
+        editing: state.feeds.editing,
         uid: state.auth.uid,
         favorites: state.user.favorites,
         favorited: state.user.favorited,

@@ -58,12 +58,9 @@ export const HeaderCompose = onClickOutside(React.createClass({
 
     // Finish this, similar to notifscenter.
     onCloseCompose(){
-
-        console.log('onCloseCompose called.');
         const { onToggle } = this.props;
         // If compose is open, animate it out.
         if (this.isComposeOpen()){
-            console.log('Received cue to close compose menu.');
             const tl = new TimelineLite();
             tl.to(this.composeRef, 0.2, {
                 ease: Power2.easeOut,
@@ -75,7 +72,6 @@ export const HeaderCompose = onClickOutside(React.createClass({
     },
 
     handleClickOutside(){
-        console.log('handleClickOutside called.');
         this.onCloseCompose();
     },
 
@@ -120,6 +116,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
                     component = (
                         // <ClickScreen handleClick={ this.onCloseCompose }>
                         <Composer
+                            type={ 'post' }
                             onClose={ this.onCloseCompose }
                             onSubmit={ this.handlePostSubmit } />
                         // </ClickScreen>

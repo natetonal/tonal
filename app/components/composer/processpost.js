@@ -72,7 +72,7 @@ const checkIfLinksAreSafe = (links, post) => {
     });
 };
 
-export const parsePost = (html, data, userData) => {
+export const parsePost = (html, data, userData, postType) => {
     let postData = { ...data };
     let assignTextToPreviousTag = false;
     let type;
@@ -150,6 +150,7 @@ export const parsePost = (html, data, userData) => {
     postData = {
         ...postData,
         hashtags,
+        type: postType,
         likes: false,
         likesCount: 0,
         shares: false,
