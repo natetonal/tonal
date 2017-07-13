@@ -28,22 +28,30 @@ export const Feed = React.createClass({
 
     componentWillMount(){
 
-        console.log('Mounting feed.');
         const {
             dispatch,
             feedId,
             type,
+            childType,
             uid
         } = this.props;
 
-        if ((feedId || uid) && type){
+        if ((feedId || uid) && type && childType){
 
             this.fId = feedId || uid;
-            // Fetch the feed:
-            dispatch(fetchFeed(this.fId, type));
+            this.uid = uid;
+            this.fType = type || false;
+            this.pType = childType || false;
+
+            console.log('Mounting feed of type: ', type);
+
+            // Fetch the feed (loop through each key, resolve promise.all):
+            // Make sure to keep the UI busy while we wait for data.
+            // And make sure to paginate.
+            dispatch(fetchFeed(this.fId, this.fType));
 
             // Mount observers:
-            const feedRef = firebase.database().ref(`${ type }/${ this.fId }/`);
+            const feedRef = firebase.database().ref(`${ this.fType }/${ this.fId }/`);
             feedRef.on('child_added', post => {
                 dispatch(addFeedPost(this.fId, post.key, post.val()));
                 console.log('from feed: child added: ', post.val());
@@ -77,29 +85,21 @@ export const Feed = React.createClass({
 
     handleUpdatePost(updatedPost, postId){
         const { dispatch } = this.props;
-        dispatch(updatePost(updatedPost, postId));
+        dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPost));
     },
 
     handleLikePost(authorId, postId){
-        const {
-            dispatch,
-            uid
-        } = this.props;
-
-        console.log('handleLikePost called with ', postId);
-        const liked = !this.likesPost(postId, uid);
-        console.log('handleLikePost valued of liked ', liked);
-        dispatch(likePost(authorId, postId, uid, liked));
+        const { dispatch } = this.props;
+        const liked = !this.likesPost(postId, this.uid);
+        dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked));
     },
 
-    handleDeletePost(notifId){
+    handleDeletePost(postId){
         const { dispatch } = this.props;
-        console.log('delete this notif: ', notifId);
-        dispatch(deletePost(notifId));
+        dispatch(deletePost(this.fId, this.fType, postId, this.pType));
     },
 
     togglePostEditor(postId = false){
-        console.log('togglePostEditor called with id: ', postId);
         const { dispatch } = this.props;
         dispatch(toggleEditPost(postId));
     },
@@ -120,7 +120,7 @@ export const Feed = React.createClass({
 
     checkAuthor(data, postId){
         const { dispatch } = this.props;
-        dispatch(updatePostAuthorData(data, postId));
+        dispatch(updatePostAuthorData(postId, data, this.fType));
     },
 
     evaluateRelationship(testUid){
@@ -136,14 +136,14 @@ export const Feed = React.createClass({
 
         const {
             feed,
-            type,
             status,
             uid,
             editing,
             favorites,
             following,
             blocked,
-            blockedBy
+            blockedBy,
+            childType
         } = this.props;
 
         const renderFeed = () => {
@@ -157,7 +157,6 @@ export const Feed = React.createClass({
                     .reverse()
                     .map(key => {
 
-                        const status = feed[key].status;
                         const isFollowing = this.checkFriendship(feed[key].author.uid, 'following');
                         const isBlocked = this.checkFriendship(feed[key].author.uid, 'blocked');
                         const isBlockedBy = this.checkFriendship(feed[key].author.uid, 'blockedBy');
@@ -176,7 +175,7 @@ export const Feed = React.createClass({
                                     key={ `post_${ key }` }
                                     feedId={ uid }
                                     postId={ key }
-                                    status={ status }
+                                    type={ childType }
                                     data={ feed[key] }
                                     editing={ editing }
                                     favorites={ favorites }

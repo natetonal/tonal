@@ -37,10 +37,11 @@ export const Post = React.createClass({
         const {
             checkAuthor,
             data,
+            feedId,
             postId
         } = this.props;
 
-        checkAuthor(data, postId);
+        checkAuthor(feedId, data, postId);
 
         // feedRef.on('child_changed', post => {
         //     dispatch(addFeedPost(this.fId, post.key, post.val()));

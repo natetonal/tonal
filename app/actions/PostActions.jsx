@@ -3,86 +3,88 @@ import {
 } from 'app/firebase';
 import moment from 'moment';
 
-const dbPoint = (feedType, feedId, postId) => {
-    switch (feedType){
-        case 'thread':
-            return `/threads/${ feedId }/${ postId }`;
-        default:
-            return `/posts/${ postId }`;
-    }
+// If a thread, feedId is the postId
+// If a main feed, the feedId is the uid.
+
+// Even though the relationship is feed > posts > thread > replies,
+// The feed > posts relationship is still maintained separately from the thread > replies relationship.
+
+// Behaviorally, since a "thread" is a "feed" that belongs to a "post",
+// The "thread" listener should handle add/delete/update functions at that one point in the db,
+// Whereas a "feed" should be unique to individuals.
+
+
+const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
+
+    const uid = data.author.uid;
+    const updates = {};
+
+    // Update the post itself:
+    updates[`${ postLoc }/${ postId }`] = data;
+
+    return databaseRef.child(`users/${ uid }`).once('value')
+    .then(userSnap => {
+
+        const user = userSnap.val() || null;
+        if (user){
+
+            // Update post author's info:
+            updates[`/user-posts/${ uid }/${ postId }`] = data;
+            updates[`/users/${ uid }/recentPost`] = data;
+            updates[`/${ feedLoc }/${ feedId }/${ postId }`] = data;
+
+            // If this specifically a "post", then update user follower feeds:
+            const userFollowers = user.followers ? Object.keys(user.followers) : null;
+
+            if (userFollowers){
+                userFollowers.forEach(followerId => {
+                    updates[`${ feedLoc }/${ followerId }/${ postId }`] = data;
+                });
+            }
+
+            // Atomic update to database
+            return databaseRef.update(updates);
+        }
+
+        return false;
+    });
 };
 
-// When someone writes a post, the postType, feedType, & feedId should determine location.
-export const writePost = (feedId, feedType, data) => {
-    return (dispatch, getState) => {
-        const uid = getState().auth.uid;
+export const writePost = (feedId, feedLoc, postLoc, data) => {
+    return () => {
         const postId = databaseRef.child('posts').push().key;
-        const updates = {};
-
         data.postId = postId;
         data.timeStamp = moment().format('LLLL');
-        updates[`/posts/${ postId }`] = data;
-        updates[`/user-posts/${ uid }/${ postId }`] = true;
-        updates[`/users/${ uid }/recentPost`] = postId;
-        updates[`/feed/${ uid }/${ postId }`] = data;
-        databaseRef.update(updates);
+
+        fanoutPostData({ feedId, feedLoc, postLoc, data, postId });
     };
 };
 
-export const updatePost = (feedId, data, postId) => {
+export const updatePost = (feedId, feedLoc, postId, postLoc, data) => {
     return () => {
-        const uid = data.author.uid;
-        const updates = {};
-
         data.postId = postId;
         data.postEdited = true;
         data.postEditedAt = moment().format('LLLL');
-        updates[`/posts/${ postId }`] = data;
-        updates[`/user-posts/${ uid }/${ postId }`] = data;
-        updates[`/users/${ uid }/recentPost`] = data;
-        updates[`/feed/${ uid }/${ postId }`] = data;
-        databaseRef.update(updates);
+
+        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
     };
 };
 
-export const deletePost = postId => {
-    return (dispatch, getState) => {
-        if (postId){
-            const uid = getState().auth.uid;
-            const updates = {};
-            const data = null;
-
-            updates[`/posts/${ postId }`] = data;
-            updates[`/user-posts/${ uid }/${ postId }`] = data;
-            updates[`/feed/${ uid }/${ postId }`] = data;
-            updates[`user-activity/${ uid }/${ postId }`] = data;
-            databaseRef.update(updates);
-        }
+export const deletePost = (feedId, feedLoc, postId, postLoc) => {
+    return () => {
+        const data = null;
+        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
     };
 };
 
-export const likePost = (authorId, postId, likeId, liked) => {
-    return (dispatch, getState) => {
-        if (postId){
-            const uid = getState().auth.uid;
-            const updates = {};
-            let data = moment().format('LLLL');
-
-            if (!liked){
-                data = null;
-            }
-
-            console.log('likePost: liked data: ', liked);
-            updates[`posts/${ postId }/likes/${ likeId }`] = data;
-            updates[`feed/${ uid }/${ postId }/likes/${ likeId }`] = data;
-            updates[`user-posts/${ authorId }/${ postId }/likes/${ likeId }`] = data;
-            databaseRef.update(updates);
-
-        }
+export const likePost = (feedId, feedLoc, postId, postLoc, data, likedId, liked) => {
+    return () => {
+        data.likes[likedId] = liked === true ? liked : null;
+        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
     };
 };
 
-export const updatePostAuthorData = (data, postId) => {
+export const updatePostAuthorData = (postId, data, loc) => {
     return dispatch => {
         const author = data.author;
         if (!author){ return; }
@@ -96,7 +98,7 @@ export const updatePostAuthorData = (data, postId) => {
             data.author.displayName = newAuthor.displayName;
             data.author.avatar = newAuthor.avatar;
 
-            dispatch(updatePost(data, postId));
+            dispatch(updatePost(postId, data, loc));
         });
     };
 };

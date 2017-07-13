@@ -63,6 +63,7 @@ export const toggleEditPost = (postId = false) => {
     };
 };
 
+
 // export const removeFeedPost = ();
 export const fetchFeed = (feedId, type) => {
     return dispatch => {

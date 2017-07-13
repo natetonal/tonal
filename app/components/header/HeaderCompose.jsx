@@ -83,7 +83,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
     handlePostSubmit(parsedPost){
         // Make sure to update action & reducer to store raw & parsed post!
         const { dispatch } = this.props;
-        dispatch(writePost(parsedPost));
+        dispatch(writePost(parsedPost, 'posts'));
     },
 
     isComposeOpen(){
