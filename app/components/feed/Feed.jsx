@@ -88,10 +88,10 @@ export const Feed = React.createClass({
         dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPost));
     },
 
-    handleLikePost(authorId, postId){
+    handleLikePost(authorId, postId, data){
         const { dispatch } = this.props;
         const liked = !this.likesPost(postId, this.uid);
-        dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked));
+        dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked, data));
     },
 
     handleDeletePost(postId){
@@ -137,13 +137,11 @@ export const Feed = React.createClass({
         const {
             feed,
             status,
-            uid,
             editing,
             favorites,
             following,
             blocked,
             blockedBy,
-            childType
         } = this.props;
 
         const renderFeed = () => {
@@ -173,9 +171,10 @@ export const Feed = React.createClass({
                             return (
                                 <Post
                                     key={ `post_${ key }` }
-                                    feedId={ uid }
+                                    feedId={ this.fId }
                                     postId={ key }
-                                    type={ childType }
+                                    feedType={ this.fType }
+                                    type={ this.pType }
                                     data={ feed[key] }
                                     editing={ editing }
                                     favorites={ favorites }

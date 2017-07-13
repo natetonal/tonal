@@ -28,8 +28,3 @@ exports.countUserPosts = (functions, admin) => {
     return functions.database.ref('/user-posts/{userId}/{postId}')
         .onWrite(event => counterUtils.countChildren('post', event, admin, false));
 };
-
-exports.countPostLikes = (functions, admin) => {
-    return functions.database.ref('/posts/{postId}/likes/{targetId}')
-        .onWrite(event => counterUtils.countLikes('likes', event, admin));
-};

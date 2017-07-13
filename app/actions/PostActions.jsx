@@ -29,9 +29,9 @@ const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
         if (user){
 
             // Update post author's info:
-            updates[`/user-posts/${ uid }/${ postId }`] = data;
-            updates[`/users/${ uid }/recentPost`] = data;
-            updates[`/${ feedLoc }/${ feedId }/${ postId }`] = data;
+            updates[`user-posts/${ uid }/${ postId }`] = data;
+            updates[`users/${ uid }/recentPost`] = data;
+            updates[`${ feedLoc }/${ feedId }/${ postId }`] = data;
 
             // If this specifically a "post", then update user follower feeds:
             const userFollowers = user.followers ? Object.keys(user.followers) : null;
@@ -42,6 +42,7 @@ const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
                 });
             }
 
+            console.log('updates: ', updates);
             // Atomic update to database
             return databaseRef.update(updates);
         }
@@ -49,6 +50,44 @@ const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
         return false;
     });
 };
+
+const fanoutLikeData = (feedId, feedLoc, postId, postLoc, data) => {
+
+    const uid = data.author.uid;
+    const updates = {};
+
+    // Update the post itself:
+    updates[`${ postLoc }/${ postId }`] = data;
+
+    return databaseRef.child(`users/${ uid }`).once('value')
+    .then(userSnap => {
+
+        const user = userSnap.val() || null;
+        if (user){
+
+            // Update post author's info:
+            updates[`user-posts/${ uid }/${ postId }`] = data;
+            updates[`users/${ uid }/recentPost`] = data;
+            updates[`${ feedLoc }/${ feedId }/${ postId }`] = data;
+
+            // If this specifically a "post", then update user follower feeds:
+            const userFollowers = user.followers ? Object.keys(user.followers) : null;
+
+            if (userFollowers){
+                userFollowers.forEach(followerId => {
+                    updates[`${ feedLoc }/${ followerId }/${ postId }`] = data;
+                });
+            }
+
+            console.log('updates: ', updates);
+            // Atomic update to database
+            return databaseRef.update(updates);
+        }
+
+        return false;
+    });
+};
+
 
 export const writePost = (feedId, feedLoc, postLoc, data) => {
     return () => {
@@ -77,10 +116,21 @@ export const deletePost = (feedId, feedLoc, postId, postLoc) => {
     };
 };
 
-export const likePost = (feedId, feedLoc, postId, postLoc, data, likedId, liked) => {
+export const likePost = (feedId, feedLoc, postId, postLoc, likedId, liked, data) => {
     return () => {
-        data.likes[likedId] = liked === true ? liked : null;
-        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
+        return databaseRef.child(`${ postLoc }/${ postId }`)
+        .transaction(post => {
+            if (post) {
+                if (post.likesCount && post.likes[likedId]) {
+                    data.likesCount--;
+                    data.likes[likedId] = null;
+                } else {
+                    data.likesCount++;
+                    data.likes[likedId] = moment().format('LLLL');
+                }
+            }
+            fanoutPostData(feedId, feedLoc, postId, postLoc, data);
+        });
     };
 };
 

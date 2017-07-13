@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import moment from 'moment';
+import firebase from 'firebase';
 import {
     TweenLite,
     TimelineLite,
@@ -43,11 +44,6 @@ export const Post = React.createClass({
 
         checkAuthor(feedId, data, postId);
 
-        // feedRef.on('child_changed', post => {
-        //     dispatch(addFeedPost(this.fId, post.key, post.val()));
-        //     console.log('from feed: child changed: ', post.val());
-        //     dispatch(syncUserData(['postCount']));
-        // });
     },
 
     componentDidMount(){
@@ -123,7 +119,8 @@ export const Post = React.createClass({
     handleLikePost(){
         const {
             likePost,
-            postId
+            postId,
+            data
         } = this.props;
 
         const userLikesThisPost = !this.state.userLikesThisPost;
@@ -135,7 +132,7 @@ export const Post = React.createClass({
         });
 
         // Animate here.
-        likePost(this.props.data.author.uid, postId);
+        likePost(this.props.data.author.uid, postId, data);
     },
 
     handleDeletePost(){
