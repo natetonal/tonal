@@ -6,6 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt';
 
 import HeaderLoggedOut from 'header/HeaderLoggedOut';
+import HeaderDummy from 'header/HeaderDummy';
 import ModalOverlay from 'header/ModalOverlay';
 import Header from 'header/Header';
 import MenuWrapper from './MenuWrapper';
@@ -88,7 +89,7 @@ export const TonalApp = React.createClass({
             } else if (status === 'fetching'){
                 return (
                     <div>
-                        <HeaderLoggedOut />
+                        <HeaderDummy />
                         <div className="tonal-main">
                             <div className="tonal-content">
                                 <div className="tonal-content-loading">

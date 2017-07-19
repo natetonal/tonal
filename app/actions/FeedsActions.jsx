@@ -1,5 +1,4 @@
 import { databaseRef } from 'app/firebase';
-import { diff, applyChange } from 'deep-diff';
 
 export const updateFeedStatus = (feedId, status) => {
     return {
@@ -28,16 +27,11 @@ export const addFeedPost = (feedId, postId = false, data = false) => {
 };
 
 export const updateFeedPost = (feedId, postId = false, data = false) => {
-    return (dispatch, getState) => {
-        const prevData = getState().feeds.feeds[feedId].data[postId];
-        console.log('diff the previous data to the incoming data: ', diff(prevData, data));
-
-        return {
-            type: 'FEED_UPDATE_POST',
-            feedId,
-            postId,
-            data
-        };
+    return {
+        type: 'FEED_UPDATE_POST',
+        feedId,
+        postId,
+        data
     };
 };
 
@@ -51,7 +45,7 @@ export const removeFeedPost = (feedId, postId) => {
 
 export const toggleEditPost = (postId = false) => {
     return (dispatch, getState) => {
-        const currentlyEditing = getState().feed.editing;
+        const currentlyEditing = getState().feeds.editing;
         if (currentlyEditing === postId){
             postId = false;
         }
@@ -78,7 +72,6 @@ export const fetchFeed = (feedId, type) => {
             }
             dispatch(updateFeedStatus(feedId, 'success'));
         }, error => {
-            console.log('feed fetch error! ', feedId, error);
             dispatch(updateFeedStatus(feedId, 'error'));
         });
     };

@@ -63,6 +63,15 @@ export const PreviewLink = React.createClass({
         });
     },
 
+    handleClick(event){
+        if (event){ event.preventDefault(); }
+
+        const { onClick } = this.props;
+        if (onClick){
+            onClick();
+        }
+    },
+
     handleMentionPreview(previewType, event){
         event.preventDefault();
         event.persist();
@@ -184,14 +193,15 @@ export const PreviewLink = React.createClass({
         };
 
         return (
-            <span ref={ element => this.componentRef = element }>
+            <span
+                onMouseEnter={ e => this.handleMentionPreview(type, e) }
+                onMouseOut={ () => this.handleClearMentionPreview() }
+                ref={ element => this.componentRef = element }>
                 <Link
                     ref={ element => this.previewElement = element }
                     key={ `PreviewLinkInnerLink_${ key }` }
                     className={ className }
-                    onMouseEnter={ e => this.handleMentionPreview(type, e) }
-                    onMouseOut={ () => this.handleClearMentionPreview() }
-                    onClick={ () => this.handleClearMentionPreview() }
+                    onClick={ e => this.handleClick(e) }
                     to={ src || null }>
                     { children }
                 </Link>

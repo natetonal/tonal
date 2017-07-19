@@ -36,6 +36,7 @@ import {
 export const SmallMenu = React.createClass({
 
     componentWillMount(){
+        console.log('smallMenu mounting.');
         this.setState({
             mouseOverMenu: false
         });

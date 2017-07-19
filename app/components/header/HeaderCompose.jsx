@@ -59,15 +59,16 @@ export const HeaderCompose = onClickOutside(React.createClass({
     // Finish this, similar to notifscenter.
     onCloseCompose(){
         const { onToggle } = this.props;
+        const isComposeOpen = this.isComposeOpen();
         // If compose is open, animate it out.
-        if (this.isComposeOpen()){
+        if (isComposeOpen){
             const tl = new TimelineLite();
             tl.to(this.composeRef, 0.2, {
                 ease: Power2.easeOut,
                 opacity: 0
             });
             tl.play();
-            tl.eventCallback('onComplete', () => this.isComposeOpen() && onToggle);
+            tl.eventCallback('onComplete', onToggle);
         }
     },
 
@@ -80,10 +81,14 @@ export const HeaderCompose = onClickOutside(React.createClass({
         dispatch(changeTab(tab));
     },
 
-    handlePostSubmit(parsedPost){
+    handlePostSubmit(post){
         // Make sure to update action & reducer to store raw & parsed post!
-        const { dispatch } = this.props;
-        dispatch(writePost(parsedPost, 'posts'));
+        const {
+            dispatch,
+            uid
+        } = this.props;
+
+        dispatch(writePost(uid, 'feed', post.type, post));
     },
 
     isComposeOpen(){
@@ -116,7 +121,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
                     component = (
                         // <ClickScreen handleClick={ this.onCloseCompose }>
                         <Composer
-                            type={ 'post' }
+                            type={ 'posts' }
                             onClose={ this.onCloseCompose }
                             onSubmit={ this.handlePostSubmit } />
                         // </ClickScreen>
@@ -148,6 +153,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
 
 export default Redux.connect(state => {
     return {
+        uid: state.auth.uid,
         headerMenu: state.uiState.headerMenu,
         tabSelected: state.headerCompose.currentTab
     };

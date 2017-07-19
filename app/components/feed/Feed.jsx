@@ -43,7 +43,6 @@ export const Feed = React.createClass({
             this.fType = type || false;
             this.pType = childType || false;
 
-            console.log('Mounting feed of type: ', type);
 
             // Fetch the feed (loop through each key, resolve promise.all):
             // Make sure to keep the UI busy while we wait for data.
@@ -54,12 +53,10 @@ export const Feed = React.createClass({
             const feedRef = firebase.database().ref(`${ this.fType }/${ this.fId }/`);
             feedRef.on('child_added', post => {
                 dispatch(addFeedPost(this.fId, post.key, post.val()));
-                console.log('from feed: child added: ', post.val());
                 dispatch(syncUserData(['postCount']));
             });
             feedRef.on('child_changed', post => {
                 dispatch(updateFeedPost(this.fId, post.key, post.val()));
-                console.log('from feed: child changed: ', post.val());
             });
             feedRef.on('child_removed', post => {
                 dispatch(removeFeedPost(this.fId, post.key));

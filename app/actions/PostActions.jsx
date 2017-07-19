@@ -14,9 +14,9 @@ import moment from 'moment';
 // Whereas a "feed" should be unique to individuals.
 
 
-const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
+const fanoutPostData = ({ feedId, feedLoc, postId, postLoc, data, authorId }) => {
 
-    const uid = data.author.uid;
+    const uid = (data && data.author.uid) || authorId;
     const updates = {};
 
     // Update the post itself:
@@ -42,7 +42,6 @@ const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
                 });
             }
 
-            console.log('updates: ', updates);
             // Atomic update to database
             return databaseRef.update(updates);
         }
@@ -50,44 +49,6 @@ const fanoutPostData = (feedId, feedLoc, postId, postLoc, data) => {
         return false;
     });
 };
-
-const fanoutLikeData = (feedId, feedLoc, postId, postLoc, data) => {
-
-    const uid = data.author.uid;
-    const updates = {};
-
-    // Update the post itself:
-    updates[`${ postLoc }/${ postId }`] = data;
-
-    return databaseRef.child(`users/${ uid }`).once('value')
-    .then(userSnap => {
-
-        const user = userSnap.val() || null;
-        if (user){
-
-            // Update post author's info:
-            updates[`user-posts/${ uid }/${ postId }`] = data;
-            updates[`users/${ uid }/recentPost`] = data;
-            updates[`${ feedLoc }/${ feedId }/${ postId }`] = data;
-
-            // If this specifically a "post", then update user follower feeds:
-            const userFollowers = user.followers ? Object.keys(user.followers) : null;
-
-            if (userFollowers){
-                userFollowers.forEach(followerId => {
-                    updates[`${ feedLoc }/${ followerId }/${ postId }`] = data;
-                });
-            }
-
-            console.log('updates: ', updates);
-            // Atomic update to database
-            return databaseRef.update(updates);
-        }
-
-        return false;
-    });
-};
-
 
 export const writePost = (feedId, feedLoc, postLoc, data) => {
     return () => {
@@ -105,14 +66,15 @@ export const updatePost = (feedId, feedLoc, postId, postLoc, data) => {
         data.postEdited = true;
         data.postEditedAt = moment().format('LLLL');
 
-        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
+        fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
     };
 };
 
 export const deletePost = (feedId, feedLoc, postId, postLoc) => {
-    return () => {
+    return (dispatch, getState) => {
+        const authorId = getState().auth.uid;
         const data = null;
-        fanoutPostData(feedId, feedLoc, postId, postLoc, data);
+        fanoutPostData({ feedId, feedLoc, postId, postLoc, data, authorId });
     };
 };
 
@@ -122,14 +84,26 @@ export const likePost = (feedId, feedLoc, postId, postLoc, likedId, liked, data)
         .transaction(post => {
             if (post) {
                 if (post.likesCount && post.likes[likedId]) {
-                    data.likesCount--;
                     data.likes[likedId] = null;
                 } else {
-                    data.likesCount++;
+                    if (!data.likes) {
+                        data.likes = {};
+                    }
                     data.likes[likedId] = moment().format('LLLL');
                 }
+
+                let count = 0;
+                Object.keys(data.likes).forEach(key => {
+                    if (data.likes[key]){
+                        count += 1;
+                    }
+                });
+
+                data.likesCount = count;
+                fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
             }
-            fanoutPostData(feedId, feedLoc, postId, postLoc, data);
+
+            return data;
         });
     };
 };

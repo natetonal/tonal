@@ -29,12 +29,22 @@ export const Tooltip = React.createClass({
         window.clearTimeout(this.delayTooltip);
     },
 
+    handleClick(event){
+        if (event){ event.preventDefault(); }
+
+        const { onClick } = this.props;
+        if (onClick){
+            onClick();
+        }
+    },
+
     render(){
 
         const {
             text,
             direction,
             align,
+            className,
             children
         } = this.props;
 
@@ -42,7 +52,9 @@ export const Tooltip = React.createClass({
 
         if (text && showTip){
             return (
-                <div className="tonal-tooltip">
+                <div
+                    onClick={ e => this.handleClick(e) }
+                    className={ `${ className } tonal-tooltip` }>
                     { children }
                     <span className={ `tooltiptext tooltip-${ direction || 'left' } text-${ align || 'left' }` }>
                         { text }
@@ -51,7 +63,13 @@ export const Tooltip = React.createClass({
             );
         }
 
-        return <div>{ children }</div>;
+        return (
+            <div
+                onClick={ e => this.handleClick(e) }
+                className={ `${ className } tonal-tooltip` }>
+                { children }
+            </div>
+        );
     }
 
 });

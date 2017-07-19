@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Redux from 'react-redux';
 import { Link } from 'react-router';
-import VisibilitySensor from 'react-visibility-sensor';
 import { switchHeaderMenu } from 'actions/UIStateActions';
 import Search from 'Search';
 import NotificationCenter from 'notifications/NotificationCenter';

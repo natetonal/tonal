@@ -92,7 +92,6 @@ export default (state = initialState, action) => {
                 }
             };
         case 'FEED_EDIT_POST':
-            console.log('aciton.postId from reducer: ', action.postId);
             return {
                 ...state,
                 editing: action.postId
@@ -135,7 +134,6 @@ export default (state = initialState, action) => {
 //                     }, {})
 //             };
 //         case 'FEED_EDIT_POST':
-//             console.log('aciton.postId from reducer: ', action.postId);
 //             return {
 //                 ...state,
 //                 editing: action.postId
