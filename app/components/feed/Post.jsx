@@ -12,7 +12,6 @@ import SmallMenu from 'elements/SmallMenu';
 import ClickScreen from 'elements/ClickScreen';
 
 import Thread from './Thread';
-import Comment from './Comment';
 import PostParser from './PostParser';
 import PostTimestamp from './PostTimestamp';
 import PostInteractionBar from './PostInteractionBar';
@@ -171,9 +170,7 @@ export const Post = React.createClass({
         // Flagged: 0
 
         const {
-            feedId,
             postId,
-            type,
             data,
             editing,
             favorites,
@@ -183,34 +180,11 @@ export const Post = React.createClass({
             deletePost,
             blockUser,
             followUser,
+            favoriteUser,
             togglePostEditor
         } = this.props;
 
         if (data){
-
-            const {
-                file,
-                type,
-                image,
-                mentions,
-                post,
-                raw,
-                likes,
-                shares,
-                postEdited,
-                postEditedAt,
-                timeStamp,
-                thread,
-                length,
-                author
-            } = data;
-
-            const {
-                uid,
-                avatar,
-                displayName,
-                username
-            } = author;
 
             const {
                 showMenu,
@@ -226,7 +200,7 @@ export const Post = React.createClass({
             const likeBtn = {
                 text: 'Likes',
                 type: 'like',
-                data: likes,
+                data: data.likes,
                 icon: 'bolt',
                 handler: this.handleLikePost,
                 btnState: (userLikesThisPost ? 'active' : ''),
@@ -237,7 +211,7 @@ export const Post = React.createClass({
             const commentBtn = {
                 text: 'Replies',
                 type: 'reply',
-                data: thread,
+                data: data.thread,
                 icon: 'comment',
                 handler: this.handleToggleReply,
                 btnState: (userRepliedToPost ? 'active' : ''),
@@ -248,7 +222,7 @@ export const Post = React.createClass({
             const shareBtn = {
                 text: 'Shares',
                 type: 'share',
-                data: shares,
+                data: data.shares,
                 icon: 'share',
                 handler: () => console.log('Sharing'),
                 btnState: (userSharedThisPost ? 'active' : ''),
@@ -260,6 +234,7 @@ export const Post = React.createClass({
 
                 if (showMenu){
 
+                    const { uid, username, displayName } = data.author;
                     const settings = [{
                         icon: 'eye-slash',
                         iconColor: 'midgray',
@@ -275,7 +250,7 @@ export const Post = React.createClass({
                                 icon: favorites ? 'broken-heart' : 'heart',
                                 iconColor: favorites ? 'midgray' : 'white',
                                 title: favorites ? `Remove ${ displayName } from your favorites` : `Add ${ displayName } to your favorites`,
-                                callback: favorites,
+                                callback: favoriteUser,
                                 params: [uid, username, displayName]
                             });
                         }
@@ -356,12 +331,12 @@ export const Post = React.createClass({
             };
 
             const renderImage = () => {
-                if (image){
+                if (data.image){
                     return (
-                        <div className={ `tonal-post-image ${ file ? 'fullwidth' : '' }` }>
+                        <div className={ `tonal-post-image ${ data.file ? 'fullwidth' : '' }` }>
                             <img
-                                className={ `post-image${ file ? '-fullwidth' : '' }` }
-                                src={ image }
+                                className={ `post-image${ data.file ? '-fullwidth' : '' }` }
+                                src={ data.image }
                                 alt="" />
                         </div>
                     );
@@ -391,9 +366,9 @@ export const Post = React.createClass({
                                 <i className="fa fa-times" aria-hidden="true" />
                             </div>
                             <Composer
-                                initialValue={ raw }
-                                mentions={ mentions }
-                                type={ type }
+                                initialValue={ data.raw }
+                                mentions={ data.mentions }
+                                type={ data.type }
                                 submitText={ 'Update Your Post ' }
                                 onClose={ this.handleTogglePostEditor }
                                 onSubmit={ this.handleUpdatePost } />
@@ -403,7 +378,7 @@ export const Post = React.createClass({
 
                 return (
                     <PostParser
-                        post={ post }
+                        post={ data.post }
                         className={ `tonal-post-message ${ bigTextLength < length ? '' : 'large' }` } />
                 );
             };
@@ -431,15 +406,15 @@ export const Post = React.createClass({
                                 <PreviewLink
                                     key={ `postLink_${ postId }` }
                                     type="user"
-                                    previewId={ author.uid }
-                                    postId={ postId }
-                                    relationship={ evaluateRelationship(author.uid) }
-                                    followUser={ followUser }
+                                    previewId={ data.author.uid }
+                                    postId={ data.postId }
+                                    relationship={ evaluateRelationship(data.author.uid) }
+                                    followUser={ data.followUser }
                                     className="post-mention"
-                                    src={ `users/${ author.username }` }>
+                                    src={ `users/${ data.author.username }` }>
                                     <img
-                                        src={ author.avatar }
-                                        alt={ author.displayName }
+                                        src={ data.author.avatar }
+                                        alt={ data.author.displayName }
                                         className="tonal-post-1-avatar-photo" />
                                 </PreviewLink>
                             </div>
@@ -450,19 +425,19 @@ export const Post = React.createClass({
                                     <PreviewLink
                                         key={ `postLink_${ postId }` }
                                         type="user"
-                                        previewId={ author.uid }
+                                        previewId={ data.author.uid }
                                         postId={ postId }
-                                        relationship={ evaluateRelationship(author.uid) }
+                                        relationship={ evaluateRelationship(data.author.uid) }
                                         followUser={ followUser }
                                         className="post-mention"
-                                        src={ `users/${ author.username }` }>
-                                        { displayName }
+                                        src={ `users/${ data.author.username }` }>
+                                        { data.author.displayName }
                                     </PreviewLink>
                                 </div>
                                 <PostTimestamp
-                                    edited={ postEdited }
-                                    editedAt={ postEditedAt }
-                                    timeStamp={ timeStamp } />
+                                    edited={ data.postEdited }
+                                    editedAt={ data.postEditedAt }
+                                    timeStamp={ data.timeStamp } />
                             </div>
                         </div>
                         { postMode() }
@@ -471,7 +446,7 @@ export const Post = React.createClass({
                         <Thread
                             toggleReply={ this.handleToggleReply }
                             showReply={ showReply }
-                            data={ thread } />
+                            data={ data.thread } />
                     </div>
                 </ReactCSSTransitionGroup>
             );

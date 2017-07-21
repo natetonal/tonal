@@ -17,7 +17,7 @@ exports.sendFollowerNotification = (functions, admin) => {
         return notifUtils.sendNotif({
             senderId: userId,
             receivingIds: [followedId],
-            receivingGroups: ['favorites'],
+            receivingGroups: ['favorited'],
             timeStamp: event.data.val().timeStamp,
             targets: event.data.val().target,
             type: notifConsts.ADD_FOLLOWER,
@@ -42,7 +42,7 @@ exports.sendFavoritedNotification = (functions, admin) => {
         return notifUtils.sendNotif({
             senderId: userId,
             receivingIds: [favoritedId],
-            receivingGroups: ['favorites'],
+            receivingGroups: ['favorited'],
             timeStamp: event.data.val().timeStamp,
             targets: event.data.val().target,
             type: notifConsts.ADD_FAVORITE,
@@ -77,7 +77,7 @@ exports.sendPostNotification = (functions, admin) => {
 
         return notifUtils.sendNotif({
             senderId: userId,
-            receivingGroups: ['favorites'],
+            receivingGroups: ['favorited'],
             timeStamp: post.timeStamp,
             targets: mentions,
             type: notifConsts.NEW_POST,

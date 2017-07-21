@@ -7,7 +7,10 @@ import {
     updateBlockedUser
 } from 'actions/UserActions';
 import { countNewNotifs } from 'actions/NotificationActions';
-import { addFollower } from 'actions/FriendshipActions';
+import {
+    addFollower,
+    addFavorite
+} from 'actions/FriendshipActions';
 import {
     fetchFeed,
     addFeedPost,
@@ -69,6 +72,15 @@ export const Feed = React.createClass({
         const { dispatch } = this.props;
         if (!this.isBlocked(followedUid)){
             dispatch(addFollower(followedUid, username, displayName));
+        }
+    },
+
+    handleFavoriteUser(favoritedUid, username, displayName){
+        const { dispatch } = this.props;
+        if (!this.checkFriendship(favoritedUid, 'blocked') &&
+            !this.checkFriendship(favoritedUid, 'blockedBy') &&
+            this.checkFriendship(favoritedUid, 'following')){
+            dispatch(addFavorite(favoritedUid, username, displayName));
         }
     },
 
@@ -189,6 +201,7 @@ export const Feed = React.createClass({
                                     likePost={ this.handleLikePost }
                                     blockUser={ this.handleBlockUser }
                                     followUser={ this.handleFollowUser }
+                                    favoriteUser={ this.handleFavoriteUser }
                                     togglePostEditor={ this.togglePostEditor } />
                             );
                         }
