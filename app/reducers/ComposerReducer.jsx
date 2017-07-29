@@ -1,5 +1,6 @@
 const initialState = {
     currentMenu: '',
+    currentValue: '',
     previewImage: '',
     imageFile: '',
     query: ''
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
                 ...state,
                 previewImage: action.image
             };
+        case 'COM_UPDATE_VALUE':
+            return {
+                ...state,
+                currentValue: action.value
+            };
         case 'COM_SET_IMAGE_UPLOAD':
             return {
                 ...state,
@@ -27,6 +33,8 @@ export default (state = initialState, action) => {
                 ...state,
                 query: action.query
             };
+        case 'COM_RESET_STATE':
+            return initialState;
         default:
             return state;
     }

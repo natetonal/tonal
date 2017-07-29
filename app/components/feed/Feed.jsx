@@ -6,7 +6,6 @@ import {
     syncUserData,
     updateBlockedUser
 } from 'actions/UserActions';
-import { countNewNotifs } from 'actions/NotificationActions';
 import {
     addFollower,
     addFavorite
@@ -24,6 +23,9 @@ import {
     updatePost,
     updatePostAuthorData
 } from 'actions/PostActions';
+import { uploadPostImage } from 'actions/StorageActions';
+import { countNewNotifs } from 'actions/NotificationActions';
+import { resetState } from 'actions/ComposerActions';
 
 import Post from './Post';
 
@@ -46,7 +48,6 @@ export const Feed = React.createClass({
             this.fType = type || false;
             this.pType = childType || false;
 
-
             // Fetch the feed (loop through each key, resolve promise.all):
             // Make sure to keep the UI busy while we wait for data.
             // And make sure to paginate.
@@ -59,6 +60,7 @@ export const Feed = React.createClass({
                 dispatch(syncUserData(['postCount']));
             });
             feedRef.on('child_changed', post => {
+                console.log('from feed: child_changed - ', post.val());
                 dispatch(updateFeedPost(this.fId, post.key, post.val()));
             });
             feedRef.on('child_removed', post => {
@@ -92,9 +94,42 @@ export const Feed = React.createClass({
         });
     },
 
+    // Check if image changed from last post to this post.
+    // If so and the updated post has an image, upload it, then update the post.
     handleUpdatePost(updatedPost, postId){
-        const { dispatch } = this.props;
-        dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPost));
+        console.log('from feed: updatedPost from handleUpdatePost: ', updatedPost);
+            // Make sure to update action & reducer to store raw & parsed post!
+        const {
+            dispatch,
+            feed
+        } = this.props;
+
+        if (updatedPost.file &&
+            updatedPost.image &&
+            feed[postId] &&
+            feed[postId].image !== updatedPost.image){
+            console.log('requirements met to upload pic.');
+            dispatch(uploadPostImage(updatedPost))
+            .then(updatedPostWithURL => {
+                if (updatedPostWithURL){
+                    dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPostWithURL))
+                    .then(() => {
+                        this.togglePostEditor(postId);
+                        dispatch(resetState());
+                    });
+                } else {
+                    console.log('error received from HeaderCompose: ', updatedPost);
+                }
+            });
+        } else {
+            console.log('requirements not met to upload pic, updating post.');
+            dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPost))
+            .then(() => {
+                dispatch(resetState());
+            });
+        }
+
+
     },
 
     handleLikePost(authorId, postId, data){

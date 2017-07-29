@@ -12,6 +12,7 @@ import SmallMenu from 'elements/SmallMenu';
 import ClickScreen from 'elements/ClickScreen';
 
 import Thread from './Thread';
+import PostImage from './PostImage';
 import PostParser from './PostParser';
 import PostTimestamp from './PostTimestamp';
 import PostInteractionBar from './PostInteractionBar';
@@ -61,12 +62,16 @@ export const Post = React.createClass({
         // If the user opens the editor:
         if (prevProps.editing !== this.props.postId &&
             this.props.editing === this.props.postId){
-            TweenLite.from(this.postEditorRef, 0.25, {
-                ease: Power1.easeOut,
-                transformOrigin: 'top left',
-                height: 0,
-                opacity: 0
-            });
+            TweenLite.fromTo(this.postEditorRef, 0.75,
+                {
+                    height: 0,
+                    opacity: 0
+                },
+                {
+                    ease: Power1.easeOut,
+                    height: '100%',
+                    opacity: 1
+                });
         }
 
         if (prevProps.data.likesCount !== this.props.data.likesCount &&
@@ -76,9 +81,7 @@ export const Post = React.createClass({
     },
 
     handlePostMenu(){
-        this.setState({
-            showMenu: !this.state.showMenu
-        });
+        this.setState({ showMenu: !this.state.showMenu });
     },
 
     handleLikePost(){
@@ -120,10 +123,7 @@ export const Post = React.createClass({
 
     handleUpdatePost(updatedPost){
 
-        const {
-            updatePost,
-            postId
-        } = this.props;
+        console.log('updatedPost received by handleUpdatePost: ', updatedPost);
 
         const tl = new TimelineLite();
         tl.to(this.postEditorRef, 0.25, {
@@ -133,7 +133,17 @@ export const Post = React.createClass({
             opacity: 0
         });
         tl.play();
-        tl.eventCallback('onComplete', updatePost, [updatedPost, postId]);
+        tl.eventCallback('onComplete', this.handleUpdatePostCallback, [updatedPost]);
+    },
+
+    handleUpdatePostCallback(updatedPost){
+        const {
+            updatePost,
+            postId
+        } = this.props;
+
+        updatePost(updatedPost, postId);
+
     },
 
     handleTogglePostEditor(){
@@ -143,6 +153,7 @@ export const Post = React.createClass({
             editing
         } = this.props;
 
+        console.log('handleTogglePostEditor called. Editor currently open? ', editing === postId);
         const tl = new TimelineLite();
         if (editing === postId){
             tl.to(this.postEditorRef, 0.25, {
@@ -189,6 +200,7 @@ export const Post = React.createClass({
             const {
                 showMenu,
                 showReply,
+                imageLoaded,
                 userLikesThisPost,
                 userRepliedToPost,
                 userSharedThisPost,
@@ -224,7 +236,6 @@ export const Post = React.createClass({
                 type: 'share',
                 data: data.shares,
                 icon: 'share',
-                handler: () => console.log('Sharing'),
                 btnState: (userSharedThisPost ? 'active' : ''),
                 count: sharesCount,
                 intro: 'Share'
@@ -240,7 +251,6 @@ export const Post = React.createClass({
                         iconColor: 'midgray',
                         title: 'Hide this post',
                         description: 'This post will no longer show up in your feed.',
-                        callback: () => console.log('UNSUBSCRIBED')
                     }];
 
                     if (!posterIsSelf){
@@ -268,7 +278,6 @@ export const Post = React.createClass({
                                 iconColor: 'midgray',
                                 title: `Unsubscribe from ${ displayName }'s posts`,
                                 description: 'Hide all posts from this user and stop receiving notifications.',
-                                callback: () => console.log('UNSUBSCRIBED FROM ALL POSTS')
                             },
                             {
                                 divider: true
@@ -279,7 +288,6 @@ export const Post = React.createClass({
                                 highlightColor: 'orange',
                                 title: 'Flag This Post',
                                 description: 'Report TOS Violations to the administrators.',
-                                callback: () => console.log('FLAGGED!')
                             },
                             {
                                 icon: 'ban',
@@ -332,13 +340,12 @@ export const Post = React.createClass({
 
             const renderImage = () => {
                 if (data.image){
+
                     return (
-                        <div className={ `tonal-post-image ${ data.file ? 'fullwidth' : '' }` }>
-                            <img
-                                className={ `post-image${ data.file ? '-fullwidth' : '' }` }
-                                src={ data.image }
-                                alt="" />
-                        </div>
+                        <PostImage
+                            file={ data.file }
+                            image={ data.image }
+                            onClick={ () => console.log('IMAGE CLICKED!') } />
                     );
                 }
 
@@ -355,6 +362,8 @@ export const Post = React.createClass({
             };
 
             const postMode = () => {
+
+                console.log('postMode called. Should editor be open? ', editing === postId);
                 if (editing === postId){
                     return (
                         <div
@@ -366,12 +375,12 @@ export const Post = React.createClass({
                                 <i className="fa fa-times" aria-hidden="true" />
                             </div>
                             <Composer
+                                prevData={ data }
                                 initialValue={ data.raw }
                                 mentions={ data.mentions }
                                 type={ data.type }
                                 submitText={ 'Update Your Post ' }
-                                onClose={ this.handleTogglePostEditor }
-                                onSubmit={ this.handleUpdatePost } />
+                                onSubmit={ this.handleUpdatePostCallback } />
                         </div>
                     );
                 }

@@ -7,7 +7,9 @@ import {
     TimelineLite,
     Power2
 } from 'gsap';
+import { uploadPostImage } from 'actions/StorageActions';
 import { changeTab } from 'actions/HeaderComposeActions';
+import { resetState } from 'actions/ComposerActions';
 import { writePost } from 'actions/PostActions';
 
 // import ClickScreen from 'elements/ClickScreen';
@@ -88,7 +90,25 @@ export const HeaderCompose = onClickOutside(React.createClass({
             uid
         } = this.props;
 
-        dispatch(writePost(uid, 'feed', post.type, post));
+        if (post.file){
+            dispatch(uploadPostImage(post))
+            .then(updatedPost => {
+                if (updatedPost){
+                    dispatch(writePost(uid, 'feed', updatedPost.type, updatedPost))
+                    .then(() => {
+                        this.onCloseCompose();
+                        dispatch(resetState());
+                    });
+                } else {
+                    console.log('error received from HeaderCompose: ', updatedPost);
+                }
+            });
+        } else {
+            dispatch(writePost(uid, 'feed', post.type, post))
+            .then(() => {
+                dispatch(resetState());
+            });
+        }
     },
 
     isComposeOpen(){
@@ -119,12 +139,9 @@ export const HeaderCompose = onClickOutside(React.createClass({
             switch (tabSelected){
                 case 'post':
                     component = (
-                        // <ClickScreen handleClick={ this.onCloseCompose }>
                         <Composer
                             type={ 'posts' }
-                            onClose={ this.onCloseCompose }
                             onSubmit={ this.handlePostSubmit } />
-                        // </ClickScreen>
                     );
                     break;
                 default:

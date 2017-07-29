@@ -6,6 +6,7 @@ import validator from 'validator';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     changeMenu,
+    updateValue,
     setPreviewImage,
     setImageUpload,
     updateSuggestionQuery
@@ -76,9 +77,10 @@ export const Composer = React.createClass({
             warning: false,
             pos: '',
             history: [],
+            prevData: this.props.prevData || false,
             submitText: this.props.submitText || 'Share It!',
-            mentions: this.props.mentions || [],
-            initialValue: this.props.initialValue || '',
+            mentions: this.props.prevData ? this.props.prevData.mentions : false,
+            initialValue: this.props.initialValue || this.props.currentValue,
             maxLength: this.props.maxLength || 2000,
             mainClass: this.props.mainClass || 'composer',
             buttonPos: this.props.buttonPos || 'top',
@@ -87,8 +89,13 @@ export const Composer = React.createClass({
     },
 
     // Implement a new Medium when component mounts, and focus on it.
+    // Set previous image & file to props when mounted.
     componentDidMount(){
-        const { initialValue } = this.state;
+        const {
+            initialValue,
+            prevData
+        } = this.state;
+
         this.mediumSettings = {
             element: this.composer,
             mode: Medium.partialMode,
@@ -99,10 +106,22 @@ export const Composer = React.createClass({
         this.resetMedium();
         this.composer.focus();
         this.medium.value(initialValue);
+        select(this.composer, { start: initialValue.length });
+        this.pos = select(this.composer);
+
+        if (prevData){
+            if (prevData.image){
+                this.handleInsertImage(prevData.image);
+            }
+
+            if (prevData.file){
+                this.handleUploadFile(prevData.file);
+            }
+        }
     },
 
-    // Make sure focus stays on composer unless selection menu open.
     componentDidUpdate(){
+        // Make sure focus stays on composer unless selection menu open.
         const { currentMenu, query } = this.props;
         if (currentMenu === '' || query){
             this.composer.focus();
@@ -161,12 +180,14 @@ export const Composer = React.createClass({
 
     // Keep a running history of composer states.
     updateHistory(value){
+        const { dispatch } = this.props;
         const { history } = this.state;
         history.unshift(value);
         if (history.length > 2){
             history.pop();
         }
         this.setState({ history });
+        dispatch(updateValue(value));
     },
 
     revertHistory(){
@@ -216,8 +237,9 @@ export const Composer = React.createClass({
         const word = `@${ query }`;
         if (textContent.match(word)){
             const { mentions } = this.state;
-            mentions.push(user);
-            this.setState({ mentions });
+            const updates = mentions && [];
+            updates.push(user);
+            this.setState({ mentions: updates });
             const innerHTML = this.medium.value();
             const updatedHTML = innerHTML.replace(word, `${ user.displayName }&nbsp;`);
             const decoratedHTML = this.decorateEntities(updatedHTML);
@@ -559,12 +581,12 @@ export const Composer = React.createClass({
         const {
             user,
             type,
-            onClose,
-            onSubmit
+            onSubmit,
+            prevData
         } = this.props;
         const postRaw = this.medium.value();
         const postData = {
-            mentions: this.state.mentions,
+            mentions: this.state.mentions.length > 0 ? this.state.mentions : false,
             image: this.props.previewImage,
             file: this.props.imageFile,
             length: this.checkLen()
@@ -577,13 +599,12 @@ export const Composer = React.createClass({
                 enabled: !this.state.enabled,
                 error
             });
-            parsePost(postRaw, postData, user, type)
+            parsePost(postRaw, postData, user, type, prevData)
             .then(parsedPost => {
                 if (parsedPost.error){
                     this.handleWarning(parsedPost);
                 } else {
                     onSubmit(parsedPost);
-                    onClose();
                 }
             });
         }
@@ -593,6 +614,8 @@ export const Composer = React.createClass({
 
         const {
             currentMenu,
+            imageUploadProgress,
+            imageUploadState,
             query
         } = this.props;
 
@@ -719,7 +742,9 @@ export const Composer = React.createClass({
         const imagePreviewer = () => {
             return (
                 <ComposerImagePreviewer
-                    className={ `${ cls.imgPrev } ${ enabled ? '' : cls.disabled }` } />
+                    className={ `${ cls.imgPrev } ${ enabled ? '' : cls.disabled }` }
+                    imageUploadProgress={ imageUploadProgress }
+                    imageUploadState={ imageUploadState } />
             );
         };
 
@@ -761,6 +786,7 @@ export const Composer = React.createClass({
                         btnType="main"
                         btnText={ enabled ? submitText : 'Submitting' }
                         isLoading={ !enabled }
+                        disabled={ !enabled }
                         onClick={ this.submitPost } />
                 </div>
             </div>
@@ -771,6 +797,9 @@ export const Composer = React.createClass({
 export default Redux.connect(state => {
     return {
         user: state.user,
+        currentValue: state.composer.currentValue,
+        imageUploadProgress: state.storage.imageUploadProgress,
+        imageUploadState: state.storage.imageUploadState,
         imageFile: state.composer.imageFile,
         previewImage: state.composer.previewImage,
         currentMenu: state.composer.currentMenu,

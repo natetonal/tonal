@@ -125,7 +125,7 @@
                 color: $lightgreen;
                 @include transition(0.2s all);
             }
-            
+
             .composer-control-label{
                 color: $lightgreen;
                 opacity: 1;
@@ -155,6 +155,7 @@
 }
 
 .composer-image-previewer {
+    position: relative;
     display: block;
     text-align: center;
     max-height: 125px;
@@ -181,6 +182,40 @@
         }
 
         @include transition(all 0.2s);
+    }
+
+    .composer-image-previewer-progress-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin-top: -10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: rgba($blue, 0.83);
+
+        .composer-image-previewer-progress-label {
+            color: $white;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+        }
+
+        .composer-image-previewer-progress-bar-container {
+            height: 7px;
+            width: 200px;
+            border-radius: 7px;
+            overflow: hidden;
+
+            .composer-image-previewer-progress-bar-fill {
+                height: 7px;
+                width: 0px;
+                background: $white;
+                border-radius: 7px;
+            }
+        }
     }
 }
 
@@ -253,6 +288,12 @@
     &.dropzone-error{
         color: $alert-error;
         border: 5px dashed $alert-error;
+        @include transition(0.2s all);
+    }
+
+    &.dropzone-active{
+        color: $lightgreen;
+        border: 5px dashed $lightgreen;
         @include transition(0.2s all);
     }
 

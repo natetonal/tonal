@@ -4,17 +4,50 @@ import {
     setPreviewImage,
     setImageUpload
 } from 'actions/ComposerActions';
+import {
+    TweenLite,
+    Power2
+} from 'gsap';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 export const ComposerImagePreviewer = React.createClass({
 
     componentWillMount(){
-        this.setState({ warningLightOn: false });
+        this.setState({
+            warningLightOn: false,
+            className: this.props.className
+        });
     },
 
     componentWillReceiveProps(nextProps){
         if (!nextProps.previewImage){
             this.warningLightOff();
+        }
+    },
+
+    componentDidUpdate(prevProps){
+        if (this.props.imageUploadProgress !== prevProps.imageUploadProgress &&
+            this.progressBarRef &&
+            this.progressPercRef){
+            const width = Math.floor(this.props.imageUploadProgress * 2);
+            TweenLite.to(this.progressBarRef, 0.25, {
+                ease: Power2.easeOut,
+                width
+            });
+
+            TweenLite.from(this.progressPercRef, 0.25, {
+                ease: Power2.easeOut,
+                opacity: 0.75
+            });
+        }
+
+        if (this.props.imageUploadState &&
+            !prevProps.imageUploadState &&
+            this.progressContainerRef){
+            TweenLite.from(this.progressContainerRef, 0.25, {
+                ease: Power2.easeOut,
+                opacity: 0
+            });
         }
     },
 
@@ -25,17 +58,49 @@ export const ComposerImagePreviewer = React.createClass({
     },
 
     warningLightOn(){
-        this.setState({ warningLightOn: true });
+        this.setState({
+            warningLightOn: true,
+            className: `${ this.props.className } warning-light` });
     },
 
     warningLightOff(){
-        this.setState({ warningLightOn: false });
+        this.setState({
+            warningLightOn: false,
+            className: this.props.className
+        });
     },
 
     render(){
 
-        const { previewImage, className } = this.props;
-        const { warningLightOn } = this.state;
+        const {
+            previewImage,
+            imageUploadState,
+            imageUploadProgress
+        } = this.props;
+
+        const {
+            warningLightOn,
+            className
+        } = this.state;
+
+        const renderUploadScreen = () => {
+            if (imageUploadState){
+                return (
+                    <div
+                        ref={ element => this.progressContainerRef = element }
+                        className="composer-image-previewer-progress-container">
+                        <div className="composer-image-previewer-progress-label">
+                            Uploading: <span ref={ element => this.progressPercRef = element }>{ imageUploadProgress }</span>%
+                        </div>
+                        <div className="composer-image-previewer-progress-bar-container">
+                            <div
+                                ref={ element => this.progressBarRef = element }
+                                className="composer-image-previewer-progress-bar-fill" />
+                        </div>
+                    </div>
+                );
+            }
+        };
 
         if (previewImage){
             return (
@@ -47,7 +112,8 @@ export const ComposerImagePreviewer = React.createClass({
                     transitionEnter={ false }
                     transitionLeave
                     transitionLeaveTimeout={ 200 }>
-                    <div className={ `${ className } ${ warningLightOn ? 'warning-light' : '' }` }>
+                    <div className={ className }>
+                        { renderUploadScreen() }
                         <div className={ `composer-image-previewer-label ${ warningLightOn ? 'warning-light' : '' }` }>
                             { warningLightOn ? 'DELETE IMAGE?' : 'IMAGE PREVIEW' }
                         </div>

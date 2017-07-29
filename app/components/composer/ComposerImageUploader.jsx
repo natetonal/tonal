@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Redux from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Dropzone from 'react-dropzone';
 
@@ -7,32 +6,58 @@ export const ComposerImageUploader = React.createClass({
 
     componentWillMount(){
         this.setState({
+            dropzoneActive: false,
             error: ''
         });
     },
 
-    handleDrop(files){
-        const image = files[0].preview || false;
-        if (image){
+    onDragEnter(e) {
+        if (e){ e.preventDefault(); }
+        this.setState({ dropzoneActive: true });
+    },
 
-            // Basic image format validation
-            const validImage = new Image();
-            validImage.onload = () => {
-                const { handleImage, handleFile } = this.props;
-                handleImage(image);
-                handleFile(files[0]);
-            };
+    onDragLeave(e) {
+        if (e){ e.preventDefault(); }
+        this.setState({ dropzoneActive: false });
+    },
 
-            validImage.onerror = () => {
-                this.setState({
-                    error: {
-                        title: 'Invalid Image.',
-                        msg: 'Please make sure you have selected a valid image format (jpg, gif, tiff, png)'
-                    }
-                });
-            };
+    acceptedTypes: ['image/gif', 'image/jpeg', 'image/png'],
 
-            validImage.src = files[0].preview;
+    maxSize: 5242880,
+
+    handleDrop(acc, rej){
+        console.log('accepted file: ', acc);
+        console.log('rejected file: ', rej);
+        const accepted = acc ? acc[0] : false;
+        const rejected = rej ? rej[0] : false;
+        if (accepted && !rejected){
+            const { handleImage, handleFile } = this.props;
+            handleImage(accepted.preview);
+            handleFile(accepted);
+        } else {
+            const size = rejected.size;
+            const type = rejected.type;
+            console.log('size: ', size);
+            console.log('type: ', type);
+            let title = '';
+            let msg = '';
+
+            if (size > this.maxSize){
+                title = 'Invalid Image.';
+                msg = 'The image you\'re trying to upload is too large. Please keep it under 5mb.';
+            } else if (!this.acceptedTypes.includes(type)){
+                title = 'Invalid Image.';
+                msg = 'Please make sure you have selected a valid image format (jpg, gif, png)';
+            } else {
+                title = 'Uh Oh.';
+                msg = 'Something strange just happened. Please try again.';
+            }
+            this.setState({
+                error: {
+                    title,
+                    msg
+                }
+            });
         }
     },
 
@@ -70,9 +95,15 @@ export const ComposerImageUploader = React.createClass({
                 transitionLeaveTimeout={ 200 }>
                 <div className="composer-image-uploader">
                     <Dropzone
+                        accept={ this.acceptedTypes.join(', ') }
                         multiple={ false }
-                        onDrop={ this.handleDrop }
-                        className={ `composer-image-dropzone-text ${ error ? 'dropzone-error' : '' }` }>
+                        maxSize={ this.maxSize }
+                        onDrop={ (acc, rej) => this.handleDrop(acc, rej) }
+                        onDragEnter={ e => this.onDragEnter(e) }
+                        onDragLeave={ e => this.onDragLeave(e) }
+                        className={ `composer-image-dropzone-text ${ error && 'dropzone-error' }` }
+                        activeClassName="composer-image-dropzone-text dropzone-active"
+                        rejectClassName="composer-image-dropzone-text dropzone-error">
                         { displayText() }
                     </Dropzone>
                 </div>
@@ -82,6 +113,4 @@ export const ComposerImageUploader = React.createClass({
 
 });
 
-export default Redux.connect(state => {
-    return {};
-})(ComposerImageUploader);
+export default ComposerImageUploader;

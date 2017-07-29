@@ -16,7 +16,7 @@ import moment from 'moment';
 
 const fanoutPostData = ({ feedId, feedLoc, postId, postLoc, data, authorId }) => {
 
-    const uid = (data && data.author.uid) || authorId;
+    const uid = data ? data.author.uid : authorId;
     const updates = {};
 
     // Update the post itself:
@@ -56,7 +56,7 @@ export const writePost = (feedId, feedLoc, postLoc, data) => {
         data.postId = postId;
         data.timeStamp = moment().format('LLLL');
 
-        fanoutPostData({ feedId, feedLoc, postLoc, data, postId });
+        return fanoutPostData({ feedId, feedLoc, postLoc, data, postId });
     };
 };
 
@@ -66,7 +66,7 @@ export const updatePost = (feedId, feedLoc, postId, postLoc, data) => {
         data.postEdited = true;
         data.postEditedAt = moment().format('LLLL');
 
-        fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
+        return fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
     };
 };
 
@@ -74,7 +74,8 @@ export const deletePost = (feedId, feedLoc, postId, postLoc) => {
     return (dispatch, getState) => {
         const authorId = getState().auth.uid;
         const data = null;
-        fanoutPostData({ feedId, feedLoc, postId, postLoc, data, authorId });
+        
+        return fanoutPostData({ feedId, feedLoc, postId, postLoc, data, authorId });
     };
 };
 

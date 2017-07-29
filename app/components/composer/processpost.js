@@ -72,8 +72,10 @@ const checkIfLinksAreSafe = (links, post) => {
     });
 };
 
-export const parsePost = (html, data, userData, postType) => {
+export const parsePost = (html, data, userData, postType, prevData = false) => {
     let postData = { ...data };
+    console.log('prevData: ', prevData);
+    console.log('postData: ', postData);
     let assignTextToPreviousTag = false;
     let type;
     const post = [];
@@ -148,8 +150,6 @@ export const parsePost = (html, data, userData, postType) => {
     parsedPost.end();
 
     postData = {
-        ...postData,
-        hashtags,
         type: postType,
         likes: false,
         likesCount: 0,
@@ -159,8 +159,11 @@ export const parsePost = (html, data, userData, postType) => {
         threadCount: 0,
         postEdited: false,
         postEditedAt: false,
+        ...prevData,
+        ...postData,
         raw: html,
         newestData: true,
+        hashtags,
         post,
         author: {
             avatar: userData.avatar,
@@ -170,6 +173,7 @@ export const parsePost = (html, data, userData, postType) => {
         }
     };
 
+    console.log('postData after merge: ', postData);
     if (links){
         return checkIfLinksAreSafe(links, post)
         .then(safePost => {

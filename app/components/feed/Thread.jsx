@@ -59,7 +59,7 @@ export const Thread = React.createClass({
                     { renderUserReplyWindow() }
                 </div>
                 <div className="tonal-replies">
-                    { thread || 'REPLIES' }
+                    { thread || '(comment & share do not work yet.)' }
                 </div>
             </div>
         );

@@ -134,6 +134,23 @@
         }
     }
 
+    .tonal-post-image-loading {
+        display: flex;
+        height: 200px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,0.75);
+        background: rgba(255,255,255,0.3);
+        border: 1px solid rgba(255,255,255,0.75);
+        font-size: 48px;
+        margin: 10px 25px;
+
+        .fa {
+            color: rgba(255,255,255,0.75);
+        }
+    }
+
+
     .tonal-post-message {
         padding: 10px;
         line-height: 1.2;
@@ -172,6 +189,10 @@
         padding: 5px 0;
         font-size: 18px;
         color: rgba(255,255,255,0.8);
+
+        @include breakpoint(small only){
+            justify-content: center;
+        }
 
         .tonal-post-interaction {
             position: relative;

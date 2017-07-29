@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 
 import authReducer from './AuthReducer';
-import imgUrlReducer from './ImgUrlReducer';
+import storageReducer from './StorageReducer';
 import uiStateReducer from './UIStateReducer';
 import userReducer from './UserReducer';
 import feedsReducer from './FeedsReducer';
@@ -17,7 +17,7 @@ import routeReducer from './RouteReducer';
 export default combineReducers({
     form,
     auth: authReducer,
-    imgUrl: imgUrlReducer,
+    storage: storageReducer,
     uiState: uiStateReducer,
     user: userReducer,
     feeds: feedsReducer,

@@ -63,8 +63,8 @@ export const NotificationsMenu = onClickOutside(React.createClass({
             newNotifsCount,
             displayNotifs,
             areThereNotifs,
-            handleClearNotifs,
-            toggleMuteNotifs
+            clearNotifs,
+            muteNotifs
         } = this.props;
 
         return (
@@ -75,8 +75,8 @@ export const NotificationsMenu = onClickOutside(React.createClass({
                     newNotifsCount={ newNotifsCount }
                     displayNotifs={ displayNotifs }
                     areThereNotifs={ areThereNotifs }
-                    clearNotifs={ handleClearNotifs }
-                    muteNotifs={ toggleMuteNotifs } />
+                    clearNotifs={ clearNotifs }
+                    muteNotifs={ muteNotifs } />
                 <NotificationsList
                     notifs={ notifs }
                     notifsStatus={ notifsStatus }
