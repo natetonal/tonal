@@ -93,6 +93,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
         if (post.file){
             dispatch(uploadPostImage(post))
             .then(updatedPost => {
+                console.log('updatedPost: ', updatedPost);
                 if (updatedPost){
                     dispatch(writePost(uid, 'feed', updatedPost.type, updatedPost))
                     .then(() => {

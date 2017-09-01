@@ -1,16 +1,9 @@
 import firebase from 'firebase';
-import { storageRef } from 'app/firebase';
 import moment from 'moment';
-
-const createUniqueName = () => {
-    let name = '';
-    const date = moment().format('x');
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 26; i++) {
-        name += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return `${ date }_${ name }`;
-};
+import {
+    storageRef,
+    databaseRef
+} from 'app/firebase';
 
 const updateImageUploadProgress = progress => {
     return {
@@ -30,12 +23,12 @@ export const uploadPostImage = post => {
     return (dispatch, getState) => {
 
         const uid = getState().auth.uid;
-        const name = createUniqueName();
+        const key = databaseRef.child(`user-images/${ uid }/`).push().key;
         const file = post.file;
         const type = post.file.type.substr(6);
         console.log('file received by uploadPostImage: ', file);
         console.log('type: ', type);
-        const postRef = storageRef.child(`post-images/${ uid }/${ name }.${ type }`);
+        const postRef = storageRef.child(`post-images/${ uid }/${ key }.${ type }`);
         const uploadTask = postRef.put(file);
         dispatch(updateImageUploadState('running'));
         // Register three observers:
@@ -61,7 +54,27 @@ export const uploadPostImage = post => {
         });
 
         return uploadTask.then(snapshot => {
-            post.image = snapshot.downloadURL;
+            console.log('from uploadTask.then: snapshot.val(): ', snapshot);
+            console.log('from uploadTask.then: metadata: ', snapshot.metadata);
+            console.log('from uploadTask.then: downloadURL: ', snapshot.downloadURL);
+            const imageData = {
+                ownerId: uid,
+                imageId: key,
+                imageType: 'post-image',
+                name: snapshot.metadata.name,
+                contentType: snapshot.metadata.contentType,
+                size: snapshot.metadata.size,
+                url: snapshot.downloadURL,
+                albums: false,
+                caption: false,
+                fullPath: snapshot.metadata.fullPath,
+                uploadedAt: moment().format('LLLL')
+            };
+
+            console.log('imageData: ', imageData);
+            post.image = imageData;
+            console.log('post after data added: ', post);
+            databaseRef.child(`user-images/${ uid }/${ key }`).update(imageData);
             dispatch(updateImageUploadState(false));
             return post;
         }).catch(error => {

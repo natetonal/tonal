@@ -36,12 +36,13 @@ export const Post = React.createClass({
 
         const {
             checkAuthor,
+            checkImage,
             data,
-            feedId,
             postId
         } = this.props;
 
-        checkAuthor(feedId, data, postId);
+        checkAuthor(data, postId);
+        checkImage(data, postId);
 
     },
 
@@ -186,6 +187,7 @@ export const Post = React.createClass({
             editing,
             favorites,
             following,
+            screenSize,
             posterIsSelf,
             evaluateRelationship,
             deletePost,
@@ -345,6 +347,7 @@ export const Post = React.createClass({
                         <PostImage
                             file={ data.file }
                             image={ data.image }
+                            screenSize={ screenSize }
                             onClick={ () => console.log('IMAGE CLICKED!') } />
                     );
                 }
@@ -363,7 +366,6 @@ export const Post = React.createClass({
 
             const postMode = () => {
 
-                console.log('postMode called. Should editor be open? ', editing === postId);
                 if (editing === postId){
                     return (
                         <div

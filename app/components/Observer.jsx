@@ -27,7 +27,7 @@ export const Observer = React.createClass({
         // Observe changes in size to the viewport relative to our media query breakpoints.
         Foundation.MediaQuery._init();
         $(window).on('changed.zf.mediaquery', (event, newSize) => {
-            if (newSize !== 'small'){ newSize = 'large'; }
+            console.log('newSize: ', newSize);
             dispatch(changeScreenSize(newSize));
         });
 
@@ -118,7 +118,7 @@ export const Observer = React.createClass({
     },
 
     componentDidMount(){
-        const size = Foundation.MediaQuery.current === 'small' ? 'small' : 'large';
+        const size = Foundation.MediaQuery.current;
         this.props.dispatch(changeScreenSize(size));
     },
 

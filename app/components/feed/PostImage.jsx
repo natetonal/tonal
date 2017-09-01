@@ -8,7 +8,30 @@ import {
 export const PostImage = React.createClass({
 
     componentWillMount(){
-        this.setState({ imageLoaded: false });
+
+        const {
+            image,
+            screenSize
+        } = this.props;
+        let url = false;
+
+        if (image){
+            console.log('image: ', image);
+            console.log('screenSize: ', screenSize);
+            if (image.thumbs && image.thumbs[screenSize]){
+                console.log('image.thumbs: ', image.thumbs);
+                url = image.thumbs[screenSize];
+            } else {
+                url = image.url;
+            }
+        }
+
+        console.log('value of url: ', url);
+        this.setState({
+            imageLoaded: false,
+            imageError: false,
+            imageUrl: url
+        });
     },
 
     componentDidMount(){
@@ -24,8 +47,8 @@ export const PostImage = React.createClass({
     },
 
     componentWillUpdate(nextProps, nextState){
-        if (nextState.imageLoaded &&
-            !this.state.imageLoaded){
+        if ((nextState.imageLoaded && !this.state.imageLoaded) ||
+            (nextState.imageError && !this.state.imageError)){
             this.loadingAnim.stop();
         }
     },
@@ -38,30 +61,46 @@ export const PostImage = React.createClass({
                 opacity: 0
             });
         }
+
+        if (!prevState.imageError &&
+            this.state.imageError){
+            TweenLite.from(this.errorContainerRef, 1, {
+                ease: Power1.easeOut,
+                opacity: 0
+            });
+        }
     },
 
     handleImageLoaded(){
         this.setState({ imageLoaded: true });
     },
 
+    handleImageError(){
+        this.setState({ imageError: true });
+    },
+
     render(){
 
         const {
             onClick,
-            image,
-            file
+            file,
         } = this.props;
 
-        const { imageLoaded } = this.state;
+        const {
+            imageLoaded,
+            imageError,
+            imageUrl
+        } = this.state;
 
         const renderHiddenImage = () => {
-            if (image){
+            if (imageUrl){
                 return (
                     <div className="hide">
                         <img
                             className={ `post-image${ file ? '-fullwidth' : '' }` }
                             onLoad={ () => this.handleImageLoaded() }
-                            src={ image }
+                            onError={ () => this.handleImageError() }
+                            src={ imageUrl }
                             alt="" />
                     </div>
                 );
@@ -71,8 +110,8 @@ export const PostImage = React.createClass({
         };
 
         const renderImage = () => {
-            if (image){
-                if (imageLoaded){
+            if (imageUrl){
+                if (imageLoaded && !imageError){
                     return (
                         <div
                             ref={ element => this.imageRef = element }
@@ -80,11 +119,29 @@ export const PostImage = React.createClass({
                             onClick={ () => onClick() }>
                             <img
                                 className={ `post-image${ file ? '-fullwidth' : '' }` }
-                                src={ image }
+                                src={ imageUrl }
                                 alt="" />
                         </div>
                     );
-                } else if (!imageLoaded){
+                } else if (!imageLoaded && imageError){
+                    return (
+                        <div
+                            ref={ element => this.errorContainerRef = element }
+                            className={ 'tonal-post-image-error' }>
+                            <div className={ 'tonal-post-image-error-header' }>
+                                This Image Is Gone
+                            </div>
+                            <div className={ 'tonal-post-image-error-icon' }>
+                                <i className="fa fa-meh-o" aria-hidden="true" />
+                            </div>
+                            <div className={ 'tonal-post-image-error-message' }>
+                                It looks like either the user deleted this image, or it vanished into the great cyber-cosmic ether.
+                            </div>
+
+                        </div>
+
+                    );
+                } else if (!imageLoaded && !imageError){
                     return (
                         <div
                             ref={ element => this.loadingContainerRef = element }

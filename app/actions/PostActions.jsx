@@ -51,6 +51,7 @@ const fanoutPostData = ({ feedId, feedLoc, postId, postLoc, data, authorId }) =>
 };
 
 export const writePost = (feedId, feedLoc, postLoc, data) => {
+    console.log('writePost called.');
     return () => {
         const postId = databaseRef.child('posts').push().key;
         data.postId = postId;
@@ -61,6 +62,7 @@ export const writePost = (feedId, feedLoc, postLoc, data) => {
 };
 
 export const updatePost = (feedId, feedLoc, postId, postLoc, data) => {
+    console.log('updatePost called.');
     return () => {
         data.postId = postId;
         data.postEdited = true;
@@ -71,15 +73,19 @@ export const updatePost = (feedId, feedLoc, postId, postLoc, data) => {
 };
 
 export const deletePost = (feedId, feedLoc, postId, postLoc) => {
+    console.log('deletePost called.');
+
     return (dispatch, getState) => {
         const authorId = getState().auth.uid;
         const data = null;
-        
+
         return fanoutPostData({ feedId, feedLoc, postId, postLoc, data, authorId });
     };
 };
 
 export const likePost = (feedId, feedLoc, postId, postLoc, likedId, liked, data) => {
+    console.log('likePost called.');
+
     return () => {
         return databaseRef.child(`${ postLoc }/${ postId }`)
         .transaction(post => {
@@ -109,8 +115,10 @@ export const likePost = (feedId, feedLoc, postId, postLoc, likedId, liked, data)
     };
 };
 
-export const updatePostAuthorData = (postId, data, loc) => {
-    return dispatch => {
+export const updatePostAuthorData = (feedId, feedLoc, postId, postLoc, data) => {
+    console.log('updatePostAuthorData called.');
+
+    return () => {
         const author = data.author;
         if (!author){ return; }
 
@@ -120,10 +128,44 @@ export const updatePostAuthorData = (postId, data, loc) => {
             if (!newAuthor ||
                 Object.keys(author).every(key => author[key] === newAuthor[key])){ return; }
 
+            // Change info that user can edit:
             data.author.displayName = newAuthor.displayName;
             data.author.avatar = newAuthor.avatar;
 
-            dispatch(updatePost(postId, data, loc));
+            fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
+        });
+    };
+};
+
+export const updatePostImageData = (feedId, feedLoc, postId, postLoc, data) => {
+    console.log('updatePostImageData called with data: ', data);
+
+    return () => {
+
+        console.log('data.image?', data.image);
+        if (!data.image){ return; }
+
+        console.log('data.image? ', data.image);
+        const image = data.image;
+        const ownerId = image.ownerId;
+        const imageId = image.imageId;
+
+        if (!ownerId || !imageId){ return; }
+
+        databaseRef.child(`user-images/${ ownerId }/${ imageId }`).once('value')
+        .then(snapshot => {
+
+            const newImage = snapshot.val();
+            if (!newImage ||
+                Object.keys(newImage).every(key => image[key] === newImage[key])){ return; }
+
+            // Change info that user can edit or things returning from DB:
+            data.image.thumbs = newImage.thumbs;
+            data.image.albums = newImage.albums;
+            data.image.caption = newImage.caption;
+
+            fanoutPostData({ feedId, feedLoc, postId, postLoc, data });
+
         });
     };
 };

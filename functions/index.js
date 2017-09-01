@@ -1,13 +1,13 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
-
 admin.initializeApp(functions.config().firebase);
 
 // Main Imports
 const notifs = require('./notifs/notifs.js');
 const counters = require('./counters/counters.js');
 const feeds = require('./feeds/feeds.js');
+const images = require('./images/thumbnails.js');
 
 // Utility Imports
 const notifUtils = require('./notifs/notifUtils.js');
@@ -29,3 +29,6 @@ exports.countUserPosts = counters.countUserPosts(functions, admin);
 // Feed Functions
 // exports.fanoutPostData = feeds.fanoutPostData(functions, admin);
 exports.deleteBlockedPostsFromFeed = feeds.deleteBlockedPostsFromFeed(functions, admin);
+
+// Image Functions
+exports.generateThumbnails = images.generateThumbnails(functions, admin);

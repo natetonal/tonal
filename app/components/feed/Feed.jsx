@@ -21,6 +21,7 @@ import {
     likePost,
     deletePost,
     updatePost,
+    updatePostImageData,
     updatePostAuthorData
 } from 'actions/PostActions';
 import { uploadPostImage } from 'actions/StorageActions';
@@ -148,6 +149,10 @@ export const Feed = React.createClass({
         dispatch(toggleEditPost(postId));
     },
 
+    toggleImagePostView(){
+
+    },
+
     isSelf(testUid){
         return testUid === this.props.uid;
     },
@@ -164,7 +169,12 @@ export const Feed = React.createClass({
 
     checkAuthor(data, postId){
         const { dispatch } = this.props;
-        dispatch(updatePostAuthorData(postId, data, this.fType));
+        dispatch(updatePostAuthorData(this.fId, this.fType, postId, this.pType, data));
+    },
+
+    checkImage(data, postId){
+        const { dispatch } = this.props;
+        dispatch(updatePostImageData(this.fId, this.fType, postId, this.pType, data));
     },
 
     evaluateRelationship(testUid){
@@ -186,7 +196,13 @@ export const Feed = React.createClass({
             following,
             blocked,
             blockedBy,
+            screenSize,
+            viewingImage
         } = this.props;
+
+        const renderImagePostView = () => {
+
+        };
 
         const renderFeed = () => {
             if (status === 'fetching' || !status){
@@ -225,8 +241,10 @@ export const Feed = React.createClass({
                                     following={ following }
                                     blocked={ blocked }
                                     blockedBy={ blockedBy }
+                                    screenSize={ screenSize }
                                     posterIsSelf={ posterIsSelf }
                                     checkAuthor={ this.checkAuthor }
+                                    checkImage={ this.checkImage }
                                     checkFriendship={ this.checkFriendship }
                                     evaluateRelationship={ this.evaluateRelationship }
                                     isSelf={ this.isSelf }
@@ -260,6 +278,7 @@ export const Feed = React.createClass({
 
         return (
             <div>
+                { renderImagePostView() }
                 { renderFeed() }
             </div>
         );
@@ -275,13 +294,14 @@ export default Redux.connect((state, ownProps) => {
     return {
         feed,
         status,
-        editing: state.feeds.editing,
         uid: state.auth.uid,
+        editing: state.feeds.editing,
         favorites: state.user.favorites,
         favorited: state.user.favorited,
         followers: state.user.followers,
         following: state.user.following,
         blocked: state.user.blocked,
-        blockedBy: state.user.blockedBy
+        blockedBy: state.user.blockedBy,
+        screenSize: state.uiState.screenSize
     };
 })(Feed);

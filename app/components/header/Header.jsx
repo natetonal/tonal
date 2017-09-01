@@ -58,7 +58,7 @@ export const Header = React.createClass({
         };
 
         const renderNotifCenter = (size, direction) => {
-            if (size === screenSize){
+            if (size.includes(screenSize)){
                 return (
                     <NotificationCenter
                         onToggle={ this.onClickHeaderMenu }
@@ -75,7 +75,7 @@ export const Header = React.createClass({
                 <div className="row">
                     <div className="small-5 medium-1 columns">
                         { renderAvatar() }
-                        { renderNotifCenter('small', 'left') }
+                        { renderNotifCenter(['small'], 'left') }
                     </div>
                     <div className="tonal-links show-for-large medium-5 columns">
                         <nav className="links">
@@ -102,7 +102,7 @@ export const Header = React.createClass({
                         </nav>
                     </div>
                     <div className="small-6 text-right columns">
-                        { renderNotifCenter('large', 'right') }
+                        { renderNotifCenter(['medium', 'large', 'xlarge', 'xxlarge'], 'right') }
                         <div className="hi-icon-effect-1 hi-icon-effect-1b hi-icon-post">
                             <a
                                 onClick={ e => headerMenu !== 'compose' && this.onClickHeaderMenu('compose', e) }
