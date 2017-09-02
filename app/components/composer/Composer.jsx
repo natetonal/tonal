@@ -77,13 +77,17 @@ export const Composer = React.createClass({
             warning: false,
             pos: '',
             history: [],
+            submitText: this.props.submitText,
             prevData: this.props.prevData || false,
-            submitText: this.props.submitText || 'Share It!',
+            avatar: this.props.avatar || false,
             mentions: this.props.prevData ? this.props.prevData.mentions : false,
             initialValue: this.props.initialValue || this.props.currentValue,
             maxLength: this.props.maxLength || 2000,
+            containerClass: this.props.containerClass || 'header-compose-post',
             mainClass: this.props.mainClass || 'composer',
             buttonPos: this.props.buttonPos || 'top',
+            buttonIcon: this.props.buttonIcon || false,
+            buttonType: this.props.buttonType || 'info',
             buttons: this.props.buttons || controlBtns
         });
     },
@@ -623,11 +627,15 @@ export const Composer = React.createClass({
             focused,
             enabled,
             error,
+            avatar,
             warning,
             buttons,
             submitText,
             mainClass,
-            buttonPos
+            containerClass,
+            buttonPos,
+            buttonIcon,
+            buttonType
         } = this.state;
 
         const cls = {
@@ -635,6 +643,7 @@ export const Composer = React.createClass({
             disabled: `${ mainClass }-disabled`,
             controls: `${ mainClass }-controls ${ buttonPos === 'bottom' ? buttonPos : '' }`,
             control: `${ mainClass }-control`,
+            avatar: `${ mainClass }-avatar`,
             controlLabel: `${ mainClass }-control-label`,
             imgPrev: `${ mainClass }-image-previewer`,
             btn: `${ mainClass }-button`,
@@ -748,8 +757,22 @@ export const Composer = React.createClass({
             );
         };
 
+        const av = () => {
+            if (avatar){
+                return (
+                    <div className={ cls.avatar }>
+                        <img
+                            src={ avatar }
+                            alt={ 'avatar bullet' } />
+                    </div>
+                );
+            }
+
+            return '';
+        };
+
         return (
-            <div className="header-compose-post">
+            <div className={ containerClass }>
                 { warn() }
                 { buttonPos !== 'bottom' && (
                 <div className={ cls.controls }>
@@ -764,6 +787,7 @@ export const Composer = React.createClass({
                     onBlur={ this.handleBlur }
                     onClick={ this.clearMenus }>
                     { imagePreviewer() }
+                    { av() }
                     <div
                         id={ mainClass }
                         ref={ element => this.composer = element }
@@ -783,7 +807,8 @@ export const Composer = React.createClass({
                 <div className={ cls.btn }>
                     <Button
                         type="submit"
-                        btnType="main"
+                        btnType={ buttonType }
+                        btnIcon={ buttonIcon }
                         btnText={ enabled ? submitText : 'Submitting' }
                         isLoading={ !enabled }
                         disabled={ !enabled }

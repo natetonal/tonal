@@ -142,6 +142,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
                     component = (
                         <Composer
                             type={ 'posts' }
+                            submitText={ 'Share It!'}
                             onSubmit={ this.handlePostSubmit } />
                     );
                     break;

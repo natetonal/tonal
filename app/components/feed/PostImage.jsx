@@ -16,17 +16,13 @@ export const PostImage = React.createClass({
         let url = false;
 
         if (image){
-            console.log('image: ', image);
-            console.log('screenSize: ', screenSize);
             if (image.thumbs && image.thumbs[screenSize]){
-                console.log('image.thumbs: ', image.thumbs);
                 url = image.thumbs[screenSize];
             } else {
                 url = image.url;
             }
         }
 
-        console.log('value of url: ', url);
         this.setState({
             imageLoaded: false,
             imageError: false,
@@ -46,6 +42,19 @@ export const PostImage = React.createClass({
         }
     },
 
+    componentWillReceiveProps(nextProps){
+        if (nextProps.screenSize !== this.props.screenSize &&
+            nextProps.screenSize &&
+            nextProps.image.thumbs[nextProps.screenSize]){
+
+            this.setState({
+                imageUrl: nextProps.image.thumbs[nextProps.screenSize] || nextProps.image.url,
+                imageLoaded: false,
+                imageError: false
+            });
+        }
+    },
+
     componentWillUpdate(nextProps, nextState){
         if ((nextState.imageLoaded && !this.state.imageLoaded) ||
             (nextState.imageError && !this.state.imageError)){
@@ -54,6 +63,7 @@ export const PostImage = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState){
+
         if (!prevState.imageLoaded &&
             this.state.imageLoaded){
             TweenLite.from(this.imageRef, 1, {

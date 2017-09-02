@@ -29,6 +29,7 @@ export const Thread = React.createClass({
 
         const {
             thread,
+            author,
             showReply,
             toggleReply
         } = this.props;
@@ -37,13 +38,19 @@ export const Thread = React.createClass({
             if (showReply){
                 return (
                     <div className="tonal-thread-user-reply-container">
-                        <div
+                        {/* <div
                             className="tonal-user-reply-close"
                             onClick={ toggleReply }>
                             <i className="fa fa-times" aria-hidden="true" />
-                        </div>
+                        </div> */}
                         <Composer
-                            submitText={ 'Reply ' }
+                            submitText={ '' }
+                            mainClass={ 'thread-composer' }
+                            containerClass={ 'thread-composer-container' }
+                            avatar={ author.avatar }
+                            buttonPos={ 'bottom' }
+                            buttonIcon={ 'fa-paper-plane' }
+                            buttonType={ 'info' }
                             onClose={ toggleReply }
                             onSubmit={ toggleReply } />
                     </div>

@@ -1,88 +1,528 @@
 .tonal-thread {
-    background: rgba(255,255,255,0.1);
+    background: rgba(129, 129, 129, 0.82);
 
-    .tonal-thread-user-reply {
+    .tonal-user-reply-close {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(0,0,0,0.2);
+        border-radius: 50%;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+        @include transition(0.2s all);
 
-        .tonal-thread-user-reply-container{
-            padding: 30px;
+        .fa{
+            color: rgba(0,0,0,0.2) !important;
+            @include transition(0.2s all);
         }
-        
-        .tonal-user-reply-close {
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 30px;
-            height: 30px;
-            border: 1px solid rgba(0,0,0,0.2);
-            border-radius: 50%;
-            right: 5px;
-            top: 5px;
-            cursor: pointer;
+
+        &:hover{
+            border: 1px solid $white;
             @include transition(0.2s all);
 
             .fa{
-                color: rgba(0,0,0,0.2) !important;
+                color: $white !important;
+                @include transition(0.2s all);
+            }
+        }
+    }
+
+    .thread-composer-container{
+        padding: 15px;
+
+        .thread-composer{
+            background: #eee;
+            color: #333;
+            cursor: text;
+            border: 1px solid rgba(0,0,0,0.55);
+            border-radius: 20px;
+            max-height: 200px;
+            line-height: 1.2;
+            letter-spacing: 0.1px;
+            font-size: $composer-font-size;
+            font-family: $main-font;
+            overflow-y: scroll;
+            resize: none;
+            outline: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px 15px;
+            @include transition(all, 0.5s);
+
+            &.thread-composer-zoom-in{
+                background: #fff;
+                @include transition(all 0.5s);
+            }
+
+            &.thread-composer-disabled{
+                background: #ccc;
+                color: #999;
+                cursor: not-allowed;
+                @include transition(all 0.5s);
+            }
+
+            &.thread-composer-highlight-err{
+                background: $composer-error-bg;
+                @include transition(all 0.5s);
+            }
+
+            span{
+                pointer-events: none;
+            }
+        }
+
+        #thread-composer{
+            font-size: 16px;
+            font-family: $main-font;
+            text-indent: 30px;
+        }
+
+        .thread-composer-error {
+            display: block;
+            color: $composer-error;
+            border: 1px solid $composer-error;
+            margin: 25px 0 0;
+            border-radius: 2px;
+
+            span {
+                display: block;
+                padding: 10px;
+            }
+        }
+
+        .thread-composer-avatar {
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            top: 20px;
+            left: 25px;
+
+            img{
+                border-radius: 15px;
+            }
+        }
+        
+        .thread-composer-controls {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 0 10px 0;
+            line-height: normal;
+
+            &.bottom {
+                padding: 10px 0 0;
+            }
+
+            .thread-composer-control {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                background: $white;
+                border: 1px solid rgba(0,0,0,0.55);
+                /* padding: 7px; */
+                height: 36px;
+                width: 36px;
+                margin: 0 5px 0 0;
+                color: rgba(0,0,0,0.55);
+                border-radius: 50%;
+                box-shadow: 0 1px 2px rgba(0,0,0,.5);
+                font-size: 16px;
+
+                .fa{
+                    color: rgba(0,0,0,0.55);
+                }
+
+                .thread-composer-control-label {
+                    display: none;
+                    // width: inherit;
+                    // position: absolute;
+                    // margin-left: -25px;
+                    // margin-top: -10px;
+                    // font-size: 10px;
+                    // text-transform: uppercase;
+                    // text-indent: 2px;
+                    // letter-spacing: 1px;
+                    // opacity: 0;
+                    // pointer-events: none;
+                    // @include transition(0.2s all);
+                }
+
+                &:hover{
+                    border: 1px solid $blue;
+                    color: $blue;
+                    @include transition(0.2s all);
+
+                    .fa{
+                        color: $blue;
+                        @include transition(0.2s all);
+
+                    }
+
+                    .thread-composer-control-label{
+                        color: $blue;
+                        opacity: 1;
+                        margin-top: -20px;
+                        @include transition(0.2s all);
+                    }
+                }
+
+                &.selected{
+                    border: 1px solid $lightgreen;
+                    color: $lightgreen;
+                    @include transition(0.2s all);
+
+                    .fa{
+                        color: $lightgreen;
+                        @include transition(0.2s all);
+                    }
+
+                    .thread-composer-control-label{
+                        color: $lightgreen;
+                        opacity: 1;
+                        margin-top: -20px;
+                        @include transition(0.2s all);
+                    }
+                }
+            }
+        }
+
+        .thread-composer-button {
+            display: inline-flex;
+            float: right;
+            padding: 10px 0 0;
+
+            button{
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                height: 36px;
+                width: 36px;
+                margin: 0 5px 0 0;
+                color: rgba(0,0,0,.55);
+                border-radius: 50%;
+                box-shadow: 0 1px 2px rgba(0,0,0,.5);
+                font-size: 16px;
+                padding: 10px;
+                letter-spacing: 1.2px;
+
+                &:hover{
+                    .fa{
+                        color: $white;
+                        @include transition(0.5s all);
+                    }
+                }
+            }
+        }
+
+        .thread-composer-placeholder {
+            color: $light-gray;
+        }
+
+        .thread-composer-emoji,
+        .emojione {
+            height: $composer-font-size;
+            width: $composer-font-size;
+        }
+
+        .thread-composer-sticker {
+            display: block;
+        }
+
+        .thread-composer-image-previewer {
+            position: relative;
+            display: block;
+            text-align: center;
+            max-height: 125px;
+            overflow: scroll;
+            background: #eaeaea;
+            padding: 10px 0 0;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            @include transition(0.2s all);
+
+            &.warning-light{
+                background: lighten($alert-error, 29%);
+                @include transition(0.2s all);
+            }
+
+            &.thread-composer-disabled{
+                background: #aaa;
+                pointer-events: none;
+                cursor: not-allowed;
+
+                img{
+                    opacity: 0.5;
+                    @include transition( all 0.2s);
+                }
+
+                @include transition(all 0.2s);
+            }
+
+            .thread-composer-image-previewer-progress-container {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                margin-top: -10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: rgba($blue, 0.83);
+
+                .thread-composer-image-previewer-progress-label {
+                    color: $white;
+                    text-transform: uppercase;
+                    font-size: 13px;
+                    letter-spacing: 1px;
+                    padding-bottom: 10px;
+                }
+
+                .thread-composer-image-previewer-progress-bar-container {
+                    height: 7px;
+                    width: 200px;
+                    border-radius: 7px;
+                    overflow: hidden;
+
+                    .thread-composer-image-previewer-progress-bar-fill {
+                        height: 7px;
+                        width: 0px;
+                        background: $white;
+                        border-radius: 7px;
+                    }
+                }
+            }
+        }
+
+        .thread-composer-image-previewer-label {
+            float:left;
+            font-size: 10px;
+            text-indent: 10px;
+            letter-spacing: 1px;
+            color: #aaa;
+            @include transition(0.2s all);
+
+            &.warning-light{
+                color: $alert-error;
+                @include transition(0.2s all);
+            }
+        }
+
+        .thread-composer-image-previewer-clear {
+            float: right;
+            padding-right: 10px;
+            margin-top: -5px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #bbb;
+
+            &:hover{
+                color: $alert-error;
+                @include transition(0.2s all);
+            }
+        }
+
+        .thread-composer-image-preview-wrapper {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .thread-composer-image-uploader {
+            display: block;
+            text-align: center;
+            overflow: scroll;
+            color: #aaa;
+            background: #eaeaea;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            @include transition(0.2s all);
+
+            &.warning-light{
+                background: lighten($alert-error, 29%);
+                @include transition(0.2s all);
+            }
+        }
+
+        .thread-composer-image-dropzone-text {
+            display: block;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            font-size: 16px;
+            border: 5px dashed #aaa;
+            color: $alert-default;
+            cursor: pointer;
+            @include transition(0.2s all);
+
+            span{
+                display: block;
+                line-height: 1.5;
+                margin: 0;
+            }
+
+            &.dropzone-error{
+                color: $alert-error;
+                border: 5px dashed $alert-error;
+                @include transition(0.2s all);
+            }
+
+            &.dropzone-active{
+                color: $lightgreen;
+                border: 5px dashed $lightgreen;
                 @include transition(0.2s all);
             }
 
             &:hover{
-                border: 1px solid $white;
-                @include transition(0.2s all);
 
-                .fa{
-                    color: $white !important;
-                    @include transition(0.2s all);
-                }
+                color: $lightgreen;
+                border: 5px dashed $lightgreen;
+                @include transition(0.2s all);
             }
         }
-    }
 
-    .tonal-reply {
-        padding: 10px 0;
-
-        .tonal-reply-avatar {
-            padding-top: 10px;
-            display: inline-block;
-            height: 40px;
-            width: 40px;
-            float: left;
+        .thread-composer-image-dropzone-text-title{
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        .tonal-reply-display-name {
-            padding-left: 10px;
-            display: inline-block;
-            font-weight: 600;
-            font-size: 14px;
-            color: $lightblue;
-        }
-
-        .tonal-reply-message {
-            margin-top: px;
-            text-indent: 10px;
-            font-size: 14px;
-        }
-
-        .tonal-reply-info {
+        .thread-composer-image-uploader-preview {
+            width: 100px;
+            height: auto;
             display: block;
-            font-size: 14px;
-            padding-left: 40px;
+            margin: 0 auto;
+            padding-top: 5px;
+            opacity: 0.3;
+        }
+
+        .thread-composer-image-uploader-alert {
+            font-size: 16px;
 
             .fa{
-                padding-right: 5px;
-            }
-
-            .tonal-reply-likes {
-                display: inline-block;
-                text-indent: 5px;
-            }
-
-            .tonal-reply-timestamp {
-                display: inline-block;
-                margin-left: 10px;
-                font-size: 12px;
-                color: rgba(255,255,255,.5);
+                margin-right: 5px;
             }
         }
+
+        .thread-composer-hashtag {
+            background: $highlight-hashtag;
+            padding: 1px 2px;
+            font-size: 17px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+            cursor: pointer;
+            color: $black;
+        }
+
+        .thread-composer-mention {
+            background: $highlight-mention;
+            padding: 1px 2px;
+            font-size: 17px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+            cursor: pointer;
+            color: $black;
+        }
+
+        .thread-composer-link {
+            color: $alert-info;
+            cursor: pointer;
+        }
+    }
+
+    .tonal-replies{
+        border-top: 1px solid rgba(0,0,0,.1);
     }
 }
+
+// .tonal-thread {
+//     background: rgba(255,255,255,0.1);
+//
+//     .tonal-thread-user-reply {
+//
+//         .tonal-thread-user-reply-container{
+//             padding: 30px;
+//         }
+//
+//         .tonal-user-reply-close {
+//             position: absolute;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             width: 30px;
+//             height: 30px;
+//             border: 1px solid rgba(0,0,0,0.2);
+//             border-radius: 50%;
+//             right: 5px;
+//             top: 5px;
+//             cursor: pointer;
+//             @include transition(0.2s all);
+//
+//             .fa{
+//                 color: rgba(0,0,0,0.2) !important;
+//                 @include transition(0.2s all);
+//             }
+//
+//             &:hover{
+//                 border: 1px solid $white;
+//                 @include transition(0.2s all);
+//
+//                 .fa{
+//                     color: $white !important;
+//                     @include transition(0.2s all);
+//                 }
+//             }
+//         }
+//     }
+//
+//     .tonal-reply {
+//         padding: 10px 0;
+//
+//         .tonal-reply-avatar {
+//             padding-top: 10px;
+//             display: inline-block;
+//             height: 40px;
+//             width: 40px;
+//             float: left;
+//         }
+//
+//         .tonal-reply-display-name {
+//             padding-left: 10px;
+//             display: inline-block;
+//             font-weight: 600;
+//             font-size: 14px;
+//             color: $lightblue;
+//         }
+//
+//         .tonal-reply-message {
+//             margin-top: px;
+//             text-indent: 10px;
+//             font-size: 14px;
+//         }
+//
+//         .tonal-reply-info {
+//             display: block;
+//             font-size: 14px;
+//             padding-left: 40px;
+//
+//             .fa{
+//                 padding-right: 5px;
+//             }
+//
+//             .tonal-reply-likes {
+//                 display: inline-block;
+//                 text-indent: 5px;
+//             }
+//
+//             .tonal-reply-timestamp {
+//                 display: inline-block;
+//                 margin-left: 10px;
+//                 font-size: 12px;
+//                 color: rgba(255,255,255,.5);
+//             }
+//         }
+//     }
+// }

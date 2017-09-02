@@ -457,6 +457,7 @@ export const Post = React.createClass({
                         <Thread
                             toggleReply={ this.handleToggleReply }
                             showReply={ showReply }
+                            author={ data.author}
                             data={ data.thread } />
                     </div>
                 </ReactCSSTransitionGroup>
