@@ -43,20 +43,6 @@ export const removeFeedPost = (feedId, postId) => {
     };
 };
 
-export const toggleEditPost = (postId = false) => {
-    return (dispatch, getState) => {
-        const currentlyEditing = getState().feeds.editing;
-        if (currentlyEditing === postId){
-            postId = false;
-        }
-
-        dispatch({
-            type: 'FEED_EDIT_POST',
-            postId
-        });
-    };
-};
-
 
 // export const removeFeedPost = ();
 export const fetchFeed = (feedId, type) => {

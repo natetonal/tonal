@@ -14,8 +14,7 @@ import {
     fetchFeed,
     addFeedPost,
     updateFeedPost,
-    removeFeedPost,
-    toggleEditPost
+    removeFeedPost
 } from 'actions/FeedsActions';
 import {
     likePost,
@@ -26,7 +25,10 @@ import {
 } from 'actions/PostActions';
 import { uploadPostImage } from 'actions/StorageActions';
 import { countNewNotifs } from 'actions/NotificationActions';
-import { resetState } from 'actions/ComposerActions';
+import {
+    resetState,
+    toggleEditing
+} from 'actions/ComposerActions';
 
 import Post from './Post';
 
@@ -145,8 +147,9 @@ export const Feed = React.createClass({
     },
 
     togglePostEditor(postId = false){
+        console.log('feed/togglePostEditor: postId: ', false);
         const { dispatch } = this.props;
-        dispatch(toggleEditPost(postId));
+        dispatch(toggleEditing(postId));
     },
 
     toggleImagePostView(){
@@ -155,6 +158,16 @@ export const Feed = React.createClass({
 
     isSelf(testUid){
         return testUid === this.props.uid;
+    },
+
+    isEditing(postId){
+        return (Object.keys(this.props.editors).includes(postId) &&
+            this.props.editors[postId].editing);
+    },
+
+    getEditingValue(postId){
+        if (!this.isEditing(postId)){ return false; }
+        return this.props.editors[postId].value;
     },
 
     likesPost(postId){
@@ -191,7 +204,6 @@ export const Feed = React.createClass({
         const {
             feed,
             status,
-            editing,
             favorites,
             following,
             blocked,
@@ -219,6 +231,8 @@ export const Feed = React.createClass({
                         const isBlocked = this.checkFriendship(feed[key].author.uid, 'blocked');
                         const isBlockedBy = this.checkFriendship(feed[key].author.uid, 'blockedBy');
                         const posterIsSelf = this.isSelf(feed[key].author.uid);
+                        const isEditing = this.isEditing(key);
+                        const editingValue = this.getEditingValue(key);
 
                         if (!isBlocked &&
                             !isBlockedBy &&
@@ -236,7 +250,8 @@ export const Feed = React.createClass({
                                     feedType={ this.fType }
                                     type={ this.pType }
                                     data={ feed[key] }
-                                    editing={ editing }
+                                    editing={ isEditing }
+                                    editingValue={ editingValue }
                                     favorites={ favorites }
                                     following={ following }
                                     blocked={ blocked }
@@ -288,14 +303,14 @@ export const Feed = React.createClass({
 
 export default Redux.connect((state, ownProps) => {
     const feedId = ownProps.feedId || state.auth.uid;
-    const feed = ((state.feeds && state.feeds.feeds[feedId]) ? state.feeds.feeds[feedId].data : false);
-    const status = ((state.feeds && state.feeds.feeds[feedId]) ? state.feeds.feeds[feedId].status : false);
+    const feed = ((state.feeds && state.feeds[feedId]) ? state.feeds[feedId].data : false);
+    const status = ((state.feeds && state.feeds[feedId]) ? state.feeds[feedId].status : false);
 
     return {
         feed,
         status,
         uid: state.auth.uid,
-        editing: state.feeds.editing,
+        editors: state.composer.editors,
         favorites: state.user.favorites,
         favorited: state.user.favorited,
         followers: state.user.followers,

@@ -1,9 +1,9 @@
 const initialState = {
     currentMenu: '',
-    currentValue: '',
     previewImage: '',
     imageFile: '',
-    query: ''
+    query: '',
+    editors: {},
 };
 
 export default (state = initialState, action) => {
@@ -18,10 +18,32 @@ export default (state = initialState, action) => {
                 ...state,
                 previewImage: action.image
             };
+        case 'COM_UPDATE_EDITORS':
+            return {
+                ...state,
+                editors: action.editors
+            };
+        case 'COM_TOGGLE_EDITING':
+            return {
+                ...state,
+                editors: {
+                    ...state.editors,
+                    [action.key]: {
+                        ...state.editors[action.key],
+                        editing: !state.editors[action.key].editing
+                    }
+                }
+            };
         case 'COM_UPDATE_VALUE':
             return {
                 ...state,
-                currentValue: action.value
+                editors: {
+                    ...state.editors,
+                    [action.key]: {
+                        ...state.editors[action.key],
+                        value: action.value
+                    }
+                }
             };
         case 'COM_SET_IMAGE_UPLOAD':
             return {

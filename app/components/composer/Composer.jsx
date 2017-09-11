@@ -3,6 +3,7 @@ import * as Redux from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
 import validator from 'validator';
+import shallowCompare from 'shallow-compare';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     changeMenu,
@@ -124,6 +125,10 @@ export const Composer = React.createClass({
         }
     },
 
+    shouldComponentUpdate(nextProps, nextState){
+        return shallowCompare(this, nextProps, nextState);
+    },
+
     componentDidUpdate(){
         // Make sure focus stays on composer unless selection menu open.
         const { currentMenu, query } = this.props;
@@ -191,7 +196,6 @@ export const Composer = React.createClass({
             history.pop();
         }
         this.setState({ history });
-        dispatch(updateValue(value));
     },
 
     revertHistory(){
@@ -355,6 +359,8 @@ export const Composer = React.createClass({
     },
 
     handleKeyPress({ key, target: { textContent }}){
+        const { dispatch } = this.props;
+
         this.clearError();
         if (key.length === 1){
             if (textContent.length === 0){
@@ -369,6 +375,7 @@ export const Composer = React.createClass({
             }
         }
 
+        dispatch(updateValue(this.medium.value()));
     },
 
     handleInsertImage(path){
@@ -616,6 +623,7 @@ export const Composer = React.createClass({
 
     render(){
 
+        console.log('call to composer render.');
         const {
             currentMenu,
             imageUploadProgress,

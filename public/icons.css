@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+/* untitled-font-2 */
+@font-face {
+  font-family: "untitled-font-2";
+  src:url("https://file.myfontastic.com/WAekJD6Q9af4hZAjV28w7W/fonts/1487139442.eot");
+  src:url("https://file.myfontastic.com/WAekJD6Q9af4hZAjV28w7W/fonts/1487139442.eot?#iefix") format("embedded-opentype"),
+    url("https://file.myfontastic.com/WAekJD6Q9af4hZAjV28w7W/fonts/1487139442.woff") format("woff"),
+    url("https://file.myfontastic.com/WAekJD6Q9af4hZAjV28w7W/fonts/1487139442.ttf") format("truetype"),
+    url("https://file.myfontastic.com/WAekJD6Q9af4hZAjV28w7W/fonts/1487139442.svg#1487139442") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-icon]:before {
+  font-family: "untitled-font-2" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "untitled-font-2" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gator:before {
+  content: "\61";
+}
+.icon-puppy:before {
+  content: "\62";
+}
+.icon-whale:before {
+  content: "\63";
+}
+.icon-bee:before {
+  content: "\64";
+}
+.icon-unicorn:before {
+  content: "\65";
+}
+.icon-baby:before {
+  content: "\66";
+}
+.icon-flower:before {
+  content: "\67";
+}
+.icon-butterfly:before {
+  content: "\68";
+}
+.icon-bug:before {
+  content: "\69";
+}
+.icon-cat:before {
+  content: "\6a";
+}
+.icon-mushroom:before {
+  content: "\6b";
+}
+.icon-bush:before {
+  content: "\6c";
+}
+.icon-tree:before {
+  content: "\6d";
+}

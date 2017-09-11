@@ -1,7 +1,6 @@
 // Feed example:
 //
-// editing: (postId),
-// feeds: {
+// {
 //     feedId1: {
 //         type: "post",
 //         status: "fetching",
@@ -14,40 +13,31 @@
 //     }
 // }
 
-const initialState = {
-    editing: false,
-    feeds: false
-};
+const initialState = {};
 
 export default (state = initialState, action) => {
     switch (action.type){
         case 'FEED_ADD_POST':
             return {
                 ...state,
-                feeds: {
-                    ...state.feeds,
-                    [action.feedId]: {
-                        ...state.feeds[action.feedId],
-                        data: {
-                            ...state.feeds[action.feedId].data,
-                            [action.postId]: action.data
-                        }
+                [action.feedId]: {
+                    ...state[action.feedId],
+                    data: {
+                        ...state[action.feedId].data,
+                        [action.postId]: action.data
                     }
                 }
             };
         case 'FEED_UPDATE_POST':
             return {
                 ...state,
-                feeds: {
-                    ...state.feeds,
-                    [action.feedId]: {
-                        ...state.feeds[action.feedId],
-                        data: {
-                            ...state.feeds[action.feedId].data,
-                            [action.postId]: {
-                                ...state.feeds[action.feedId].data[action.postId],
-                                ...action.data
-                            }
+                [action.feedId]: {
+                    ...state[action.feedId],
+                    data: {
+                        ...state[action.feedId].data,
+                        [action.postId]: {
+                            ...state[action.feedId].data[action.postId],
+                            ...action.data
                         }
                     }
                 }
@@ -55,46 +45,32 @@ export default (state = initialState, action) => {
         case 'FEED_ADD_DATA':
             return {
                 ...state,
-                feeds: {
-                    ...state.feeds,
-                    [action.feedId]: {
-                        ...state.feeds[action.feedId],
-                        type: action.feedType,
-                        data: action.data
-                    }
+                [action.feedId]: {
+                    ...state[action.feedId],
+                    type: action.feedType,
+                    data: action.data
                 }
             };
         case 'FEED_UPDATE_STATUS':
             return {
                 ...state,
-                feeds: {
-                    ...state.feeds,
-                    [action.feedId]: {
-                        ...state.feeds[action.feedId],
-                        status: action.status
-                    }
+                [action.feedId]: {
+                    ...state[action.feedId],
+                    status: action.status
                 }
             };
         case 'FEED_REMOVE_POST':
             return {
                 ...state,
-                feeds: {
-                    ...state.feeds,
-                    [action.feedId]: {
-                        ...state.feeds[action.feedId],
-                        data: Object.keys(state.feeds[action.feedId].data)
-                            .filter(postId => postId !== action.postId)
-                            .reduce((obj, postId) => {
-                                obj[postId] = state.feeds[action.feedId].data[postId];
-                                return obj;
-                            }, {})
-                    }
+                [action.feedId]: {
+                    ...state[action.feedId],
+                    data: Object.keys(state[action.feedId].data)
+                        .filter(postId => postId !== action.postId)
+                        .reduce((obj, postId) => {
+                            obj[postId] = state[action.feedId].data[postId];
+                            return obj;
+                        }, {})
                 }
-            };
-        case 'FEED_EDIT_POST':
-            return {
-                ...state,
-                editing: action.postId
             };
         default:
             return state;
