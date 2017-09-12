@@ -29,6 +29,7 @@ export const Search = React.createClass({
                 <form className="morphsearch-form">
                     <input
                         className="morphsearch-input"
+                        label="Search Box"
                         ref={ element => this.searchBox = element }
                         onFocus={ !isOpen ? this.toggleSearch : '' }
                         type="search"

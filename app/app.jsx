@@ -18,7 +18,7 @@ const store = configure();
 $(document).foundation(); // eslint-disable-line
 
 // Loaders for css & sass
-require('style!css!sass!applicationStyles'); // eslint-disable-line
+// require('style!css!sass!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged(user => {
 

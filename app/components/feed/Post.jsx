@@ -149,6 +149,7 @@ export const Post = React.createClass({
 
     handleTogglePostEditor(){
         console.log('from post:  togglePostEditor called');
+        // an edit.
         const {
             togglePostEditor,
             postId,
