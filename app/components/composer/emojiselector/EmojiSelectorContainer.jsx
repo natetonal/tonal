@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { Preload } from 'react-preload';
 
@@ -10,7 +10,7 @@ import {
 
 import EmojiSelectorSkinToneModifier from './EmojiSelectorSkinToneModifier';
 
-export const EmojiSelectorContainer = React.createClass({
+class EmojiSelectorContainer extends Component {
 
     preloader(text){
         return (
@@ -21,25 +21,25 @@ export const EmojiSelectorContainer = React.createClass({
                 </div>
             </div>
         );
-    },
+    }
 
     handleMouseEnter(title, event){
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
-    },
+    }
 
     handleMouseLeave(event){
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave(event.target.value);
-    },
+    }
 
     handleClick(shortname, path, event){
         event.preventDefault();
         const { onClick } = this.props;
         onClick(shortname, path);
-    },
+    }
 
     renderEmoji({ path, shortname, alt }, index){
 
@@ -56,7 +56,7 @@ export const EmojiSelectorContainer = React.createClass({
                     alt={ alt } />
             </div>
         );
-    },
+    }
 
     render(){
 
@@ -108,7 +108,7 @@ export const EmojiSelectorContainer = React.createClass({
             </Preload>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

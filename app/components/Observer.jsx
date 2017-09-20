@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import $ from 'jquery';
@@ -13,7 +13,7 @@ import { changeScreenSize } from 'actions/UIStateActions';
 import { syncUserData } from 'actions/UserActions';
 
 // The observer handles all database changes globally and keeps state up-to-date.
-export const Observer = React.createClass({
+class Observer extends Component {
 
     componentWillMount(){
 
@@ -25,7 +25,7 @@ export const Observer = React.createClass({
         } = this.props;
 
         // Observe changes in size to the viewport relative to our media query breakpoints.
-        Foundation.MediaQuery._init();
+        Foundation.MediaQuery._init(); //eslint-disable-line
         $(window).on('changed.zf.mediaquery', (event, newSize) => {
             console.log('newSize: ', newSize);
             dispatch(changeScreenSize(newSize));
@@ -115,18 +115,17 @@ export const Observer = React.createClass({
                 dispatch(countNewNotifs());
             });
         });
-    },
+    }
 
     componentDidMount(){
         const size = Foundation.MediaQuery.current;
         this.props.dispatch(changeScreenSize(size));
-    },
+    }
 
     render(){
         return <div />;
     }
-
-});
+}
 
 export default connect(state => {
     return {

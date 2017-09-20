@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-export const UserItem = React.createClass({
+class UserItem extends Component {
 
     render(){
 
@@ -31,7 +31,6 @@ export const UserItem = React.createClass({
 
         return <div>Fetching...</div>;
     }
-
-});
+}
 
 export default UserItem;

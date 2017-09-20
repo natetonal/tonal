@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TimelineLite,
     Power2,
@@ -7,13 +7,13 @@ import {
 
 import SmallMenu from 'elements/SmallMenu';
 
-export const NotificationTopbar = React.createClass({
+class NotificationTopbar extends Component {
 
     componentWillMount(){
         this.setState({
             showNotifSettingsMenu: false
         });
-    },
+    }
 
     componentDidMount(){
         // Animate the topbar when component first loads.
@@ -24,7 +24,7 @@ export const NotificationTopbar = React.createClass({
             opacity: 0
         });
         tl.play();
-    },
+    }
 
     componentDidUpdate(prevProps){
 
@@ -74,19 +74,19 @@ export const NotificationTopbar = React.createClass({
             });
             tl.play();
         }
-    },
+    }
 
     toggleMuteNotifs(){
         const { toggleMuteNotifs } = this.props;
         toggleMuteNotifs();
-    },
+    }
 
     toggleNotifSettingsMenu(e){
         if (e){ e.preventDefault(); }
         this.setState({
             showNotifSettingsMenu: !this.state.showNotifSettingsMenu
         });
-    },
+    }
 
     render(){
 
@@ -177,8 +177,6 @@ export const NotificationTopbar = React.createClass({
             </div>
         );
     }
-
-
-});
+}
 
 export default NotificationTopbar;

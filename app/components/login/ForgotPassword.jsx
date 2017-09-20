@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { switchLoginModalUI } from 'actions/UIStateActions';
 import { sendPasswordResetEmail } from 'actions/UserActions';
 
@@ -8,20 +8,20 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import validate from './validatelogin';
 
-export const ForgotPassword = React.createClass({
+class ForgotPassword extends Component {
 
     handleLoginModalUI(event){
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name');
         const { dispatch } = this.props;
         return dispatch(switchLoginModalUI(loginModalUI));
-    },
+    }
 
     handleFormSubmit(values){
         const { email } = values;
         const { dispatch } = this.props;
         return dispatch(sendPasswordResetEmail(email));
-    },
+    }
 
     render(){
 
@@ -64,8 +64,8 @@ export const ForgotPassword = React.createClass({
             </div>
         );
     }
-});
-//
+}
+
 export default reduxForm({
     form: 'forgot-password',
     validate

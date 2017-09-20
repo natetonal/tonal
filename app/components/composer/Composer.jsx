@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
@@ -67,7 +67,7 @@ const regexIgnoreList = [
     'giphy.com/media/'
 ];
 
-export const Composer = React.createClass({
+class Composer extends Component {
 
     // Initialize local state. Optionally assign props to state.
     componentWillMount(){
@@ -91,7 +91,7 @@ export const Composer = React.createClass({
             buttonType: this.props.buttonType || 'info',
             buttons: this.props.buttons || controlBtns
         });
-    },
+    }
 
     // Implement a new Medium when component mounts, and focus on it.
     // Set previous image & file to props when mounted.
@@ -123,11 +123,11 @@ export const Composer = React.createClass({
                 this.handleUploadFile(prevData.file);
             }
         }
-    },
+    }
 
     shouldComponentUpdate(nextProps, nextState){
         return shallowCompare(this, nextProps, nextState);
-    },
+    }
 
     componentDidUpdate(){
         // Make sure focus stays on composer unless selection menu open.
@@ -135,7 +135,7 @@ export const Composer = React.createClass({
         if (currentMenu === '' || query){
             this.composer.focus();
         }
-    },
+    }
 
     // Find the current caret position relative the inner HTML.
     // MASSIVE thank you to YangombiUmpakati at SO for this wonderful solution
@@ -175,7 +175,7 @@ export const Composer = React.createClass({
 
         }
         return htmlIndex;
-    },
+    }
 
     // This gets the caret position by first using the getHTMLCaretPosition function, then
     // running it through checkLen to determine the "true" location with emoji considered.
@@ -185,7 +185,7 @@ export const Composer = React.createClass({
         const preStr = currentContent.substr(0, currentPos);
         const len = this.checkLen(preStr, ignoreEmoji);
         return len;
-    },
+    }
 
     // Keep a running history of composer states.
     updateHistory(value){
@@ -196,13 +196,13 @@ export const Composer = React.createClass({
             history.pop();
         }
         this.setState({ history });
-    },
+    }
 
     revertHistory(){
         const { history } = this.state;
         this.medium.value(history[1]);
         this.updateHistory(this.medium.value());
-    },
+    }
 
     // See if there are any new mentions coming in.
     checkMentions(textContent){
@@ -223,7 +223,7 @@ export const Composer = React.createClass({
         }
         dispatch(updateSuggestionQuery(word));
         this.checkIfMentionsRemoved(textContent);
-    },
+    }
 
     // Check if any mentions have been removed from input.
     checkIfMentionsRemoved(textContent){
@@ -237,7 +237,7 @@ export const Composer = React.createClass({
             });
         }
         this.setState({ mentions: updatedMentions });
-    },
+    }
 
     // Replace the @mention with the user's full name in place.
     handleMention(user, query){
@@ -258,7 +258,7 @@ export const Composer = React.createClass({
             select(this.composer, { start: pos + user.displayName.length });
         }
         this.clearMenus();
-    },
+    }
 
     // A list of entities used to decorate the composer.
     // Note: if a new entity is added later, processpost.js will have to be updated.
@@ -296,11 +296,11 @@ export const Composer = React.createClass({
                 strategy: this.decorateLinksAndHashtags
             }
         ];
-    },
+    }
 
     resetMedium(){
         this.medium = new Medium(this.mediumSettings);
-    },
+    }
 
     handlePaste(evt){
         evt.stopPropagation();
@@ -325,7 +325,7 @@ export const Composer = React.createClass({
 
         select(this.composer, { start: textIndex + htmlLength });
         this.checkMentions(this.composer.textContent);
-    },
+    }
 
     imagesToShortcode(text){
         if (!text.match(matchImgTag)){ return text; }
@@ -343,20 +343,20 @@ export const Composer = React.createClass({
         }
 
         return returnText;
-    },
+    }
 
     handleDrop(evt){
         evt.stopPropagation();
         evt.preventDefault();
-    },
+    }
 
     handleFocus(){
         this.setState({ focused: true });
-    },
+    }
 
     handleBlur(){
         this.setState({ focused: false });
-    },
+    }
 
     handleKeyPress({ key, target: { textContent }}){
         const { dispatch } = this.props;
@@ -376,13 +376,13 @@ export const Composer = React.createClass({
         }
 
         dispatch(updateValue(this.medium.value()));
-    },
+    }
 
     handleInsertImage(path){
         this.clearMenus();
         const { dispatch } = this.props;
         dispatch(setPreviewImage(path));
-    },
+    }
 
     // note: this function is also passed a "path" argument
     handleInsertEmoji(shortname){
@@ -397,12 +397,12 @@ export const Composer = React.createClass({
         select(this.composer, { start: this.pos.end + shortname.length });
 
         this.redecorateContent();
-    },
+    }
 
     handleUploadFile(file){
         const { dispatch } = this.props;
         dispatch(setImageUpload(file));
-    },
+    }
 
     handleControl(name, evt){
         evt.preventDefault();
@@ -411,7 +411,7 @@ export const Composer = React.createClass({
         const { dispatch, currentMenu } = this.props;
         const menu = currentMenu === name ? '' : name;
         dispatch(changeMenu(menu));
-    },
+    }
 
     handleWarning(warning = false){
         event.preventDefault();
@@ -423,21 +423,21 @@ export const Composer = React.createClass({
         } else {
             onClose();
         }
-    },
+    }
 
     clearError(){
         const { error } = this.state;
         if (error){
             this.setState({ error: false });
         }
-    },
+    }
 
     clearMenus(){
         const { dispatch } = this.props;
         this.clearError();
         dispatch(changeMenu());
         dispatch(updateSuggestionQuery());
-    },
+    }
 
     // Processes passed entities for given input value
     decorateEntities(val = this.medium.value()){
@@ -451,7 +451,7 @@ export const Composer = React.createClass({
         });
 
         return decoratedText;
-    },
+    }
 
     decorateMentions(entity, text){
         const { mentions } = this.state;
@@ -464,7 +464,7 @@ export const Composer = React.createClass({
         });
 
         return text;
-    },
+    }
 
     decorateLinksAndHashtags(entity, text){
         const { regex, className, tag } = entity;
@@ -494,7 +494,7 @@ export const Composer = React.createClass({
 
 
         return text;
-    },
+    }
 
     decorateEmoji(entity, text){
         const { regex, className, tag } = entity;
@@ -519,7 +519,7 @@ export const Composer = React.createClass({
         }
 
         return text;
-    },
+    }
 
     stripPrevTags(value){
         let newVal = value;
@@ -530,7 +530,7 @@ export const Composer = React.createClass({
         }
 
         return newVal;
-    },
+    }
 
     shouldIgnoreWord(word){
         // Innocent until proven guilty
@@ -543,7 +543,7 @@ export const Composer = React.createClass({
         });
 
         return shouldIgnore;
-    },
+    }
 
     redecorateContent(){
         this.pos = select(this.composer);
@@ -554,7 +554,7 @@ export const Composer = React.createClass({
         this.checkMax(decoratedText);
         this.medium.focus();
         select(this.composer, this.pos);
-    },
+    }
 
     // Checks the relative length of this block. Emoji can optionally be set to be ignored in the count.
     checkLen(value = this.medium.value(), ignoreEmoji = false){
@@ -578,14 +578,14 @@ export const Composer = React.createClass({
         }
 
         return charCount;
-    },
+    }
 
     checkMax(value){
         const { maxLength } = this.state;
         if (this.checkLen(value) > maxLength){
             this.revertHistory();
         }
-    },
+    }
 
     submitPost(){
         event.preventDefault();
@@ -619,7 +619,7 @@ export const Composer = React.createClass({
                 }
             });
         }
-    },
+    }
 
     render(){
 
@@ -825,7 +825,7 @@ export const Composer = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import Waypoint from 'react-waypoint';
 
-export const GiphySelectorContainer = React.createClass({
+class GiphySelectorContainer extends Component {
 
     render(){
 
@@ -81,8 +81,7 @@ export const GiphySelectorContainer = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default Redux.connect(state => {
     return {

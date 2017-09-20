@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -15,19 +15,19 @@ import {
     warn
 } from './validatesignup';
 
-export const Signup = React.createClass({
+class Signup extends Component {
 
     componentWillMount(){
         this.setState({
             showForm: false
         });
-    },
+    }
 
     handleFacebookLogin(event){
         event.preventDefault();
         const { dispatch } = this.props;
         return dispatch(createUserWithFacebookAuth());
-    },
+    }
 
     handleFormSubmit(values){
         const {
@@ -36,17 +36,17 @@ export const Signup = React.createClass({
         } = values;
         const { dispatch } = this.props;
         return dispatch(createUserWithEmailAndPassword(email, password));
-    },
+    }
 
     handleStop(event){
         event.preventDefault();
-    },
+    }
 
     toggleSignupForm(){
         this.setState({
             showForm: !this.state.showForm
         });
-    },
+    }
 
     render(){
 
@@ -145,7 +145,7 @@ export const Signup = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default reduxForm({
     form: 'signup',

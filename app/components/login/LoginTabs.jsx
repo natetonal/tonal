@@ -1,16 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import * as Redux from 'react-redux';
 import { switchLoginModalUI } from 'actions/UIStateActions';
 
-const LoginTabs = React.createClass({
+class LoginTabs extends Component {
 
     handleTabs(event){
         event.preventDefault();
         const tabSelected = event.target.getAttribute('name');
         const { dispatch } = this.props;
         dispatch(switchLoginModalUI(tabSelected));
-    },
+    }
 
     render(){
 
@@ -44,7 +44,7 @@ const LoginTabs = React.createClass({
 
         return <div />;
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

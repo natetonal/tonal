@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
 const tabsArray = [
@@ -16,7 +16,7 @@ const tabsArray = [
     }
 ];
 
-export const GiphySelectorTabs = React.createClass({
+class GiphySelectorTabs extends Component {
 
     render(){
 
@@ -42,7 +42,7 @@ export const GiphySelectorTabs = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

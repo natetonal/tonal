@@ -1,5 +1,5 @@
 import firebase, { databaseRef } from 'app/firebase';
-import { browserHistory } from 'react-router';
+import { pushToRoute } from './RouteActions';
 import moment from 'moment';
 
 import {
@@ -49,7 +49,7 @@ export const addErrorMessage = error => {
 export const startLoginForAuthorizedUser = uid => {
     return dispatch => {
         dispatch(login(uid));
-        browserHistory.push('connect');
+        dispatch(pushToRoute('connect'));
     };
 };
 

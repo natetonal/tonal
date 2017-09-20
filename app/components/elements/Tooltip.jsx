@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export const Tooltip = React.createClass({
+class Tooltip extends Component {
 
     componentWillMount(){
         let showTip = true;
         if (this.props.delay){ showTip = false; }
         this.setState({ showTip });
-    },
+    }
 
     componentWillUpdate(nextProps){
         const { delay } = this.props;
@@ -23,11 +23,11 @@ export const Tooltip = React.createClass({
                 this.setState({ showTip: false });
             }
         }
-    },
+    }
 
     componentWillUnmount(){
         window.clearTimeout(this.delayTooltip);
-    },
+    }
 
     handleClick(event){
         if (event){ event.preventDefault(); }
@@ -36,7 +36,7 @@ export const Tooltip = React.createClass({
         if (onClick){
             onClick();
         }
-    },
+    }
 
     render(){
 
@@ -71,7 +71,6 @@ export const Tooltip = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default Tooltip;

@@ -1,21 +1,21 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { changeSearchText } from 'actions/GiphySelectorActions';
 
-export const GiphySelectorSearch = React.createClass({
+class GiphySelectorSearch extends Component {
 
     componentDidMount(){
         const { searchText } = this.props;
         if (searchText.length > 1){
             this.giphySearch.value = searchText;
         }
-    },
+    }
 
     handleInput(){
         const { dispatch } = this.props;
         dispatch(changeSearchText(this.giphySearch.value));
-    },
+    }
 
     handleClearText(evt){
         evt.preventDefault();
@@ -23,18 +23,18 @@ export const GiphySelectorSearch = React.createClass({
         dispatch(changeSearchText(''));
         this.giphySearch.value = '';
         this.giphySearch.focus();
-    },
+    }
 
     handleKeyUp({ key }){
         if (key === 'Enter'){
             this.handleSearch();
         }
-    },
+    }
 
     handleSearch(){
         const { onSearch } = this.props;
         onSearch();
-    },
+    }
 
     render(){
 
@@ -69,7 +69,7 @@ export const GiphySelectorSearch = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const VerifyingEmail = React.createClass({
+class VerifyingEmail extends Component {
 
     render(){
         return (
@@ -15,7 +15,6 @@ const VerifyingEmail = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default VerifyingEmail;

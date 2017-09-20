@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
 import {
@@ -27,7 +27,7 @@ import { NotificationsMenu } from './NotificationsMenu';
 // import { NotificationTopbar } from './NotificationTopbar';
 // import { NotificationsList } from './NotificationsList';
 
-export const NotificationCenter = React.createClass({
+class NotificationCenter extends Component {
 
     componentWillMount(){
 
@@ -45,7 +45,7 @@ export const NotificationCenter = React.createClass({
         this.setState({
             showBadge: newNotifsCount > 0
         });
-    },
+    }
 
     componentWillReceiveProps(nextProps){
 
@@ -55,7 +55,7 @@ export const NotificationCenter = React.createClass({
                 showBadge: nextProps.newNotifsCount > 0
             });
         }
-    },
+    }
 
     componentDidUpdate(prevProps, prevState){
         //
@@ -91,11 +91,11 @@ export const NotificationCenter = React.createClass({
         //     });
         //     tl.play();
         // }
-    },
+    }
 
     componentWillUnmount() {
         this.acknowledgeNotifs();
-    },
+    }
 
     onClickNotifs(event){
         if (event){ event.preventDefault(); }
@@ -122,19 +122,19 @@ export const NotificationCenter = React.createClass({
         } else {
             onToggle('notifs');
         }
-    },
+    }
 
     handleClearNotifs(){
         const { dispatch } = this.props;
         dispatch(clearAllNotifs());
-    },
+    }
 
     handleFollowUser(followedUid, username, displayName){
         const { dispatch } = this.props;
         if (['blocked', 'blockedBy'].every(group => !this.checkFriendship(followedUid, group))){
             dispatch(addFollower(followedUid, username, displayName));
         }
-    },
+    }
 
     handleFavoriteUser(favoritedUid, username, displayName){
         const { dispatch } = this.props;
@@ -143,7 +143,7 @@ export const NotificationCenter = React.createClass({
             this.checkFriendship(favoritedUid, 'following')){
             dispatch(addFavorite(favoritedUid, username, displayName));
         }
-    },
+    }
 
     handleBlockUser(blockedUid){
         const { dispatch } = this.props;
@@ -151,23 +151,23 @@ export const NotificationCenter = React.createClass({
         .then(() => {
             dispatch(countNewNotifs());
         });
-    },
+    }
 
     handleClickNotif(route){
         const { dispatch } = this.props;
         dispatch(pushToRoute(route));
-    },
+    }
 
     handleDeleteNotif(notifId){
         const { dispatch } = this.props;
         console.log('delete this notif: ', notifId);
         dispatch(deleteNotif(notifId));
-    },
+    }
 
     toggleMuteNotifs(){
         const { dispatch } = this.props;
         dispatch(toggleSettingDisplayNotifs());
-    },
+    }
 
     closeNotifsMenu(){
         if (this.isNotifsOpen()){
@@ -175,20 +175,20 @@ export const NotificationCenter = React.createClass({
             this.acknowledgeNotifs();
             onToggle();
         }
-    },
+    }
 
     isSelf(testUid){
         return testUid === this.props.uid;
-    },
+    }
 
     isNotifsOpen(){
         return this.props.headerMenu === 'notifs';
-    },
+    }
 
     checkFriendship(testUid, testGroup){
         const group = this.props[testGroup] || {};
         return Object.keys(group).includes(testUid);
-    },
+    }
 
     acknowledgeNotifs(){
         const {
@@ -196,11 +196,11 @@ export const NotificationCenter = React.createClass({
             notifs
         } = this.props;
         dispatch(acknowledgeNotifs(notifs));
-    },
+    }
 
     areThereNotifs(){
         return Object.keys(this.props.notifs).length > 0;
-    },
+    }
 
     render(){
 
@@ -293,8 +293,7 @@ export const NotificationCenter = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default Redux.connect(state => {
     return {

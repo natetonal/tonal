@@ -16,31 +16,31 @@
             value: //var,
             truth: //t/f
         }
-    },
+    }
     {
         divider: true
-    },
+    }
     ...
 ]
 
 
 */
 
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TimelineLite,
     Power1,
     Back
 } from 'gsap';
 
-export const SmallMenu = React.createClass({
+class SmallMenu extends Component {
 
     componentWillMount(){
         console.log('smallMenu mounting.');
         this.setState({
             mouseOverMenu: false
         });
-    },
+    }
 
     componentDidMount(){
         const tl = new TimelineLite();
@@ -50,7 +50,7 @@ export const SmallMenu = React.createClass({
             scale: 0
         });
         tl.play();
-    },
+    }
 
     handleCallback(callback, event, params){
         event.preventDefault();
@@ -66,7 +66,7 @@ export const SmallMenu = React.createClass({
         } else {
             tl.eventCallback('onComplete', callback);
         }
-    },
+    }
 
     render(){
 
@@ -155,7 +155,6 @@ export const SmallMenu = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default SmallMenu;

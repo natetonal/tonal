@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { verifyEmailWithCode } from 'actions/AuthActions';
 import { pushToRoute } from 'actions/RouteActions';
 
 import Alert from 'elements/Alert';
 
-export const Verify = React.createClass({
+class Verify extends Component {
 
     // For future reference:
     // Handle oobCode verification in the component, NOT in the router.
@@ -17,7 +17,7 @@ export const Verify = React.createClass({
             const { location: { query: { mode, oobCode }}} = this.props;
             this.handleQuery(mode, oobCode);
         }
-    },
+    }
 
     handleQuery(mode, oobCode){
         const { dispatch } = this.props;
@@ -27,7 +27,7 @@ export const Verify = React.createClass({
 
         return dispatch(pushToRoute('/'));
 
-    },
+    }
 
     render(){
 
@@ -49,7 +49,7 @@ export const Verify = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

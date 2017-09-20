@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import onClickOutside from 'react-onclickoutside';
 
@@ -38,14 +38,14 @@ const headerComposeTabs = [
     }
 ];
 
-export const HeaderCompose = onClickOutside(React.createClass({
+class HeaderCompose extends Component {
 
     componentDidMount(){
         TweenLite.from(this.composeRef, 0.4, {
             ease: Power2.easeOut,
             opacity: 0
         });
-    },
+    }
 
     componentDidUpdate(prevProps){
         // If compose just opened:
@@ -56,7 +56,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
                 opacity: 0
             });
         }
-    },
+    }
 
     // Finish this, similar to notifscenter.
     onCloseCompose(){
@@ -72,16 +72,16 @@ export const HeaderCompose = onClickOutside(React.createClass({
             tl.play();
             tl.eventCallback('onComplete', onToggle);
         }
-    },
+    }
 
     handleClickOutside(){
         this.onCloseCompose();
-    },
+    }
 
     handleTabClick(tab){
         const { dispatch } = this.props;
         dispatch(changeTab(tab));
-    },
+    }
 
     handlePostSubmit(post){
         // Make sure to update action & reducer to store raw & parsed post!
@@ -110,11 +110,11 @@ export const HeaderCompose = onClickOutside(React.createClass({
                 dispatch(resetState());
             });
         }
-    },
+    }
 
     isComposeOpen(){
         return this.props.headerMenu === 'compose';
-    },
+    }
 
     render(){
 
@@ -142,7 +142,7 @@ export const HeaderCompose = onClickOutside(React.createClass({
                     component = (
                         <Composer
                             type={ 'posts' }
-                            submitText={ 'Share It!'}
+                            submitText={ 'Share It!' }
                             onSubmit={ this.handlePostSubmit } />
                     );
                     break;
@@ -168,7 +168,9 @@ export const HeaderCompose = onClickOutside(React.createClass({
             </div>
         );
     }
-}));
+}
+
+const ComposedHeaderCompose = onClickOutside(HeaderCompose);
 
 export default Redux.connect(state => {
     return {
@@ -176,4 +178,4 @@ export default Redux.connect(state => {
         headerMenu: state.uiState.headerMenu,
         tabSelected: state.headerCompose.currentTab
     };
-})(HeaderCompose);
+})(ComposedHeaderCompose);

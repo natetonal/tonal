@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -7,7 +7,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Login from './Login';
 import Signup from './Signup';
 
-export const LoginModal = React.createClass({
+class LoginModal extends Component {
 
     componentWillMount(){
         this.setState({

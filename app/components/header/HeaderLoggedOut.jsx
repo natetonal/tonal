@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import * as Redux from 'react-redux';
 import {
     switchLoginModalUI,
@@ -8,7 +8,7 @@ import {
 
 import Search from 'Search';
 
-export const HeaderLoggedOut = React.createClass({
+class HeaderLoggedOut extends Component {
 
     toggleLoginModal(event){
         event.preventDefault();
@@ -20,7 +20,7 @@ export const HeaderLoggedOut = React.createClass({
             dispatch(switchLoginModalUI(tabSelected));
             dispatch(toggleLoginModal());
         }
-    },
+    }
 
     render(){
 
@@ -54,7 +54,7 @@ export const HeaderLoggedOut = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

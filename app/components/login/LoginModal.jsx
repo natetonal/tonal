@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { resetErrorMessage } from 'actions/AuthActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -13,12 +13,12 @@ import ResetPassword from './ResetPassword';
 import VerifyingEmail from './VerifyingEmail';
 import LoginEmailSent from './LoginEmailSent';
 
-export const LoginModal = React.createClass({
+class LoginModal extends Component {
 
     clearErrors(){
         const { dispatch } = this.props;
         dispatch(resetErrorMessage());
-    },
+    }
 
     render(){
 
@@ -98,7 +98,7 @@ export const LoginModal = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

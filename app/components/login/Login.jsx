@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { startEmailLogin } from 'actions/AuthActions';
@@ -11,38 +11,38 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import validate from './validatelogin';
 
-export const Login = React.createClass({
+class Login extends Component {
 
     componentWillMount(){
         this.setState({
             showForm: false
         });
-    },
+    }
 
     handleFormSubmit(values){
         const { email, password } = values;
         const { dispatch } = this.props;
         return dispatch(startEmailLogin(email, password));
-    },
+    }
 
     handleFacebookLogin(event){
         event.preventDefault();
         const { dispatch } = this.props;
         return dispatch(createUserWithFacebookAuth());
-    },
+    }
 
     handleLoginModalUI(event){
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name');
         const { dispatch } = this.props;
         return dispatch(switchLoginModalUI(loginModalUI));
-    },
+    }
 
     toggleLoginForm(){
         this.setState({
             showForm: !this.state.showForm
         });
-    },
+    }
 
     render(){
 
@@ -117,7 +117,7 @@ export const Login = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default reduxForm({
     form: 'login',

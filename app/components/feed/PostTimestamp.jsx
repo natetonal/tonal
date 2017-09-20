@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import {
     TweenLite,
     Power1
 } from 'gsap';
 
-export const PostTimestamp = React.createClass({
+class PostTimestamp extends Component {
 
     componentWillMount(){
         this.setState({
             timeStamp: this.processTimestamp()
         });
-    },
+    }
 
     componentDidMount(){
         this.interval = setInterval(this.updateTimestamp, 1000);
-    },
+    }
 
     componentDidUpdate(prevProps, prevState){
         if (prevState.timeStamp !== this.state.timeStamp){
@@ -24,10 +24,10 @@ export const PostTimestamp = React.createClass({
                 opacity: 0
             });
         }
-    },
+    }
     componentWillUnmount(){
         clearInterval(this.interval);
-    },
+    }
 
     processTimestamp(){
         const timeStamp = this.props.editedAt || this.props.timeStamp;
@@ -37,13 +37,13 @@ export const PostTimestamp = React.createClass({
         }
 
         return timeStamp;
-    },
+    }
 
     updateTimestamp(){
         this.setState({
             timeStamp: this.processTimestamp()
         });
-    },
+    }
 
     render(){
 
@@ -66,7 +66,6 @@ export const PostTimestamp = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default PostTimestamp;

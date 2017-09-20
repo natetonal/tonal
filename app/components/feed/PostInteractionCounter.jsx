@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TweenLite,
     Power1
 } from 'gsap';
 
-export const PostInteractionCounter = React.createClass({
+class PostInteractionCounter extends Component {
 
     componentDidUpdate(prevProps){
         if (prevProps.count !== this.props.count) {
@@ -13,7 +13,7 @@ export const PostInteractionCounter = React.createClass({
                 opacity: 0
             });
         }
-    },
+    }
 
     render(){
 
@@ -25,7 +25,6 @@ export const PostInteractionCounter = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default PostInteractionCounter;

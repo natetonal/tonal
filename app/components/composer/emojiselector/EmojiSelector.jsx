@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import {
     changeTab,
@@ -16,7 +16,7 @@ import EmojiSelectorContainer from './EmojiSelectorContainer';
 // how you load multiple assets using a webpack loader:
 // const pathToEmoji = require.context('emojione/assets/png', true);
 
-export const EmojiSelector = React.createClass({
+class EmojiSelector extends Component {
 
     componentWillReceiveProps(nextProps){
 
@@ -36,30 +36,30 @@ export const EmojiSelector = React.createClass({
                     currentTab === 'search'){
             this.changeTab(previousTab, previousTabTitle);
         }
-    },
+    }
 
     changeTitleDisplay(title){
         const { dispatch } = this.props;
         dispatch(changeTitleDisplay(title));
-    },
+    }
 
     clearTitleDisplay(){
         const { dispatch, currentTabTitle } = this.props;
         dispatch(changeTitleDisplay(currentTabTitle));
-    },
+    }
 
     changeTab(tab, title){
         const { dispatch } = this.props;
         dispatch(changeTab(tab));
         dispatch(changeTabTitle(title));
-    },
+    }
 
     selectEmoji(shortname, path){
         const { handleEmoji } = this.props;
         if (shortname && path){
             handleEmoji(shortname, path);
         }
-    },
+    }
 
     render(){
 
@@ -85,7 +85,7 @@ export const EmojiSelector = React.createClass({
             </ReactCSSTransitionGroup>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

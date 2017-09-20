@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { switchHeaderMenu } from 'actions/UIStateActions';
 // import Hammer from 'react-hammerjs'; - add this back in later for swiping.
 
 import Menu from './Menu';
 
-export const MenuWrapper = React.createClass({
+class MenuWrapper extends Component {
 
     handleClick(menu, event){
         event.preventDefault();
@@ -20,11 +20,11 @@ export const MenuWrapper = React.createClass({
                 dispatch(switchHeaderMenu(menu));
             }
         }
-    },
+    }
 
     isOpen(){
         return this.props.headerMenu === 'settings';
-    },
+    }
 
     render(){
 
@@ -47,7 +47,7 @@ export const MenuWrapper = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

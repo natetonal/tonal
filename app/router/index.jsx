@@ -1,5 +1,9 @@
 import React from 'react';
-import { Route, Router, IndexRoute, browserHistory } from 'react-router';
+import {
+    Switch,
+    Route
+} from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
 
 // Components
 import TonalApp from 'TonalApp';
@@ -10,6 +14,8 @@ import Discover from 'pages/Discover';
 import MyMusic from 'pages/MyMusic';
 import TonalStore from 'pages/TonalStore';
 import NotFound from 'pages/NotFound';
+
+import history from './history';
 
 // React-Router middleware (next allows async actions)
 // const requireLogin = (nextState, replace, next) => {
@@ -32,24 +38,19 @@ import NotFound from 'pages/NotFound';
 //     next();
 // };
 
-const requireLogin = () => {
-
-};
-
-const redirectIfLoggedIn = () => {
-
-};
+// If needed again, add this to each route that needs it:
+// onEnter={ requireLogin }
 
 export default (
-    <Router history={ browserHistory }>
-        <Route path="/" component={ TonalApp }>
-            <IndexRoute component={ Landing } onEnter={ redirectIfLoggedIn } />
+    <ConnectedRouter history={ history }>
+        <Route exact path="/" component={ TonalApp }>
+            <Route component={ Landing } />
             <Route path="auth" component={ Verify } />
-            <Route path="connect" component={ Connect } onEnter={ requireLogin } />
-            <Route path="discover" component={ Discover } onEnter={ requireLogin } />
-            <Route path="mymusic" component={ MyMusic } onEnter={ requireLogin } />
-            <Route path="store" component={ TonalStore } onEnter={ requireLogin } />
-            <Route path="*" component={ NotFound } />
+            <Route path="connect" component={ Connect } />
+            <Route path="discover" component={ Discover } />
+            <Route path="mymusic" component={ MyMusic } />
+            <Route path="store" component={ TonalStore } />
+            <Route component={ NotFound } />
         </Route>
-    </Router>
+    </ConnectedRouter>
 );

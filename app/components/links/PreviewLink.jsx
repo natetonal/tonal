@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { fetchPreviewData } from 'actions/LinkActions';
@@ -8,7 +8,7 @@ import { fetchPreviewData } from 'actions/LinkActions';
 import UserPreview from './UserPreview';
 import UserList from './UserList';
 
-export const PreviewLink = React.createClass({
+class PreviewLink extends Component {
 
     componentWillMount(){
         this.timeoutMouseEnter = null;
@@ -32,22 +32,22 @@ export const PreviewLink = React.createClass({
             previewReady: false,
             previewHovered: false
         });
-    },
+    }
 
     getCoords(elem){
         const rect = elem.getBoundingClientRect();
         this.top = rect.top + 40;
         this.left = rect.left;
-    },
+    }
 
-    countsArr: ['followers', 'following'],
-    singleDataType: ['user'],
-    multipleDataType: ['user-list'],
+    countsArr: ['followers', 'following']
+    singleDataType: ['user']
+    multipleDataType: ['user-list']
 
     clearCoords(){
         this.top = 0;
         this.left = 0;
-    },
+    }
 
     fetchData(previewId = this.props.previewId){
         if (!previewId){ return false; }
@@ -61,7 +61,7 @@ export const PreviewLink = React.createClass({
 
             return false;
         });
-    },
+    }
 
     handleClick(event){
         if (event){ event.preventDefault(); }
@@ -70,7 +70,7 @@ export const PreviewLink = React.createClass({
         if (onClick){
             onClick();
         }
-    },
+    }
 
     handleMentionPreview(previewType, event){
         event.preventDefault();
@@ -107,7 +107,7 @@ export const PreviewLink = React.createClass({
             }, 500);
 
         }
-    },
+    }
 
     handleClearMentionPreview(){
         if (this.timeoutMouseEnter) {
@@ -128,11 +128,11 @@ export const PreviewLink = React.createClass({
                 }
             }, 100);
         }
-    },
+    }
 
     handlePreviewMouseEnter(){
         this.setState({ previewHovered: true });
-    },
+    }
 
     handlePreviewMouseLeave(){
         this.clearCoords();
@@ -142,7 +142,7 @@ export const PreviewLink = React.createClass({
             previewReady: false,
             previewHovered: false
         });
-    },
+    }
 
     render(){
         const {
@@ -214,6 +214,6 @@ export const PreviewLink = React.createClass({
             </span>
         );
     }
-});
+}
 
 export default Redux.connect()(PreviewLink);

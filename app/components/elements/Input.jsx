@@ -1,39 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Tooltip from './Tooltip';
 
-export const Input = React.createClass({
-
-    propTypes: {
-        label: React.PropTypes.string.isRequired,
-        input: React.PropTypes.object.isRequired,
-        type: React.PropTypes.string.isRequired,
-        inputRef: React.PropTypes.func
-    },
-
-    getDefaultProps(){
-        return {
-            label: '',
-            input: {},
-            type: '',
-            touched: false,
-            error: '',
-            inputRef: this.inputRef
-        };
-    },
-
-    getInitialState(){
-        return {
-            showPassword: false
-        };
-    },
+class Input extends Component {
 
     togglePasswordView(){
         this.setState({
             showPassword: !this.state.showPassword
         });
-    },
+    }
 
     render(){
 
@@ -176,6 +153,22 @@ export const Input = React.createClass({
             </span>
         );
     }
-});
+}
+
+Input.propTypes = {
+    label: PropTypes.string.isRequired,
+    input: PropTypes.object.isRequired,
+    type: PropTypes.string.isRequired,
+    inputRef: PropTypes.func
+};
+
+Input.defaultProps = {
+    label: '',
+    input: {},
+    type: '',
+    touched: false,
+    error: '',
+    inputRef: false
+};
 
 export default Input;

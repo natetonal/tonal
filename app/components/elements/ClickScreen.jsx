@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export const ClickScreen = React.createClass({
-
-    propTypes: {
-        handleClick: React.PropTypes.func.isRequired
-    },
+class ClickScreen extends Component {
 
     componentWillMount(){
         document.addEventListener('click', this.handleClickOutside, false);
-    },
+    }
 
     componentWillUnmount(){
         document.removeEventListener('click', this.handleClickOutside, false);
-    },
+    }
 
     handleClickOutside(e){
 
@@ -25,7 +22,7 @@ export const ClickScreen = React.createClass({
         } else {
             console.log('Ignoring this click.');
         }
-    },
+    }
 
     render(){
 
@@ -37,7 +34,10 @@ export const ClickScreen = React.createClass({
             </div>
         );
     }
+}
 
-});
+ClickScreen.propTypes = {
+    handleClick: PropTypes.func.isRequired
+};
 
 export default ClickScreen;

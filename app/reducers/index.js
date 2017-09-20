@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 import { reducer as form } from 'redux-form';
 
 import authReducer from './AuthReducer';
@@ -27,5 +28,6 @@ export default combineReducers({
     composer: composerReducer,
     emojiSelector: emojiSelectorReducer,
     giphySelector: giphySelectorReducer,
-    route: routeReducer
+    route: routeReducer,
+    router: routerReducer
 });

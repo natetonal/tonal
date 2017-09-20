@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import PostInteractionButton from './PostInteractionButton';
 
-export const PostInteractionBar = React.createClass({
+class PostInteractionBar extends Component {
 
     componentWillMount(){
         this.key = this.createKey();
-    },
+    }
 
     createKey(length = 10){
         let text = '';
@@ -15,7 +15,7 @@ export const PostInteractionBar = React.createClass({
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
         return text;
-    },
+    }
 
     render(){
 
@@ -42,7 +42,6 @@ export const PostInteractionBar = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default PostInteractionBar;

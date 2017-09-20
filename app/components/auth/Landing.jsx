@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
 import LoginModal from './LoginModal/LoginModal';
 
-export const Landing = React.createClass({
+class Landing extends Component {
 
     render(){
 

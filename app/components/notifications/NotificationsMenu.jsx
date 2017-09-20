@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import {
     TimelineLite,
@@ -8,11 +8,11 @@ import {
 import { NotificationTopbar } from './NotificationTopbar';
 import { NotificationsList } from './NotificationsList';
 
-export const NotificationsMenu = onClickOutside(React.createClass({
+class NotificationsMenu  extends Component{
 
     componentWillMount(){
         console.log('NotificationsMenu: mounting.');
-    },
+    }
 
     componentDidUpdate(prevProps){
 
@@ -36,11 +36,11 @@ export const NotificationsMenu = onClickOutside(React.createClass({
             });
             tl.play();
         }
-    },
+    }
 
     handleClickOutside(){
         this.props.onClickNotifs();
-    },
+    }
 
     render(){
 
@@ -99,6 +99,8 @@ export const NotificationsMenu = onClickOutside(React.createClass({
         );
     }
 
-}));
+}
 
-export default NotificationsMenu;
+const ComposedNotificationsMenu = onClickOutside(NotificationsMenu);
+
+export default ComposedNotificationsMenu;

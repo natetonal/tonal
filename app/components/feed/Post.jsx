@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     TweenLite,
@@ -19,7 +19,7 @@ import PostInteractionBar from './PostInteractionBar';
 
 const bigTextLength = 80;
 
-export const Post = React.createClass({
+class Post extends Component {
 
     componentWillMount(){
 
@@ -44,7 +44,7 @@ export const Post = React.createClass({
         checkAuthor(data, postId);
         checkImage(data, postId);
 
-    },
+    }
 
     componentWillReceiveProps(nextProps){
         // If the user has finished editing the post:
@@ -57,7 +57,7 @@ export const Post = React.createClass({
                 opacity: 0
             });
         }
-    },
+    }
 
     componentDidUpdate(prevProps){
         // If the user opens the editor:
@@ -79,11 +79,11 @@ export const Post = React.createClass({
             this.props.data.likesCount !== this.state.likesCount){
             this.setState({ likesCount: this.props.data.likesCount });
         }
-    },
+    }
 
     handlePostMenu(){
         this.setState({ showMenu: !this.state.showMenu });
-    },
+    }
 
     handleLikePost(){
         const {
@@ -102,7 +102,7 @@ export const Post = React.createClass({
 
         // Animate here.
         likePost(this.props.data.author.uid, postId, data);
-    },
+    }
 
     handleDeletePost(){
 
@@ -120,7 +120,7 @@ export const Post = React.createClass({
         });
         tl.play();
         tl.eventCallback('onComplete', deletePost, [postId]);
-    },
+    }
 
     handleUpdatePost(updatedPost){
 
@@ -135,7 +135,7 @@ export const Post = React.createClass({
         });
         tl.play();
         tl.eventCallback('onComplete', this.handleUpdatePostCallback, [updatedPost]);
-    },
+    }
 
     handleUpdatePostCallback(updatedPost){
         const {
@@ -145,7 +145,7 @@ export const Post = React.createClass({
 
         updatePost(updatedPost, postId);
 
-    },
+    }
 
     handleTogglePostEditor(){
         console.log('from post:  togglePostEditor called');
@@ -168,13 +168,13 @@ export const Post = React.createClass({
         }
         tl.play();
         tl.eventCallback('onComplete', togglePostEditor, [postId]);
-    },
+    }
 
     handleToggleReply(){
         this.setState({
             showReply: !this.state.showReply
         });
-    },
+    }
 
     render(){
 
@@ -300,7 +300,7 @@ export const Post = React.createClass({
                                 title: `Block ${ displayName }`,
                                 callback: blockUser,
                                 params: [uid]
-                            },
+                            }
                         );
                     }
 
@@ -459,7 +459,7 @@ export const Post = React.createClass({
                         <Thread
                             toggleReply={ this.handleToggleReply }
                             showReply={ showReply }
-                            author={ data.author}
+                            author={ data.author }
                             data={ data.thread } />
                     </div>
                 </ReactCSSTransitionGroup>
@@ -468,6 +468,6 @@ export const Post = React.createClass({
 
         return <div>NO POSTS YET LOL!</div>;
     }
-});
+}
 
 export default Post;

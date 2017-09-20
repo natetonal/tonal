@@ -1,22 +1,22 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { changeSearchText } from 'actions/EmojiSelectorActions';
 
-export const EmojiSelectorSearch = React.createClass({
+class EmojiSelectorSearch extends Component {
 
     componentDidMount(){
         const { searchText } = this.props;
         if (searchText.length > 1){
             this.emojiSearch.value = searchText;
         }
-    },
+    }
 
     handleInput(evt){
         evt.preventDefault();
         const { dispatch } = this.props;
         dispatch(changeSearchText(evt.target.value));
-    },
+    }
 
     handleClearText(evt){
         evt.preventDefault();
@@ -24,7 +24,7 @@ export const EmojiSelectorSearch = React.createClass({
         dispatch(changeSearchText(''));
         this.emojiSearch.value = '';
         this.emojiSearch.focus();
-    },
+    }
 
     render(){
 
@@ -44,7 +44,7 @@ export const EmojiSelectorSearch = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

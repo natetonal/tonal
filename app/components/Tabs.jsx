@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-export const Tabs = React.createClass({
+class Tabs extends Component {
 
     render(){
         return (
@@ -9,25 +9,25 @@ export const Tabs = React.createClass({
                 <ul>
                     <li>
                         <Link to="connect" data-hover="Connect">
-                            <span className="tab-icon tab-connect"></span>
+                            <span className="tab-icon tab-connect" />
                             <span className="link-name">Connect</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="discover" data-hover="Discover">
-                            <span className="tab-icon tab-discover"></span>
+                            <span className="tab-icon tab-discover" />
                             <span className="link-name">Discover</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="store" data-hover="Store">
-                            <span className="tab-icon tab-store"></span>
+                            <span className="tab-icon tab-store" />
                             <span className="link-name">Store</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="mymusic" data-hover="My Music">
-                            <span className="tab-icon tab-mymusic"></span>
+                            <span className="tab-icon tab-mymusic" />
                             <span className="link-name">My Music</span>
                         </Link>
                     </li>
@@ -35,6 +35,6 @@ export const Tabs = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Tabs;

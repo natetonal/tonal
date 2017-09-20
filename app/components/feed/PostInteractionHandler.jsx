@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import Tooltip from 'elements/Tooltip';
 import PreviewLink from 'links/PreviewLink';
 
-export const PostInteractionHandler = React.createClass({
+class PostInteractionHandler extends Component {
 
     handleClick(event){
         if (event){ event.preventDefault(); }
 
         this.props.clickLike();
-    },
+    }
 
     render(){
 
@@ -44,7 +44,6 @@ export const PostInteractionHandler = React.createClass({
             </PreviewLink>
         );
     }
-
-});
+}
 
 export default PostInteractionHandler;

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export const NotFound = React.createClass({
+class NotFound extends Component {
 
     render(){
 
@@ -11,7 +11,6 @@ export const NotFound = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default NotFound;

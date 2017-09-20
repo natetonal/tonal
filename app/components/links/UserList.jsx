@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import UserItem from './UserItem';
 
-export const UserList = React.createClass({
+class UserList extends Component {
 
     render(){
 
@@ -44,7 +44,6 @@ export const UserList = React.createClass({
             );
         }
     }
-
-});
+}
 
 export default UserList;

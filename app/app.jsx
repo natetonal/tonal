@@ -1,5 +1,7 @@
+import 'applicationStyles';
+
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
 import { fetchUserData } from 'actions/UserActions';
@@ -14,11 +16,10 @@ import Root from './containers/Root';
 
 const store = configure();
 
-// Load foundation
 $(document).foundation(); // eslint-disable-line
 
 // Loaders for css & sass
-// require('style!css!sass!applicationStyles'); // eslint-disable-line
+// require('!style-loader!css-loader!resolve-url-loader!sass-loader?sourceMap!applicationStyles'); // eslint-disable-line
 
 firebase.auth().onAuthStateChanged(user => {
 
@@ -52,23 +53,32 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 
-render(
-    <AppContainer>
-        <Root store={ store } />
-    </AppContainer>,
-    document.getElementById('tonal')
-);
+const render = App => {
+    ReactDOM.render(
+        <AppContainer>
+            <App store={ store } />
+        </AppContainer>,
+        document.getElementById('tonal')
+    );
+};
+
+render(Root);
 
 if (module.hot) {
-    module.hot.accept('./containers/Root', () => {
-        const RootContainer = require('./containers/Root').default;
-        render(
-            <AppContainer>
-                <RootContainer
-                    store={ store }
-                />
-            </AppContainer>,
-            document.getElementById('tonal')
-        );
-    });
+    module.hot.accept('./containers/Root', () => { render(Root); });
 }
+
+// if (module.hot) {
+//     console.log('hot ');
+//     module.hot.accept('./containers/Root', () => {
+//         const RootContainer = require('./containers/Root').default;
+//         render(
+//             <AppContainer>
+//                 <RootContainer
+//                     store={ store }
+//                 />
+//             </AppContainer>,
+//             document.getElementById('tonal')
+//         );
+//     });
+// }

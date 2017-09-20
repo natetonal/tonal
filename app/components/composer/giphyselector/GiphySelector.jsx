@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as Redux from 'react-redux';
 import {
@@ -12,11 +12,11 @@ import GiphySelectorTabs from './GiphySelectorTabs';
 import GiphySelectorSearch from './GiphySelectorSearch';
 import GiphySelectorContainer from './GiphySelectorContainer';
 
-export const GiphySelector = React.createClass({
+class GiphySelector extends Component {
 
     componentDidMount(){
         this.getImages();
-    },
+    }
 
     componentWillReceiveProps(nextProps){
         const { dispatch } = this.props;
@@ -32,7 +32,7 @@ export const GiphySelector = React.createClass({
         } else if (this.props.currentMenu !== nextProps.currentMenu){
             dispatch(resetState());
         }
-    },
+    }
 
     componentDidUpdate(prevProps){
         if ((prevProps.currentMenu !== this.props.currentMenu ||
@@ -40,12 +40,12 @@ export const GiphySelector = React.createClass({
             this.props.status !== 'fetching'){
             this.getImages();
         }
-    },
+    }
 
     componentWillUnmount(){
         const { dispatch } = this.props;
         dispatch(resetState());
-    },
+    }
 
     getImages(){
         const {
@@ -57,20 +57,20 @@ export const GiphySelector = React.createClass({
         const mode = `${ currentMenu }_${ currentTab }`;
 
         dispatch(fetchImages(mode, searchText));
-    },
+    }
 
     handleTabs(tab, event){
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(switchTabs(tab));
-    },
+    }
 
     selectImage(path){
         const { handleGiphy, dispatch } = this.props;
         if (path) {
             handleGiphy(path);
         }
-    },
+    }
 
     render(){
 
@@ -94,7 +94,7 @@ export const GiphySelector = React.createClass({
             </ReactCSSTransitionGroup>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

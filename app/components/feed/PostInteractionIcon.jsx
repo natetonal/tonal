@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import mojs from 'mo-js';
 
-export const PostInteractionIcon = React.createClass({
+class PostInteractionIcon extends Component {
 
     componentDidMount() {
 
@@ -61,7 +61,7 @@ export const PostInteractionIcon = React.createClass({
 
         this.anim.add(takeoff1, takeoff2);
 
-    },
+    }
 
     shouldComponentUpdate(nextProps) {
         if (nextProps.isPlay &&
@@ -76,7 +76,7 @@ export const PostInteractionIcon = React.createClass({
         }
 
         return false;
-    },
+    }
 
     render(){
 
@@ -93,8 +93,7 @@ export const PostInteractionIcon = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default PostInteractionIcon;
 

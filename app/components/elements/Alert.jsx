@@ -1,35 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
+import PropTypes from 'prop-types';
 import Button from './Button';
 
-export const Alert = React.createClass({
-
-    propTypes: {
-        type: React.PropTypes.string.isRequired,
-        title: React.PropTypes.string.isRequired,
-        buttons: React.PropTypes.array,
-        fullscreen: React.PropTypes.bool,
-        animate: React.PropTypes.bool,
-        message: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.object
-        ]),
-        onClose: React.PropTypes.func.isRequired
-    },
-
-    getDefaultProps(){
-
-        return {
-            type: 'default',
-            title: 'Title',
-            button: false,
-            fullscreen: false,
-            animate: true,
-            message: 'Message',
-            onClose: () => console.log('You need to pass a handler to dismiss this.')
-        };
-    },
+class Alert extends Component {
 
     render(){
 
@@ -120,6 +94,29 @@ export const Alert = React.createClass({
             </ReactCSSTransitionGroup>
         );
     }
-});
+}
+
+Alert.propTypes = {
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    buttons: PropTypes.array,
+    fullscreen: PropTypes.bool,
+    animate: PropTypes.bool,
+    message: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ]),
+    onClose: PropTypes.func.isRequired
+};
+
+Alert.defaultProps = {
+    type: 'default',
+    title: 'Title',
+    buttons: false,
+    fullscreen: false,
+    animate: true,
+    message: 'Message',
+    onClose: () => console.log('You need to pass a handler to dismiss this.')
+};
 
 export default Alert;

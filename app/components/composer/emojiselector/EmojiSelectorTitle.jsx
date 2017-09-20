@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
-export const EmojiSelectorTitle = React.createClass({
+class EmojiSelectorTitle extends Component {
 
     render(){
 
@@ -14,7 +14,7 @@ export const EmojiSelectorTitle = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

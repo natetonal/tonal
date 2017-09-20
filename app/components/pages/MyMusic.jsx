@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
-export const MyMusic = React.createClass({
+class MyMusic extends Component {
 
     render(){
         return (
             <div>MyMusic</div>
         );
     }
-});
+}
 
 export default Redux.connect()(MyMusic);

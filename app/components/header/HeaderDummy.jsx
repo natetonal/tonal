@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export const HeaderDummy = React.createClass({
+class HeaderDummy extends Component {
 
     render(){
 
@@ -10,7 +10,6 @@ export const HeaderDummy = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default HeaderDummy;

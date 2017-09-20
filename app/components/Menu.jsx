@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { startLogout } from 'actions/AuthActions';
 import {
     TweenLite,
@@ -12,7 +12,7 @@ import numeral from 'numeral';
 
 const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-avatar.png?alt=media&token=f7e23557-bc15-44fd-bfb5-1ddff07bc954';
 
-export const Menu = React.createClass({
+class Menu extends Component {
 
     componentWillUpdate(nextProps){
         if (this.props.headerMenu !== nextProps.headerMenu &&
@@ -43,12 +43,12 @@ export const Menu = React.createClass({
                 counterTL.play();
             }
         });
-    },
+    }
 
     handleLogout(){
         const { dispatch } = this.props;
         dispatch(startLogout());
-    },
+    }
 
     render(){
 
@@ -190,7 +190,7 @@ export const Menu = React.createClass({
             </nav>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

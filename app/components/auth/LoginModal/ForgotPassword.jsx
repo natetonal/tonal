@@ -1,12 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import * as Redux from 'react-redux';
 import * as actions from 'actions';
 
 import Input from './../../elements/Input';
 import Button from './../../elements/Button';
 
-export const ForgotPassword = React.createClass({
+class ForgotPassword extends Component {
     render(){
         return(
             <div>

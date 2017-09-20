@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
 import {
@@ -20,14 +20,14 @@ import {
     warn
 } from './validate';
 
-let FirstTimeUserPrompt = React.createClass({
+class FirstTimeUserPrompt extends Component {
 
     componentWillMount(){
         // Where to store the optional uploaded image blob
         this.setState({
             blob: false
         });
-    },
+    }
 
     componentDidMount(){
 
@@ -53,7 +53,7 @@ let FirstTimeUserPrompt = React.createClass({
             y: 50,
         }, '-=0.5');
         tl.play();
-    },
+    }
 
     componentDidUpdate(prevState){
         if (prevState.blob !== this.state.blob){
@@ -68,11 +68,11 @@ let FirstTimeUserPrompt = React.createClass({
         if (this.props.submitSucceeded){
             this.animateOut();
         }
-    },
+    }
 
     handleStop(event){
         event.preventDefault();
-    },
+    }
 
     handleDrop(files){
         const image = files[0].preview || false;
@@ -89,7 +89,7 @@ let FirstTimeUserPrompt = React.createClass({
 
             validImage.src = files[0].preview;
         }
-    },
+    }
 
     animateOut(){
         const exitTl = new TimelineLite();
@@ -104,22 +104,22 @@ let FirstTimeUserPrompt = React.createClass({
         });
         exitTl.play();
         exitTl.eventCallback('onComplete', this.closeThis);
-    },
+    }
 
     closeThis(){
         const { dispatch } = this.props;
         dispatch(updateUserData({ firstLogin: false }));
-    },
+    }
 
     handleFormSubmit(values){
         const { dispatch } = this.props;
         dispatch(updateUserData(values));
-    },
+    }
 
     handlePlaceChange(place){
         const { change } = this.props;
         change('location', place);
-    },
+    }
 
     render(){
 
@@ -264,16 +264,15 @@ let FirstTimeUserPrompt = React.createClass({
             </div>
         );
     }
+}
 
-});
-
-FirstTimeUserPrompt = reduxForm({
+const FTUPWithReduxForm = reduxForm({
     form: 'firstTimeUser',
     validate,
     warn
 })(FirstTimeUserPrompt);
 
-FirstTimeUserPrompt = Redux.connect(state => {
+export default Redux.connect(state => {
     return {
         initialValues: {
             displayName: state.user.displayName,
@@ -285,6 +284,4 @@ FirstTimeUserPrompt = Redux.connect(state => {
         avatar: state.user.avatar,
         location: state.user.location
     };
-})(FirstTimeUserPrompt);
-
-export default FirstTimeUserPrompt;
+})(FTUPWithReduxForm);

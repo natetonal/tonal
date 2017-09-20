@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import PreviewLink from 'links/PreviewLink';
 
 // Note - In execution, make sure to use something more user-specific than their name, such as unique ID.
-export const PostParser = React.createClass({
+class PostParser extends Component {
 
     replaceHTMLEntities(textBlock){
         const escapeCharsRegex = /&lt;|&gt;|&amp;|&nbsp;/gi;
@@ -17,7 +17,7 @@ export const PostParser = React.createClass({
         }
 
         return textBlock;
-    },
+    }
 
     isThisTonal(link){
         let isThisTonal = false;
@@ -36,7 +36,7 @@ export const PostParser = React.createClass({
         });
 
         return isThisTonal;
-    },
+    }
 
     prependProtocol(link){
         let isThereAProtocol = false;
@@ -53,7 +53,7 @@ export const PostParser = React.createClass({
         if (isThereAProtocol){ return link; }
 
         return `http://${ link }`;
-    },
+    }
 
     formatLink(link){
         if (!this.isThisTonal(link)){
@@ -63,7 +63,7 @@ export const PostParser = React.createClass({
         }
 
         return link;
-    },
+    }
 
     render(){
         const {
@@ -142,7 +142,6 @@ export const PostParser = React.createClass({
 
         return <div />;
     }
-
-});
+}
 
 export default PostParser;

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
 import {
@@ -7,25 +7,25 @@ import {
     tabsArray
 } from './emojidata.js';
 
-export const EmojiSelectorTabs = React.createClass({
+class EmojiSelectorTabs extends Component {
 
     handleMouseEnter(title, event){
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
-    },
+    }
 
     handleMouseLeave(event){
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave(event.target.value);
-    },
+    }
 
     handleClick(name, title, event){
         event.preventDefault();
         const { onClick } = this.props;
         onClick(name, title);
-    },
+    }
 
     render(){
 
@@ -56,7 +56,7 @@ export const EmojiSelectorTabs = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

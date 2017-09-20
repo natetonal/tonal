@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import { push } from 'react-router-redux';
 
 export const getPrevRoute = (route = '') => {
     return {
@@ -8,7 +8,10 @@ export const getPrevRoute = (route = '') => {
 };
 
 export const pushToRoute = route => {
-    return () => {
-        browserHistory.push(route);
+    return dispatch => {
+        if (route){
+            console.log('pushing to route: ', route);
+            dispatch(push(`/${ route }`));
+        }
     };
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
     TimelineLite,
@@ -9,7 +9,7 @@ import {
 import ClickScreen from 'elements/ClickScreen';
 import SmallMenu from 'elements/SmallMenu';
 
-export const Notification = React.createClass({
+class Notification extends Component {
 
     componentWillMount(){
         const oneSender = (this.props.senders && Object.keys(this.props.senders).length === 1);
@@ -23,7 +23,7 @@ export const Notification = React.createClass({
             isFollowing: false,
             isFavorited: false
         });
-    },
+    }
 
     componentDidMount(){
         const { acknowledged } = this.props.notif;
@@ -42,7 +42,7 @@ export const Notification = React.createClass({
         if (this.state.oneSender){
             this.updateFriendshipsForSingleSender();
         }
-    },
+    }
 
     componentWillReceiveProps(nextProps){
         console.log(`favorites prev: ${ this.props.favoritesCount } next: ${ nextProps.favoritesCount }`);
@@ -52,7 +52,7 @@ export const Notification = React.createClass({
             this.props.favoritesCount !== nextProps.favoritesCount)){
             this.updateFriendshipsForSingleSender();
         }
-    },
+    }
 
     componentDidUpdate(prevProps, prevState){
         if (prevState.timeStamp !== this.state.timeStamp){
@@ -67,11 +67,11 @@ export const Notification = React.createClass({
         if (this.state.oneSender !== prevState.oneSender){
             this.updateFriendshipsForSingleSender(this.state.oneSender);
         }
-    },
+    }
 
     componentWillUnmount(){
         clearInterval(this.interval);
-    },
+    }
 
     processTimestamp(){
         const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(this.props.notif.timeStamp, 'LLLL'));
@@ -80,13 +80,13 @@ export const Notification = React.createClass({
         }
 
         return this.props.notif.timeStamp;
-    },
+    }
 
     updateTimestamp(){
         this.setState({
             timeStamp: this.processTimestamp()
         });
-    },
+    }
 
     updateFriendshipsForSingleSender(){
         const sender = this.state.oneSender || false;
@@ -97,7 +97,7 @@ export const Notification = React.createClass({
             isFollowing,
             isFavorited
         });
-    },
+    }
 
     toggleNotifMenu(event){
         if (event){
@@ -107,7 +107,7 @@ export const Notification = React.createClass({
         this.setState({
             showNotifMenu: !this.state.showNotifMenu
         });
-    },
+    }
 
     handleDelete(){
         const {
@@ -123,7 +123,7 @@ export const Notification = React.createClass({
         });
         tl.play();
         tl.eventCallback('onComplete', deleteNotif, [notifId]);
-    },
+    }
 
     render(){
 
@@ -323,6 +323,6 @@ export const Notification = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Notification;

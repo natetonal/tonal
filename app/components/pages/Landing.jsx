@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import {
     toggleLoginModal,
@@ -12,11 +12,11 @@ import {
 
 import LoginModal from 'login/LoginModal';
 
-export const Landing = React.createClass({
+class Landing extends Component {
 
     componentDidMount(){
-        console.log('Landing / Loading Tonal, Mon. 9:03 version.');
-        if (this.props.location){
+        const modeCheck = (this.props.location.query && this.props.location.query.mode) || false;
+        if (modeCheck){
             console.log('Landing / location: ', this.props.location);
             const {
                 dispatch,
@@ -38,7 +38,7 @@ export const Landing = React.createClass({
                 dispatch(verifyEmailWithCode(oobCode));
             }
         }
-    },
+    }
 
     render(){
 
@@ -53,7 +53,7 @@ export const Landing = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

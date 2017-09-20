@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TimelineMax,
     TweenLite,
     Power1,
 } from 'gsap';
 
-export const PostImage = React.createClass({
+class PostImage extends Component {
 
     componentWillMount(){
 
@@ -28,7 +28,7 @@ export const PostImage = React.createClass({
             imageError: false,
             imageUrl: url
         });
-    },
+    }
 
     componentDidMount(){
         if (this.loadingContainerRef){
@@ -40,7 +40,7 @@ export const PostImage = React.createClass({
             });
             this.loadingAnim.play();
         }
-    },
+    }
 
     componentWillReceiveProps(nextProps){
         if (nextProps.screenSize !== this.props.screenSize &&
@@ -53,14 +53,14 @@ export const PostImage = React.createClass({
                 imageError: false
             });
         }
-    },
+    }
 
     componentWillUpdate(nextProps, nextState){
         if ((nextState.imageLoaded && !this.state.imageLoaded) ||
             (nextState.imageError && !this.state.imageError)){
             this.loadingAnim.stop();
         }
-    },
+    }
 
     componentDidUpdate(prevProps, prevState){
 
@@ -79,15 +79,15 @@ export const PostImage = React.createClass({
                 opacity: 0
             });
         }
-    },
+    }
 
     handleImageLoaded(){
         this.setState({ imageLoaded: true });
-    },
+    }
 
     handleImageError(){
         this.setState({ imageError: true });
-    },
+    }
 
     render(){
 
@@ -175,7 +175,6 @@ export const PostImage = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default PostImage;

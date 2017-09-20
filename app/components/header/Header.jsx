@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { switchHeaderMenu } from 'actions/UIStateActions';
 import Search from 'Search';
 import NotificationCenter from 'notifications/NotificationCenter';
 import HeaderCompose from './HeaderCompose';
 
-export const Header = React.createClass({
+class Header extends Component {
 
     onClickHeaderMenu(menu = false, event) {
         if (event){ event.preventDefault(); }
 
         const { dispatch } = this.props;
         dispatch(switchHeaderMenu(menu));
-    },
+    }
 
     render(){
 
@@ -119,7 +119,7 @@ export const Header = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

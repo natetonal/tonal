@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TimelineLite,
     Power2
 } from 'gsap';
 import Notification from './Notification';
 
-export const NotificationsList = React.createClass({
+class NotificationsList extends Component {
 
     componentDidMount(){
         const tl = new TimelineLite();
@@ -14,7 +14,7 @@ export const NotificationsList = React.createClass({
             opacity: 0
         });
         tl.play();
-    },
+    }
 
     render(){
 
@@ -150,6 +150,6 @@ export const NotificationsList = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default NotificationsList;

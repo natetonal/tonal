@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { toggleSearch } from 'actions/UIStateActions';
 
-export const Search = React.createClass({
+class Search extends Component {
 
     toggleSearch(){
         const { dispatch, isOpen } = this.props;
@@ -10,7 +10,7 @@ export const Search = React.createClass({
         if (isOpen){
             this.searchBox.value = '';
         }
-    },
+    }
 
     render(){
 
@@ -272,7 +272,7 @@ export const Search = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return { isOpen: state.uiState.searchIsOpen };

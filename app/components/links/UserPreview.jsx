@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import numeral from 'numeral';
 import {
     TweenMax,
     Back
 } from 'gsap';
 
-export const UserPreview = React.createClass({
+class UserPreview extends Component {
 
     componentDidMount(){
         const { countsArr } = this.props;
@@ -17,7 +17,7 @@ export const UserPreview = React.createClass({
                 y: 50
             }, 0.15);
         }
-    },
+    }
 
     render(){
 
@@ -129,7 +129,6 @@ export const UserPreview = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default UserPreview;

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
 // Note - you'll need to make sure that any action that sends an e-mail also captures the e-mail address.
 
-const LoginEmailSent = React.createClass({
+class LoginEmailSent extends Component {
 
     render(){
 
@@ -32,7 +32,7 @@ const LoginEmailSent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

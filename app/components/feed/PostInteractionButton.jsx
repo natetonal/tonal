@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import PostInteractionIcon from './PostInteractionIcon';
 import PostInteractionCounter from './PostInteractionCounter';
 import PostInteractionHandler from './PostInteractionHandler';
 
-export const PostInteractionButton = React.createClass({
+class PostInteractionButton extends Component {
 
     componentWillMount(){
         this.setState({ isPlay: false });
-    },
+    }
 
     // shouldComponentUpdate(n, nextState){
     //     if (this.state.isPlay !== nextState.isPlay){
@@ -16,7 +16,7 @@ export const PostInteractionButton = React.createClass({
     //     }
     //
     //     return true;
-    // },
+    // }
 
     handleClickLike(event){
         console.log('CLEECK');
@@ -25,11 +25,11 @@ export const PostInteractionButton = React.createClass({
         }
         this.setState({ isPlay: true });
         this.props.button.handler();
-    },
+    }
 
     stopAnimateLike(){
         this.setState({ isPlay: false });
-    },
+    }
 
     render(){
 
@@ -65,6 +65,6 @@ export const PostInteractionButton = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default PostInteractionButton;

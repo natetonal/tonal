@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 
-export const ProfileWrapper = React.createClass({
+class ProfileWrapper extends Component {
 
     render(){
         return (
             <div className="profile-wrapper" />
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import { modifySkinTone } from 'actions/EmojiSelectorActions';
 import {
@@ -6,25 +6,25 @@ import {
     skinToneArray
 } from './emojidata';
 
-export const EmojiSelectorSkinToneModifier = React.createClass({
+class EmojiSelectorSkinToneModifier extends Component {
 
     handleMouseEnter(title, event){
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
-    },
+    }
 
     handleMouseLeave(event){
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave();
-    },
+    }
 
     handleClick(name, event){
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(modifySkinTone(name));
-    },
+    }
 
     render(){
 
@@ -53,7 +53,7 @@ export const EmojiSelectorSkinToneModifier = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Redux.connect(state => {
     return {

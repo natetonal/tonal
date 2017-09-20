@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import firebase from 'firebase';
 
@@ -32,7 +32,7 @@ import {
 
 import Post from './Post';
 
-export const Feed = React.createClass({
+class Feed extends Component {
 
     componentWillMount(){
 
@@ -71,14 +71,19 @@ export const Feed = React.createClass({
                 dispatch(syncUserData(['postCount']));
             });
         }
-    },
+    }
 
+    getEditingValue(postId){
+        if (!this.isEditing(postId)){ return false; }
+        return this.props.editors[postId].value;
+    }
+    
     handleFollowUser(followedUid, username, displayName){
         const { dispatch } = this.props;
         if (!this.isBlocked(followedUid)){
             dispatch(addFollower(followedUid, username, displayName));
         }
-    },
+    }
 
     handleFavoriteUser(favoritedUid, username, displayName){
         const { dispatch } = this.props;
@@ -87,7 +92,7 @@ export const Feed = React.createClass({
             this.checkFriendship(favoritedUid, 'following')){
             dispatch(addFavorite(favoritedUid, username, displayName));
         }
-    },
+    }
 
     handleBlockUser(blockedUid){
         const { dispatch } = this.props;
@@ -95,13 +100,14 @@ export const Feed = React.createClass({
         .then(() => {
             dispatch(countNewNotifs());
         });
-    },
+    }
 
     // Check if image changed from last post to this post.
     // If so and the updated post has an image, upload it, then update the post.
     handleUpdatePost(updatedPost, postId){
         console.log('from feed: updatedPost from handleUpdatePost: ', updatedPost);
-            // Make sure to update action & reducer to store raw & parsed post!
+        // Make sure to update action & reducer to store raw & parsed post!
+
         const {
             dispatch,
             feed
@@ -133,62 +139,57 @@ export const Feed = React.createClass({
         }
 
 
-    },
+    }
 
     handleLikePost(authorId, postId, data){
         const { dispatch } = this.props;
         const liked = !this.likesPost(postId, this.uid);
         dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked, data));
-    },
+    }
 
     handleDeletePost(postId){
         const { dispatch } = this.props;
         dispatch(deletePost(this.fId, this.fType, postId, this.pType));
-    },
+    }
 
     togglePostEditor(postId = false){
         console.log('feed/togglePostEditor: postId: ', false);
         const { dispatch } = this.props;
         dispatch(toggleEditing(postId));
-    },
+    }
 
     toggleImagePostView(){
 
-    },
+    }
 
     isSelf(testUid){
         return testUid === this.props.uid;
-    },
+    }
 
     isEditing(postId){
         return (Object.keys(this.props.editors).includes(postId) &&
             this.props.editors[postId].editing);
-    },
-
-    getEditingValue(postId){
-        if (!this.isEditing(postId)){ return false; }
-        return this.props.editors[postId].value;
-    },
+    }
 
     likesPost(postId){
         const postLikes = this.props.feed[postId].likes || {};
         return Object.keys(postLikes).includes(this.props.uid);
-    },
+    }
 
     checkFriendship(testUid, testGroup){
         const group = this.props[testGroup] || {};
         return Object.keys(group).includes(testUid);
-    },
+    }
 
     checkAuthor(data, postId){
         const { dispatch } = this.props;
         dispatch(updatePostAuthorData(this.fId, this.fType, postId, this.pType, data));
-    },
+    }
 
     checkImage(data, postId){
         const { dispatch } = this.props;
         dispatch(updatePostImageData(this.fId, this.fType, postId, this.pType, data));
-    },
+    }
 
     evaluateRelationship(testUid){
 
@@ -197,7 +198,7 @@ export const Feed = React.createClass({
         return ['blocked', 'blockedBy', 'favorites', 'following'].find(group => {
             return this.checkFriendship(testUid, group);
         }) || 'none';
-    },
+    }
 
     render(){
 
@@ -298,8 +299,7 @@ export const Feed = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default Redux.connect((state, ownProps) => {
     const feedId = ownProps.feedId || state.auth.uid;

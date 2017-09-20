@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Feed from 'feed/Feed';
 
-export const Connect = React.createClass({
+class Connect extends Component {
 
     render(){
 
@@ -13,6 +13,6 @@ export const Connect = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Connect;

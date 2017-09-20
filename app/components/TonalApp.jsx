@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { resetUIState } from 'actions/UIStateActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -14,19 +14,19 @@ import Observer from './Observer';
 import Tabs from './Tabs';
 
 
-export const TonalApp = React.createClass({
-
-    componentWillMount(){
-    },
+class TonalApp extends Component {
 
     componentWillReceiveProps(nextProps){
         const { dispatch } = this.props;
 
+        if (this.props.location.pathname){
+            console.log('from TonalApp: this.props.location.pathname? ', this.props.location.pathname);
+        }
         // clear the UI state if the route changes
         if (this.props.location.pathname !== nextProps.location.pathname){
             dispatch(resetUIState());
         }
-    },
+    }
 
     render(){
 
@@ -35,6 +35,8 @@ export const TonalApp = React.createClass({
             status,
             firstLogin,
         } = this.props;
+
+        console.log(`TonalApp rendering with uid: ${ uid }, status: ${ status } and firstLogin: ${ firstLogin }`);
 
         const displayFirstTimeUserPrompt = () => {
             if (firstLogin){
@@ -127,7 +129,7 @@ export const TonalApp = React.createClass({
             </ReactCSSTransitionGroup>
         );
     }
-});
+}
 
 export default connect(state => {
     return {

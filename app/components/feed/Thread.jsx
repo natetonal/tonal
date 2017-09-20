@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     TweenLite,
     Power2
@@ -6,7 +6,7 @@ import {
 
 import Composer from 'composer/Composer';
 
-export const Thread = React.createClass({
+class Thread extends Component {
 
     componentDidUpdate(prevProps){
         if (prevProps.showReply !== this.props.showReply){
@@ -23,7 +23,7 @@ export const Thread = React.createClass({
                 scaleY: (on ? 1 : 0),
             });
         }
-    },
+    }
 
     render(){
 
@@ -71,7 +71,6 @@ export const Thread = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 export default Thread;

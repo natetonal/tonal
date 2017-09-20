@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { resetPasswordAndLoginUser } from 'actions/AuthActions';
 
@@ -6,13 +6,13 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import validate from './validateresetpw';
 
-export const ResetPassword = React.createClass({
+class ResetPassword extends Component {
 
     handleFormSubmit(values){
         const { password } = values;
         const { dispatch, userEmail, oobCode } = this.props;
         return dispatch(resetPasswordAndLoginUser(oobCode, userEmail, password));
-    },
+    }
 
     render(){
 
@@ -49,7 +49,7 @@ export const ResetPassword = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default reduxForm({
     form: 'reset-password',

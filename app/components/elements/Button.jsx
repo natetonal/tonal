@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export const Button = React.createClass({
+class Button extends Component {
 
     render(){
 
@@ -45,6 +45,6 @@ export const Button = React.createClass({
             </button>
         );
     }
-});
+}
 
 export default Button;

@@ -1,24 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Button from 'elements/Button';
 
-export const FullPageAlert = React.createClass({
-
-    propTypes: {
-        type: React.PropTypes.string,
-        title: React.PropTypes.string,
-        message: React.PropTypes.string.isRequired,
-        buttons: React.PropTypes.array,
-    },
-
-    getDefaultProps(){
-
-        return {
-            type: 'default',
-            title: '',
-            message: '',
-            button: []
-        };
-    },
+class FullPageAlert extends Component {
 
     render(){
         const {
@@ -31,9 +15,7 @@ export const FullPageAlert = React.createClass({
         const renderButtons = () => {
             if (buttons){
                 buttons.map(button => {
-                    return (
-
-                    )
+                    return ''; // Incomplete thought
                 });
             }
         }
@@ -43,7 +25,21 @@ export const FullPageAlert = React.createClass({
             </div>
         );
     }
+}
 
-});
+
+FullPageAlert.propTypes = {
+    type: PropTypes.string,
+    title: PropTypes.string,
+    message: PropTypes.string.isRequired,
+    buttons: PropTypes.array,
+};
+
+FullPageAlert.defaultProps = {
+    type: 'default',
+    title: '',
+    message: '',
+    buttons: []
+};
 
 export default FullPageAlert;

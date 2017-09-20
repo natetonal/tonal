@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as Redux from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -7,13 +7,13 @@ import DummyData from './dummydata.json';
 const avatarIMG = 'https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-avatar.png?alt=media&token=f7e23557-bc15-44fd-bfb5-1ddff07bc954';
 const offset = 40; // This is to hug the selection window closer to the caret's actual pos.
 
-export const MentionSuggestions = React.createClass({
+class MentionSuggestions extends Component {
 
     componentWillMount(){
         this.setState({
             suggestions: []
         });
-    },
+    }
 
 
     // BIG thank you to Tim Down at SO for this snippet!!
@@ -24,7 +24,7 @@ export const MentionSuggestions = React.createClass({
         var sel = doc.selection, range, rects, rect;
         var x = 0, y = 0;
         if (sel) {
-            if (sel.type !== "Control") {
+            if (sel.type !== 'Control') {
                 range = sel.createRange();
                 range.collapse(true);
                 x = range.boundingLeft;
@@ -64,7 +64,7 @@ export const MentionSuggestions = React.createClass({
             }
         }
         return { x, y };
-    },
+    }
 
     filterSuggestions(query){
         const suggestions = [];
@@ -77,13 +77,13 @@ export const MentionSuggestions = React.createClass({
         });
 
         return suggestions;
-    },
+    }
 
     handleClick(user, query, evt){
         evt.preventDefault();
         const { handleMention } = this.props;
         handleMention(user, query);
-    },
+    }
 
     render(){
 
@@ -110,7 +110,7 @@ export const MentionSuggestions = React.createClass({
             return (
                 <span
                     className={ className }
-                    dangerouslySetInnerHTML={ { __html: highlightedText } } />
+                    dangerouslySetInnerHTML={{ __html: highlightedText }} />
             );
         };
 
@@ -149,14 +149,13 @@ export const MentionSuggestions = React.createClass({
                 transitionLeaveTimeout={ 200 }>
                 <div
                     className="mention-suggestions"
-                    style={ { top: (this.getSelectionCoords().y - offset) } }>
+                    style={{ top: (this.getSelectionCoords().y - offset) }}>
                     { renderSuggestions() }
                 </div>
             </ReactCSSTransitionGroup>
         );
     }
-
-});
+}
 
 export default Redux.connect(state => {
     return {

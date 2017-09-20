@@ -1,29 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Dropzone from 'react-dropzone';
 
-export const ComposerImageUploader = React.createClass({
+class ComposerImageUploader extends Component {
 
     componentWillMount(){
         this.setState({
             dropzoneActive: false,
             error: ''
         });
-    },
+    }
 
     onDragEnter(e) {
         if (e){ e.preventDefault(); }
         this.setState({ dropzoneActive: true });
-    },
+    }
 
     onDragLeave(e) {
         if (e){ e.preventDefault(); }
         this.setState({ dropzoneActive: false });
-    },
+    }
 
-    acceptedTypes: ['image/gif', 'image/jpeg', 'image/png'],
+    acceptedTypes: ['image/gif', 'image/jpeg', 'image/png']
 
-    maxSize: 5242880,
+    maxSize: 5242880
 
     handleDrop(acc, rej){
         console.log('accepted file: ', acc);
@@ -59,7 +59,7 @@ export const ComposerImageUploader = React.createClass({
                 }
             });
         }
-    },
+    }
 
     render(){
 
@@ -110,7 +110,6 @@ export const ComposerImageUploader = React.createClass({
             </ReactCSSTransitionGroup>
         );
     }
-
-});
+}
 
 export default ComposerImageUploader;
