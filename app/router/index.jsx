@@ -43,14 +43,15 @@ import history from './history';
 
 export default (
     <ConnectedRouter history={ history }>
-        <Route exact path="/" component={ TonalApp }>
-            <Route component={ Landing } />
+        <Switch>
+            <Route path="/" component={ TonalApp } />
+            <Route exact path="/" component={ Landing } />
             <Route path="auth" component={ Verify } />
-            <Route path="connect" component={ Connect } />
+            <Route exact path="connect" component={ Connect } />
             <Route path="discover" component={ Discover } />
             <Route path="mymusic" component={ MyMusic } />
             <Route path="store" component={ TonalStore } />
             <Route component={ NotFound } />
-        </Route>
+        </Switch>
     </ConnectedRouter>
 );

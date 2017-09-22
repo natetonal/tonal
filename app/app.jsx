@@ -1,7 +1,7 @@
 import 'applicationStyles';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import firebase from 'app/firebase';
 import { fetchUserData } from 'actions/UserActions';
@@ -53,19 +53,20 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 
-const render = App => {
-    ReactDOM.render(
+const renderWithHMR = () => {
+    render(
         <AppContainer>
-            <App store={ store } />
+            <Root store={ store } />
         </AppContainer>,
         document.getElementById('tonal')
     );
 };
 
-render(Root);
+renderWithHMR();
 
+console.log('Module hot? ', module.hot);
 if (module.hot) {
-    module.hot.accept('./containers/Root', () => { render(Root); });
+    module.hot.accept('./containers/Root', () => { renderWithHMR(); });
 }
 
 // if (module.hot) {
