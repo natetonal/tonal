@@ -49,7 +49,7 @@ export const addErrorMessage = error => {
 export const startLoginForAuthorizedUser = uid => {
     return dispatch => {
         dispatch(login(uid));
-        dispatch(pushToRoute('connect'));
+        dispatch(pushToRoute('/connect'));
     };
 };
 

@@ -34,6 +34,10 @@ import Post from './Post';
 
 class Feed extends Component {
 
+    constructor(props){
+        super(props);
+    }
+    
     componentWillMount(){
 
         const {
@@ -77,7 +81,7 @@ class Feed extends Component {
         if (!this.isEditing(postId)){ return false; }
         return this.props.editors[postId].value;
     }
-    
+
     handleFollowUser(followedUid, username, displayName){
         const { dispatch } = this.props;
         if (!this.isBlocked(followedUid)){
@@ -137,8 +141,6 @@ class Feed extends Component {
                 dispatch(resetState());
             });
         }
-
-
     }
 
     handleLikePost(authorId, postId, data){
@@ -172,6 +174,9 @@ class Feed extends Component {
     }
 
     likesPost(postId){
+        console.log('this.props from likesPost: ', this.props);
+        console.log('this from likesPost: ', this);
+
         const postLikes = this.props.feed[postId].likes || {};
         return Object.keys(postLikes).includes(this.props.uid);
     }

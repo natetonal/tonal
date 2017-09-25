@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import router from '../router/';
+import { ConnectedRouter } from 'react-router-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
+import TonalApp from 'TonalApp';
+
+const history = createBrowserHistory();
 
 class Root extends Component {
 
@@ -9,9 +13,9 @@ class Root extends Component {
         const { store } = this.props;
         return (
             <Provider store={ store }>
-                <div>
-                    {router}
-                </div>
+                <ConnectedRouter history={ history }>
+                    <TonalApp />
+                </ConnectedRouter>
             </Provider>
         );
     }

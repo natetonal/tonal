@@ -18,9 +18,6 @@ const store = configure();
 
 $(document).foundation(); // eslint-disable-line
 
-// Loaders for css & sass
-// require('!style-loader!css-loader!resolve-url-loader!sass-loader?sourceMap!applicationStyles'); // eslint-disable-line
-
 firebase.auth().onAuthStateChanged(user => {
 
     // We only want the observer to initiate auth if the app isn't.
@@ -52,7 +49,6 @@ firebase.auth().onAuthStateChanged(user => {
     }
 });
 
-
 const renderWithHMR = () => {
     render(
         <AppContainer>
@@ -68,18 +64,3 @@ console.log('Module hot? ', module.hot);
 if (module.hot) {
     module.hot.accept('./containers/Root', () => { renderWithHMR(); });
 }
-
-// if (module.hot) {
-//     console.log('hot ');
-//     module.hot.accept('./containers/Root', () => {
-//         const RootContainer = require('./containers/Root').default;
-//         render(
-//             <AppContainer>
-//                 <RootContainer
-//                     store={ store }
-//                 />
-//             </AppContainer>,
-//             document.getElementById('tonal')
-//         );
-//     });
-// }

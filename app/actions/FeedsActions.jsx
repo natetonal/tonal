@@ -51,6 +51,7 @@ export const fetchFeed = (feedId, type) => {
         databaseRef.child(`${ type }/${ feedId }`).once('value')
         .then(snapshot => {
             const data = snapshot.val();
+            console.log('feed fetched from database: ', data);
             if (data){
                 dispatch(addFeedData(feedId, type, data));
             } else {

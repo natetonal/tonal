@@ -28,7 +28,7 @@ class MenuWrapper extends Component {
 
     render(){
 
-
+        console.log('from MenuWrapper: this.props.children? ', this.props.children);
         return (
             <div
                 id="tonal-container"

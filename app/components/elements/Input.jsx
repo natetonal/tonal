@@ -6,6 +6,12 @@ import Tooltip from './Tooltip';
 
 class Input extends Component {
 
+    componentWillMount(){
+        this.setState({
+            showPassword: false
+        });
+    }
+
     togglePasswordView(){
         this.setState({
             showPassword: !this.state.showPassword
@@ -159,7 +165,6 @@ Input.propTypes = {
     label: PropTypes.string.isRequired,
     input: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
-    inputRef: PropTypes.func
 };
 
 Input.defaultProps = {

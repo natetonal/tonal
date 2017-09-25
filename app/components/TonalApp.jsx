@@ -1,29 +1,42 @@
+// This needs to be the new router file.
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { resetUIState } from 'actions/UIStateActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import {
+    Switch,
+    Route
+} from 'react-router-dom';
+import { resetUIState } from 'actions/UIStateActions';
 
-import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt';
+// Routes with Exact Paths
+import Verify from 'pages/Verify';
+import Landing from 'pages/Landing';
+import Connect from 'pages/Connect';
+import Discover from 'pages/Discover';
+import MyMusic from 'pages/MyMusic';
+import TonalStore from 'pages/TonalStore';
+import NotFound from 'pages/NotFound';
 
-import HeaderLoggedOut from 'header/HeaderLoggedOut';
-import HeaderDummy from 'header/HeaderDummy';
-import ModalOverlay from 'header/ModalOverlay';
-import Header from 'header/Header';
-import MenuWrapper from './MenuWrapper';
-import Observer from './Observer';
-import Tabs from './Tabs';
-
+// Conditionally Rendered Routes
+import FirstTimeUserPrompt from 'prompts/firsttimeuser/FirstTimeUserPrompt'; // firstLogin === true
+import HeaderLoggedOut from 'header/HeaderLoggedOut'; // !uid
+import ModalOverlay from 'header/ModalOverlay'; // !uid,
+import Header from 'header/Header'; // uid, status === 'success'
+import MenuWrapper from './MenuWrapper'; // uid, status === 'success'
+import Observer from './Observer'; // uid, status === 'success'
+import Tabs from './Tabs'; // uid, status === 'success'
 
 class TonalApp extends Component {
 
     componentWillReceiveProps(nextProps){
-        const { dispatch } = this.props;
+        const {
+            dispatch,
+            path
+        } = this.props;
 
-        if (this.props.location.pathname){
-            console.log('from TonalApp: this.props.location.pathname? ', this.props.location.pathname);
-        }
         // clear the UI state if the route changes
-        if (this.props.location.pathname !== nextProps.location.pathname){
+        if (path !== nextProps.path){
             dispatch(resetUIState());
         }
     }
@@ -36,103 +49,126 @@ class TonalApp extends Component {
             firstLogin,
         } = this.props;
 
-        console.log(`TonalApp rendering with uid: ${ uid }, status: ${ status } and firstLogin: ${ firstLogin }`);
 
-        const displayFirstTimeUserPrompt = () => {
-            if (firstLogin){
-                return <FirstTimeUserPrompt />;
-            }
+        const loggedIn = uid && status === 'success';
 
-            return '';
-        };
-
-        const mainView = () => {
-
-            // Authorized Log In:
-            if (uid &&
-                !firstLogin &&
-                status === 'success'){
-                return (
-                    <MenuWrapper>
-                        <Observer />
-                        <Header />
-                        <div className="tonal-content">
-                            { this.props.children }
-                        </div>
-                        <Tabs />
-                    </MenuWrapper>
-                );
-
-            // First Log In View With Prompt:
-            } else if (uid &&
-                firstLogin &&
-                status === 'success'){
-                return (
-                    <MenuWrapper>
-                        <ReactCSSTransitionGroup
-                            transitionName="smooth-fadein"
-                            transitionAppear
-                            transitionAppearTimeout={ 200 }
-                            transitionEnter={ false }
-                            transitionLeave={ false }>
-                            { displayFirstTimeUserPrompt() }
-                        </ReactCSSTransitionGroup>
-                        <div className="blur">
-                            <Header />
-                            <div className="tonal-content">
-                                { this.props.children }
-                            </div>
-                            <Tabs />
-                        </div>
-                    </MenuWrapper>
-                );
-
-            // Loading View:
-            } else if (status === 'fetching'){
-                return (
-                    <div>
-                        <HeaderDummy />
-                        <div className="tonal-main">
-                            <div className="tonal-content">
-                                <div className="tonal-content-loading">
-                                    <span>Loading</span>
-                                    <span>
-                                        <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            // Logged Out View:
+        const ContentWrappedRoutes = routes => {
             return (
-                <div>
-                    <HeaderLoggedOut />
-                    <div className="tonal-main">
-                        <div className="tonal-content">
-                            { this.props.children }
-                        </div>
-                    </div>
-                    <ModalOverlay />
+                <div className="tonal-content">
+                    { routes.children }
                 </div>
             );
         };
 
+        const MenuWrappedRoutes = routes => {
+            if (loggedIn){
+                return (
+                    <MenuWrapper>
+                        { routes.children }
+                    </MenuWrapper>
+                );
+            }
+
+            return (
+                <div className="tonal-main">
+                    { routes.children }
+                </div>
+            );
+        };
+
+        const BlurWrappedRoutes = routes => {
+            if (firstLogin){
+                return (
+                    <div className="blur">
+                        { routes.children }
+                    </div>
+                );
+            }
+
+            return (
+                <div>
+                    { routes.children }
+                </div>
+            );
+        };
+
+        const LoadingRoute = ({ ...route }) => {
+            if (status === 'fetching'){
+                return <Route { ...route } />;
+            }
+
+            return null;
+        };
+
+        const LoggedInRoute = ({ ...route }) => {
+            if (loggedIn){
+                return <Route { ...route } />;
+            }
+
+            return null;
+        };
+
+        const LoggedOutRoute = ({ ...route }) => {
+            if (!loggedIn){
+                return <Route { ...route } />;
+            }
+
+            return null;
+        };
+
+        const NewUserRoute = props => {
+            if (loggedIn && firstLogin){
+                return <Route { ...props } />;
+            }
+
+            return null;
+        };
+
+        const ContentLoader = () => {
+            if (status === 'fetching'){
+                return (
+                    <div className="tonal-content-loading">
+                        <span>Loading</span>
+                        <span>
+                            <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
+                        </span>
+                    </div>
+                );
+            }
+        };
+
         return (
-            <ReactCSSTransitionGroup
-                transitionName="dramatic-fadein"
-                transitionEnterTimeout={ 500 }
-                transitionLeaveTimeout={ 500 }>
-                { mainView() }
-            </ReactCSSTransitionGroup>
+            <main>
+                <MenuWrappedRoutes>
+                    <NewUserRoute component={ FirstTimeUserPrompt } />
+                    <BlurWrappedRoutes>
+                        <LoggedInRoute component={ Observer } />
+                        <LoggedInRoute component={ Header } />
+                        <LoggedOutRoute component={ HeaderLoggedOut } />
+                        <ContentWrappedRoutes>
+                            <LoadingRoute component={ ContentLoader } />
+                            <Switch>
+                                <Route exact path="/" component={ Landing } />
+                                <Route path="/auth" component={ Verify } />
+                                <Route path="/connect" component={ Connect } />
+                                <Route path="/discover" component={ Discover } />
+                                <Route path="/mymusic" component={ MyMusic } />
+                                <Route path="/store" component={ TonalStore } />
+                                <Route component={ NotFound } />
+                            </Switch>
+                        </ContentWrappedRoutes>
+                        <LoggedInRoute component={ Tabs } />
+                    </BlurWrappedRoutes>
+                </MenuWrappedRoutes>
+                <LoggedOutRoute component={ ModalOverlay } />
+            </main>
         );
     }
 }
 
 export default connect(state => {
     return {
+        path: state.router.location.pathname,
         uid: state.auth.uid,
         firstLogin: state.user.firstLogin,
         status: state.user.status

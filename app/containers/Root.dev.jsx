@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import router from '../router/';
+import { ConnectedRouter } from 'react-router-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
+import TonalApp from 'TonalApp';
 import DevTools from './DevTools';
 
+const history = createBrowserHistory();
+//
 class Root extends Component {
 
     render() {
@@ -12,7 +16,9 @@ class Root extends Component {
         return (
             <Provider store={ store }>
                 <div>
-                    { router }
+                    <ConnectedRouter history={ history }>
+                        <TonalApp />
+                    </ConnectedRouter>
                     <DevTools />
                 </div>
             </Provider>
