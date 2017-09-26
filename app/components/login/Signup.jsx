@@ -17,19 +17,22 @@ import {
 
 class Signup extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             showForm: false
-        });
+        };
     }
 
-    handleFacebookLogin(event){
+    handleFacebookLogin = event => {
         event.preventDefault();
         const { dispatch } = this.props;
         return dispatch(createUserWithFacebookAuth());
     }
 
-    handleFormSubmit(values){
+    handleFormSubmit = values => {
         const {
             email,
             password
@@ -38,11 +41,11 @@ class Signup extends Component {
         return dispatch(createUserWithEmailAndPassword(email, password));
     }
 
-    handleStop(event){
+    handleStop = event => {
         event.preventDefault();
     }
 
-    toggleSignupForm(){
+    toggleSignupForm = () => {
         this.setState({
             showForm: !this.state.showForm
         });

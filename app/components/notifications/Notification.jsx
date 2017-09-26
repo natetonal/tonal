@@ -11,21 +11,24 @@ import SmallMenu from 'elements/SmallMenu';
 
 class Notification extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+        super(props);
+
         const oneSender = (this.props.senders && Object.keys(this.props.senders).length === 1);
         const sender = oneSender ? this.props.senders[Object.keys(this.props.senders)[0]] : false;
 
-        this.setState({
+        this.state = {
             showNotifMenuIcon: false,
             showNotifMenu: false,
             timeStamp: this.processTimestamp(),
             oneSender: sender,
             isFollowing: false,
             isFavorited: false
-        });
+        };
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         const { acknowledged } = this.props.notif;
         if (!acknowledged){
             const tl = new TimelineLite();
@@ -44,7 +47,7 @@ class Notification extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         console.log(`favorites prev: ${ this.props.favoritesCount } next: ${ nextProps.favoritesCount }`);
         console.log(`following prev: ${ this.props.followingCount } next: ${ nextProps.followingCount }`);
         if (this.state.oneSender &&
@@ -54,7 +57,7 @@ class Notification extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState){
+    componentDidUpdate = (prevProps, prevState) => {
         if (prevState.timeStamp !== this.state.timeStamp){
             const tl = new TimelineLite();
             tl.from(this.timeStampRef, 0.5, {
@@ -69,11 +72,11 @@ class Notification extends Component {
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         clearInterval(this.interval);
     }
 
-    processTimestamp(){
+    processTimestamp = () => {
         const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(this.props.notif.timeStamp, 'LLLL'));
         if (sameOrBefore){
             return moment(this.props.notif.timeStamp, 'LLLL').fromNow();
@@ -82,13 +85,13 @@ class Notification extends Component {
         return this.props.notif.timeStamp;
     }
 
-    updateTimestamp(){
+    updateTimestamp = () => {
         this.setState({
             timeStamp: this.processTimestamp()
         });
     }
 
-    updateFriendshipsForSingleSender(){
+    updateFriendshipsForSingleSender = () => {
         const sender = this.state.oneSender || false;
         console.log('sender received by updateFriendshipsForSingleSender: ', sender);
         const isFollowing = sender ? this.props.checkFriendship(sender.uid, 'following') : false;
@@ -99,7 +102,7 @@ class Notification extends Component {
         });
     }
 
-    toggleNotifMenu(event){
+    toggleNotifMenu = event => {
         if (event){
             event.stopPropagation();
         }
@@ -109,7 +112,7 @@ class Notification extends Component {
         });
     }
 
-    handleDelete(){
+    handleDelete = () => {
         const {
             notifId,
             deleteNotif

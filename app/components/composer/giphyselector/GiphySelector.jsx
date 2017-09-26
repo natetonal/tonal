@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import {
     fetchImages,
     switchTabs,
@@ -14,11 +14,11 @@ import GiphySelectorContainer from './GiphySelectorContainer';
 
 class GiphySelector extends Component {
 
-    componentDidMount(){
+    componentDidMount = () => {
         this.getImages();
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         const { dispatch } = this.props;
 
         if (nextProps.status === 'success' &&
@@ -34,7 +34,7 @@ class GiphySelector extends Component {
         }
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         if ((prevProps.currentMenu !== this.props.currentMenu ||
             prevProps.currentTab !== this.props.currentTab) &&
             this.props.status !== 'fetching'){
@@ -42,12 +42,12 @@ class GiphySelector extends Component {
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         const { dispatch } = this.props;
         dispatch(resetState());
     }
 
-    getImages(){
+    getImages = () => {
         const {
             dispatch,
             currentMenu,
@@ -59,13 +59,13 @@ class GiphySelector extends Component {
         dispatch(fetchImages(mode, searchText));
     }
 
-    handleTabs(tab, event){
+    handleTabs = (tab, event) => {
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(switchTabs(tab));
     }
 
-    selectImage(path){
+    selectImage = path => {
         const { handleGiphy, dispatch } = this.props;
         if (path) {
             handleGiphy(path);
@@ -96,7 +96,7 @@ class GiphySelector extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         currentMenu: state.composer.currentMenu,
         currentTab: state.giphySelector.currentTab,

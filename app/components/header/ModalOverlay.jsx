@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { toggleLoginModal } from 'actions/UIStateActions';
 
 class ModalOverlay extends Component {
 
-    toggleLoginModal(event){
+    toggleLoginModal = event => {
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(toggleLoginModal());
@@ -22,7 +22,7 @@ class ModalOverlay extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         isModalOpen: state.uiState.loginModalIsOpen
     };

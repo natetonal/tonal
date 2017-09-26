@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { toggleSearch } from 'actions/UIStateActions';
 
 class Search extends Component {
 
-    toggleSearch(){
+    toggleSearch = () => {
         const { dispatch, isOpen } = this.props;
         dispatch(toggleSearch());
         if (isOpen){
@@ -274,6 +274,6 @@ class Search extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return { isOpen: state.uiState.searchIsOpen };
 })(Search);

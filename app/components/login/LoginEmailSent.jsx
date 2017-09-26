@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 // Note - you'll need to make sure that any action that sends an e-mail also captures the e-mail address.
 
@@ -34,7 +34,7 @@ class LoginEmailSent extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         loginModalUI: state.uiState.loginModalUI
     };

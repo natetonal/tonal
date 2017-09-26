@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from 'actions';
 
 import LoginModal from './LoginModal/LoginModal';
@@ -23,6 +23,6 @@ class Landing extends Component {
     }
 });
 
-export default Redux.connect(state => {
+export default connect(state => {
     return { isOpen: state.uiState.loginModalIsOpen };
 })(Landing);

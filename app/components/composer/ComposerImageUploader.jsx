@@ -4,11 +4,14 @@ import Dropzone from 'react-dropzone';
 
 class ComposerImageUploader extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             dropzoneActive: false,
             error: ''
-        });
+        };
     }
 
     onDragEnter(e) {
@@ -25,7 +28,7 @@ class ComposerImageUploader extends Component {
 
     maxSize: 5242880
 
-    handleDrop(acc, rej){
+    handleDrop = (acc, rej) => {
         console.log('accepted file: ', acc);
         console.log('rejected file: ', rej);
         const accepted = acc ? acc[0] : false;

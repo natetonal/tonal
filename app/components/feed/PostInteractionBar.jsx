@@ -4,7 +4,10 @@ import PostInteractionButton from './PostInteractionButton';
 
 class PostInteractionBar extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+        super(props);
+        
         this.key = this.createKey();
     }
 

@@ -6,13 +6,16 @@ import Tooltip from './Tooltip';
 
 class Input extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             showPassword: false
-        });
+        };
     }
 
-    togglePasswordView(){
+    togglePasswordView = () => {
         this.setState({
             showPassword: !this.state.showPassword
         });

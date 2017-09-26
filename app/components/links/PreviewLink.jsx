@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -10,7 +10,12 @@ import UserList from './UserList';
 
 class PreviewLink extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+        super(props);
+        this.countsArr = ['followers', 'following'];
+        this.singleDataType = ['user'];
+        this.multipleDataType = ['user-list'];
         this.timeoutMouseEnter = null;
         this.timeoutMouseLeave = null;
         this.top = 0;
@@ -25,26 +30,22 @@ class PreviewLink extends Component {
             return text;
         };
 
-        this.setState({
+        this.state = {
             key: this.key(),
             previewData: false,
             previewType: false,
             previewReady: false,
             previewHovered: false
-        });
+        };
     }
 
-    getCoords(elem){
+    getCoords = elem => {
         const rect = elem.getBoundingClientRect();
         this.top = rect.top + 40;
         this.left = rect.left;
     }
 
-    countsArr: ['followers', 'following']
-    singleDataType: ['user']
-    multipleDataType: ['user-list']
-
-    clearCoords(){
+    clearCoords = () => {
         this.top = 0;
         this.left = 0;
     }
@@ -63,7 +64,7 @@ class PreviewLink extends Component {
         });
     }
 
-    handleClick(event){
+    handleClick = event => {
         if (event){ event.preventDefault(); }
 
         const { onClick } = this.props;
@@ -72,7 +73,7 @@ class PreviewLink extends Component {
         }
     }
 
-    handleMentionPreview(previewType, event){
+    handleMentionPreview = (previewType, event) => {
         event.preventDefault();
         event.persist();
         if (!this.timeoutMouseEnter) {
@@ -109,7 +110,7 @@ class PreviewLink extends Component {
         }
     }
 
-    handleClearMentionPreview(){
+    handleClearMentionPreview = () => {
         if (this.timeoutMouseEnter) {
             window.clearTimeout(this.timeoutMouseEnter);
             this.timeoutMouseEnter = null;
@@ -130,11 +131,11 @@ class PreviewLink extends Component {
         }
     }
 
-    handlePreviewMouseEnter(){
+    handlePreviewMouseEnter = () => {
         this.setState({ previewHovered: true });
     }
 
-    handlePreviewMouseLeave(){
+    handlePreviewMouseLeave = () => {
         this.clearCoords();
         this.setState({
             previewType: false,
@@ -202,7 +203,7 @@ class PreviewLink extends Component {
                     key={ `PreviewLinkInnerLink_${ key }` }
                     className={ className }
                     onClick={ e => this.handleClick(e) }
-                    to={ src || null }>
+                    to={ src || '' }>
                     { children }
                 </Link>
                 <ReactCSSTransitionGroup
@@ -216,4 +217,4 @@ class PreviewLink extends Component {
     }
 }
 
-export default Redux.connect()(PreviewLink);
+export default connect()(PreviewLink);

@@ -7,7 +7,7 @@ import Notification from './Notification';
 
 class NotificationsList extends Component {
 
-    componentDidMount(){
+    componentDidMount = () => {
         const tl = new TimelineLite();
         tl.from(this.notifsListRef, 0.4, {
             ease: Power2.easeOut,

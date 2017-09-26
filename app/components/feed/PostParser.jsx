@@ -6,7 +6,7 @@ import PreviewLink from 'links/PreviewLink';
 // Note - In execution, make sure to use something more user-specific than their name, such as unique ID.
 class PostParser extends Component {
 
-    replaceHTMLEntities(textBlock){
+    replaceHTMLEntities = textBlock => {
         const escapeCharsRegex = /&lt;|&gt;|&amp;|&nbsp;/gi;
         const escapeChars = ['&gt;', '&lt;', '&amp;', '&nbsp;'];
         const replaceChars = ['>', '<', '&', ' '];
@@ -19,7 +19,7 @@ class PostParser extends Component {
         return textBlock;
     }
 
-    isThisTonal(link){
+    isThisTonal = link => {
         let isThisTonal = false;
         const tonalPrefixes = [
             'http://tonal.co',
@@ -38,7 +38,7 @@ class PostParser extends Component {
         return isThisTonal;
     }
 
-    prependProtocol(link){
+    prependProtocol = link => {
         let isThereAProtocol = false;
         const allowableProtocols = [
             'http://',
@@ -55,7 +55,7 @@ class PostParser extends Component {
         return `http://${ link }`;
     }
 
-    formatLink(link){
+    formatLink = link => {
         if (!this.isThisTonal(link)){
             link = this.prependProtocol(link);
             console.log('link: ', link);

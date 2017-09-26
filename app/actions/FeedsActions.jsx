@@ -9,6 +9,7 @@ export const updateFeedStatus = (feedId, status) => {
 };
 
 export const addFeedData = (feedId, feedType, data = false) => {
+    console.log('addFeedData called: ', feedId, feedType);
     return {
         type: 'FEED_ADD_DATA',
         feedId,

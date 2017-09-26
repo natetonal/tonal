@@ -7,7 +7,9 @@ import {
 
 class PostImage extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+        super(props);
 
         const {
             image,
@@ -23,14 +25,14 @@ class PostImage extends Component {
             }
         }
 
-        this.setState({
+        this.state = {
             imageLoaded: false,
             imageError: false,
             imageUrl: url
-        });
+        };
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         if (this.loadingContainerRef){
             this.loadingAnim = new TimelineMax();
             this.loadingAnim.to(this.loadingContainerRef, 0.5, {
@@ -42,7 +44,7 @@ class PostImage extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         if (nextProps.screenSize !== this.props.screenSize &&
             nextProps.screenSize &&
             nextProps.image.thumbs[nextProps.screenSize]){
@@ -55,14 +57,14 @@ class PostImage extends Component {
         }
     }
 
-    componentWillUpdate(nextProps, nextState){
+    componentWillUpdate = (nextProps, nextState) => {
         if ((nextState.imageLoaded && !this.state.imageLoaded) ||
             (nextState.imageError && !this.state.imageError)){
             this.loadingAnim.stop();
         }
     }
 
-    componentDidUpdate(prevProps, prevState){
+    componentDidUpdate = (prevProps, prevState) => {
 
         if (!prevState.imageLoaded &&
             this.state.imageLoaded){
@@ -81,11 +83,11 @@ class PostImage extends Component {
         }
     }
 
-    handleImageLoaded(){
+    handleImageLoaded = () => {
         this.setState({ imageLoaded: true });
     }
 
-    handleImageError(){
+    handleImageError = () => {
         this.setState({ imageError: true });
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import DummyData from './dummydata.json';
@@ -9,10 +9,13 @@ const offset = 40; // This is to hug the selection window closer to the caret's 
 
 class MentionSuggestions extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             suggestions: []
-        });
+        };
     }
 
 
@@ -66,7 +69,7 @@ class MentionSuggestions extends Component {
         return { x, y };
     }
 
-    filterSuggestions(query){
+    filterSuggestions = query => {
         const suggestions = [];
         const re = new RegExp(query, 'gi');
         DummyData.forEach(user => {
@@ -79,7 +82,7 @@ class MentionSuggestions extends Component {
         return suggestions;
     }
 
-    handleClick(user, query, evt){
+    handleClick = (user, query, evt) => {
         evt.preventDefault();
         const { handleMention } = this.props;
         handleMention(user, query);
@@ -157,7 +160,7 @@ class MentionSuggestions extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         query: state.composer.query
     };

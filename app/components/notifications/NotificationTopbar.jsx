@@ -9,13 +9,16 @@ import SmallMenu from 'elements/SmallMenu';
 
 class NotificationTopbar extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             showNotifSettingsMenu: false
-        });
+        };
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         // Animate the topbar when component first loads.
         const tl = new TimelineLite();
         tl.from(this.topbarRef, 0.4, {
@@ -26,7 +29,7 @@ class NotificationTopbar extends Component {
         tl.play();
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
 
         // Change the color if there are now new notifications.
         if (prevProps.newNotifsCount === 0 &&
@@ -76,12 +79,12 @@ class NotificationTopbar extends Component {
         }
     }
 
-    toggleMuteNotifs(){
+    toggleMuteNotifs = () => {
         const { toggleMuteNotifs } = this.props;
         toggleMuteNotifs();
     }
 
-    toggleNotifSettingsMenu(e){
+    toggleNotifSettingsMenu = e => {
         if (e){ e.preventDefault(); }
         this.setState({
             showNotifSettingsMenu: !this.state.showNotifSettingsMenu

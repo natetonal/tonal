@@ -8,7 +8,7 @@ import validate from './validateresetpw';
 
 class ResetPassword extends Component {
 
-    handleFormSubmit(values){
+    handleFormSubmit = values => {
         const { password } = values;
         const { dispatch, userEmail, oobCode } = this.props;
         return dispatch(resetPasswordAndLoginUser(oobCode, userEmail, password));

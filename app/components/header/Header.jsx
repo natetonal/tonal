@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { switchHeaderMenu } from 'actions/UIStateActions';
 import Search from 'Search';
@@ -8,7 +8,7 @@ import HeaderCompose from './HeaderCompose';
 
 class Header extends Component {
 
-    onClickHeaderMenu(menu = false, event) {
+    onClickHeaderMenu = (menu = false, event) => {
         if (event){ event.preventDefault(); }
 
         const { dispatch } = this.props;
@@ -121,7 +121,7 @@ class Header extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         headerMenu: state.uiState.headerMenu,
         screenSize: state.uiState.screenSize,

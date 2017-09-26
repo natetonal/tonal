@@ -21,32 +21,21 @@ const bigTextLength = 80;
 
 class Post extends Component {
 
-    componentWillMount(){
-
-        this.setState({
+    constructor(props){
+        super(props);
+        this.state = {
             showMenu: false,
             showReply: false,
-            userLikesThisPost: this.props.likesPost(this.props.postId),
             userRepliedToPost: false,
             userSharedThisPost: false,
+            userLikesThisPost: this.props.userLikesThisPost,
             likesCount: this.props.data.likesCount || 0,
             sharesCount: this.props.data.sharesCount || 0,
             threadCount: this.props.data.threadCount || 0
-        });
-
-        const {
-            checkAuthor,
-            checkImage,
-            data,
-            postId
-        } = this.props;
-
-        checkAuthor(data, postId);
-        checkImage(data, postId);
-
+        };
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         // If the user has finished editing the post:
         if (nextProps.editing !== nextProps.postId &&
             this.props.editing === this.props.postId){
@@ -59,7 +48,7 @@ class Post extends Component {
         }
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         // If the user opens the editor:
         if (prevProps.editing !== this.props.postId &&
             this.props.editing === this.props.postId){
@@ -81,11 +70,11 @@ class Post extends Component {
         }
     }
 
-    handlePostMenu(){
+    handlePostMenu = () => {
         this.setState({ showMenu: !this.state.showMenu });
     }
 
-    handleLikePost(){
+    handleLikePost = () => {
         const {
             likePost,
             postId,
@@ -104,7 +93,7 @@ class Post extends Component {
         likePost(this.props.data.author.uid, postId, data);
     }
 
-    handleDeletePost(){
+    handleDeletePost = () => {
 
         const {
             deletePost,
@@ -122,7 +111,7 @@ class Post extends Component {
         tl.eventCallback('onComplete', deletePost, [postId]);
     }
 
-    handleUpdatePost(updatedPost){
+    handleUpdatePost = updatedPost => {
 
         console.log('updatedPost received by handleUpdatePost: ', updatedPost);
 
@@ -137,7 +126,7 @@ class Post extends Component {
         tl.eventCallback('onComplete', this.handleUpdatePostCallback, [updatedPost]);
     }
 
-    handleUpdatePostCallback(updatedPost){
+    handleUpdatePostCallback = updatedPost => {
         const {
             updatePost,
             postId
@@ -147,7 +136,7 @@ class Post extends Component {
 
     }
 
-    handleTogglePostEditor(){
+    handleTogglePostEditor = () => {
         console.log('from post:  togglePostEditor called');
         // an edit.
         const {
@@ -170,7 +159,7 @@ class Post extends Component {
         tl.eventCallback('onComplete', togglePostEditor, [postId]);
     }
 
-    handleToggleReply(){
+    handleToggleReply = () => {
         this.setState({
             showReply: !this.state.showReply
         });

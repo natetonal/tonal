@@ -8,13 +8,14 @@ import {
 import { NotificationTopbar } from './NotificationTopbar';
 import { NotificationsList } from './NotificationsList';
 
-class NotificationsMenu  extends Component{
+class NotificationsMenu extends Component{
 
-    componentWillMount(){
+    constructor(props){
+        super(props);
         console.log('NotificationsMenu: mounting.');
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
 
         // If the menu just opened:
         if (!prevProps.headerMenu !== this.props.headerMenu &&
@@ -38,7 +39,7 @@ class NotificationsMenu  extends Component{
         }
     }
 
-    handleClickOutside(){
+    handleClickOutside = () => {
         this.props.onClickNotifs();
     }
 

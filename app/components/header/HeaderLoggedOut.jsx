@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import {
     switchLoginModalUI,
     toggleLoginModal
@@ -10,7 +10,7 @@ import Search from 'Search';
 
 class HeaderLoggedOut extends Component {
 
-    toggleLoginModal(event){
+    toggleLoginModal = event => {
         event.preventDefault();
 
         const { dispatch, isModalOpen } = this.props;
@@ -56,7 +56,7 @@ class HeaderLoggedOut extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         isModalOpen: state.uiState.loginModalIsOpen
     };

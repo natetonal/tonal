@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 
 class GiphySelectorContainer extends Component {
@@ -83,7 +83,7 @@ class GiphySelectorContainer extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         status: state.giphySelector.status,
         images: state.giphySelector.images,

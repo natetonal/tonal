@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from 'actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -9,20 +9,22 @@ import Signup from './Signup';
 
 class LoginModal extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+        
+        super(props);
+        this.state = {
             tabSelected: 'login'
-        });
+        };
     },
 
-    handleTabs(event){
+    handleTabs = event => {
         event.preventDefault();
         this.setState({
             tabSelected: event.target.getAttribute('name')
         });
     },
 
-    toggleLoginModal(event){
+    toggleLoginModal = event => {
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(actions.toggleLoginModal());
@@ -61,6 +63,6 @@ class LoginModal extends Component {
     }
 });
 
-export default Redux.connect(state => {
+export default connect(state => {
     return { isOpen: state.uiState.loginModalIsOpen };
 })(LoginModal);

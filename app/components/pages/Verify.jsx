@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { verifyEmailWithCode } from 'actions/AuthActions';
 import { pushToRoute } from 'actions/RouteActions';
 
@@ -12,14 +12,14 @@ class Verify extends Component {
 
     // Load in your component here
 
-    componentDidMount(){
+    componentDidMount = () => {
         if (!this.props.status){
             const { location: { query: { mode, oobCode }}} = this.props;
             this.handleQuery(mode, oobCode);
         }
     }
 
-    handleQuery(mode, oobCode){
+    handleQuery = (mode, oobCode) => {
         const { dispatch } = this.props;
         if (mode === 'verifyEmail' && oobCode){
             return dispatch(verifyEmailWithCode(oobCode));
@@ -51,7 +51,7 @@ class Verify extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         status: state.user.status
     };

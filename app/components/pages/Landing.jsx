@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import {
     toggleLoginModal,
     switchLoginModalUI
@@ -14,7 +14,7 @@ import LoginModal from 'login/LoginModal';
 
 class Landing extends Component {
 
-    componentDidMount(){
+    componentDidMount = () => {
         const modeCheck = (this.props.location.query && this.props.location.query.mode) || false;
         if (modeCheck){
             console.log('Landing / location: ', this.props.location);
@@ -55,7 +55,7 @@ class Landing extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         isOpen: state.uiState.loginModalIsOpen,
     };

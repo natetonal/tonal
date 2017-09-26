@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 class ProfileWrapper extends Component {
 
@@ -10,7 +10,7 @@ class ProfileWrapper extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         user: state.user
     };

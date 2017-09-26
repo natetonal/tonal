@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 class Discover extends Component {
 
@@ -13,4 +13,4 @@ class Discover extends Component {
     }
 }
 
-export default Redux.connect()(Discover);
+export default connect()(Discover);

@@ -8,7 +8,7 @@ import Composer from 'composer/Composer';
 
 class Thread extends Component {
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         if (prevProps.showReply !== this.props.showReply){
             const on = this.props.showReply === true;
             TweenLite.fromTo(this.userReplyRef, 0.25, {

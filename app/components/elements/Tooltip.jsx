@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 
 class Tooltip extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+        super(props);
+
         let showTip = true;
         if (this.props.delay){ showTip = false; }
-        this.setState({ showTip });
+        this.state = { showTip };
     }
 
-    componentWillUpdate(nextProps){
+    componentWillUpdate = nextProps => {
         const { delay } = this.props;
 
         if (delay){
@@ -25,11 +28,11 @@ class Tooltip extends Component {
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         window.clearTimeout(this.delayTooltip);
     }
 
-    handleClick(event){
+    handleClick = event => {
         if (event){ event.preventDefault(); }
 
         const { onClick } = this.props;

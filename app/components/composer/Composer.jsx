@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import Button from 'elements/Button';
 import select from 'selection-range';
 import validator from 'validator';
@@ -70,8 +70,11 @@ const regexIgnoreList = [
 class Composer extends Component {
 
     // Initialize local state. Optionally assign props to state.
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             focused: false,
             enabled: true,
             error: false,
@@ -90,12 +93,12 @@ class Composer extends Component {
             buttonIcon: this.props.buttonIcon || false,
             buttonType: this.props.buttonType || 'info',
             buttons: this.props.buttons || controlBtns
-        });
+        };
     }
 
     // Implement a new Medium when component mounts, and focus on it.
     // Set previous image & file to props when mounted.
-    componentDidMount(){
+    componentDidMount = () => {
         const {
             initialValue,
             prevData
@@ -125,11 +128,11 @@ class Composer extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate = (nextProps, nextState) => {
         return shallowCompare(this, nextProps, nextState);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate = () => {
         // Make sure focus stays on composer unless selection menu open.
         const { currentMenu, query } = this.props;
         if (currentMenu === '' || query){
@@ -188,7 +191,7 @@ class Composer extends Component {
     }
 
     // Keep a running history of composer states.
-    updateHistory(value){
+    updateHistory = value => {
         const { dispatch } = this.props;
         const { history } = this.state;
         history.unshift(value);
@@ -198,14 +201,14 @@ class Composer extends Component {
         this.setState({ history });
     }
 
-    revertHistory(){
+    revertHistory = () => {
         const { history } = this.state;
         this.medium.value(history[1]);
         this.updateHistory(this.medium.value());
     }
 
     // See if there are any new mentions coming in.
-    checkMentions(textContent){
+    checkMentions = textContent => {
 
         const { dispatch } = this.props;
         let word = '';
@@ -226,7 +229,7 @@ class Composer extends Component {
     }
 
     // Check if any mentions have been removed from input.
-    checkIfMentionsRemoved(textContent){
+    checkIfMentionsRemoved = textContent => {
         const { mentions } = this.state;
         const updatedMentions = [];
         if (mentions){
@@ -240,7 +243,7 @@ class Composer extends Component {
     }
 
     // Replace the @mention with the user's full name in place.
-    handleMention(user, query){
+    handleMention = (user, query) => {
         const textContent = this.composer.textContent;
         const word = `@${ query }`;
         if (textContent.match(word)){
@@ -263,7 +266,7 @@ class Composer extends Component {
     // A list of entities used to decorate the composer.
     // Note: if a new entity is added later, processpost.js will have to be updated.
 
-    entityTypes(){
+    entityTypes = () => {
         const { mainClass } = this.state;
 
         return [
@@ -298,11 +301,11 @@ class Composer extends Component {
         ];
     }
 
-    resetMedium(){
+    resetMedium = () => {
         this.medium = new Medium(this.mediumSettings);
     }
 
-    handlePaste(evt){
+    handlePaste = evt => {
         evt.stopPropagation();
         evt.preventDefault();
         this.pos = select(this.composer);
@@ -327,7 +330,7 @@ class Composer extends Component {
         this.checkMentions(this.composer.textContent);
     }
 
-    imagesToShortcode(text){
+    imagesToShortcode = text => {
         if (!text.match(matchImgTag)){ return text; }
 
         let returnText = text;
@@ -345,16 +348,16 @@ class Composer extends Component {
         return returnText;
     }
 
-    handleDrop(evt){
+    handleDrop = evt => {
         evt.stopPropagation();
         evt.preventDefault();
     }
 
-    handleFocus(){
+    handleFocus = () => {
         this.setState({ focused: true });
     }
 
-    handleBlur(){
+    handleBlur = () => {
         this.setState({ focused: false });
     }
 
@@ -378,14 +381,14 @@ class Composer extends Component {
         dispatch(updateValue(this.medium.value()));
     }
 
-    handleInsertImage(path){
+    handleInsertImage = path => {
         this.clearMenus();
         const { dispatch } = this.props;
         dispatch(setPreviewImage(path));
     }
 
     // note: this function is also passed a "path" argument
-    handleInsertEmoji(shortname){
+    handleInsertEmoji = shortname => {
         this.clearMenus();
         this.medium.focus();
         const innerHTML = this.medium.value();
@@ -399,12 +402,12 @@ class Composer extends Component {
         this.redecorateContent();
     }
 
-    handleUploadFile(file){
+    handleUploadFile = file => {
         const { dispatch } = this.props;
         dispatch(setImageUpload(file));
     }
 
-    handleControl(name, evt){
+    handleControl = (name, evt) => {
         evt.preventDefault();
         this.clearError();
         this.pos = select(this.composer);
@@ -425,14 +428,14 @@ class Composer extends Component {
         }
     }
 
-    clearError(){
+    clearError = () => {
         const { error } = this.state;
         if (error){
             this.setState({ error: false });
         }
     }
 
-    clearMenus(){
+    clearMenus = () => {
         const { dispatch } = this.props;
         this.clearError();
         dispatch(changeMenu());
@@ -453,7 +456,7 @@ class Composer extends Component {
         return decoratedText;
     }
 
-    decorateMentions(entity, text){
+    decorateMentions = (entity, text) => {
         const { mentions } = this.state;
         if (!mentions){ return text; }
 
@@ -466,7 +469,7 @@ class Composer extends Component {
         return text;
     }
 
-    decorateLinksAndHashtags(entity, text){
+    decorateLinksAndHashtags = (entity, text) => {
         const { regex, className, tag } = entity;
         if (!text.match(regex)) { return text; }
 
@@ -496,7 +499,7 @@ class Composer extends Component {
         return text;
     }
 
-    decorateEmoji(entity, text){
+    decorateEmoji = (entity, text) => {
         const { regex, className, tag } = entity;
         if (!text.match(regex)) { return text; }
 
@@ -521,7 +524,7 @@ class Composer extends Component {
         return text;
     }
 
-    stripPrevTags(value){
+    stripPrevTags = value => {
         let newVal = value;
         let checkArray = [];
         while ((checkArray = stripHTML.exec(value)) !== null){
@@ -532,7 +535,7 @@ class Composer extends Component {
         return newVal;
     }
 
-    shouldIgnoreWord(word){
+    shouldIgnoreWord = word => {
         // Innocent until proven guilty
         let shouldIgnore = false;
         regexIgnoreList.forEach(blacklistItem => {
@@ -545,7 +548,7 @@ class Composer extends Component {
         return shouldIgnore;
     }
 
-    redecorateContent(){
+    redecorateContent = () => {
         this.pos = select(this.composer);
         const decoratedText = this.decorateEntities();
         const lastChar = decoratedText.charAt(decoratedText.length - 1);
@@ -580,14 +583,14 @@ class Composer extends Component {
         return charCount;
     }
 
-    checkMax(value){
+    checkMax = value => {
         const { maxLength } = this.state;
         if (this.checkLen(value) > maxLength){
             this.revertHistory();
         }
     }
 
-    submitPost(){
+    submitPost = () => {
         event.preventDefault();
         const {
             user,
@@ -827,7 +830,7 @@ class Composer extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         user: state.user,
         currentValue: state.composer.currentValue,

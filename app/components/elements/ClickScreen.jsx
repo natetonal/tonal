@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 
 class ClickScreen extends Component {
 
-    componentWillMount(){
+    constructor(props){
+        super(props);
+        
         document.addEventListener('click', this.handleClickOutside, false);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         document.removeEventListener('click', this.handleClickOutside, false);
     }
 
-    handleClickOutside(e){
+    handleClickOutside = e => {
 
         const domNode = this.domNode;
         if ((!domNode ||

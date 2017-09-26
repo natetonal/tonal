@@ -7,7 +7,7 @@ import {
 
 class UserPreview extends Component {
 
-    componentDidMount(){
+    componentDidMount = () => {
         const { countsArr } = this.props;
         if (countsArr.every(name => this[`${ name }Ref`])){
             const refs = countsArr.map(name => this[`${ name }Ref`]);

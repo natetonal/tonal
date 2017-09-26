@@ -5,7 +5,7 @@ import Input from './Input';
 const LocationInput = ComposedInput => {
     class thisInput extends Component {
 
-        componentDidMount(){
+        componentDidMount = () => {
 
             const input = this.childRef.inputRef;
             const options = {

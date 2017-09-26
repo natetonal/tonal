@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import onClickOutside from 'react-onclickoutside';
 
 import {
@@ -40,14 +40,14 @@ const headerComposeTabs = [
 
 class HeaderCompose extends Component {
 
-    componentDidMount(){
+    componentDidMount = () => {
         TweenLite.from(this.composeRef, 0.4, {
             ease: Power2.easeOut,
             opacity: 0
         });
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         // If compose just opened:
         if (!prevProps.headerMenu !== this.props.headerMenu &&
             this.isComposeOpen()){
@@ -59,7 +59,7 @@ class HeaderCompose extends Component {
     }
 
     // Finish this, similar to notifscenter.
-    onCloseCompose(){
+    onCloseCompose = () => {
         const { onToggle } = this.props;
         const isComposeOpen = this.isComposeOpen();
         // If compose is open, animate it out.
@@ -74,16 +74,16 @@ class HeaderCompose extends Component {
         }
     }
 
-    handleClickOutside(){
+    handleClickOutside = () => {
         this.onCloseCompose();
     }
 
-    handleTabClick(tab){
+    handleTabClick = tab => {
         const { dispatch } = this.props;
         dispatch(changeTab(tab));
     }
 
-    handlePostSubmit(post){
+    handlePostSubmit = post => {
         // Make sure to update action & reducer to store raw & parsed post!
         const {
             dispatch,
@@ -112,7 +112,7 @@ class HeaderCompose extends Component {
         }
     }
 
-    isComposeOpen(){
+    isComposeOpen = () => {
         return this.props.headerMenu === 'compose';
     }
 
@@ -172,7 +172,7 @@ class HeaderCompose extends Component {
 
 const ComposedHeaderCompose = onClickOutside(HeaderCompose);
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         uid: state.auth.uid,
         headerMenu: state.uiState.headerMenu,

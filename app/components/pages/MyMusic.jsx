@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 class MyMusic extends Component {
 
@@ -10,4 +10,4 @@ class MyMusic extends Component {
     }
 }
 
-export default Redux.connect()(MyMusic);
+export default connect()(MyMusic);

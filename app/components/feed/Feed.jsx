@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import firebase from 'firebase';
 
 import {
@@ -35,10 +35,9 @@ import Post from './Post';
 class Feed extends Component {
 
     constructor(props){
+
+        console.log('props from constructor? ', props);
         super(props);
-    }
-    
-    componentWillMount(){
 
         const {
             dispatch,
@@ -63,6 +62,7 @@ class Feed extends Component {
             // Mount observers:
             const feedRef = firebase.database().ref(`${ this.fType }/${ this.fId }/`);
             feedRef.on('child_added', post => {
+                console.log('from feed: feed post added - ', post.val());
                 dispatch(addFeedPost(this.fId, post.key, post.val()));
                 dispatch(syncUserData(['postCount']));
             });
@@ -77,19 +77,19 @@ class Feed extends Component {
         }
     }
 
-    getEditingValue(postId){
+    getEditingValue = postId => {
         if (!this.isEditing(postId)){ return false; }
         return this.props.editors[postId].value;
     }
 
-    handleFollowUser(followedUid, username, displayName){
+    handleFollowUser = (followedUid, username, displayName) => {
         const { dispatch } = this.props;
         if (!this.isBlocked(followedUid)){
             dispatch(addFollower(followedUid, username, displayName));
         }
     }
 
-    handleFavoriteUser(favoritedUid, username, displayName){
+    handleFavoriteUser = (favoritedUid, username, displayName) => {
         const { dispatch } = this.props;
         if (!this.checkFriendship(favoritedUid, 'blocked') &&
             !this.checkFriendship(favoritedUid, 'blockedBy') &&
@@ -98,7 +98,7 @@ class Feed extends Component {
         }
     }
 
-    handleBlockUser(blockedUid){
+    handleBlockUser = blockedUid => {
         const { dispatch } = this.props;
         dispatch(updateBlockedUser(blockedUid))
         .then(() => {
@@ -108,7 +108,7 @@ class Feed extends Component {
 
     // Check if image changed from last post to this post.
     // If so and the updated post has an image, upload it, then update the post.
-    handleUpdatePost(updatedPost, postId){
+    handleUpdatePost = (updatedPost, postId) => {
         console.log('from feed: updatedPost from handleUpdatePost: ', updatedPost);
         // Make sure to update action & reducer to store raw & parsed post!
 
@@ -143,13 +143,13 @@ class Feed extends Component {
         }
     }
 
-    handleLikePost(authorId, postId, data){
+    handleLikePost = (authorId, postId, data) => {
         const { dispatch } = this.props;
         const liked = !this.likesPost(postId, this.uid);
         dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked, data));
     }
 
-    handleDeletePost(postId){
+    handleDeletePost = postId => {
         const { dispatch } = this.props;
         dispatch(deletePost(this.fId, this.fType, postId, this.pType));
     }
@@ -160,43 +160,43 @@ class Feed extends Component {
         dispatch(toggleEditing(postId));
     }
 
-    toggleImagePostView(){
+    toggleImagePostView = () => {
 
     }
 
-    isSelf(testUid){
+    isSelf = testUid => {
         return testUid === this.props.uid;
     }
 
-    isEditing(postId){
+    isEditing = postId => {
         return (Object.keys(this.props.editors).includes(postId) &&
             this.props.editors[postId].editing);
     }
 
-    likesPost(postId){
-        console.log('this.props from likesPost: ', this.props);
-        console.log('this from likesPost: ', this);
+    checkIfUserLikesPost = postId => {
+        // console.log('this.props from likesPost: ', this.props);
+        // console.log('this from likesPost: ', this);
 
         const postLikes = this.props.feed[postId].likes || {};
         return Object.keys(postLikes).includes(this.props.uid);
     }
 
-    checkFriendship(testUid, testGroup){
+    checkFriendship = (testUid, testGroup) => {
         const group = this.props[testGroup] || {};
         return Object.keys(group).includes(testUid);
     }
 
-    checkAuthor(data, postId){
+    checkAuthor = (data, postId) => {
         const { dispatch } = this.props;
         dispatch(updatePostAuthorData(this.fId, this.fType, postId, this.pType, data));
     }
 
-    checkImage(data, postId){
+    checkImage = (data, postId) => {
         const { dispatch } = this.props;
         dispatch(updatePostImageData(this.fId, this.fType, postId, this.pType, data));
     }
 
-    evaluateRelationship(testUid){
+    evaluateRelationship = testUid => {
 
         if (this.isSelf(testUid)){ return 'self'; }
 
@@ -239,6 +239,7 @@ class Feed extends Component {
                         const posterIsSelf = this.isSelf(feed[key].author.uid);
                         const isEditing = this.isEditing(key);
                         const editingValue = this.getEditingValue(key);
+                        const checkIfUserLikesPost = this.checkIfUserLikesPost(key);
 
                         if (!isBlocked &&
                             !isBlockedBy &&
@@ -247,6 +248,10 @@ class Feed extends Component {
                             // Need to simplify post object.
                             // Need to add text snippet.
                             // const notifType = feed[key].type;
+
+                            // Check to see if author changed name or avatar:
+                            this.checkAuthor(feed[key]);
+                            // this.checkImage(feed[key]);
 
                             return (
                                 <Post
@@ -264,12 +269,13 @@ class Feed extends Component {
                                     blockedBy={ blockedBy }
                                     screenSize={ screenSize }
                                     posterIsSelf={ posterIsSelf }
+                                    userLikesThisPost={ checkIfUserLikesPost }
                                     checkAuthor={ this.checkAuthor }
                                     checkImage={ this.checkImage }
                                     checkFriendship={ this.checkFriendship }
+                                    checkIfUserLikesPost={ this.checkIfUserLikesPost }
                                     evaluateRelationship={ this.evaluateRelationship }
                                     isSelf={ this.isSelf }
-                                    likesPost={ this.likesPost }
                                     updatePost={ this.handleUpdatePost }
                                     deletePost={ this.handleDeletePost }
                                     likePost={ this.handleLikePost }
@@ -306,7 +312,7 @@ class Feed extends Component {
     }
 }
 
-export default Redux.connect((state, ownProps) => {
+export default connect((state, ownProps) => {
     const feedId = ownProps.feedId || state.auth.uid;
     const feed = ((state.feeds && state.feeds[feedId]) ? state.feeds[feedId].data : false);
     const status = ((state.feeds && state.feeds[feedId]) ? state.feeds[feedId].status : false);

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 class EmojiSelectorTitle extends Component {
 
@@ -16,7 +16,7 @@ class EmojiSelectorTitle extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         currentTitleDisplay: state.emojiSelector.currentTitleDisplay
     };

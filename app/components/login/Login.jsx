@@ -13,32 +13,35 @@ import validate from './validatelogin';
 
 class Login extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             showForm: false
-        });
+        };
     }
 
-    handleFormSubmit(values){
+    handleFormSubmit = values => {
         const { email, password } = values;
         const { dispatch } = this.props;
         return dispatch(startEmailLogin(email, password));
     }
 
-    handleFacebookLogin(event){
+    handleFacebookLogin = event => {
         event.preventDefault();
         const { dispatch } = this.props;
         return dispatch(createUserWithFacebookAuth());
     }
 
-    handleLoginModalUI(event){
+    handleLoginModalUI = event => {
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name');
         const { dispatch } = this.props;
         return dispatch(switchLoginModalUI(loginModalUI));
     }
 
-    toggleLoginForm(){
+    toggleLoginForm = () => {
         this.setState({
             showForm: !this.state.showForm
         });

@@ -5,7 +5,7 @@ import PreviewLink from 'links/PreviewLink';
 
 class PostInteractionHandler extends Component {
 
-    handleClick(event){
+    handleClick = event => {
         if (event){ event.preventDefault(); }
 
         this.props.clickLike();

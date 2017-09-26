@@ -29,7 +29,7 @@ import Tabs from './Tabs'; // uid, status === 'success'
 
 class TonalApp extends Component {
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         const {
             dispatch,
             path

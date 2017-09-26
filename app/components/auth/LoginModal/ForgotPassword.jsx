@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from 'actions';
 
 import Input from './../../elements/Input';
@@ -17,4 +17,4 @@ class ForgotPassword extends Component {
     }
 });
 
-export default Redux.connect()(ForgotPassword);
+export default connect()(ForgotPassword);

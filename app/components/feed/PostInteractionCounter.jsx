@@ -6,7 +6,7 @@ import {
 
 class PostInteractionCounter extends Component {
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         if (prevProps.count !== this.props.count) {
             TweenLite.from(this.countRef, 0.25, {
                 ease: Power1.easeOut,

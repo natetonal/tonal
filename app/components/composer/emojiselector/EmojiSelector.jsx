@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import {
     changeTab,
     changeTabTitle,
@@ -18,7 +18,7 @@ import EmojiSelectorContainer from './EmojiSelectorContainer';
 
 class EmojiSelector extends Component {
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
 
         const {
             searchText,
@@ -38,23 +38,23 @@ class EmojiSelector extends Component {
         }
     }
 
-    changeTitleDisplay(title){
+    changeTitleDisplay = title => {
         const { dispatch } = this.props;
         dispatch(changeTitleDisplay(title));
     }
 
-    clearTitleDisplay(){
+    clearTitleDisplay = () => {
         const { dispatch, currentTabTitle } = this.props;
         dispatch(changeTitleDisplay(currentTabTitle));
     }
 
-    changeTab(tab, title){
+    changeTab = (tab, title) => {
         const { dispatch } = this.props;
         dispatch(changeTab(tab));
         dispatch(changeTabTitle(title));
     }
 
-    selectEmoji(shortname, path){
+    selectEmoji = (shortname, path) => {
         const { handleEmoji } = this.props;
         if (shortname && path){
             handleEmoji(shortname, path);
@@ -87,7 +87,7 @@ class EmojiSelector extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         searchText: state.emojiSelector.searchText,
         currentTab: state.emojiSelector.currentTab,

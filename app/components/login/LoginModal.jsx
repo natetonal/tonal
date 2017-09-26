@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { resetErrorMessage } from 'actions/AuthActions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -15,7 +15,7 @@ import LoginEmailSent from './LoginEmailSent';
 
 class LoginModal extends Component {
 
-    clearErrors(){
+    clearErrors = () => {
         const { dispatch } = this.props;
         dispatch(resetErrorMessage());
     }
@@ -100,7 +100,7 @@ class LoginModal extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         email: state.user.email,
         isOpen: state.uiState.loginModalIsOpen,

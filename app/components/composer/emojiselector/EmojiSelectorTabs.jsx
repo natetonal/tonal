@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 import {
     getPathFromShortname,
@@ -9,19 +9,19 @@ import {
 
 class EmojiSelectorTabs extends Component {
 
-    handleMouseEnter(title, event){
+    handleMouseEnter = (title, event) => {
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
     }
 
-    handleMouseLeave(event){
+    handleMouseLeave = event => {
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave(event.target.value);
     }
 
-    handleClick(name, title, event){
+    handleClick = (name, title, event) => {
         event.preventDefault();
         const { onClick } = this.props;
         onClick(name, title);
@@ -58,7 +58,7 @@ class EmojiSelectorTabs extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         currentTab: state.emojiSelector.currentTab
     };

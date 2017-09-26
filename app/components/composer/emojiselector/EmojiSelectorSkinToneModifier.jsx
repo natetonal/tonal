@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { modifySkinTone } from 'actions/EmojiSelectorActions';
 import {
     getPathFromShortname,
@@ -8,19 +8,19 @@ import {
 
 class EmojiSelectorSkinToneModifier extends Component {
 
-    handleMouseEnter(title, event){
+    handleMouseEnter = (title, event) => {
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
     }
 
-    handleMouseLeave(event){
+    handleMouseLeave = event => {
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave();
     }
 
-    handleClick(name, event){
+    handleClick = (name, event) => {
         event.preventDefault();
         const { dispatch } = this.props;
         dispatch(modifySkinTone(name));
@@ -55,7 +55,7 @@ class EmojiSelectorSkinToneModifier extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         skinToneModifier: state.emojiSelector.skinToneModifier
     };

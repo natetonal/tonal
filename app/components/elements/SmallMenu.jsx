@@ -35,14 +35,16 @@ import {
 
 class SmallMenu extends Component {
 
-    componentWillMount(){
-        console.log('smallMenu mounting.');
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             mouseOverMenu: false
-        });
+        };
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         const tl = new TimelineLite();
         tl.from(this.smallMenu, 0.25, {
             ease: Back.easeOut.config(1.4),
@@ -52,7 +54,7 @@ class SmallMenu extends Component {
         tl.play();
     }
 
-    handleCallback(callback, event, params){
+    handleCallback = (callback, event, params) => {
         event.preventDefault();
         const tl = new TimelineLite();
         tl.to(this.smallMenu, 0.1, {

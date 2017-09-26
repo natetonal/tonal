@@ -7,17 +7,19 @@ import {
 
 class PostTimestamp extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+        this.state = {
             timeStamp: this.processTimestamp()
-        });
+        };
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         this.interval = setInterval(this.updateTimestamp, 1000);
     }
 
-    componentDidUpdate(prevProps, prevState){
+    componentDidUpdate = (prevProps, prevState) => {
         if (prevState.timeStamp !== this.state.timeStamp){
             TweenLite.from(this.timeStampRef, 0.5, {
                 ease: Power1.easeOut,
@@ -25,11 +27,11 @@ class PostTimestamp extends Component {
             });
         }
     }
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         clearInterval(this.interval);
     }
 
-    processTimestamp(){
+    processTimestamp = () => {
         const timeStamp = this.props.editedAt || this.props.timeStamp;
         const sameOrBefore = moment().subtract(3, 'days').isSameOrBefore(moment(timeStamp, 'LLLL'));
         if (sameOrBefore){
@@ -39,7 +41,7 @@ class PostTimestamp extends Component {
         return timeStamp;
     }
 
-    updateTimestamp(){
+    updateTimestamp = () => {
         this.setState({
             timeStamp: this.processTimestamp()
         });

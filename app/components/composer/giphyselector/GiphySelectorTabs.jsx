@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 const tabsArray = [
     {
@@ -44,7 +44,7 @@ class GiphySelectorTabs extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         currentTab: state.giphySelector.currentTab,
         searchText: state.giphySelector.searchText

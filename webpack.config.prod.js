@@ -19,8 +19,6 @@ console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
 module.exports = merge(common, {
     entry: [
-        'script-loader!jquery/dist/jquery.min.js',
-        'script-loader!foundation-sites/dist/js/foundation.min.js',
         './app/app.jsx'
     ],
     output: {

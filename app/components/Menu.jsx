@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { startLogout } from 'actions/AuthActions';
 import {
@@ -14,7 +14,7 @@ const dummyPhoto = 'https://firebasestorage.googleapis.com/v0/b/tonal-developmen
 
 class Menu extends Component {
 
-    componentWillUpdate(nextProps){
+    componentWillUpdate = nextProps => {
         if (this.props.headerMenu !== nextProps.headerMenu &&
             nextProps.headerMenu === 'settings'){
             TweenLite.from(this.namesRef, 0.75, {
@@ -45,7 +45,7 @@ class Menu extends Component {
         });
     }
 
-    handleLogout(){
+    handleLogout = () => {
         const { dispatch } = this.props;
         dispatch(startLogout());
     }
@@ -192,7 +192,7 @@ class Menu extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         avatar: state.user.avatar,
         displayName: state.user.displayName,

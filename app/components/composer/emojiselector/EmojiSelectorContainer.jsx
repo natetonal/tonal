@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import { Preload } from 'react-preload';
 
 import {
@@ -12,7 +12,7 @@ import EmojiSelectorSkinToneModifier from './EmojiSelectorSkinToneModifier';
 
 class EmojiSelectorContainer extends Component {
 
-    preloader(text){
+    preloader = text => {
         return (
             <div className="emoji-container">
                 <div className="emoji-item-placeholder">
@@ -23,19 +23,19 @@ class EmojiSelectorContainer extends Component {
         );
     }
 
-    handleMouseEnter(title, event){
+    handleMouseEnter = (title, event) => {
         event.preventDefault();
         const { onMouseEnter } = this.props;
         onMouseEnter(title);
     }
 
-    handleMouseLeave(event){
+    handleMouseLeave = event => {
         event.preventDefault();
         const { onMouseLeave } = this.props;
         onMouseLeave(event.target.value);
     }
 
-    handleClick(shortname, path, event){
+    handleClick = (shortname, path, event) => {
         event.preventDefault();
         const { onClick } = this.props;
         onClick(shortname, path);
@@ -110,7 +110,7 @@ class EmojiSelectorContainer extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         currentTab: state.emojiSelector.currentTab,
         searchText: state.emojiSelector.searchText,

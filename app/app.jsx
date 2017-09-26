@@ -3,9 +3,9 @@ import 'applicationStyles';
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import $ from 'jquery';
 import firebase from 'app/firebase';
 import { fetchUserData } from 'actions/UserActions';
-import { changeScreenSize } from 'actions/UIStateActions';
 
 import {
     startLoginForAuthorizedUser,
@@ -16,7 +16,9 @@ import Root from './containers/Root';
 
 const store = configure();
 
-$(document).foundation(); // eslint-disable-line
+$(document).ready(() => {
+    $(document).foundation();
+});
 
 firebase.auth().onAuthStateChanged(user => {
 

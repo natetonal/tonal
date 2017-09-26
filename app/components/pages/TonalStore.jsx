@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 
 class TonalStore extends Component {
 
@@ -10,4 +10,4 @@ class TonalStore extends Component {
     }
 }
 
-export default Redux.connect()(TonalStore);
+export default connect()(TonalStore);

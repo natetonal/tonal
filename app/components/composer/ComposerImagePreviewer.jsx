@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Redux from 'react-redux';
+import { connect } from 'react-redux';
 import {
     setPreviewImage,
     setImageUpload
@@ -12,20 +12,23 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class ComposerImagePreviewer extends Component {
 
-    componentWillMount(){
-        this.setState({
+    constructor(props){
+
+        super(props);
+
+        this.state = {
             warningLightOn: false,
             className: this.props.className
-        });
+        };
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = nextProps => {
         if (!nextProps.previewImage){
             this.warningLightOff();
         }
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = prevProps => {
         if (this.props.imageUploadProgress !== prevProps.imageUploadProgress &&
             this.progressBarRef &&
             this.progressPercRef){
@@ -51,19 +54,19 @@ class ComposerImagePreviewer extends Component {
         }
     }
 
-    handleClearImage(){
+    handleClearImage = () => {
         const { dispatch } = this.props;
         dispatch(setPreviewImage());
         dispatch(setImageUpload());
     }
 
-    warningLightOn(){
+    warningLightOn = () => {
         this.setState({
             warningLightOn: true,
             className: `${ this.props.className } warning-light` });
     }
 
-    warningLightOff(){
+    warningLightOff = () => {
         this.setState({
             warningLightOn: false,
             className: this.props.className
@@ -139,7 +142,7 @@ class ComposerImagePreviewer extends Component {
     }
 }
 
-export default Redux.connect(state => {
+export default connect(state => {
     return {
         previewImage: state.composer.previewImage
     };

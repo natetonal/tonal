@@ -10,14 +10,14 @@ import validate from './validatelogin';
 
 class ForgotPassword extends Component {
 
-    handleLoginModalUI(event){
+    handleLoginModalUI = event => {
         event.preventDefault();
         const loginModalUI = event.target.getAttribute('name');
         const { dispatch } = this.props;
         return dispatch(switchLoginModalUI(loginModalUI));
     }
 
-    handleFormSubmit(values){
+    handleFormSubmit = values => {
         const { email } = values;
         const { dispatch } = this.props;
         return dispatch(sendPasswordResetEmail(email));

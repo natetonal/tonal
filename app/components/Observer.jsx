@@ -15,7 +15,10 @@ import { syncUserData } from 'actions/UserActions';
 // The observer handles all database changes globally and keeps state up-to-date.
 class Observer extends Component {
 
-    componentWillMount(){
+    constructor(props){
+
+
+        super(props);
 
         console.log('Observer loaded.');
 
@@ -117,7 +120,7 @@ class Observer extends Component {
         });
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         const size = Foundation.MediaQuery.current;
         this.props.dispatch(changeScreenSize(size));
     }

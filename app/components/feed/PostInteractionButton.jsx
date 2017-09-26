@@ -6,11 +6,14 @@ import PostInteractionHandler from './PostInteractionHandler';
 
 class PostInteractionButton extends Component {
 
-    componentWillMount(){
-        this.setState({ isPlay: false });
+    constructor(props){
+
+        super(props);
+
+        this.state = { isPlay: false };
     }
 
-    // shouldComponentUpdate(n, nextState){
+    // shouldComponentUpdate = (n, nextState) => {
     //     if (this.state.isPlay !== nextState.isPlay){
     //         return false;
     //     }
@@ -18,7 +21,7 @@ class PostInteractionButton extends Component {
     //     return true;
     // }
 
-    handleClickLike(event){
+    handleClickLike = event => {
         console.log('CLEECK');
         if (event){
             event.preventDefault();
@@ -27,7 +30,7 @@ class PostInteractionButton extends Component {
         this.props.button.handler();
     }
 
-    stopAnimateLike(){
+    stopAnimateLike = () => {
         this.setState({ isPlay: false });
     }
 
