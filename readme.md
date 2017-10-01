@@ -1,4 +1,4 @@
-<div align="center">
+<div style="display: block; background: black" align="center">
     <img width="118" height="35" src="https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-logo.png?alt=media&token=8c709f68-11b8-41ef-969d-f17c5286c4a1">
 </div>
 
