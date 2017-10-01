@@ -5,7 +5,6 @@ class Connect extends Component {
 
     render(){
 
-        console.log('Connect rendered.');
         return (
             <div className="connect-container">
                 <Feed

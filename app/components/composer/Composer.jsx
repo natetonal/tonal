@@ -115,7 +115,6 @@ class Composer extends Component {
         this.composer.focus();
         this.medium.value(initialValue);
 
-        console.log('from Composer: initialValue? ', initialValue);
         select(this.composer, { start: initialValue.length });
         this.pos = select(this.composer);
 
@@ -627,7 +626,6 @@ class Composer extends Component {
 
     render(){
 
-        console.log('call to composer render.');
         const {
             currentMenu,
             imageUploadProgress,

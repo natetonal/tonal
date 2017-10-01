@@ -130,6 +130,7 @@ class Feed extends Component {
                         dispatch(resetState());
                     });
                 } else {
+                    // Don't update post?
                 }
             });
         } else {
@@ -151,7 +152,7 @@ class Feed extends Component {
         dispatch(deletePost(this.fId, this.fType, postId, this.pType));
     }
 
-    togglePostEditor(postId = false){
+    togglePostEditor = (postId = false) => {
         const { dispatch } = this.props;
         dispatch(toggleEditing(postId));
     }

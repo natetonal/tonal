@@ -75,7 +75,6 @@ export const deleteNotif = notifId => {
 
 export const acknowledgeNotifs = notifs => {
     return (dispatch, getState) => {
-        console.log('acknowledge notifs called!');
         const uid = getState().auth.uid;
         databaseRef.child(`notifications/${ uid }`).once('value')
         .then(snapshot => {
