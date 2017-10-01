@@ -84,11 +84,13 @@ export const skinToneArray = [
 
 export const getImageFromValue = value => {
     const imgPath = emojione.imagePathPNG;
-    const imgCode = value.unicode;
-    const imgType = emojione.imageType;
-    const imgVer = emojione.cacheBustParam;
+    const imgCode = value.code_points.base;
+    const imgType = 'png';
+
+    console.log('from getImageFromValue: value? ', value);
+    console.log(`from getImageFromValue: ${ imgPath }${ imgCode }.${ imgType } - ${ emojione ? true : false }`);
     return {
-        path: `${ imgPath }${ imgCode }.${ imgType }${ imgVer }`,
+        path: `${ imgPath }${ imgCode }.${ imgType }`,
         shortname: value.shortname,
         alt: value.name[0].toUpperCase() + value.name.slice(1),
     };
@@ -184,6 +186,7 @@ const matchModifier = (emoji, category, modifier = 'default') => {
 export const getEmoji = (category = 'people', searchText = '', modifier = 'default') => {
     let emoji = [];
     if (category !== 'search'){
+        console.log('from getEmoji: emojiJSON? ', emojiJSON);
         Object.keys(emojiJSON).forEach(key => {
             const value = emojiJSON[key];
             if (category === value.category &&

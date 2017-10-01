@@ -18,7 +18,7 @@ class Alert extends Component {
         } = this.props;
 
         const renderButtons = () => {
-            if (!buttons) { return ''; }
+            if (!buttons || buttons.length === 0) { return ''; }
 
             const btnWidth = Math.floor(12 / buttons.length);
 
@@ -112,7 +112,7 @@ Alert.propTypes = {
 Alert.defaultProps = {
     type: 'default',
     title: 'Title',
-    buttons: false,
+    buttons: [],
     fullscreen: false,
     animate: true,
     message: 'Message',

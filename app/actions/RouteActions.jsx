@@ -13,7 +13,7 @@ export const pushToRoute = route => {
         if (route && loc !== route){
             console.log('loc? ', loc);
             console.log('pushing to route: ', route);
-            dispatch(push(`/${ route }`));
+            dispatch(push(`${ route }`));
         }
     };
 };

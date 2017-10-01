@@ -1,13 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 
-import createBrowserHistory from 'history/createBrowserHistory';
+import history from 'app/tonalHistory';
 
 import thunk from 'redux-thunk';
 import reducer from 'reducers';
 import DevTools from '../containers/DevTools';
-
-const history = createBrowserHistory();
 
 // Build the middleware for intercepting and dispatching navigation actions
 const routerReduxMiddleware = routerMiddleware(history);
@@ -21,8 +19,9 @@ const enhancer = compose(
 );
 
 const enhancerProd = compose(
-    // Middleware you want to use in development:
+    // Middleware you want to use in production:
     applyMiddleware(thunk),
+    applyMiddleware(routerReduxMiddleware),
     window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 

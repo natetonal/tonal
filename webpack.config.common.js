@@ -31,9 +31,9 @@ module.exports = {
             actions: path.resolve(__dirname, 'app/actions'),
             store: path.resolve(__dirname, 'app/store/configureStore.jsx'),
             reducers: path.resolve(__dirname, 'app/reducers/index.js'),
-            router: path.resolve(__dirname, 'app/router'),
+            router: path.resolve(__dirname, 'app/router')
         },
-        extensions: ['.js', '.jsx']
+        extensions: ['*', '.js', '.jsx']
     },
     module: {
         rules: [
@@ -67,9 +67,10 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
+                            sourceMap: true,
                             includePaths: [
-                                path.resolve(__dirname, 'node_modules/foundation-sites/scss'),
-                                path.resolve(__dirname, 'app/styles')
+                                path.resolve(__dirname, './node_modules/foundation-sites/scss'),
+                                path.resolve(__dirname, './app/styles')
                             ]
                         }
                     }

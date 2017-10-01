@@ -114,6 +114,8 @@ class Composer extends Component {
         this.resetMedium();
         this.composer.focus();
         this.medium.value(initialValue);
+
+        console.log('from Composer: initialValue? ', initialValue);
         select(this.composer, { start: initialValue.length });
         this.pos = select(this.composer);
 
@@ -143,7 +145,7 @@ class Composer extends Component {
     // Find the current caret position relative the inner HTML.
     // MASSIVE thank you to YangombiUmpakati at SO for this wonderful solution
     // http://stackoverflow.com/questions/16736680/get-caret-position-in-contenteditable-div-including-tags
-    getHTMLCaretPosition() {
+    getHTMLCaretPosition = () => {
         const { start, end } = this.pos;
         const textPosition = Math.max(start, end);
 
@@ -182,7 +184,7 @@ class Composer extends Component {
 
     // This gets the caret position by first using the getHTMLCaretPosition function, then
     // running it through checkLen to determine the "true" location with emoji considered.
-    getRelativeCaretPosition(ignoreEmoji = false) {
+    getRelativeCaretPosition = (ignoreEmoji = false) => {
         const currentPos = this.getHTMLCaretPosition();
         const currentContent = this.medium.value();
         const preStr = currentContent.substr(0, currentPos);
@@ -192,7 +194,6 @@ class Composer extends Component {
 
     // Keep a running history of composer states.
     updateHistory = value => {
-        const { dispatch } = this.props;
         const { history } = this.state;
         history.unshift(value);
         if (history.length > 2){
@@ -416,7 +417,7 @@ class Composer extends Component {
         dispatch(changeMenu(menu));
     }
 
-    handleWarning(warning = false){
+    handleWarning = (warning = false) => {
         event.preventDefault();
         const { onClose } = this.props;
         if (warning){
@@ -443,7 +444,7 @@ class Composer extends Component {
     }
 
     // Processes passed entities for given input value
-    decorateEntities(val = this.medium.value()){
+    decorateEntities = (val = this.medium.value()) => {
         if (!val){ return ''; }
 
         const value = this.stripPrevTags(val);
@@ -560,7 +561,7 @@ class Composer extends Component {
     }
 
     // Checks the relative length of this block. Emoji can optionally be set to be ignored in the count.
-    checkLen(value = this.medium.value(), ignoreEmoji = false){
+    checkLen = (value = this.medium.value(), ignoreEmoji = false) => {
         let charCount = 0; // Relative index while iterating through blocks.
         let checkArray = [];
         const replaceChars = ['>', '<', '&', ' '];

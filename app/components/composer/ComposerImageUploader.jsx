@@ -8,6 +8,8 @@ class ComposerImageUploader extends Component {
 
         super(props);
 
+        this.acceptedTypes = ['image/gif', 'image/jpeg', 'image/png'];
+        this.maxSize = 5242880;
         this.state = {
             dropzoneActive: false,
             error: ''
@@ -23,10 +25,6 @@ class ComposerImageUploader extends Component {
         if (e){ e.preventDefault(); }
         this.setState({ dropzoneActive: false });
     }
-
-    acceptedTypes: ['image/gif', 'image/jpeg', 'image/png']
-
-    maxSize: 5242880
 
     handleDrop = (acc, rej) => {
         console.log('accepted file: ', acc);

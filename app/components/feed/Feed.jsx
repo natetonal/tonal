@@ -36,11 +36,9 @@ class Feed extends Component {
 
     constructor(props){
 
-        console.log('props from constructor? ', props);
         super(props);
 
         const {
-            dispatch,
             feedId,
             type,
             childType,
@@ -53,28 +51,31 @@ class Feed extends Component {
             this.uid = uid;
             this.fType = type || false;
             this.pType = childType || false;
-
-            // Fetch the feed (loop through each key, resolve promise.all):
-            // Make sure to keep the UI busy while we wait for data.
-            // And make sure to paginate.
-            dispatch(fetchFeed(this.fId, this.fType));
-
-            // Mount observers:
-            const feedRef = firebase.database().ref(`${ this.fType }/${ this.fId }/`);
-            feedRef.on('child_added', post => {
-                console.log('from feed: feed post added - ', post.val());
-                dispatch(addFeedPost(this.fId, post.key, post.val()));
-                dispatch(syncUserData(['postCount']));
-            });
-            feedRef.on('child_changed', post => {
-                console.log('from feed: child_changed - ', post.val());
-                dispatch(updateFeedPost(this.fId, post.key, post.val()));
-            });
-            feedRef.on('child_removed', post => {
-                dispatch(removeFeedPost(this.fId, post.key));
-                dispatch(syncUserData(['postCount']));
-            });
         }
+    }
+
+    componentWillMount = () => {
+
+        const { dispatch } = this.props;
+
+        // Fetch the feed (loop through each key, resolve promise.all):
+        // Make sure to keep the UI busy while we wait for data.
+        // And make sure to paginate.
+        dispatch(fetchFeed(this.fId, this.fType));
+
+        // Mount observers:
+        const feedRef = firebase.database().ref(`${ this.fType }/${ this.fId }/`);
+        feedRef.on('child_added', post => {
+            dispatch(addFeedPost(this.fId, post.key, post.val()));
+            dispatch(syncUserData(['postCount']));
+        });
+        feedRef.on('child_changed', post => {
+            dispatch(updateFeedPost(this.fId, post.key, post.val()));
+        });
+        feedRef.on('child_removed', post => {
+            dispatch(removeFeedPost(this.fId, post.key));
+            dispatch(syncUserData(['postCount']));
+        });
     }
 
     getEditingValue = postId => {
@@ -109,7 +110,6 @@ class Feed extends Component {
     // Check if image changed from last post to this post.
     // If so and the updated post has an image, upload it, then update the post.
     handleUpdatePost = (updatedPost, postId) => {
-        console.log('from feed: updatedPost from handleUpdatePost: ', updatedPost);
         // Make sure to update action & reducer to store raw & parsed post!
 
         const {
@@ -121,7 +121,6 @@ class Feed extends Component {
             updatedPost.image &&
             feed[postId] &&
             feed[postId].image !== updatedPost.image){
-            console.log('requirements met to upload pic.');
             dispatch(uploadPostImage(updatedPost))
             .then(updatedPostWithURL => {
                 if (updatedPostWithURL){
@@ -131,11 +130,9 @@ class Feed extends Component {
                         dispatch(resetState());
                     });
                 } else {
-                    console.log('error received from HeaderCompose: ', updatedPost);
                 }
             });
         } else {
-            console.log('requirements not met to upload pic, updating post.');
             dispatch(updatePost(this.fId, this.fType, postId, this.pType, updatedPost))
             .then(() => {
                 dispatch(resetState());
@@ -145,7 +142,7 @@ class Feed extends Component {
 
     handleLikePost = (authorId, postId, data) => {
         const { dispatch } = this.props;
-        const liked = !this.likesPost(postId, this.uid);
+        const liked = !this.checkIfUserLikesPost(postId);
         dispatch(likePost(this.fId, this.fType, postId, this.pType, this.uid, liked, data));
     }
 
@@ -155,7 +152,6 @@ class Feed extends Component {
     }
 
     togglePostEditor(postId = false){
-        console.log('feed/togglePostEditor: postId: ', false);
         const { dispatch } = this.props;
         dispatch(toggleEditing(postId));
     }
@@ -174,8 +170,6 @@ class Feed extends Component {
     }
 
     checkIfUserLikesPost = postId => {
-        // console.log('this.props from likesPost: ', this.props);
-        // console.log('this from likesPost: ', this);
 
         const postLikes = this.props.feed[postId].likes || {};
         return Object.keys(postLikes).includes(this.props.uid);

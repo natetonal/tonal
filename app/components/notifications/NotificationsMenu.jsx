@@ -5,8 +5,8 @@ import {
     Power2
 } from 'gsap';
 
-import { NotificationTopbar } from './NotificationTopbar';
-import { NotificationsList } from './NotificationsList';
+import NotificationTopbar from './NotificationTopbar';
+import NotificationsList from './NotificationsList';
 
 class NotificationsMenu extends Component{
 
@@ -68,6 +68,7 @@ class NotificationsMenu extends Component{
             muteNotifs
         } = this.props;
 
+        console.log('NotificationsMenu rendering.');
         return (
             <div
                 ref={ element => this.notifsContainerRef = element }
@@ -102,6 +103,4 @@ class NotificationsMenu extends Component{
 
 }
 
-const ComposedNotificationsMenu = onClickOutside(NotificationsMenu);
-
-export default ComposedNotificationsMenu;
+export default onClickOutside(NotificationsMenu);

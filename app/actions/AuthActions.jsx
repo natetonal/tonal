@@ -1,6 +1,8 @@
 import firebase, { databaseRef } from 'app/firebase';
-import { pushToRoute } from './RouteActions';
 import moment from 'moment';
+
+import { pushToRoute } from './RouteActions';
+
 
 import {
     storeUserDataToState,
@@ -49,7 +51,7 @@ export const addErrorMessage = error => {
 export const startLoginForAuthorizedUser = uid => {
     return dispatch => {
         dispatch(login(uid));
-        dispatch(pushToRoute('/connect'));
+        dispatch(pushToRoute('connect'));
     };
 };
 
@@ -73,12 +75,13 @@ export const startEmailLogin = (email, password) => {
 export const logoutAndPushToRootRoute = () => {
     return dispatch => {
         dispatch(logout());
-        browserHistory.push('/');
+        dispatch(pushToRoute('/'));
     };
 };
 
 export const startLogout = () => {
     return dispatch => {
+        console.log('startLogout called!');
         firebase.auth().signOut().then(() => {
             dispatch({ type: 'USER_RESET_DATA' });
             dispatch(logoutAndPushToRootRoute());

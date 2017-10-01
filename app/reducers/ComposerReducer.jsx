@@ -1,4 +1,5 @@
 const initialState = {
+    currentValue: '',
     currentMenu: '',
     previewImage: '',
     imageFile: '',

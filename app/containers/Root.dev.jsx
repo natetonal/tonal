@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import createBrowserHistory from 'history/createBrowserHistory';
+import history from 'app/tonalHistory';
 import TonalApp from 'TonalApp';
 import DevTools from './DevTools';
 
-const history = createBrowserHistory();
 //
 class Root extends Component {
 

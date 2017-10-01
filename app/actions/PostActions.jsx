@@ -116,7 +116,6 @@ export const likePost = (feedId, feedLoc, postId, postLoc, likedId, liked, data)
 };
 
 export const updatePostAuthorData = (feedId, feedLoc, postId, postLoc, data) => {
-    console.log('updatePostAuthorData called.');
 
     return () => {
         const author = data.author;

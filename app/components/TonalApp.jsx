@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
+    withRouter,
     Switch,
     Route
 } from 'react-router-dom';
@@ -77,7 +77,7 @@ class TonalApp extends Component {
         };
 
         const BlurWrappedRoutes = routes => {
-            if (firstLogin){
+            if (loggedIn && firstLogin){
                 return (
                     <div className="blur">
                         { routes.children }
@@ -148,12 +148,12 @@ class TonalApp extends Component {
                         <ContentWrappedRoutes>
                             <LoadingRoute component={ ContentLoader } />
                             <Switch>
-                                <Route exact path="/" component={ Landing } />
-                                <Route path="/auth" component={ Verify } />
-                                <Route path="/connect" component={ Connect } />
-                                <Route path="/discover" component={ Discover } />
-                                <Route path="/mymusic" component={ MyMusic } />
-                                <Route path="/store" component={ TonalStore } />
+                                <LoggedOutRoute exact path="/" component={ Landing } />
+                                <LoggedInRoute path="/auth" component={ Verify } />
+                                <LoggedInRoute path="/connect" component={ Connect } />
+                                <LoggedInRoute path="/discover" component={ Discover } />
+                                <LoggedInRoute path="/mymusic" component={ MyMusic } />
+                                <LoggedInRoute path="/store" component={ TonalStore } />
                                 <Route component={ NotFound } />
                             </Switch>
                         </ContentWrappedRoutes>
@@ -166,11 +166,11 @@ class TonalApp extends Component {
     }
 }
 
-export default connect(state => {
+export default withRouter(connect(state => {
     return {
         path: state.router.location.pathname,
         uid: state.auth.uid,
         firstLogin: state.user.firstLogin,
         status: state.user.status
     };
-})(TonalApp);
+})(TonalApp));

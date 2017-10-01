@@ -5,6 +5,7 @@
 @import "foundation";
 
 @include foundation-everything;
+@include foundation-grid;
 
 // Mixins
 @import "base/mixins";

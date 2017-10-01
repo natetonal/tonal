@@ -16,9 +16,7 @@ import Root from './containers/Root';
 
 const store = configure();
 
-$(document).ready(() => {
-    $(document).foundation();
-});
+$(document).foundation();
 
 firebase.auth().onAuthStateChanged(user => {
 

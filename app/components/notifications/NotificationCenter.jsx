@@ -22,7 +22,7 @@ import {
     addFavorite
 } from 'actions/FriendshipActions';
 import { pushToRoute } from 'actions/RouteActions';
-import { NotificationsMenu } from './NotificationsMenu';
+import NotificationsMenu from './NotificationsMenu';
 
 // import { NotificationTopbar } from './NotificationTopbar';
 // import { NotificationsList } from './NotificationsList';
@@ -33,20 +33,24 @@ class NotificationCenter extends Component {
 
         super(props);
 
-        const {
-            dispatch,
-            newNotifsCount,
-            uid
-        } = this.props;
-
-        if (uid){
-            // Fetch notifications:
-            dispatch(fetchNotifs(uid));
-        }
+        const { newNotifsCount } = this.props;
 
         this.state = {
             showBadge: newNotifsCount > 0
         };
+    }
+
+    componentWillMount = () => {
+        const {
+            dispatch,
+            uid
+        } = this.props;
+
+        if (uid){
+
+            // Fetch notifications:
+            dispatch(fetchNotifs(uid));
+        }
     }
 
     componentWillReceiveProps = nextProps => {
@@ -95,7 +99,7 @@ class NotificationCenter extends Component {
         // }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.acknowledgeNotifs();
     }
 
@@ -216,7 +220,7 @@ class NotificationCenter extends Component {
         const isNotifsOpen = this.isNotifsOpen();
         const areThereNotifs = this.areThereNotifs();
 
-        const renderBadge = () => {
+        const Badge = () => {
             if (showBadge){
                 return (
                     <span
@@ -225,10 +229,10 @@ class NotificationCenter extends Component {
                 );
             }
 
-            return '';
+            return null;
         };
 
-        const renderNotifs = () => {
+        const Notifs = () => {
             if (isNotifsOpen){
                 return (
                     <NotificationsMenu
@@ -247,53 +251,32 @@ class NotificationCenter extends Component {
                         followUser={ this.handleFollowUser }
                         favoriteUser={ this.handleFavoriteUser } />
                 );
-                // return (
-                //     <div
-                //         ref={ element => this.notifsContainerRef = element }
-                //         className="notifications-list-container">
-                //         <NotificationTopbar
-                //             newNotifsCount={ newNotifsCount }
-                //             displayNotifs={ displayNotifs }
-                //             areThereNotifs={ areThereNotifs }
-                //             clearNotifs={ this.handleClearNotifs }
-                //             muteNotifs={ this.toggleMuteNotifs } />
-                //         <NotificationsList
-                //             notifs={ notifs }
-                //             notifsStatus={ notifsStatus }
-                //             displayNotifs={ displayNotifs }
-                //             areThereNotifs={ areThereNotifs }
-                //             followingCount={ followingCount }
-                //             favoritesCount={ favoritesCount }
-                //             following={ following }
-                //             favorites={ favorites }
-                //             blocked={ blocked }
-                //             blockedBy={ blockedBy }
-                //             isSelf={ this.isSelf }
-                //             checkFriendship={ this.checkFriendship }
-                //             clickNotif={ this.handleClickNotif }
-                //             deleteNotif={ this.handleDeleteNotif }
-                //             blockUser={ this.handleBlockUser }
-                //             followUser={ this.handleFollowUser }
-                //             favoriteUser={ this.handleFavoriteUser } />
-                //     </div>
-                // );
             }
+
+            return null;
         };
 
-        return (
-            <div className={ `hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-${ direction }` }>
-                <a
-                    onClick={ this.onClickNotifs }
-                    className="hi-icon hi-icon-mobile">
-                    <i
-                        ref={ element => this.notifsIconMobileRef = element }
-                        className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
-                        aria-hidden="true" />
-                </a>
-                { renderBadge() }
-                { renderNotifs() }
-            </div>
-        );
+        const ContentToRender = () => {
+            return (
+                <div className={ `hi-icon-effect-1 hi-icon-effect-1b hi-icon-notify nt-${ direction }` }>
+                    <a
+                        onClick={ this.onClickNotifs }
+                        className="hi-icon hi-icon-mobile">
+                        <i
+                            ref={ element => this.notifsIconMobileRef = element }
+                            className={ `fa fa-bell${ displayNotifs ? '' : '-slash muted' }` }
+                            aria-hidden="true" />
+                    </a>
+                    <div>
+                        <Badge />
+                        <Notifs />
+                    </div>
+                </div>
+            );
+        };
+
+        return <ContentToRender />;
+
     }
 }
 
