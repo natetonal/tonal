@@ -1,5 +1,5 @@
 <div align="center">
-    <img height="40%" width="40%" src="https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-symbol.png?alt=media&token=8a6c0e15-c74e-4549-967d-400cb9f2fff2">
+    <img height="25%" width="25%" src="https://firebasestorage.googleapis.com/v0/b/tonal-development.appspot.com/o/assets%2Fheader%2Ftonal-symbol.png?alt=media&token=8a6c0e15-c74e-4549-967d-400cb9f2fff2">
 </div>
 
 # Tonal - A Social Music Marketplace
