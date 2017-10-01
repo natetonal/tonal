@@ -8,10 +8,10 @@ Thank you for jumping onboard this project! The goal with this is to create an i
 
 ## Getting Started:
 
-Step 1: Clone this repo.
-Step 2: Head to this repo's Wiki tab and create those environment files within your project.
-Step 3: Navigate to the project root directory and run `npm install` to get dependencies.
-Step 4: Run `npm run dev` to start the development server & webpack build.
+1. Clone this repo.
+2. Head to this repo's Wiki tab and create those environment files within your project.
+3. Navigate to the project root directory and run `npm install` to get dependencies.
+4. Run `npm run dev` to start the development server & webpack build.
 
 The project should be viewable on `localhost:3000`.
 
