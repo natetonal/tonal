@@ -3,7 +3,7 @@
 # Tonal - A Social Music Marketplace
 Thank you for jumping onboard this project! The goal with this is to create an incredible new way for musicians to sell their music, and create a new digital experience for fans to enjoy their favorite music. I'm interested in getting any and all Las Vegas area coders (or elsewhere!) to jump onboard the project on a part-time or full-time basis, as your availability allows. I look forward to working with you!
 
-##Getting Started:
+## Getting Started:
 
 Step 1: Clone this repo
 Step 2: Head to this repo's Wiki tab and create those environment files within your project.
