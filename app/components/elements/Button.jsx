@@ -15,6 +15,7 @@ class Button extends Component {
             onClick
         } = this.props;
 
+        console.log('Button rendering with props: ', this.props);
         const displayIcon = () => {
             if (btnIcon){
                 return (

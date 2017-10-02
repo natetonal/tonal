@@ -261,6 +261,7 @@ export const createUserWithFacebookAuth = () => {
                             updatedAt: moment().format('LLLL')
                         };
 
+                        console.log('user stored to state: ', user);
                         dispatch(storeUserDataToState(user));
                         dispatch(startLoginForAuthorizedUser(uid));
                         databaseRef.child(`users/${ uid }`).update(user);

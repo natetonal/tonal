@@ -115,6 +115,7 @@ class FirstTimeUserPrompt extends Component {
     }
 
     handleFormSubmit = values => {
+        console.log('handleFormSubmit called.');
         const { dispatch } = this.props;
         dispatch(updateUserData(values));
     }
@@ -169,7 +170,7 @@ class FirstTimeUserPrompt extends Component {
                 <div
                     className="ftu-prompt-container"
                     ref={ element => this.containerRef = element }>
-                    <form onSubmit={ handleSubmit(this.handleFormSubmit) }>
+                    <form>
                         <div className="ftu-prompt-content">
                             <div className="ftu-prompt-title">
                                 { 'You\'re Almost There!' }
@@ -258,6 +259,7 @@ class FirstTimeUserPrompt extends Component {
                             <Button
                                 type="submit"
                                 btnType="info"
+                                onClick={ handleSubmit(this.handleFormSubmit) }
                                 isLoading={ submitting }
                                 btnIcon=""
                                 btnText={ 'Looks Good' } />
