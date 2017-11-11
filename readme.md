@@ -4,4 +4,6 @@
 
 # Tonal
 
-The Tonal project was discontinued as of November 1st, 2017. The goal with this project was to create an incredible new way for musicians to sell their music, and create a new digital experience for fans to enjoy their favorite music. This repo is archived and kept only for reference.
+The Tonal project was discontinued as of November 1st, 2017. The goal with this project was to create an incredible new way for musicians to sell their music, and create a new digital experience for fans to enjoy their favorite music. Tonal was the brainchild of <a href="https://www.natekmusic.com/" alt="Nate Kimball">Nate Kimball</a> and <a href="http://www.markcorbin.com/" alt="Mark Corbin">Mark Corbin</a>. 
+
+This repo is archived and kept only for reference.
